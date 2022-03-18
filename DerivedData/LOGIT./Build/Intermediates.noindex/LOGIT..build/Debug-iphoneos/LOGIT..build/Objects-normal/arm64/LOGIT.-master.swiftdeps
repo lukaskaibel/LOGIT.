@@ -1,0 +1,84 @@
+version: "Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)"
+options: "2c895cf7258331bd78fcb26112e3e3b47c59692778e8fa36b0244e3429dcf56d"
+build_start_time: [1646062427, 116121053]
+build_end_time: [1646062430, 109987974]
+inputs:
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/Exercise+CoreDataClass.swift"
+  : [1646062427, 26558160]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/Exercise+CoreDataProperties.swift"
+  : [1646062427, 27004003]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/WeightEntry+CoreDataClass.swift"
+  : [1646062427, 25671005]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/WeightEntry+CoreDataProperties.swift"
+  : [1646062427, 26025772]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/Workout+CoreDataClass.swift"
+  : [1646062427, 27885198]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/Workout+CoreDataProperties.swift"
+  : [1646062427, 28295040]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/WorkoutDiary+CoreDataModel.swift"
+  : [1646062427, 23711442]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/WorkoutSet+CoreDataClass.swift"
+  : [1646062427, 24949312]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Intermediates.noindex/LOGIT..build/Debug-iphoneos/LOGIT..build/DerivedSources/CoreDataGenerated/WorkoutDiary/WorkoutSet+CoreDataProperties.swift"
+  : [1646062427, 25503396]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./All Workouts/AllWorkouts.swift": [1640816851, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./All Workouts/AllWorkoutsView.swift": [1643037413, 672941684]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./CommonUI/BarGraph2.swift": [1642702080, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./CommonUI/TileView.swift": [1639328355, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./CommonUI/WorkoutCellView.swift": [1643037454, 542587518]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Database.swift": [1643668204, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ExerciseDetail/ExerciseDetail.swift": [1642701749, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ExerciseDetail/ExerciseDetailView.swift"
+  : [1643037454, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ExerciseSelection/ExerciseSelection.swift"
+  : [1642112777, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ExerciseSelection/ExerciseSelectionView.swift"
+  : [1643194337, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ExerciseView2.swift": [1639668091, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Array<Array<WorkoutSet>>+.swift"
+  : [1645806969, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Array<Int>+.swift": [1629799575, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Array<WorkoutSet>+.swift": [1645806583, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Color+.swift": [1640881754, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Date+.swift": [1632931279, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Exercise+.swift": [1641499504, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Image+.swift": [1633003103, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/String+.swift": [1624802877, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/View+.swift": [1624802927, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/Workout+.swift": [1643037454, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Extentions/WorkoutSet+.swift": [1641735283, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Home/Home.swift": [1642701550, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Home/HomeView.swift": [1643675415, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Legacy Files /LineGraph.swift": [1639668076, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Legacy Files /MenuView.swift": [1643037454, 516268253]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Persistence.swift": [1639230985, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./ProfileView.swift": [1633088390, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Settings/SettingsView.swift": [1642170887, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Styles/KeyButton.swift": [1632242840, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/Banner.swift": [1623682992, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/BarGraph.swift": [1640698255, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/CustomTextField.swift"
+  : [1623672698, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/DateBarGraph.swift": [1624728361, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/DragDownToDismiss.swift"
+  : [1639235384, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/HImageWithText.swift": [1624726002, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/OnDeleteModifier.swift"
+  : [1646062312, 100353240]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/SavedSetView.swift": [1639226992, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/UnitView.swift": [1640104093, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Supporting Files/VisualEffektView.swift"
+  : [1623676406, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Weight/WeightEntries.swift": [1643676868, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./Weight/WeightEntriesView.swift": [1643677674, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutDetail/WorkoutDetail.swift": [1641498367, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutDetail/WorkoutDetailView.swift": [1643038367, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutDiaryApp.swift": [1645965126, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutRecorder/SavedSetView2.swift": [1643194645, 0]
+  "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutRecorder/WorkoutRecorder.swift": [1643038477, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutRecorder/WorkoutRecorderView.swift"
+  : [1643039673, 0]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutRecorderList/WorkoutRecorderList.swift"
+  : [1646062424, 475893974]
+  ? "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT./WorkoutRecorderList/WorkoutRecorderListView.swift"
+  : [1646062424, 450881004]

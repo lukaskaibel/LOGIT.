@@ -1,0 +1,74 @@
+//
+//  WorkoutCellView.swift
+//  WorkoutDiary
+//
+//  Created by Lukas Kaibel on 26.09.21.
+//
+
+import SwiftUI
+
+
+struct WorkoutCellView: View {
+    
+    //MARK: Variables
+    
+    @ObservedObject var workout: Workout
+    
+    @State var isShowingAllExercises: Bool = false
+    
+    //MARK: Body
+    
+    var body: some View {
+        NavigationLink(destination: WorkoutDetailView(workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext, workoutID: workout.objectID))) {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack {
+                    Text(workout.name ?? "No Name")
+                        .font(.title3.weight(.semibold))
+                    Spacer()
+                    Text(date)
+                        .foregroundColor(.secondaryLabel)
+                }
+                Text(exercisesString)
+                    .foregroundColor(.secondaryLabel)
+                    .font(.body.weight(.medium))
+                    .lineLimit(1)
+                    .frame(maxWidth: 300, alignment: .leading)
+                Text("\(workout.numberOfSetGroups) exercise\(workout.numberOfSetGroups == 1 ? "" : "s")")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.caption)
+            }
+            .padding(.vertical, 6)
+        }
+    }
+    
+    //MARK: Computed Variabels
+    
+    private var date: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        if let date = workout.date {
+            return formatter.string(from: date)
+        } else {
+            return ""
+        }
+    }
+    
+    private var exercisesString: String {
+        var result = ""
+        for exercise in workout.exercises {
+            if let name = exercise.name {
+                result += (!result.isEmpty ? ", " : "") + name
+            }
+        }
+        return result.isEmpty ? " " : result
+    }
+    
+    private var showingMoreButtonText: String { isShowingAllExercises ? "- show less" : "+ \(workout.numberOfSets - 3) more" }
+    
+}
+
+struct WorkoutView_Previews: PreviewProvider {
+    static var previews: some View {
+        WorkoutCellView(workout: Workout(context: Database.preview.container.viewContext))
+    }
+}

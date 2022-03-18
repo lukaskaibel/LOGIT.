@@ -1,0 +1,62 @@
+{
+  "_buildCommand2" : {
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : true,
+    "targets" : null
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "4e824c033f20661c2a1cf40481668532f2a0d009fcb49bce1f1186e26e5b6b82"
+    }
+  ],
+  "containerPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT..xcodeproj",
+  "continueBuildingAfterErrors" : true,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "indexbuild",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "iphoneos",
+      "sdk" : "iphoneos15.0",
+      "sdkVariant" : "iphoneos",
+      "supportedArchitectures" : [
+        "arm64e",
+        "arm64v8",
+        "arm64",
+        "armv8"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Index/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Index/Build/Products",
+      "derivedDataPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Index/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Index/PrecompiledHeaders",
+      "pchPath" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Index/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "synthesized" : {
+        "table" : {
+          "ENABLE_PREVIEWS" : "NO",
+          "INDEX_ARENA_INFO_REGULAR_BUILD_PRODUCTS_DIR" : "/Users/lukas/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/DerivedData/LOGIT./Build/Products",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "qos" : "default",
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "launch",
+  "shouldCollectMetrics" : false,
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

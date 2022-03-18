@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
+        <attribute name="isFavorite" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="exercise" inverseEntity="WorkoutSetGroup"/>
+    </entity>
+    <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" defaultDateTimeInterval="646345140" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" defaultValueString=""/>
+        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="workout" inverseEntity="WorkoutSetGroup"/>
+    </entity>
+    <entity name="WorkoutSet" representedClassName="WorkoutSet" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutSetGroup" inverseName="sets" inverseEntity="WorkoutSetGroup"/>
+    </entity>
+    <entity name="WorkoutSetGroup" representedClassName="WorkoutSetGroup" syncable="YES" codeGenerationType="class">
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="setGroups" inverseEntity="Exercise"/>
+        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSet" inverseName="setGroup" inverseEntity="WorkoutSet"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="setGroups" inverseEntity="Workout"/>
+    </entity>
+    <elements>
+        <element name="Exercise" positionX="820.7496337890625" positionY="358.6207275390625" width="128" height="74"/>
+        <element name="Workout" positionX="219.9733276367188" positionY="464.2337951660156" width="128" height="89"/>
+        <element name="WorkoutSet" positionX="358.213134765625" positionY="163.2440490722656" width="128" height="104"/>
+        <element name="WorkoutSetGroup" positionX="423" positionY="324" width="128" height="74"/>
+    </elements>
+</model>
