@@ -16,6 +16,7 @@ struct ExerciseDetailView: View {
     @StateObject var exerciseDetail: ExerciseDetail
     
     @State private var showDeletionAlert = false
+    @State private var showingEditExercise = false
     
     var body: some View {
         List {
@@ -66,21 +67,22 @@ struct ExerciseDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    showDeletionAlert = true
+                Menu(content: {
+                    Button(action: { showingEditExercise.toggle() }, label: { Label("Edit Name", systemImage: "pencil") })
+                    Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label("Delete", systemImage: "trash") } )
                 }) {
-                    Image(systemName: "trash")
-                }.foregroundColor(.accentColor)
+                    Image(systemName: "ellipsis")
+                }
             }
         }
-        .confirmationDialog("Delete Exercise", isPresented: $showDeletionAlert) {
+        .confirmationDialog(Text("Do you want to delete \(exerciseDetail.exercise.name ?? "")? This action can not be undone."), isPresented: $showDeletionAlert, titleVisibility: .visible) {
             Button("Delete \(exerciseDetail.exercise.name ?? "")", role: .destructive, action: {
                 exerciseDetail.deleteExercise()
                 dismiss()
             })
-            Button("Cancel", role: .cancel) {
-                
-            }
+        }
+        .sheet(isPresented: $showingEditExercise) {
+            EditExerciseView(editExercise: EditExercise(exerciseToEdit: exerciseDetail.exercise))
         }
     }
     

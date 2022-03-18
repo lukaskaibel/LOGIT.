@@ -9,7 +9,8 @@ import SwiftUI
 
 struct WorkoutRecorderView: View {
     
-    @StateObject var workoutRecorder = WorkoutRecorder(database: Database.shared)
+    @StateObject private var workoutRecorder = WorkoutRecorder(database: Database.shared)
+    @StateObject private var exerciseSelection = ExerciseSelection(context: Database.shared.container.viewContext)
     @Environment(\.dismiss) var dismiss
     
     @State private var showingExerciseSelection = false
@@ -25,7 +26,7 @@ struct WorkoutRecorderView: View {
             }.environmentObject(workoutRecorder)
             .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil }) {
                 NavigationView {
-                    ExerciseSelectionView(exerciseSelection: StateObject(wrappedValue: ExerciseSelection(context: Database.shared.container.viewContext)),
+                    ExerciseSelectionView(exerciseSelection: exerciseSelection,
                                           selectedExercise: Binding(get: { workoutRecorder.setGroupWithSelectedExercise?.exercise }, set: {
                         if let exercise = $0 {
                             if let setGroup = workoutRecorder.setGroupWithSelectedExercise {

@@ -102,6 +102,15 @@ struct Database {
         return exercise
     }
     
+    func getExercises() -> [Exercise] {
+        do {
+            let request = Exercise.fetchRequest()
+            return try container.viewContext.fetch(request)
+        } catch {
+            fatalError("Failed to fetch Exercises: \(error)")
+        }
+    }
+    
     func delete(_ object: NSManagedObject, saveContext: Bool = false) {
         if let workoutSet = object as? WorkoutSet, let setGroup = workoutSet.setGroup, setGroup.numberOfSets <= 1 {
             delete(setGroup)

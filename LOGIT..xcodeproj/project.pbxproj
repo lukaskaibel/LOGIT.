@@ -10,6 +10,8 @@
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
 		791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
+		796D611927E53AB400E15F01 /* EditExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611827E53AB400E15F01 /* EditExerciseView.swift */; };
+		796D611C27E53AC700E15F01 /* EditExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611B27E53AC700E15F01 /* EditExercise.swift */; };
 		79746709277136FE006518F0 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailView.swift */; };
 		7974670C277137AB006518F0 /* WorkoutDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7974670B277137AB006518F0 /* WorkoutDetail.swift */; };
 		7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */; };
@@ -51,6 +53,8 @@
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
+		796D611827E53AB400E15F01 /* EditExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExerciseView.swift; sourceTree = "<group>"; };
+		796D611B27E53AC700E15F01 /* EditExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExercise.swift; sourceTree = "<group>"; };
 		79746708277136FE006518F0 /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
 		7974670B277137AB006518F0 /* WorkoutDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetail.swift; sourceTree = "<group>"; };
 		7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutSetGroup+.swift"; sourceTree = "<group>"; };
@@ -101,6 +105,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		796D611A27E53AB800E15F01 /* EditExercise */ = {
+			isa = PBXGroup;
+			children = (
+				796D611B27E53AC700E15F01 /* EditExercise.swift */,
+				796D611827E53AB400E15F01 /* EditExerciseView.swift */,
+			);
+			path = EditExercise;
+			sourceTree = "<group>";
+		};
 		7974670A27713706006518F0 /* WorkoutDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -204,6 +217,7 @@
 				799AAF28278781E900C8BF0C /* ExerciseDetail */,
 				79A934DB27C7F12600ED9321 /* WorkoutRecorder */,
 				80ED02912764D97300D59B75 /* ExerciseSelection */,
+				796D611A27E53AB800E15F01 /* EditExercise */,
 				79CAF79B27E13FE700A1711C /* Profile */,
 				79D570D42779F9AE0005E006 /* CommonUI */,
 				801CDC482688BD9D00BB653D /* Extentions */,
@@ -335,6 +349,7 @@
 				80ED02902764D94200D59B75 /* ExerciseSelectionView.swift in Sources */,
 				80E9FAF12700C42A00C670D5 /* WorkoutCellView.swift in Sources */,
 				79D570D8277B4C520005E006 /* BarGraph.swift in Sources */,
+				796D611927E53AB400E15F01 /* EditExerciseView.swift in Sources */,
 				801CDC572688C28700BB653D /* CustomTextField.swift in Sources */,
 				805E2A0626D3A9A600587817 /* Array<Int>+.swift in Sources */,
 				801CDC4C2688BDC800BB653D /* Color+.swift in Sources */,
@@ -353,6 +368,7 @@
 				801CDC502688BDE600BB653D /* View+.swift in Sources */,
 				8033F98E27072B0600EC707A /* ProfileView.swift in Sources */,
 				807FC47F268A909D00169820 /* Exercise+.swift in Sources */,
+				796D611C27E53AC700E15F01 /* EditExercise.swift in Sources */,
 				790E1A34279DB5B300EDB715 /* Database.swift in Sources */,
 				801CDC4E2688BDD900BB653D /* Image+.swift in Sources */,
 				79A934E127C7F16100ED9321 /* WorkoutRecorderView.swift in Sources */,
