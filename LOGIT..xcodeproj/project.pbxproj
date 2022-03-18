@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
+		791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
 		79746709277136FE006518F0 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailView.swift */; };
 		7974670C277137AB006518F0 /* WorkoutDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7974670B277137AB006518F0 /* WorkoutDetail.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
 		79746708277136FE006518F0 /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
 		7974670B277137AB006518F0 /* WorkoutDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetail.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				8065AA6E2686667F00F53A5A /* WorkoutDiaryApp.swift */,
+				791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */,
 				790E1A33279DB5B300EDB715 /* Database.swift */,
 				808460472766616500E0D0D0 /* Home */,
 				8084604C276662A900E0D0D0 /* All Workouts */,
@@ -309,6 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */,
 				8065AA762686668100F53A5A /* Preview Assets.xcassets in Resources */,
 				8065AA732686668100F53A5A /* Assets.xcassets in Resources */,
 			);

@@ -13,6 +13,8 @@ struct WorkoutRecorderView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var showingExerciseSelection = false
+    @State private var showingFinishWorkoutAlert = false
+    @State private var showingDeleteUnusedSetsAndFinishWorkoutAlert = false
         
     var body: some View {
         NavigationView {
@@ -42,6 +44,28 @@ struct WorkoutRecorderView: View {
                     }
                 }
             }.navigationBarHidden(true)
+                .confirmationDialog(Text("Do you want to finish the workout?"),
+                                    isPresented: $showingFinishWorkoutAlert,
+                                    titleVisibility: .automatic) {
+                    Button("Finish Workout") {
+                        workoutRecorder.saveWorkout()
+                        dismiss()
+                    }
+                }
+                .confirmationDialog(Text("Delete all sets without entries and finish workout?"),
+                                    isPresented: $showingDeleteUnusedSetsAndFinishWorkoutAlert,
+                                    titleVisibility: .visible) {
+                    Button("Delete Sets and Finish Workout", role: .destructive) {
+                        workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                        print(workoutRecorder.workout.sets)
+                        if workoutRecorder.workout.isEmpty {
+                            workoutRecorder.deleteWorkout()
+                        } else {
+                            workoutRecorder.saveWorkout()
+                        }
+                        dismiss()
+                    }
+                }
         }
     }
     
@@ -59,15 +83,19 @@ struct WorkoutRecorderView: View {
                     .font(.title2.weight(.bold))
                 Spacer()
                 Button(action: {
-                    if !workoutRecorder.workout.isEmpty {
-                        workoutRecorder.saveWorkout()
+                    if workoutRecorder.workoutHasEntries {
+                        if workoutRecorder.setsWithoutRepsAndWeight.isEmpty {
+                            showingFinishWorkoutAlert.toggle()
+                        } else {
+                            showingDeleteUnusedSetsAndFinishWorkoutAlert.toggle()
+                        }
                     } else {
                         workoutRecorder.deleteWorkout()
+                        dismiss()
                     }
-                    dismiss()
                 }) {
-                    Image(systemName: workoutRecorder.workout.isEmpty ? "xmark.circle.fill" : "checkmark.circle.fill")
-                        .foregroundColor(workoutRecorder.workout.isEmpty ? .fill : .accentColor)
+                    Image(systemName: !workoutRecorder.workoutHasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
+                        .foregroundColor(!workoutRecorder.workoutHasEntries ? .fill : .accentColor)
                         .font(.title)
                 }
             }

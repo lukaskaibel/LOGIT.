@@ -26,6 +26,7 @@ struct ExerciseSelectionView: View {
             ForEach(exerciseSelection.exercises) { exercise in
                 HStack {
                     Text(exercise.name ?? "No Name")
+                        .lineLimit(1)
                     Spacer()
                     if selectedExercise == exercise {
                         Image(systemName: "checkmark.circle.fill")

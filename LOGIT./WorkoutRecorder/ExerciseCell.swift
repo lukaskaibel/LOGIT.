@@ -62,6 +62,7 @@ struct ExerciseCell: View {
                 HStack(spacing: 3) {
                     Text(setGroup.exercise?.name ?? "No Name")
                         .font(.title3.weight(.semibold))
+                        .lineLimit(1)
                     Image(systemName: "chevron.right")
                         .foregroundColor(.secondaryLabel)
                         .font(.caption.weight(.semibold))
@@ -100,14 +101,20 @@ struct ExerciseCell: View {
         var repetitionsString: Binding<String> {
             Binding<String>(
                 get: { workoutSet.repetitions == 0 ? "" : String(workoutSet.repetitions) },
-                set: { value in workoutSet.repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0 }
+                set: {
+                    value in workoutSet.repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
+                    workoutRecorder.updateView()
+                }
             )
         }
         
         var weightString: Binding<String> {
             Binding<String>(
                 get: { workoutSet.weight == 0 ? "" : String(convertWeightForDisplaying(workoutSet.weight)) },
-                set: { value in workoutSet.weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0) }
+                set: {
+                    value in workoutSet.weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
+                    workoutRecorder.updateView()
+                }
             )
         }
         

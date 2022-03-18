@@ -100,6 +100,7 @@ struct WorkoutDetailView: View {
                         Text("\(exercise.name ?? "No Name")")
                             .foregroundColor(.label)
                             .font(.title2.weight(.semibold))
+                            .lineLimit(1)
                             .multilineTextAlignment(.leading)
                         Image(systemName: "chevron.right")
                             .foregroundColor(.separator)

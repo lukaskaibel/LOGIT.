@@ -64,7 +64,7 @@ final class ExerciseDetail: ObservableObject {
             request.sortDescriptors = [NSSortDescriptor(key: attribute == .repetitions ? "repetitions" : "weight", ascending: false)]
             var workoutSets = try context.fetch(request)
             workoutSets = workoutSets.filter { $0.exercise == exercise }
-            return convertWeightForDisplaying(Int(attribute == .repetitions ? workoutSets.first?.repetitions ?? 0 : workoutSets.first?.weight ?? 0)) 
+            return attribute == .repetitions ? Int(workoutSets.first?.repetitions ?? 0) : convertWeightForDisplaying(workoutSets.first?.weight ?? 0)
         } catch {
             fatalError("Error fetching sets for exercise")
         }

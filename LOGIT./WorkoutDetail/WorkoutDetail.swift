@@ -46,10 +46,6 @@ final class WorkoutDetail: ObservableObject {
         workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList
     }
     
-    var numberOfSets: Int {
-        workout.numberOfSets
-    }
-    
     var workoutDateString: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .long

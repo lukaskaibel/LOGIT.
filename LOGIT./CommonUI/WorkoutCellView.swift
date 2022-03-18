@@ -62,9 +62,7 @@ struct WorkoutCellView: View {
         }
         return result.isEmpty ? " " : result
     }
-    
-    private var showingMoreButtonText: String { isShowingAllExercises ? "- show less" : "+ \(workout.numberOfSets - 3) more" }
-    
+        
 }
 
 struct WorkoutView_Previews: PreviewProvider {

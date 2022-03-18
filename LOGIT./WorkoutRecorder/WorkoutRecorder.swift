@@ -32,6 +32,20 @@ class WorkoutRecorder: ObservableObject {
         workout.setGroups?.array as? [WorkoutSetGroup] ?? [WorkoutSetGroup]()
     }
     
+    public var workoutHasEntries: Bool {
+        setsWithoutRepsAndWeight.count != workout.numberOfSets
+    }
+   
+    public var setsWithoutRepsAndWeight: [WorkoutSet] {
+        workout.sets.filter { $0.repetitions == 0 && $0.weight == 0 }
+    }
+    
+    public func deleteSetsWithoutRepsAndWeight() {
+        for workoutSet in setsWithoutRepsAndWeight {
+            database.delete(workoutSet)
+        }
+    }
+    
     public func indexInSetGroup(for workoutSet: WorkoutSet) -> Int? {
         for setGroup in setGroups {
             if let index = setGroup.index(of: workoutSet) {
@@ -41,30 +55,33 @@ class WorkoutRecorder: ObservableObject {
         return nil
     }
     
-    public func addSet(to setGroup: WorkoutSetGroup) {
-        database.newWorkoutSet(setGroup: setGroup)
+    public func updateView() {
         objectWillChange.send()
     }
     
+    public func addSet(to setGroup: WorkoutSetGroup) {
+        database.newWorkoutSet(setGroup: setGroup)
+        updateView()
+    }
         
     public func addSetGroup(with exercise: Exercise) {
         database.newWorkoutSetGroup(exercise: exercise, workout: workout)
-        objectWillChange.send()
+        updateView()
     }
     
     public func delete(set: WorkoutSet) {
         database.delete(set)
-        objectWillChange.send()
+        updateView()
     }
     
     public func delete(setGroup: WorkoutSetGroup) {
         database.delete(setGroup)
-        objectWillChange.send()
+        updateView()
     }
     
     public func deleteWorkout() {
         database.delete(workout)
-        objectWillChange.send()
+        updateView()
     }
     
     public func saveWorkout() {

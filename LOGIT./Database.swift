@@ -55,6 +55,10 @@ struct Database {
         }
     }
     
+    func refreshObjects() {
+        container.viewContext.refreshAllObjects()
+    }
+    
     @discardableResult
     func newWorkout(name: String = "Monday Morning Workout", date: Date = Date(), setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()) -> Workout {
         let workout = Workout(context: container.viewContext)
@@ -77,20 +81,6 @@ struct Database {
         return setGroup
     }
     
-    func delete(_ object: NSManagedObject, saveContext: Bool = false) {
-        if let workoutSet = object as? WorkoutSet {
-            if let setGroup = workoutSet.setGroup {
-                if setGroup.numberOfSets <= 1 {
-                    delete(setGroup)
-                }
-            }
-        }
-        container.viewContext.delete(object)
-        if saveContext {
-            save()
-        }
-    }
-    
     @discardableResult
     func newWorkoutSet(repetitions: Int = 0, time: Int = 0, weight: Int = 0, setGroup: WorkoutSetGroup? = nil) -> WorkoutSet {
         let workoutSet = WorkoutSet(context: container.viewContext)
@@ -110,6 +100,17 @@ struct Database {
             exercise.setGroups = NSOrderedSet(array: setGroups)
         }
         return exercise
+    }
+    
+    func delete(_ object: NSManagedObject, saveContext: Bool = false) {
+        if let workoutSet = object as? WorkoutSet, let setGroup = workoutSet.setGroup, setGroup.numberOfSets <= 1 {
+            delete(setGroup)
+        }
+        container.viewContext.delete(object)
+        refreshObjects()
+        if saveContext {
+            save()
+        }
     }
     
 }
