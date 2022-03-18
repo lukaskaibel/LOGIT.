@@ -13,7 +13,6 @@ struct WorkoutDetailView: View {
     @Environment(\.dismiss) var dismiss
     
     @StateObject var workoutDetail: WorkoutDetail
-    @FocusState private var textFieldFocused: Bool
     @State private var isShowingDeleteWorkoutAlert: Bool = false
     
     var body: some View {
@@ -31,10 +30,7 @@ struct WorkoutDetailView: View {
                                 VStack(alignment: .leading, spacing: 0) {
                                     EmptyView()
                                         .frame(height: 1)
-                                    WorkoutSetCell(workoutSet: workoutSet,
-                                                   selectedSet: $workoutDetail.selectedSet,
-                                                   selectedAttribute: $workoutDetail.selectedAttribute,
-                                                   textFieldFocused: _textFieldFocused)
+                                    WorkoutSetCell(workoutSet: workoutSet)
                                         .padding(.vertical, 8)
                                     Divider()
                                 }
@@ -43,47 +39,34 @@ struct WorkoutDetailView: View {
                     }.listRowSeparator(.hidden)
                 }, header: {
                     Header(for: setGroup)
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        .padding(.bottom, 8)
+                        .listRowInsets(EdgeInsets())
                 }, footer: {
-                    Text("\(setGroup.numberOfSets) sets")
+                    Text("\(setGroup.numberOfSets) set\(setGroup.numberOfSets == 1 ? "" : "s")")
                         .foregroundColor(.secondaryLabel)
                         .font(.subheadline)
                         .listRowSeparator(.hidden, edges: .bottom)
-                })
-            }
+                }).padding(.leading)
+            }.listRowInsets(EdgeInsets())
             Footer
         }.listStyle(.plain)
-        .navigationTitle(workoutDetail.workout.name ?? "No Name")
-        .navigationBarTitleDisplayMode(.inline)
-        .background {
-            TextField("Empty Field", text: $workoutDetail.textFieldString)
-                .keyboardType(.numberPad)
-                .opacity(0)
-                .focused($textFieldFocused, equals: true)
-        }
-        .gesture (
-            TapGesture()
-                .onEnded {
-                    workoutDetail.selectedSet = nil
-                    workoutDetail.selectedAttribute = nil
-                }
-        )
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(role: .destructive, action: {
-                    isShowingDeleteWorkoutAlert = true
-                }) {
-                    Image(systemName: "trash")
+            .navigationTitle(workoutDetail.workout.name ?? "No Name")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(role: .destructive, action: {
+                        isShowingDeleteWorkoutAlert = true
+                    }) {
+                        Image(systemName: "trash")
+                    }
                 }
             }
-        }
-        .confirmationDialog("Deleting Workout", isPresented: $isShowingDeleteWorkoutAlert) {
-            Button("Delete Workout", role: .destructive) {
-                workoutDetail.deleteWorkout()
-                dismiss()
+            .confirmationDialog("Deleting Workout", isPresented: $isShowingDeleteWorkoutAlert) {
+                Button("Delete Workout", role: .destructive) {
+                    workoutDetail.deleteWorkout()
+                    dismiss()
+                }
             }
-        }
-        
     }
         
     //MARK: - Supporting Views
@@ -109,7 +92,7 @@ struct WorkoutDetailView: View {
                 }
                 Spacer()
             }
-        }.padding(.horizontal)
+        }
     }
     
     @ViewBuilder
@@ -117,8 +100,8 @@ struct WorkoutDetailView: View {
         HStack {
             Spacer()
             VStack {
-                Text(workoutDetail.workoutDateString)
-                Text("\(workoutDetail.workout.numberOfSetGroups) Exercises")
+                Text("\(workoutDetail.workoutDateString), \(workoutDetail.workoutTimeString)")
+                Text("\(workoutDetail.workout.numberOfSetGroups) exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s"), \(workoutDetail.workout.numberOfSets) set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")")
             }.foregroundColor(.secondaryLabel)
                 .font(.subheadline)
             Spacer()
@@ -129,33 +112,13 @@ struct WorkoutDetailView: View {
     struct WorkoutSetCell: View {
         
         @ObservedObject var workoutSet: WorkoutSet
-        @Binding var selectedSet: WorkoutSet?
-        @Binding var selectedAttribute: WorkoutSet.Attribute?
-        @FocusState var textFieldFocused: Bool
         
         var body: some View {
             HStack {
                 if workoutSet.repetitions > 0 {
                     UnitView(value: String(workoutSet.repetitions), unit: "RPS")
-                        .foregroundColor(isSelected && selectedAttribute == .repetitions ? .blue : .label)
                         .padding(.vertical, 5)
                         .padding(.trailing, 8)
-                        .background(isSelected && selectedAttribute == .repetitions ? Color.secondaryBackground : .clear)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .overlay {
-                            if isSelected && selectedAttribute == .repetitions {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.blue, lineWidth: 2)
-                            }
-                        }
-                        .gesture(
-                            TapGesture()
-                                .onEnded {
-                                    selectedSet = workoutSet
-                                    selectedAttribute = .repetitions
-                                    textFieldFocused = true
-                                }
-                        )
                 } else {
                     UnitView(value: "", unit: "") //needed in order for cell not to collapse if reps and weight = 0
                         .padding(.vertical, 5)
@@ -165,57 +128,13 @@ struct WorkoutDetailView: View {
                         dividerCircle
                     }
                     UnitView(value: String(convertWeightForDisplaying(workoutSet.weight)), unit: WeightUnit.used.rawValue.uppercased())
-                        .foregroundColor(isSelected && selectedAttribute == .weight ? .blue : .label)
-                        .gesture(
-                            TapGesture()
-                                .onEnded {
-                                    selectedSet = workoutSet
-                                    selectedAttribute = .weight
-                                    textFieldFocused = true
-                                }
-                        )
                         .padding(.vertical, 5)
                         .padding(.horizontal, 8)
-                        .background(isSelected && selectedAttribute == .weight ? Color.secondaryBackground : .clear)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .overlay {
-                            if isSelected && selectedAttribute == .weight {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.blue, lineWidth: 2)
-                            }
-                        }
-                }
-                if workoutSet.time > 0 {
-                    if workoutSet.repetitions > 0 || workoutSet.weight > 0 {
-                        dividerCircle
-                    }
-                    UnitView(value: String(workoutSet.time), unit: "SEC")
-                        .foregroundColor(isSelected && selectedAttribute == .time ? .blue : .label)
-                        .gesture(
-                            TapGesture()
-                                .onEnded {
-                                    selectedSet = workoutSet
-                                    selectedAttribute = .time
-                                    textFieldFocused = true
-                                }
-                        )
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 8)
-                        .background(isSelected && selectedAttribute == .time ? Color.secondaryBackground : .clear)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                        .overlay {
-                            if isSelected && selectedAttribute == .time {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.blue, lineWidth: 2)
-                            }
-                        }
                 }
             }
                 
         }
-        
-        var isSelected: Bool { workoutSet == selectedSet }
-        
+                
         var dividerCircle: some View {
             Circle()
                 .foregroundColor(.separator)

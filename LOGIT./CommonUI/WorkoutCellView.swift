@@ -19,11 +19,12 @@ struct WorkoutCellView: View {
     //MARK: Body
     
     var body: some View {
-        NavigationLink(destination: WorkoutDetailView(workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext, workoutID: workout.objectID))) {
+        NavigationLink(destination: WorkoutDetailView(workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext,
+                                                                                   workoutID: workout.objectID))) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text(workout.name ?? "No Name")
-                        .font(.title3.weight(.semibold))
+                        .font(.body.weight(.semibold))
                     Spacer()
                     Text(date)
                         .foregroundColor(.secondaryLabel)
@@ -37,7 +38,7 @@ struct WorkoutCellView: View {
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
             }
-            .padding(.vertical, 6)
+            .padding(.vertical, 3)
         }
     }
     

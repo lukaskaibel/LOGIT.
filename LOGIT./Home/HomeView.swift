@@ -83,18 +83,18 @@ struct HomeView: View {
         }
     }
     
-    private var QuoteView: some View {
-        VStack(spacing: 10) {
-            Text("\""+"He who says he can and he who says he can't are both usually right."+"\"")
-                .foregroundColor(.separator)
-                .multilineTextAlignment(.center)
-                .font(.title2.weight(.bold))
-            Text("Michael Jordan")
-                .foregroundColor(.separator)
-                .font(.body.weight(.medium))
-        }
-            .padding(.horizontal)
-    }
+//    private var QuoteView: some View {
+//        VStack(spacing: 10) {
+//            Text("\""+"He who says he can and he who says he can't are both usually right."+"\"")
+//                .foregroundColor(.separator)
+//                .multilineTextAlignment(.center)
+//                .font(.title2.weight(.bold))
+//            Text("Michael Jordan")
+//                .foregroundColor(.separator)
+//                .font(.body.weight(.medium))
+//        }
+//            .padding(.horizontal)
+//    }
     
     private var AverageWorkoutsView: some View {
         Section(content: {
@@ -139,68 +139,8 @@ struct HomeView: View {
 }
 
 
-
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(context: Database.preview.container.viewContext)
     }
 }
-
-
-
-
-
-
-//Section {
-//                        HStack {
-//                            VStack(alignment: .leading, spacing: 15) {
-//                                HStack(spacing: 3) {
-//                                    Image(systemName: "target")
-//                                    Text("WEEKLY GOAL")
-//                                }.foregroundColor(.secondaryLabel)
-//                                    .font(.caption.weight(.medium))
-//                                VStack(alignment: .leading, spacing: -5) {
-//                                    Text(String(home.goalPerWeek))
-//                                        .font(.largeTitle)
-//                                    Text("per week")
-//                                }
-//                                Spacer()
-//                                VStack(spacing: 10) {
-//                                    ProgressView(value: Float(home.workoutsPerWeek(for: 1).first ?? 0) / Float(home.goalPerWeek))
-//                                        .progressViewStyle(LinearProgressViewStyle())
-//                                        .tint(.accentColor)
-//                                    HStack {
-//                                        Text("This week")
-//                                        Spacer()
-//                                        Text("\(home.workoutsPerWeek(for: 1).first ?? 0)/\(home.goalPerWeek)")
-//                                    }
-//                                        .font(.footnote)
-//                                }
-//                            }.padding()
-//                                .frame(maxWidth: .infinity, maxHeight: 180)
-//                                .background(Color.secondaryBackground)
-//                                .cornerRadius(10)
-//                            NavigationLink(destination: WeightEntriesView()) {
-//                                VStack(alignment: .leading, spacing: 15) {
-//                                    HStack(spacing: 3) {
-//                                        Image(systemName: "scalemass.fill")
-//                                        Text("WEIGHT")
-//                                        Spacer()
-//                                    }.foregroundColor(.secondaryLabel)
-//                                        .font(.caption.weight(.medium))
-//                                    VStack(alignment: .leading, spacing: -5) {
-//                                        Text("83")
-//                                            .font(.largeTitle)
-//                                        Text("kg")
-//                                    }
-//                                    Spacer()
-//                                    Text("Tap to enter")
-//                                        .font(.footnote)
-//
-//                                }
-//                            }.padding()
-//                                .frame(maxWidth: .infinity, maxHeight: 180)
-//                                .background(Color.secondaryBackground)
-//                                .cornerRadius(10)
-//                        }
-//                    }.listRowSeparator(.hidden)
