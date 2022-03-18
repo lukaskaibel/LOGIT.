@@ -61,7 +61,6 @@ final class Home: ObservableObject {
                 }
             }
         }
-        print(result)
         return result
     }
     

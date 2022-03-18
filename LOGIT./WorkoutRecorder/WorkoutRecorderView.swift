@@ -1,5 +1,5 @@
 //
-//  WorkoutRecorderListView.swift
+//  WorkoutRecorderView.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 24.02.22.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct WorkoutRecorderListView: View {
+struct WorkoutRecorderView: View {
     
-    @StateObject var workoutRecorder = WorkoutRecorderList(database: Database.shared)
+    @StateObject var workoutRecorder = WorkoutRecorder(database: Database.shared)
     @Environment(\.dismiss) var dismiss
     
     @State private var showingExerciseSelection = false
@@ -127,6 +127,6 @@ struct WorkoutRecorderListView: View {
 
 struct WorkoutRecorderListView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderListView()
+        WorkoutRecorderView()
     }
 }

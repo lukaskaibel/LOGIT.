@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ExerciseCell: View {
     
-    @EnvironmentObject var workoutRecorder: WorkoutRecorderList
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
     
     @ObservedObject var setGroup: WorkoutSetGroup
     
@@ -93,7 +93,7 @@ struct ExerciseCell: View {
     
     private struct WorkoutSetCell: View {
         
-        @EnvironmentObject var workoutRecorder: WorkoutRecorderList
+        @EnvironmentObject var workoutRecorder: WorkoutRecorder
         
         @ObservedObject var workoutSet: WorkoutSet
         
@@ -164,6 +164,6 @@ struct ExerciseCell: View {
 struct ExerciseCell_Previews: PreviewProvider {
     static var previews: some View {
         ExerciseCell(setGroup: WorkoutSetGroup(), showingExerciseSelection: .constant(false))
-            .environmentObject(WorkoutRecorderList(database: Database.preview))
+            .environmentObject(WorkoutRecorder(database: Database.preview))
     }
 }

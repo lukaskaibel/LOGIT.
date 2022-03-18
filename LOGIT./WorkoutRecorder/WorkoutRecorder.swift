@@ -8,7 +8,7 @@
 import Foundation
 
 
-class WorkoutRecorderList: ObservableObject {
+class WorkoutRecorder: ObservableObject {
     
     @Published var workout: Workout
     @Published var workoutDuration: Int = 0
@@ -68,9 +68,7 @@ class WorkoutRecorderList: ObservableObject {
     }
     
     public func saveWorkout() {
-        print((workout.setGroups!.array as! [WorkoutSetGroup]).first!.sets!.array as! [WorkoutSet])
         database.save()
-        
     }
     
     private func startWorkout() {

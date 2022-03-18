@@ -51,7 +51,7 @@ struct HomeView: View {
                 }
                 Spacer(minLength: 50)
                     .listRowSeparator(.hidden, edges: .bottom)
-            }.listStyle(.inset)
+            }.listStyle(.plain)
                 .navigationTitle("LOGIT.")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -61,27 +61,24 @@ struct HomeView: View {
                             Image(systemName: "person.crop.circle")
                         }
                     }
+                    ToolbarItem(placement: .bottomBar) {
+                        Button(action: {
+                            isShowingWorkoutRecorder = true
+                        }) {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("New Workout")
+                            }.font(.body.weight(.bold))
+                        }
+                    }
                 }
-                
-        }
+        } .navigationViewStyle(.stack)
         .fullScreenCover(isPresented: $isShowingWorkoutRecorder) {
-            WorkoutRecorderListView()
+            WorkoutRecorderView()
         }
         .sheet(isPresented: $isShowingProfile) {
             NavigationView {
                 ProfileView()
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                Button(action: {
-                    isShowingWorkoutRecorder = true
-                }) {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                        Text("New Workout")
-                    }.font(.body.weight(.bold))
-                }
             }
         }
     }

@@ -39,7 +39,7 @@ struct AllWorkoutsView: View {
             }
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden, edges: .bottom)
-        }.listStyle(.inset)
+        }.listStyle(.plain)
             .searchable(text: $allWorkouts.searchedText, prompt: "Search in Workouts")
             .navigationTitle("All Workouts")
             .toolbar  {
@@ -74,7 +74,6 @@ struct AllWorkoutsView: View {
                     }
                 }
             }
-            .background(Color.secondaryBackground.edgesIgnoringSafeArea(.all))
     }
     
     private func dateString(for date: Date) -> String {
