@@ -85,6 +85,9 @@ class WorkoutRecorder: ObservableObject {
     }
     
     public func saveWorkout() {
+        if workout.name?.isEmpty ?? true {
+            workout.name = Workout.getStandardName(for: Date())
+        }
         database.save()
     }
     

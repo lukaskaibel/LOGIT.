@@ -53,4 +53,20 @@ extension Workout {
         (setGroups?.array as? [WorkoutSetGroup] ?? .emptyList).firstIndex(of: setGroup)
     }
     
+    static func getStandardName(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        let weekday = formatter.string(from: date)
+        let hour = Calendar.current.component(.hour, from: date)
+        let daytime: String
+        switch hour {
+        case 6..<12: daytime = "Morning"
+        case 12..<14: daytime = "Noon"
+        case 14..<17: daytime = "Afternoon"
+        case 17..<22: daytime = "Evening"
+        default: daytime = "Night"
+        }
+        return "\(weekday) \(daytime) Workout"
+    }
+    
 }

@@ -24,7 +24,7 @@ struct EditExerciseView: View {
                     .padding()
                     .background(Color.secondaryBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                Text("Enter the name for the new exercise.")
+                Text("Enter the name for the exercise.")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                     .padding(.leading)

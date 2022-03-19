@@ -51,9 +51,7 @@ final class WorkoutDetail: ObservableObject {
     }
     
     var workoutDateString: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter.string(from: workout.date ?? Date())
+        workout.date?.description(.long) ?? ""
     }
     
     func remove(_ setGroup: WorkoutSetGroup) {

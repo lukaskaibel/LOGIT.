@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="O3z-xE-kE4">
-                                <rect key="frame" x="87" y="378" width="240" height="150"/>
+                                <rect key="frame" x="82" y="368" width="240" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="Fb6-6I-P7U"/>
                                 </constraints>
@@ -26,8 +26,8 @@
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="Nlb-EW-qo4"/>
-                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" id="dwN-4C-CnH"/>
+                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" constant="-5" id="Nlb-EW-qo4"/>
+                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" constant="-10" id="dwN-4C-CnH"/>
                         </constraints>
                     </view>
                 </viewController>

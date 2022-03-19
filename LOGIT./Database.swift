@@ -60,7 +60,7 @@ struct Database {
     }
     
     @discardableResult
-    func newWorkout(name: String = "Monday Morning Workout", date: Date = Date(), setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()) -> Workout {
+    func newWorkout(name: String = "", date: Date = Date(), setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()) -> Workout {
         let workout = Workout(context: container.viewContext)
         workout.name = name
         workout.date = date

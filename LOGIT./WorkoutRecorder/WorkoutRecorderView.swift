@@ -80,7 +80,7 @@ struct WorkoutRecorderView: View {
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
             HStack {
-                TextField("Workout Title", text: $workoutRecorder.workoutName)
+                TextField(Workout.getStandardName(for: Date()), text: $workoutRecorder.workoutName)
                     .font(.title2.weight(.bold))
                 Spacer()
                 Button(action: {

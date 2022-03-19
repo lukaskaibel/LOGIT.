@@ -25,6 +25,7 @@ struct WorkoutCellView: View {
                 HStack {
                     Text(workout.name ?? "No Name")
                         .font(.body.weight(.semibold))
+                        .lineLimit(1)
                     Spacer()
                     Text(date)
                         .foregroundColor(.secondaryLabel)
@@ -45,10 +46,8 @@ struct WorkoutCellView: View {
     //MARK: Computed Variabels
     
     private var date: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
         if let date = workout.date {
-            return formatter.string(from: date)
+            return date.description(.short)
         } else {
             return ""
         }
