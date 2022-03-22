@@ -1,6 +1,6 @@
 //
 //  Workout+.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 01.07.21.
 //

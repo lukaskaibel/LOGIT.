@@ -33,6 +33,8 @@ struct ExerciseCell: View {
                 .padding(.bottom, 5)
             ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
                 WorkoutSetCell(workoutSet: workoutSet)
+            }.onDelete { indexSet in
+                workoutRecorder.delete(setsWithIndices: indexSet, in: setGroup)
             }
             Button(action: {
                 workoutRecorder.addSet(to: setGroup)
@@ -169,9 +171,6 @@ struct ExerciseCell: View {
                         }
                     }
             }.padding(.trailing)
-                .onDelete {
-                    workoutRecorder.delete(set: workoutSet)
-                }
         }
         
     }

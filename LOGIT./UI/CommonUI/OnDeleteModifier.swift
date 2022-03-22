@@ -95,9 +95,9 @@ struct Delete: ViewModifier {
 
 extension View {
     
-    func onDelete(perform action: @escaping () -> Void) -> some View {
-        self.modifier(Delete(action: action))
-    }
+//    func onDelete(perform action: @escaping () -> Void) -> some View {
+//        self.modifier(Delete(action: action))
+//    }
     
 }
 
@@ -109,6 +109,6 @@ struct OnDeleteModifier_Previews: PreviewProvider {
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
             .padding()
-            .onDelete {}
+            //.onDelete {}
     }
 }

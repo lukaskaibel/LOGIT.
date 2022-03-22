@@ -1,6 +1,6 @@
 //
 //  WorkoutCellView.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 26.09.21.
 //

@@ -38,7 +38,7 @@
 		8033F98E27072B0600EC707A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8033F98D27072B0600EC707A /* ProfileView.swift */; };
 		8058F49F268D2503006A94AC /* Workout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8058F49E268D2503006A94AC /* Workout+.swift */; };
 		805E2A0626D3A9A600587817 /* Array<Int>+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805E2A0526D3A9A600587817 /* Array<Int>+.swift */; };
-		8065AA6F2686667F00F53A5A /* WorkoutDiaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA6E2686667F00F53A5A /* WorkoutDiaryApp.swift */; };
+		8065AA6F2686667F00F53A5A /* LOGITApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA6E2686667F00F53A5A /* LOGITApp.swift */; };
 		8065AA732686668100F53A5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8065AA722686668100F53A5A /* Assets.xcassets */; };
 		8065AA762686668100F53A5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8065AA752686668100F53A5A /* Preview Assets.xcassets */; };
 		8065AA7B2686668100F53A5A /* WorkoutDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA792686668100F53A5A /* WorkoutDiary.xcdatamodeld */; };
@@ -84,7 +84,7 @@
 		8058F49E268D2503006A94AC /* Workout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Workout+.swift"; sourceTree = "<group>"; };
 		805E2A0526D3A9A600587817 /* Array<Int>+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array<Int>+.swift"; sourceTree = "<group>"; };
 		8065AA6B2686667F00F53A5A /* LOGIT..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LOGIT..app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8065AA6E2686667F00F53A5A /* WorkoutDiaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDiaryApp.swift; sourceTree = "<group>"; };
+		8065AA6E2686667F00F53A5A /* LOGITApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOGITApp.swift; sourceTree = "<group>"; };
 		8065AA722686668100F53A5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8065AA752686668100F53A5A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8065AA7A2686668100F53A5A /* WorkoutDiary.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WorkoutDiary.xcdatamodel; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		8065AA6D2686667F00F53A5A /* LOGIT. */ = {
 			isa = PBXGroup;
 			children = (
-				8065AA6E2686667F00F53A5A /* WorkoutDiaryApp.swift */,
+				8065AA6E2686667F00F53A5A /* LOGITApp.swift */,
 				8065AA7C2686668100F53A5A /* Info.plist */,
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */,
@@ -410,7 +410,7 @@
 				79A934E127C7F16100ED9321 /* WorkoutRecorderView.swift in Sources */,
 				79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* WorkoutSet+.swift in Sources */,
-				8065AA6F2686667F00F53A5A /* WorkoutDiaryApp.swift in Sources */,
+				8065AA6F2686667F00F53A5A /* LOGITApp.swift in Sources */,
 				799AAF2A2787820300C8BF0C /* ExerciseDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

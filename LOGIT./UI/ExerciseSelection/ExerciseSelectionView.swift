@@ -1,6 +1,6 @@
 //
 //  ExerciseSelectionView.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 11.12.21.
 //

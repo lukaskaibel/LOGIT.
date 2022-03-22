@@ -1,6 +1,6 @@
 //
-//  WorkoutDiaryApp.swift
-//  WorkoutDiary
+//  LOGITApp.swift
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 25.06.21.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct WorkoutDiaryApp: App {
+struct LOGIT: App {
     
     @AppStorage("setupDone") var setupDone: Bool = false
     
@@ -19,7 +19,7 @@ struct WorkoutDiaryApp: App {
             "setupDone" : false
         ])
         //FirstStartView Test
-        UserDefaults.standard.set(false, forKey: "setupDone")
+        //UserDefaults.standard.set(false, forKey: "setupDone")
     }
     
     let database = Database.shared

@@ -1,6 +1,6 @@
 //
 //  ExerciseSelection.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 11.12.21.
 //
@@ -24,6 +24,7 @@ final class ExerciseSelection: ObservableObject {
     init(context: NSManagedObjectContext) {
         self.context = context
         self.exercises = [Exercise]()
+        NotificationCenter.default.addObserver(self, selector: #selector(contextChanged), name: .NSManagedObjectContextObjectsDidChange, object: context)
         updateExercises()
     }
     
@@ -62,5 +63,8 @@ final class ExerciseSelection: ObservableObject {
         }
     }
     
+    @objc private func contextChanged() {
+        updateExercises()
+    }
     
 }

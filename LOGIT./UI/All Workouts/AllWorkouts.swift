@@ -1,6 +1,6 @@
 //
 //  AllWorkouts.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 12.12.21.
 //

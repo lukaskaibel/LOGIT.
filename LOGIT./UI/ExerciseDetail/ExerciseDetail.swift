@@ -22,6 +22,11 @@ final class ExerciseDetail: ObservableObject {
         self.exerciseID = exerciseID
     }
     
+    func with(exercise: Exercise) -> ExerciseDetail {
+        self.exerciseID = exercise.objectID
+        return self
+    }
+    
     var exercise: Exercise {
         get {
             if let exercise = context.object(with: exerciseID) as? Exercise {

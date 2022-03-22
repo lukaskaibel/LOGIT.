@@ -5,15 +5,19 @@
 //  Created by Lukas Kaibel on 24.02.22.
 //
 
-import Foundation
-import UIKit
-
+import SwiftUI
 
 class WorkoutRecorder: ObservableObject {
     
     @Published var workout: Workout
     @Published var workoutDuration: Int = 0
     @Published var setGroupWithSelectedExercise: WorkoutSetGroup? = nil
+    @Published var exerciseForExerciseDetail: Exercise?
+    
+    var showingExerciseDetail: Binding<Bool> {
+        Binding(get: { self.exerciseForExerciseDetail != nil },
+                set: { _ in self.exerciseForExerciseDetail = nil })
+    }
     
     private var database: Database
     private var timer: Timer?
@@ -70,8 +74,12 @@ class WorkoutRecorder: ObservableObject {
         updateView()
     }
     
-    public func delete(set: WorkoutSet) {
-        database.delete(set)
+    public func delete(setsWithIndices indexSet: IndexSet, in setGroup: WorkoutSetGroup) {
+        for index in indexSet {
+            if let sets = setGroup.sets?.array as? [WorkoutSet] {
+                database.delete(sets[index])
+            }
+        }
         updateView()
     }
     

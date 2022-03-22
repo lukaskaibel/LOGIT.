@@ -1,6 +1,6 @@
 //
 //  Array<Int>+.swift
-//  WorkoutDiary
+//  LOGIT
 //
 //  Created by Lukas Kaibel on 23.08.21.
 //
