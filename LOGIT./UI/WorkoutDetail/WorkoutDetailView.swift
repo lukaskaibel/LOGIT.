@@ -61,7 +61,9 @@ struct WorkoutDetailView: View {
                     }
                 }
             }
-            .confirmationDialog("Deleting Workout", isPresented: $isShowingDeleteWorkoutAlert) {
+            .confirmationDialog("Delete \(workoutDetail.workout.name ?? "Workout")? This action cannot be undone.",
+                                isPresented: $isShowingDeleteWorkoutAlert,
+                                titleVisibility: .visible) {
                 Button("Delete Workout", role: .destructive) {
                     workoutDetail.deleteWorkout()
                     dismiss()

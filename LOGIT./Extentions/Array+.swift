@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension Array {
     
     static var emptyList: [Element] { [Element]() }
@@ -21,3 +20,4 @@ extension Array where Element: Comparable {
     }
     
 }
+

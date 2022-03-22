@@ -123,3 +123,16 @@ struct Database {
     }
     
 }
+
+
+extension Database {
+    
+    var numberOfExercises: Int {
+        do {
+            return try container.viewContext.fetch(Exercise.fetchRequest()).count
+        } catch {
+            fatalError("Error fetching exercises: \(error)")
+        }
+    }
+    
+}

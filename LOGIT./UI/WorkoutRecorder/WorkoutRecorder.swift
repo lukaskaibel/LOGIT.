@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 class WorkoutRecorder: ObservableObject {
@@ -95,6 +96,7 @@ class WorkoutRecorder: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
             self?.workoutDuration += 1
         })
+        RunLoop.current.add(timer!, forMode: .common)
     }
     
 }

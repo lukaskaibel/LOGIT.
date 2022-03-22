@@ -7,7 +7,11 @@
 
 import Foundation
 
-enum WeightUnit: String, Codable {
+enum WeightUnit: String, Codable, Identifiable {
+    var id: String {
+        self.rawValue
+    }
+    
     case kg, lbs
     
     static var used: WeightUnit {

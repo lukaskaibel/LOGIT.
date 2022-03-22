@@ -73,7 +73,6 @@ struct Delete: ViewModifier {
                         }
                     }
             )
-            .animation(.interactiveSpring(), value: 1.0)
     }
     
     private func delete() {
@@ -82,7 +81,7 @@ struct Delete: ViewModifier {
     }
     
     private func hapticFeedback() {
-        let generator = UIImpactFeedbackGenerator(style: .medium)
+        let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
     }
     
@@ -108,6 +107,8 @@ struct OnDeleteModifier_Previews: PreviewProvider {
     static var previews: some View {
         Text("Test")
             .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
             .padding()
+            .onDelete {}
     }
 }

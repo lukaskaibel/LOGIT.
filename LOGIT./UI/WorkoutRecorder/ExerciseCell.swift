@@ -12,6 +12,14 @@ struct ExerciseCell: View {
     @EnvironmentObject var workoutRecorder: WorkoutRecorder
     
     @ObservedObject var setGroup: WorkoutSetGroup
+    @StateObject private var exerciseDetail: ExerciseDetail
+    
+    init(setGroup: WorkoutSetGroup, showingExerciseSelection: Binding<Bool>) {
+        self.setGroup = setGroup
+        self._showingExerciseSelection = showingExerciseSelection
+        _exerciseDetail = StateObject(wrappedValue: ExerciseDetail(context: Database.shared.container.viewContext,
+                                                                   exerciseID: setGroup.exercise!.objectID)) 
+    }
     
     @Binding var showingExerciseSelection: Bool
     
@@ -28,6 +36,7 @@ struct ExerciseCell: View {
             }
             Button(action: {
                 workoutRecorder.addSet(to: setGroup)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             }) {
                 Label("Add Set", systemImage: "plus.circle.fill")
                     .foregroundColor(.accentColor)
@@ -40,8 +49,7 @@ struct ExerciseCell: View {
             .buttonStyle(.plain)
             .sheet(isPresented: $isShowingExerciseDetail) {
                 NavigationView {
-                    ExerciseDetailView(exerciseDetail: ExerciseDetail(context: Database.shared.container.viewContext,
-                                                                      exerciseID: setGroup.exercise!.objectID))
+                    ExerciseDetailView(exerciseDetail: exerciseDetail)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button("Dismiss") {
@@ -79,7 +87,9 @@ struct ExerciseCell: View {
                 }
                 Section {
                     Button(role: .destructive, action: {
-                        workoutRecorder.delete(setGroup: setGroup)
+                        withAnimation {
+                            workoutRecorder.delete(setGroup: setGroup)
+                        }
                     }) {
                         Label("Remove", systemImage: "xmark.circle")
                     }

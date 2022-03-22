@@ -16,6 +16,7 @@ struct WorkoutRecorderView: View {
     @State private var showingExerciseSelection = false
     @State private var showingFinishWorkoutAlert = false
     @State private var showingDeleteUnusedSetsAndFinishWorkoutAlert = false
+    @State private var showingDiscardWorkoutAlert = false
         
     var body: some View {
         NavigationView {
@@ -58,12 +59,20 @@ struct WorkoutRecorderView: View {
                                     titleVisibility: .visible) {
                     Button("Delete Sets and Finish Workout", role: .destructive) {
                         workoutRecorder.deleteSetsWithoutRepsAndWeight()
-                        print(workoutRecorder.workout.sets)
                         if workoutRecorder.workout.isEmpty {
                             workoutRecorder.deleteWorkout()
                         } else {
                             workoutRecorder.saveWorkout()
                         }
+                        dismiss()
+                    }
+                }
+                .confirmationDialog(Text("This workout has to entries. Discard it?"),
+                                    isPresented: $showingDiscardWorkoutAlert,
+                                    titleVisibility: .visible) {
+                    Button("Discard Workout", role: .destructive) {
+                        workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                        workoutRecorder.deleteWorkout()
                         dismiss()
                     }
                 }
@@ -85,14 +94,14 @@ struct WorkoutRecorderView: View {
                 Spacer()
                 Button(action: {
                     if workoutRecorder.workoutHasEntries {
+                        UINotificationFeedbackGenerator().notificationOccurred(.success)
                         if workoutRecorder.setsWithoutRepsAndWeight.isEmpty {
                             showingFinishWorkoutAlert.toggle()
                         } else {
                             showingDeleteUnusedSetsAndFinishWorkoutAlert.toggle()
                         }
                     } else {
-                        workoutRecorder.deleteWorkout()
-                        dismiss()
+                        showingDiscardWorkoutAlert.toggle()
                     }
                 }) {
                     Image(systemName: !workoutRecorder.workoutHasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
@@ -105,6 +114,7 @@ struct WorkoutRecorderView: View {
             .background(Color.tertiaryBackground)
     }
     
+    @State private var animationValue = 1.0
     
     private var ExerciseList: some View {
         List {
@@ -116,7 +126,7 @@ struct WorkoutRecorderView: View {
                             .font(.caption)
                     }
                     ExerciseCell(setGroup: setGroup, showingExerciseSelection: $showingExerciseSelection)
-                }
+                }.transition(.slide)
             }.padding(.vertical)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
@@ -124,23 +134,18 @@ struct WorkoutRecorderView: View {
                 .padding(.vertical)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
+                .padding(.bottom, 20 )
         }.listStyle(.plain)
             .background(Color.secondaryBackground)
             .onAppear {
                 UIScrollView.appearance().keyboardDismissMode = .onDrag
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Button("Copy last Set") {
-                        
-                    }.foregroundColor(.accentColor)
-                        .font(.body.weight(.semibold))
-                }
-            }
+            
     }
     
     private var AddExerciseButton: some View {
         Button(action: {
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             showingExerciseSelection = true
         }) {
             Label("Add Exercise", systemImage: "plus.circle.fill")

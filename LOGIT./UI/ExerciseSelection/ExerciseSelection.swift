@@ -19,11 +19,34 @@ final class ExerciseSelection: ObservableObject {
     }
     
     private let context: NSManagedObjectContext
+    private let database = Database.shared
     
     init(context: NSManagedObjectContext) {
         self.context = context
         self.exercises = [Exercise]()
         updateExercises()
+    }
+    
+    var groupedExercises: [[Exercise]] {
+        var result = [[Exercise]]()
+        for exercise in exercises {
+            if let lastExerciseNameFirstLetter = result.last?.last?.name?.first, let exerciseFirstLetter = exercise.name?.first, lastExerciseNameFirstLetter == exerciseFirstLetter {
+                result[result.count - 1].append(exercise)
+            } else {
+                result.append([exercise])
+            }
+        }
+        return result
+    }
+    
+    func getLetter(for group: [Exercise]) -> String {
+        String(group.first?.name?.first ?? Character(" "))
+    }
+    
+    func delete(exercise: Exercise) {
+        database.delete(exercise)
+        updateExercises()
+        objectWillChange.send()
     }
         
     func updateExercises() {

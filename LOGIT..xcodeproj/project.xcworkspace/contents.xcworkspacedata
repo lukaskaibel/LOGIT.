@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/WorkoutDiary/LOGIT..xcodeproj">
+      location = "self:../LOGIT.">
    </FileRef>
 </Workspace>

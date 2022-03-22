@@ -21,19 +21,5 @@ extension Image {
     static var repetitions: Image { Image(systemName: "multiply") }
     static var weight: Image { Image(systemName: "scalemass") }
     static var time: Image { Image(systemName: "stopwatch") }
-
-    static var average: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Circle()
-                    .stroke(Color.label, lineWidth: 2)
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: geometry.size.height))
-                    path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
-                }
-                .stroke(Color.label, lineWidth: 2)
-            }
-        }.aspectRatio(1.0, contentMode: .fit)
-    }
     
 }

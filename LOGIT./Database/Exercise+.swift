@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import CoreData
 
 extension Exercise {
     
@@ -32,6 +32,15 @@ extension Exercise {
             }
         }
         return result
+    }
+    
+}
+
+
+extension Array: Identifiable where Element: Exercise {
+    
+    public var id: NSManagedObjectID {
+        first?.objectID ?? NSManagedObjectID()
     }
     
 }

@@ -34,12 +34,12 @@ struct WorkoutCellView: View {
                     .foregroundColor(.secondaryLabel)
                     .font(.body.weight(.medium))
                     .lineLimit(1)
-                    .frame(maxWidth: 300, alignment: .leading)
+                    .frame(maxWidth: 280, alignment: .leading)
                 Text("\(workout.numberOfSetGroups) exercise\(workout.numberOfSetGroups == 1 ? "" : "s")")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
             }
-            .padding(.vertical, 3)
+            .padding(.vertical, 4)
         }
     }
     
