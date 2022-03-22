@@ -1,3 +1,0 @@
-Target dependency graph (2 targets)
-LOGIT. in LOGIT., no dependencies
-LOGIT. in LOGIT., no dependencies
