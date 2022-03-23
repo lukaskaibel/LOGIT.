@@ -119,6 +119,9 @@ struct FirstStartView: View {
                         setupStage = .standardExercises
                     }
                 case .standardExercises:
+                    if useStandardExercises {
+                        addDefaultExercises()
+                    }
                     setupDone = true
                     setupFinished = true
                 }
@@ -139,6 +142,14 @@ struct FirstStartView: View {
                     .environment(\.managedObjectContext, Database.shared.container.viewContext)
             }
     }
+    
+    private func addDefaultExercises() {
+        for exerciseName in Exercise.defaultExerciseNames {
+            Database.shared.newExercise(name: exerciseName)
+        }
+        Database.shared.save()
+    }
+    
 }
 
 struct FirstStartView_Previews: PreviewProvider {

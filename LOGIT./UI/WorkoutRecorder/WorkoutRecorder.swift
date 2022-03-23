@@ -34,7 +34,16 @@ class WorkoutRecorder: ObservableObject {
     }
     
     public var setGroups: [WorkoutSetGroup] {
-        workout.setGroups?.array as? [WorkoutSetGroup] ?? [WorkoutSetGroup]()
+        workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList
+    }
+    
+    public func moveSetGroups(from source: IndexSet, to destination: Int) {
+        if var setGroups = workout.setGroups?.array as? [WorkoutSetGroup] {
+            setGroups.move(fromOffsets: source, toOffset: destination)
+            workout.setGroups = NSOrderedSet(array: setGroups)
+            database.refreshObjects()
+            objectWillChange.send()
+        }
     }
     
     public var workoutHasEntries: Bool {
@@ -72,6 +81,15 @@ class WorkoutRecorder: ObservableObject {
     public func addSetGroup(with exercise: Exercise) {
         database.newWorkoutSetGroup(exercise: exercise, workout: workout)
         updateView()
+    }
+    
+    public func delete(exercisesWithIndices indexSet: IndexSet) {
+        if let setGroups = workout.setGroups?.array as? [WorkoutSetGroup] {
+            for index in indexSet {
+                database.delete(setGroups[index])
+            }
+            updateView()
+        }
     }
     
     public func delete(setsWithIndices indexSet: IndexSet, in setGroup: WorkoutSetGroup) {

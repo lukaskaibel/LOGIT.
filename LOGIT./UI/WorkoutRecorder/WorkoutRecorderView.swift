@@ -10,11 +10,15 @@ import CoreData
 
 struct WorkoutRecorderView: View {
     
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @StateObject private var workoutRecorder = WorkoutRecorder(database: Database.shared)
     @StateObject private var exerciseSelection = ExerciseSelection(context: Database.shared.container.viewContext)
     @StateObject private var exerciseDetail = ExerciseDetail(context: Database.shared.container.viewContext, exerciseID: NSManagedObjectID())
-    @Environment(\.dismiss) var dismiss
     
+    @State private var editMode: EditMode = .inactive
+    @State private var isEditing: Bool = false
     @State private var showingExerciseSelection = false
     @State private var showingFinishWorkoutAlert = false
     @State private var showingDeleteUnusedSetsAndFinishWorkoutAlert = false
@@ -27,6 +31,16 @@ struct WorkoutRecorderView: View {
                 Divider()
                 ExerciseList
             }.environmentObject(workoutRecorder)
+                .environment(\.editMode, $editMode)
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Spacer()
+                        Button(isEditing ? "Done" : "Reorder Exercises") {
+                            isEditing.toggle()
+                            editMode = isEditing ? .active : .inactive
+                        }.disabled(workoutRecorder.workout.numberOfSetGroups == 0)
+                    }
+                }
             .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil }) {
                 NavigationView {
                     ExerciseSelectionView(exerciseSelection: exerciseSelection,
@@ -124,46 +138,66 @@ struct WorkoutRecorderView: View {
             }
         }.padding(.horizontal)
             .padding(.bottom)
-            .background(Color.tertiaryBackground)
+            .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
     
     @State private var animationValue = 1.0
     
     private var ExerciseList: some View {
         List {
-            ForEach(workoutRecorder.setGroups, id:\.objectID) { setGroup in
-                Section {
-                    ExerciseHeader(setGroup: setGroup)
-                    ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
-                        WorkoutSetCell(workoutSet: workoutSet)
-                    }.onDelete { indexSet in
-                        workoutRecorder.delete(setsWithIndices: indexSet, in: setGroup)
-                    }
-                    Button(action: {
-                        workoutRecorder.addSet(to: setGroup)
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                    }) {
-                        Label("Add Set", systemImage: "plus.circle.fill")
-                            .foregroundColor(.accentColor)
-                            .font(.body.weight(.bold))
-                    }.padding(15)
-                        .frame(maxWidth: .infinity)
-                }.transition(.slide)
-                    .buttonStyle(.plain)
-            }.listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-            AddExerciseButton
-                .padding(.vertical)
+            ForEach(workoutRecorder.workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList, id:\.objectID) { setGroup in
+                // Neccessary because onMode crashes with Sections
+                if isEditing {
+                    ReorderExerciseCell(for: setGroup)
+                } else {
+                    ExerciseWithSetsSection(for: setGroup)
+                }
+            }.onMove(perform: workoutRecorder.moveSetGroups)
+                .onDelete { indexSet in workoutRecorder.delete(exercisesWithIndices: indexSet) }
                 .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
+                .listRowBackground(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
                 .listRowInsets(EdgeInsets())
-                .padding(.bottom, 20 )
+            if !isEditing {
+                AddExerciseButton
+                    .padding(.vertical)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+                    .padding(.bottom, 20 )
+            }
         }.listStyle(.insetGrouped)
             .background(Color.secondaryBackground)
             .onAppear {
                 UIScrollView.appearance().keyboardDismissMode = .onDrag
             }
             
+    }
+    
+    private func ExerciseWithSetsSection(for setGroup: WorkoutSetGroup) -> some View {
+        Section {
+            ExerciseHeader(setGroup: setGroup)
+                .deleteDisabled(true)
+            ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
+                WorkoutSetCell(workoutSet: workoutSet)
+            }.onDelete { indexSet in
+                workoutRecorder.delete(setsWithIndices: indexSet, in: setGroup)
+            }
+            Button(action: {
+                workoutRecorder.addSet(to: setGroup)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }) {
+                Label("Add Set", systemImage: "plus.circle.fill")
+                    .foregroundColor(.accentColor)
+                    .font(.body.weight(.bold))
+            }.padding(15)
+                .frame(maxWidth: .infinity)
+                .deleteDisabled(true)
+        }.transition(.slide)
+            .buttonStyle(.plain)
+    }
+    
+    private func ReorderExerciseCell(for setGroup: WorkoutSetGroup) -> some View {
+        ExerciseHeader(setGroup: setGroup)
     }
     
     @ViewBuilder
@@ -178,39 +212,47 @@ struct WorkoutRecorderView: View {
                 }) {
                     HStack(spacing: 3) {
                         Text(setGroup.exercise?.name ?? "No Name")
+                            .foregroundColor(.label)
                             .font(.title3.weight(.semibold))
                             .lineLimit(1)
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.secondaryLabel)
-                            .font(.caption.weight(.semibold))
+                        if !isEditing {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondaryLabel)
+                                .font(.caption.weight(.semibold))
+                        }
                     }
                 }
                 Spacer()
-                Menu(content: {
-                    Section {
-                        Button(action: {
-                            workoutRecorder.exerciseForExerciseDetail = setGroup.exercise
-                        }) {
-                            Label("Show \(setGroup.exercise?.name ?? "")", systemImage: "info.circle")
-                        }
-                    }
-                    Section {
-                        Button(role: .destructive, action: {
-                            withAnimation {
-                                workoutRecorder.delete(setGroup: setGroup)
+                if !isEditing {
+                    Menu(content: {
+                        Section {
+                            Button(action: {
+                                workoutRecorder.exerciseForExerciseDetail = setGroup.exercise
+                            }) {
+                                Label("Show \(setGroup.exercise?.name ?? "")", systemImage: "info.circle")
                             }
-                        }) {
-                            Label("Remove", systemImage: "xmark.circle")
                         }
+                        Section {
+                            Button(role: .destructive, action: {
+                                withAnimation {
+                                    workoutRecorder.delete(setGroup: setGroup)
+                                }
+                            }) {
+                                Label("Remove", systemImage: "xmark.circle")
+                            }
+                        }
+                    }) {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.label)
+                            .padding(7)
                     }
-                }) {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.label)
-                        .padding(7)
                 }
             }.padding()
-            Divider()
-                .padding(.leading)
+            if !isEditing {
+                Divider()
+                    .padding(.leading)
+                    .padding(.bottom, 5)
+            }
         }
     }
     
@@ -246,7 +288,7 @@ struct WorkoutRecorderView: View {
                 .font(.body.weight(.semibold))
                 .multilineTextAlignment(.trailing)
                 .padding(7)
-                .background(workoutSet.repetitions == 0 ? .secondaryBackground : Color.accentColor.opacity(0.1))
+                .background(workoutSet.repetitions == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : Color.accentColor.opacity(0.1))
                 .cornerRadius(5)
                 .overlay {
                     HStack {
@@ -263,7 +305,7 @@ struct WorkoutRecorderView: View {
                 .font(.body.weight(.semibold))
                 .multilineTextAlignment(.trailing)
                 .padding(7)
-                .background(workoutSet.weight == 0 ? .secondaryBackground : Color.accentColor.opacity(0.1))
+                .background(workoutSet.weight == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : Color.accentColor.opacity(0.1))
                 .cornerRadius(5)
                 .overlay {
                     HStack {
