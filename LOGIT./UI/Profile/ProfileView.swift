@@ -23,6 +23,7 @@ struct ProfileView: View {
                         Text("All Exercises")
                         Text("\(database.numberOfExercises) exercise\(database.numberOfExercises == 1 ? "" : "s")")
                             .foregroundColor(.secondaryLabel)
+                            .font(.footnote)
                     }.padding(.vertical, 3)
                 })
             }
@@ -37,13 +38,13 @@ struct ProfileView: View {
             })
             Section(content: {
                 Picker("Unit", selection: $weightUnit, content: {
-                    Text("KG").tag(WeightUnit.kg)
-                    Text("LBS").tag(WeightUnit.lbs)
+                    Text("kg").tag(WeightUnit.kg)
+                    Text("lbs").tag(WeightUnit.lbs)
                 })
             }, footer: {
                 Text("Select the unit you want to use. Any previous entries will be converted on change.")
             })
-        }.listStyle(.grouped)
+        }.listStyle(.insetGrouped)
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

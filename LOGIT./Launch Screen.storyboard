@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -16,18 +16,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="O3z-xE-kE4">
-                                <rect key="frame" x="82" y="368" width="240" height="150"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="Fb6-6I-P7U"/>
-                                </constraints>
-                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOGIT." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOt-Lf-QZs">
+                                <rect key="frame" x="115.5" y="397" width="183.5" height="72"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="60"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" constant="-5" id="Nlb-EW-qo4"/>
-                            <constraint firstItem="O3z-xE-kE4" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" constant="-10" id="dwN-4C-CnH"/>
+                            <constraint firstItem="lOt-Lf-QZs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="10" id="3OK-vL-71A"/>
+                            <constraint firstItem="lOt-Lf-QZs" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="DWA-Ij-iP2"/>
+                            <constraint firstItem="lOt-Lf-QZs" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" constant="-20" id="WIf-gq-bzG"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lOt-Lf-QZs" secondAttribute="bottom" constant="10" id="f0k-UH-0ba"/>
+                            <constraint firstItem="lOt-Lf-QZs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="10" id="hzg-4U-M3A"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lOt-Lf-QZs" secondAttribute="trailing" constant="10" id="wO1-3D-iJ1"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -37,7 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen" width="593" height="150"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

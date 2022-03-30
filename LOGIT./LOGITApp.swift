@@ -19,7 +19,7 @@ struct LOGIT: App {
             "setupDone" : false
         ])
         //FirstStartView Test
-        //UserDefaults.standard.set(false, forKey: "setupDone")
+//        UserDefaults.standard.set(false, forKey: "setupDone")
     }
     
     let database = Database.shared

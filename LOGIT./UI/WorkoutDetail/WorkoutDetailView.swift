@@ -39,7 +39,8 @@ struct WorkoutDetailView: View {
                     }.listRowSeparator(.hidden)
                 }, header: {
                     Header(for: setGroup)
-                        .padding(.bottom, 8)
+                        .padding(.vertical
+                                 , 8)
                         .listRowInsets(EdgeInsets())
                 }, footer: {
                     Text("\(setGroup.numberOfSets) set\(setGroup.numberOfSets == 1 ? "" : "s")")
@@ -119,22 +120,17 @@ struct WorkoutDetailView: View {
             HStack {
                 if workoutSet.repetitions > 0 {
                     UnitView(value: String(workoutSet.repetitions), unit: "RPS")
-                        .padding(.vertical, 5)
-                        .padding(.trailing, 8)
-                } else {
-                    UnitView(value: "", unit: "") //needed in order for cell not to collapse if reps and weight = 0
-                        .padding(.vertical, 5)
                 }
                 if workoutSet.weight > 0 {
                     if workoutSet.repetitions > 0 {
                         dividerCircle
+                            .padding(.horizontal, 8)
                     }
                     UnitView(value: String(convertWeightForDisplaying(workoutSet.weight)), unit: WeightUnit.used.rawValue.uppercased())
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 8)
+                } else {
+                    UnitView(value: "", unit: "") //needed in order for cell not to collapse if reps and weight = 0
                 }
-            }
-                
+            }.padding(.vertical, 5)
         }
                 
         var dividerCircle: some View {

@@ -17,21 +17,38 @@ struct ExerciseDetailView: View {
     
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
+    @State private var selectedIndexInGraph: Int? = nil
     
     var body: some View {
         List {
-            Section(content: {
-                WeightView
-            }, header: {
-                Text("Weight")
-                    .padding(.leading)
-            })
-            Section(content: {
-                RepetitionsView
-            }, header: {
-                Text("Repetitions")
-                    .padding(.leading)
-            })
+            VStack {
+                VStack(alignment: .leading) {
+                    Text("Personal Best")
+                        .foregroundColor(.secondaryLabel)
+                    HStack {
+                        Text("\(exerciseDetail.personalBest(for: exerciseDetail.selectedAttribute)) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
+                            .font(.title.weight(.medium))
+                        Spacer()
+                        if let selectedIndexInGraph = selectedIndexInGraph {
+                            Text("\(exerciseDetail.getGraphYValues(for: exerciseDetail.selectedAttribute)[selectedIndexInGraph]) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
+                                .foregroundColor(.accentColor)
+                                .font(.title.weight(.medium))
+                        }
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                LineGraph(xValues: exerciseDetail.getGraphXValues(for: exerciseDetail.selectedAttribute),
+                          yValues: exerciseDetail.getGraphYValues(for: exerciseDetail.selectedAttribute),
+                          selectedIndex: $selectedIndexInGraph)
+                    .frame(height: 180)
+                Picker("Calendar Component", selection: $exerciseDetail.selectedCalendarComponentForWeight) {
+                    Text("Weekly").tag(Calendar.Component.weekOfYear)
+                    Text("Monthly").tag(Calendar.Component.month)
+                    Text("Yearly").tag(Calendar.Component.year)
+                }.pickerStyle(.segmented)
+                    .padding(.top)
+
+            }.tileStyle()
+                .listRowSeparator(.hidden)
             Section(content: {
                 ForEach(exerciseDetail.sets.indices, id:\.self) { index in
                     if let workoutSet = exerciseDetail.sets[index], workoutSet.repetitions > 0 || workoutSet.weight > 0 {
@@ -61,6 +78,13 @@ struct ExerciseDetailView: View {
                     Spacer()
                 }.padding(.vertical, 5)
                 .listRowSeparator(.hidden, edges: .top)
+            }, footer: {
+                Text("\(exerciseDetail.sets.count) set\(exerciseDetail.sets.count == 1 ? "" : "s")")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.footnote)
+                    .padding(.top, 5)
+                    .padding(.bottom, 50)
+                    .listRowSeparator(.hidden, edges: .bottom)
             })
         }.listStyle(.plain)
         .navigationTitle(exerciseDetail.exercise.name ?? "")

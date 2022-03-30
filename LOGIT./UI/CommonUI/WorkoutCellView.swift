@@ -37,7 +37,7 @@ struct WorkoutCellView: View {
                     .frame(maxWidth: 280, alignment: .leading)
                 Text("\(workout.numberOfSetGroups) exercise\(workout.numberOfSetGroups == 1 ? "" : "s")")
                     .foregroundColor(.secondaryLabel)
-                    .font(.caption)
+                    .font(.footnote)
             }
             .padding(.vertical, 4)
         }

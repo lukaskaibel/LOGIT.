@@ -20,6 +20,7 @@ struct WorkoutRecorderView: View {
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
     @State private var showingExerciseSelection = false
+    @State private var showingTimerView = false
     @State private var showingFinishWorkoutAlert = false
     @State private var showingDeleteUnusedSetsAndFinishWorkoutAlert = false
     @State private var showingDiscardWorkoutAlert = false
@@ -34,6 +35,9 @@ struct WorkoutRecorderView: View {
                 .environment(\.editMode, $editMode)
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
+                        Button(action: { withAnimation { showingTimerView.toggle() } }) {
+                            Image(systemName: "timer")
+                        }
                         Spacer()
                         Button(isEditing ? "Done" : "Reorder Exercises") {
                             isEditing.toggle()
@@ -104,17 +108,20 @@ struct WorkoutRecorderView: View {
                 }
             }
         }
+        .overlay {
+            if showingTimerView {
+                VStack {
+                    Spacer()
+                    TimerView
+                }.edgesIgnoringSafeArea(.bottom)
+                    .transition(.move(edge: .bottom))
+            }
+        }
     }
-    
-    private var workoutDurationString: String {
-        "\(workoutRecorder.workoutDuration/3600):\(workoutRecorder.workoutDuration/60 / 10 % 6 )\(workoutRecorder.workoutDuration/60 % 10):\(workoutRecorder.workoutDuration % 60 / 10)\(workoutRecorder.workoutDuration%60 % 10)"
-    }
-    
+        
     private var Header: some View {
         VStack(spacing: 5) {
-            Text(workoutDurationString)
-                .foregroundColor(.secondaryLabel)
-                .font(.body.monospacedDigit())
+            WorkoutDurationView()
             HStack {
                 TextField(Workout.getStandardName(for: Date()), text: $workoutRecorder.workoutName)
                     .font(.title2.weight(.bold))
@@ -171,6 +178,70 @@ struct WorkoutRecorderView: View {
                 UIScrollView.appearance().keyboardDismissMode = .onDrag
             }
             
+    }
+    
+    private var timerString: String? {
+        guard let time = workoutRecorder.timerTime else { return nil }
+        return "\(time/60 / 10 % 6 )\(time/60 % 10):\(time % 60 / 10)\(time%60 % 10)"
+    }
+    
+    private struct WorkoutDurationView: View {
+        @State private var startTime = Date()
+        @State private var updater = false
+        
+        let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        
+        var body: some View {
+            if updater || !updater {
+                Text(workoutDurationString)
+                    .foregroundColor(.secondaryLabel)
+                    .font(.body.monospacedDigit())
+                    .onReceive(timer) { input in
+                        updater.toggle()
+                    }
+            }
+        }
+        
+        private var workoutDuration: Int {
+            Int(NSInteger(Date().timeIntervalSince(startTime)))
+        }
+        
+        private var workoutDurationString: String {
+            "\(workoutDuration/3600):\(workoutDuration/60 / 10 % 6 )\(workoutDuration/60 % 10):\(workoutDuration % 60 / 10)\(workoutDuration%60 % 10)"
+        }
+        
+    }
+    
+    private var TimerView: some View {
+        VStack {
+            HStack {
+                Button("Dismiss") { withAnimation { showingTimerView = false } }
+                Spacer()
+                Button(workoutRecorder.timerStartTime == nil ? "Start" : "Stop") {
+                    withAnimation {
+                        workoutRecorder.timerStartTime = workoutRecorder.timerStartTime == nil ? Date(timeIntervalSinceNow: TimeInterval(workoutRecorder.selectedTimerDuration)) : nil
+                    }
+                }
+                    .font(.body.weight(.semibold))
+            }.overlay { Text("Set Timer") }
+            if let timerString = timerString {
+                Text(timerString)
+                    .font(.system(size: 50, weight: .medium, design: .default).monospacedDigit())
+                    .frame(maxHeight: 250)
+            } else {
+                Picker("Timer", selection: $workoutRecorder.selectedTimerDuration) {
+                    ForEach(0...300, id:\.self) { i in
+                        Text(String(i)).tag(i)
+                    }
+                }.pickerStyle(.wheel)
+                    .frame(maxHeight: 250)
+            }
+               
+        }.padding()
+            .background(Color.tertiaryBackground)
+            .cornerRadius(20)
+            .edgesIgnoringSafeArea(.bottom)
+            .shadow(color: .shadow, radius: 5, x: 0, y: 5)
     }
     
     private func ExerciseWithSetsSection(for setGroup: WorkoutSetGroup) -> some View {

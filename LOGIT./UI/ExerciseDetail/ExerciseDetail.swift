@@ -10,6 +10,7 @@ import CoreData
 
 final class ExerciseDetail: ObservableObject {
     
+    @Published var selectedAttribute: WorkoutSet.Attribute = .weight
     @Published var selectedCalendarComponentForRepetitions: Calendar.Component = .weekOfYear
     @Published var selectedCalendarComponentForWeight: Calendar.Component = .weekOfYear
     
@@ -59,6 +60,17 @@ final class ExerciseDetail: ObservableObject {
         }
     }
     
+    private var workoutsWithExercise: [Workout] {
+        do {
+            let request = Workout.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+            let workouts = try context.fetch(request)
+            return workouts.filter { $0.exercises.contains(exercise) }
+        } catch {
+            fatalError("ExerciseDetail: Error fetching workouts: \(error)")
+        }
+    }
+    
     func deleteExercise() {
         database.delete(exercise, saveContext: true)
     }
@@ -73,6 +85,19 @@ final class ExerciseDetail: ObservableObject {
         } catch {
             fatalError("Error fetching sets for exercise")
         }
+    }
+    
+    func weightValues() -> [Double] {
+        var result = [Double]()
+        for workout in workoutsWithExercise {
+            let setGroupsWithExercise = (workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList).filter { $0.exercise == exercise }
+            let maxValue = (setGroupsWithExercise.map { ($0.sets?.array as? [WorkoutSet] ?? .emptyList).map { selectedAttribute == .repetitions ? $0.repetitions : $0.weight } }).reduce([], +).max()
+            if let maxValue = maxValue, maxValue > 0 {
+                result.append(Double(selectedAttribute == .weight ? convertWeightForDisplaying(maxValue) : Int(maxValue)))
+            }
+        }
+        result = result.count == 0 ? [0, 0] : result.count == 1 ? [0, result[0]] : result
+        return result
     }
     
     func getGraphYValues(for attribute: WorkoutSet.Attribute) -> [Int] {

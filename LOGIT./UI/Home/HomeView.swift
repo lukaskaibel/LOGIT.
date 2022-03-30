@@ -99,7 +99,7 @@ struct HomeView: View {
     
     private var TargetWorkoutsView: some View {
         Section(content: {
-            VStack(spacing: 0) {
+            VStack {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Workout target")
@@ -127,14 +127,12 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
-                }.padding()
+                }
                 TargetPerWeekGraph(xValues: home.getWeeksString().reversed(),
                                   yValues: home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed(),
                                   target: targetPerWeek)
                     .frame(height: 170)
-                    .padding([.bottom, .horizontal])
-            }.background(Color.secondaryBackground)
-            .cornerRadius(20)
+            }.tileStyle()
         }).listRowSeparator(.hidden)
     }
     

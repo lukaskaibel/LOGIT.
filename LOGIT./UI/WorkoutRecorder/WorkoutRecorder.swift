@@ -10,24 +10,37 @@ import SwiftUI
 class WorkoutRecorder: ObservableObject {
     
     @Published var workout: Workout
-    @Published var workoutDuration: Int = 0
     @Published var setGroupWithSelectedExercise: WorkoutSetGroup? = nil
     @Published var exerciseForExerciseDetail: Exercise?
+    @Published var selectedTimerDuration: Int = 0
     
-    var showingExerciseDetail: Binding<Bool> {
+    public var showingExerciseDetail: Binding<Bool> {
         Binding(get: { self.exerciseForExerciseDetail != nil },
                 set: { _ in self.exerciseForExerciseDetail = nil })
     }
     
     private var database: Database
     private var timer: Timer?
+    private var workoutStartTime = Date()
+    public var timerStartTime: Date?
     
     public init(database: Database) {
         self.database = database
         workout = database.newWorkout()
-        startWorkout()
+        //startWorkout()
     }
-    
+        
+    public var timerTime: Int? {
+        guard let date = timerStartTime else { return nil }
+        let time = Int(NSInteger(date.timeIntervalSince(Date())) % 60)
+        if time < 0 {
+            timerStartTime = nil
+            return nil
+        } else {
+            return time
+        }
+    }
+        
     public var workoutName: String {
         get { workout.name ?? "" }
         set { workout.name = newValue }
@@ -120,7 +133,7 @@ class WorkoutRecorder: ObservableObject {
     
     private func startWorkout() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
-            self?.workoutDuration += 1
+            self?.objectWillChange.send()
         })
         RunLoop.current.add(timer!, forMode: .common)
     }
