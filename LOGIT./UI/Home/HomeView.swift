@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 struct HomeView: View {
-    
+        
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
     
     @ObservedObject private var home: Home

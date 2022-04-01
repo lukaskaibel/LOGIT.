@@ -20,25 +20,10 @@ class WorkoutRecorder: ObservableObject {
     }
     
     private var database: Database
-    private var timer: Timer?
-    private var workoutStartTime = Date()
-    public var timerStartTime: Date?
     
     public init(database: Database) {
         self.database = database
         workout = database.newWorkout()
-        //startWorkout()
-    }
-        
-    public var timerTime: Int? {
-        guard let date = timerStartTime else { return nil }
-        let time = Int(NSInteger(date.timeIntervalSince(Date())) % 60)
-        if time < 0 {
-            timerStartTime = nil
-            return nil
-        } else {
-            return time
-        }
     }
         
     public var workoutName: String {
@@ -129,13 +114,6 @@ class WorkoutRecorder: ObservableObject {
             workout.name = Workout.getStandardName(for: Date())
         }
         database.save()
-    }
-    
-    private func startWorkout() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
-            self?.objectWillChange.send()
-        })
-        RunLoop.current.add(timer!, forMode: .common)
     }
     
 }
