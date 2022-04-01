@@ -168,79 +168,22 @@ struct WorkoutRecorderView: View {
                     .padding(.bottom, 20 )
             }
         }.listStyle(.insetGrouped)
-            .background(Color.secondaryBackground)
             .onAppear {
-                UIScrollView.appearance().keyboardDismissMode = .onDrag
+                UIScrollView.appearance().keyboardDismissMode = .interactive
+            }
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button("Done") {
+                            hideKeyboard()
+                        }.font(.body.weight(.semibold))
+                    }
+                }
             }
             
     }
     
-    private struct WorkoutDurationView: View {
-        @State private var startTime = Date()
-        @State private var updater = false
-        
-        let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-        
-        var body: some View {
-            if updater || !updater {
-                Text(workoutDurationString)
-                    .foregroundColor(.secondaryLabel)
-                    .font(.body.monospacedDigit())
-                    .onReceive(timer) { input in
-                        updater.toggle()
-                    }
-            }
-        }
-        
-        private var workoutDuration: Int {
-            Int(NSInteger(Date().timeIntervalSince(startTime)))
-        }
-        
-        private var workoutDurationString: String {
-            "\(workoutDuration/3600):\(workoutDuration/60 / 10 % 6 )\(workoutDuration/60 % 10):\(workoutDuration % 60 / 10)\(workoutDuration%60 % 10)"
-        }
-    }
-    
-    private struct TimerTimeView: View {
-        @StateObject var timer = TimerModel()
-        
-        @Binding var showingTimerView: Bool
-        
-        var body: some View {
-            Group {
-                if timer.isRunning || timer.isPaused {
-                    Text(timer.timeString)
-                        .foregroundColor(timer.isRunning ? .accentColor : .secondaryLabel)
-                        .font(.body.weight(.bold).monospacedDigit())
-                } else {
-                    Image(systemName: "timer")
-                }
-            }
-                .sheet(isPresented: $showingTimerView) {
-                    ZStack(alignment: .top) {
-                        NavigationView {
-                            TimerView(selectableSeconds: Array(stride(from: 15, to: 300, by: 15)))
-                                .environmentObject(timer)
-                                .navigationBarTitle("Set Timer")
-                                .navigationBarTitleDisplayMode(.inline)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(action: { showingTimerView = false }) {
-                                            Text("Dismiss")
-                                        }
-                                    }
-                                }
-                        }
-                        Capsule()
-                            .fill(Color.fill)
-                            .frame(width: 35, height: 5)
-                            .padding(.top, 7)
-                    }
-                }
-        }
-        
-    }
-        
     private func ExerciseWithSetsSection(for setGroup: WorkoutSetGroup) -> some View {
         Section {
             ExerciseHeader(setGroup: setGroup)

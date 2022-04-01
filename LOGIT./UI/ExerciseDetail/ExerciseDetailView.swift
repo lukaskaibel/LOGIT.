@@ -79,7 +79,7 @@ struct ExerciseDetailView: View {
                 }.padding(.vertical, 5)
                 .listRowSeparator(.hidden, edges: .top)
             }, footer: {
-                Text("\(exerciseDetail.sets.count) set\(exerciseDetail.sets.count == 1 ? "" : "s")")
+                Text("\(exerciseDetail.sets.filter { $0.repetitions > 0 || $0.weight > 0 }.count) set\(exerciseDetail.sets.count == 1 ? "" : "s")")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
                     .padding(.top, 5)
