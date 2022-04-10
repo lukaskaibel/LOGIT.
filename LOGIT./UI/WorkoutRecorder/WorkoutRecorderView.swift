@@ -18,6 +18,7 @@ struct WorkoutRecorderView: View {
     @StateObject private var exerciseSelection = ExerciseSelection(context: Database.shared.container.viewContext)
     @StateObject private var exerciseDetail = ExerciseDetail(context: Database.shared.container.viewContext, exerciseID: NSManagedObjectID())
     
+    @State private var showingStartScreen = true
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
     @State private var showingExerciseSelection = false
@@ -28,87 +29,96 @@ struct WorkoutRecorderView: View {
         
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                Header
-                Divider()
-                ExerciseList
-            }.environmentObject(workoutRecorder)
-                .environment(\.editMode, $editMode)
-                .toolbar {
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Button(action: { showingTimerView.toggle() }) {
-                            TimerTimeView(showingTimerView: $showingTimerView)
+            if showingStartScreen {
+                WorkoutRecorderStartScreen(showingStartScreen: $showingStartScreen)
+                    .environmentObject(workoutRecorder)
+            } else {
+                RecorderView
+            }
+        }
+    }
+    
+    private var RecorderView: some View {
+        VStack(spacing: 0) {
+            Header
+            Divider()
+            ExerciseList
+        }.environmentObject(workoutRecorder)
+            .environment(\.editMode, $editMode)
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button(action: { showingTimerView.toggle() }) {
+                        TimerTimeView(showingTimerView: $showingTimerView)
+                    }
+                        .font(.body.monospacedDigit())
+                    Spacer()
+                    Button(isEditing ? "Done" : "Reorder Exercises") {
+                        isEditing.toggle()
+                        editMode = isEditing ? .active : .inactive
+                    }.disabled(workoutRecorder.workout.numberOfSetGroups == 0)
+                }
+            }
+        .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil }) {
+            NavigationView {
+                ExerciseSelectionView(exerciseSelection: exerciseSelection,
+                                      selectedExercise: Binding(get: { workoutRecorder.setGroupWithSelectedExercise?.exercise }, set: {
+                    if let exercise = $0 {
+                        if let setGroup = workoutRecorder.setGroupWithSelectedExercise {
+                            setGroup.exercise = exercise
+                        } else {
+                            workoutRecorder.addSetGroup(with: exercise)
                         }
-                            .font(.body.monospacedDigit())
-                        Spacer()
-                        Button(isEditing ? "Done" : "Reorder Exercises") {
-                            isEditing.toggle()
-                            editMode = isEditing ? .active : .inactive
-                        }.disabled(workoutRecorder.workout.numberOfSetGroups == 0)
+                    }
+                }))
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel", role: .cancel) {
+                            showingExerciseSelection = false
+                        }
                     }
                 }
-            .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil }) {
-                NavigationView {
-                    ExerciseSelectionView(exerciseSelection: exerciseSelection,
-                                          selectedExercise: Binding(get: { workoutRecorder.setGroupWithSelectedExercise?.exercise }, set: {
-                        if let exercise = $0 {
-                            if let setGroup = workoutRecorder.setGroupWithSelectedExercise {
-                                setGroup.exercise = exercise
-                            } else {
-                                workoutRecorder.addSetGroup(with: exercise)
-                            }
-                        }
-                    }))
+            }
+        }
+        
+        .sheet(isPresented: workoutRecorder.showingExerciseDetail) {
+            NavigationView {
+                ExerciseDetailView(exerciseDetail: exerciseDetail.with(exercise: workoutRecorder.exerciseForExerciseDetail!))
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Cancel", role: .cancel) {
-                                showingExerciseSelection = false
-                            }
+                            Button("Dismiss") { workoutRecorder.showingExerciseDetail.wrappedValue = false }
                         }
                     }
-                }
             }
-            
-            .sheet(isPresented: workoutRecorder.showingExerciseDetail) {
-                NavigationView {
-                    ExerciseDetailView(exerciseDetail: exerciseDetail.with(exercise: workoutRecorder.exerciseForExerciseDetail!))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Dismiss") { workoutRecorder.showingExerciseDetail.wrappedValue = false }
-                            }
-                        }
-                }
-            }
-            .navigationBarHidden(true)
-            .confirmationDialog(Text("Do you want to finish the workout?"),
-                                isPresented: $showingFinishWorkoutAlert,
-                                titleVisibility: .automatic) {
-                Button("Finish Workout") {
-                    workoutRecorder.saveWorkout()
-                    dismiss()
-                }
-            }
-            .confirmationDialog(Text("Delete all sets without entries and finish workout?"),
-                                isPresented: $showingDeleteUnusedSetsAndFinishWorkoutAlert,
-                                titleVisibility: .visible) {
-                Button("Delete Sets and Finish Workout", role: .destructive) {
-                    workoutRecorder.deleteSetsWithoutRepsAndWeight()
-                    if workoutRecorder.workout.isEmpty {
-                        workoutRecorder.deleteWorkout()
-                    } else {
-                        workoutRecorder.saveWorkout()
-                    }
-                    dismiss()
-                }
-            }
-            .confirmationDialog(Text("This workout has to entries. Discard it?"),
-                                isPresented: $showingDiscardWorkoutAlert,
-                                titleVisibility: .visible) {
-                Button("Discard Workout", role: .destructive) {
-                    workoutRecorder.deleteSetsWithoutRepsAndWeight()
+        }
+        .navigationBarHidden(true)
+        .confirmationDialog(Text("Do you want to finish the workout?"),
+                            isPresented: $showingFinishWorkoutAlert,
+                            titleVisibility: .automatic) {
+            Button("Finish Workout") {
+                workoutRecorder.saveWorkout()
+                dismiss()
+            }.font(.body.weight(.semibold))
+        }
+        .confirmationDialog(Text("Delete all sets without entries and finish workout?"),
+                            isPresented: $showingDeleteUnusedSetsAndFinishWorkoutAlert,
+                            titleVisibility: .visible) {
+            Button("Delete Sets and Finish Workout", role: .destructive) {
+                workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                if workoutRecorder.workout.isEmpty {
                     workoutRecorder.deleteWorkout()
-                    dismiss()
+                } else {
+                    workoutRecorder.saveWorkout()
                 }
+                dismiss()
+            }
+        }
+        .confirmationDialog(Text("This workout has to entries. Discard it?"),
+                            isPresented: $showingDiscardWorkoutAlert,
+                            titleVisibility: .visible) {
+            Button("Discard Workout", role: .destructive) {
+                workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                workoutRecorder.deleteWorkout()
+                dismiss()
             }
         }
     }
@@ -134,7 +144,7 @@ struct WorkoutRecorderView: View {
                     }
                 }) {
                     Image(systemName: !workoutRecorder.workoutHasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
-                        .foregroundColor(!workoutRecorder.workoutHasEntries ? .fill : .accentColor)
+                        .foregroundColor(!workoutRecorder.workoutHasEntries ? .separator : .accentColor)
                         .font(.title)
                 }
             }
@@ -155,7 +165,7 @@ struct WorkoutRecorderView: View {
                     ExerciseWithSetsSection(for: setGroup)
                 }
             }.onMove(perform: workoutRecorder.moveSetGroups)
-                .onDelete { indexSet in workoutRecorder.delete(exercisesWithIndices: indexSet) }
+                .onDelete { indexSet in workoutRecorder.delete(setGroupsWithIndexes: indexSet) }
                 .listRowSeparator(.hidden)
                 .listRowBackground(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
                 .listRowInsets(EdgeInsets())
@@ -195,7 +205,7 @@ struct WorkoutRecorderView: View {
             }
             Button(action: {
                 workoutRecorder.addSet(to: setGroup)
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }) {
                 Label("Add Set", systemImage: "plus.circle.fill")
                     .foregroundColor(.accentColor)
@@ -293,13 +303,13 @@ struct WorkoutRecorderView: View {
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
                 .padding()
-            TextField("0", text: repetitionsString)
+            TextField(workoutRecorder.repetitionsPlaceholder(for: workoutSet), text: repetitionsString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
                 .font(.body.weight(.semibold))
                 .multilineTextAlignment(.trailing)
                 .padding(7)
-                .background(workoutSet.repetitions == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : Color.accentColor.opacity(0.1))
+                .background(workoutSet.repetitions == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : .accentColorBackground)
                 .cornerRadius(5)
                 .overlay {
                     HStack {
@@ -310,13 +320,13 @@ struct WorkoutRecorderView: View {
                         Spacer()
                     }
                 }
-            TextField("0", text: weightString)
+            TextField(workoutRecorder.weightPlaceholder(for: workoutSet), text: weightString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
                 .font(.body.weight(.semibold))
                 .multilineTextAlignment(.trailing)
                 .padding(7)
-                .background(workoutSet.weight == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : Color.accentColor.opacity(0.1))
+                .background(workoutSet.weight == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : .accentColorBackground)
                 .cornerRadius(5)
                 .overlay {
                     HStack {
@@ -327,6 +337,23 @@ struct WorkoutRecorderView: View {
                         Spacer()
                     }
                 }
+            if let templateSet = workoutRecorder.templateSet(for: workoutSet), templateSet.hasEntry {
+                Button(action: {
+                    UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                    if workoutSet.hasEntry {
+                        workoutSet.clearEntries()
+                    } else {
+                        workoutSet.match(templateSet)
+                    }
+                }) {
+                    Image(systemName: "checkmark")
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(workoutSet.hasEntry ? .accentColor : .secondaryLabel)
+                        .padding(7)
+                        .background(workoutSet.hasEntry ? Color.accentColorBackground : .secondaryBackground)
+                        .cornerRadius(5)
+                }
+            }
         }.padding(.trailing)
     }
     
@@ -341,7 +368,7 @@ struct WorkoutRecorderView: View {
                 .font(.body.weight(.bold))
         }.frame(maxWidth: .infinity)
             .padding()
-            .background(Color.accentColor.opacity(0.2))
+            .background(Color.accentColorBackground)
             .cornerRadius(15)
     }
     

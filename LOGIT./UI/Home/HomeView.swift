@@ -15,6 +15,7 @@ struct HomeView: View {
     @ObservedObject private var home: Home
     @State private var isShowingWorkoutRecorder: Bool = false
     @State private var isShowingProfile: Bool = false
+    @State private var isShowingTemplateEditor = false
     @State private var isShowingQuote: Bool = true
     
     init(context: NSManagedObjectContext) {
@@ -28,7 +29,7 @@ struct HomeView: View {
                     TargetWorkoutsView
                     Section(content: {
                         ForEach(home.recentWorkouts, id:\.objectID) { (workout: Workout) in
-                            WorkoutCellView(workout: workout)
+                            WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(true))
                         }.onDelete { indexSet in
                             for index in indexSet {
                                 home.delete(workout: home.recentWorkouts[index])
@@ -81,6 +82,9 @@ struct HomeView: View {
             NavigationView {
                 ProfileView()
             }
+        }
+        .sheet(isPresented: $isShowingTemplateEditor) {
+            TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
         }
     }
     

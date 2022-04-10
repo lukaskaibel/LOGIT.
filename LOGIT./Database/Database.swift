@@ -44,6 +44,10 @@ struct Database {
         })
     }
     
+    var context: NSManagedObjectContext {
+        container.viewContext
+    }
+    
     func save() {
         let context = container.viewContext
         if context.hasChanges {
@@ -55,9 +59,15 @@ struct Database {
         }
     }
     
+    func object(with objectID: NSManagedObjectID) -> NSManagedObject {
+        context.object(with: objectID)
+    }
+    
     func refreshObjects() {
         container.viewContext.refreshAllObjects()
     }
+    
+    //MARK: - Entitiy Creation
     
     @discardableResult
     func newWorkout(name: String = "", date: Date = Date(), setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()) -> Workout {
@@ -69,11 +79,14 @@ struct Database {
     }
     
     @discardableResult
-    func newWorkoutSetGroup(sets: [WorkoutSet]? = nil, exercise: Exercise? = nil, workout: Workout? = nil) -> WorkoutSetGroup {
+    func newWorkoutSetGroup(sets: [WorkoutSet]? = nil,
+                            createFirstSetAutomatically: Bool = true,
+                            exercise: Exercise? = nil,
+                            workout: Workout? = nil) -> WorkoutSetGroup {
         let setGroup = WorkoutSetGroup(context: container.viewContext)
         if let sets = sets, !sets.isEmpty {
             setGroup.sets = NSOrderedSet(array: sets)
-        } else {
+        } else if createFirstSetAutomatically {
             newWorkoutSet(setGroup: setGroup)
         }
         setGroup.exercise = exercise
@@ -101,6 +114,63 @@ struct Database {
         }
         return exercise
     }
+    
+    //MARK: - Template Entitiy Creation
+    
+    @discardableResult
+    func newTemplateWorkout(name: String = "",
+                            setGroups: [TemplateWorkoutSetGroup] = [TemplateWorkoutSetGroup]()) -> TemplateWorkout {
+        let templateWorkout = TemplateWorkout(context: container.viewContext)
+        templateWorkout.name = name
+        templateWorkout.creationDate = Date.now
+        templateWorkout.setGroups = NSOrderedSet(array: setGroups)
+        return templateWorkout
+    }
+    
+    @discardableResult
+    func newTemplateWorkout(from workout: Workout) -> TemplateWorkout {
+        let template = newTemplateWorkout(name: workout.name ?? "")
+        workout.template = template
+        for setGroup in workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList {
+            let templateSetGroup = newTemplateWorkoutSetGroup(createFirstSetAutomatically: false,
+                                                              exercise: setGroup.exercise,
+                                                              templateWorkout: template)
+            for workoutSet in setGroup.sets?.array as? [WorkoutSet] ?? .emptyList {
+                newTemplateWorkoutSet(repetitions: Int(workoutSet.repetitions),
+                                      weight: Int(workoutSet.weight),
+                                      setGroup: templateSetGroup)
+            }
+        }
+        return template
+    }
+    
+    @discardableResult
+    func newTemplateWorkoutSetGroup(templateSets: [TemplateWorkoutSet]? = nil,
+                                    createFirstSetAutomatically: Bool = true,
+                                    exercise: Exercise? = nil,
+                                    templateWorkout: TemplateWorkout? = nil) -> TemplateWorkoutSetGroup {
+        let templateSetGroup = TemplateWorkoutSetGroup(context: container.viewContext)
+        if let templateSets = templateSets, !templateSets.isEmpty {
+            templateSetGroup.sets = NSOrderedSet(array: templateSets)
+        } else if createFirstSetAutomatically {
+            newTemplateWorkoutSet(setGroup: templateSetGroup)
+        }
+        templateSetGroup.exercise = exercise
+        templateSetGroup.workout = templateWorkout
+        return templateSetGroup
+    }
+    
+    @discardableResult
+    func newTemplateWorkoutSet(repetitions: Int = 0, weight: Int = 0, setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateWorkoutSet {
+        let templateWorkoutSet = TemplateWorkoutSet(context: container.viewContext)
+        templateWorkoutSet.repetitions = Int64(repetitions)
+        templateWorkoutSet.weight = Int64(weight)
+        templateWorkoutSet.setGroup = setGroup
+        return templateWorkoutSet
+    }
+
+
+    //MARK: - Extra Methods
     
     func getExercises() -> [Exercise] {
         do {

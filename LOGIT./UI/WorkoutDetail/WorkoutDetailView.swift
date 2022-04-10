@@ -12,11 +12,23 @@ struct WorkoutDetailView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @Binding var canNavigateToTemplate: Bool
+    
     @StateObject var workoutDetail: WorkoutDetail
     @State private var isShowingDeleteWorkoutAlert: Bool = false
+    @State private var isShowingNewTemplate: Bool = false
+    @State private var isShowingTemplateDetail: Bool = false
     
     var body: some View {
         List {
+            if canNavigateToTemplate {
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(height: 1)
+                    .listRowSeparator(.hidden)
+                TemplateView
+                    .buttonStyle(PlainButtonStyle())
+            }
             ForEach(workoutDetail.setGroups) { setGroup in
                 Section(content: {
                     VStack(spacing: 0) {
@@ -39,8 +51,6 @@ struct WorkoutDetailView: View {
                     }.listRowSeparator(.hidden)
                 }, header: {
                     Header(for: setGroup)
-                        .padding(.vertical
-                                 , 8)
                         .listRowInsets(EdgeInsets())
                 }, footer: {
                     Text("\(setGroup.numberOfSets) set\(setGroup.numberOfSets == 1 ? "" : "s")")
@@ -70,9 +80,63 @@ struct WorkoutDetailView: View {
                     dismiss()
                 }
             }
+                                .sheet(isPresented: $isShowingNewTemplate) {
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: Database.shared.newTemplateWorkout(from: workoutDetail.workout)))
+                                }
+                                .sheet(isPresented: $isShowingTemplateDetail) {
+                                    NavigationView {
+                                        WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: workoutDetail.workout.template?.objectID ?? NSManagedObjectID()))
+                                            .toolbar {
+                                                ToolbarItem(placement: .navigationBarLeading) {
+                                                    Button("Dismiss") { isShowingTemplateDetail = false }
+                                                }
+                                            }
+                                    }
+                                }
     }
         
     //MARK: - Supporting Views
+    
+    private var TemplateView: some View {
+        Section(content: {
+            Button(action: {
+                if workoutDetail.workout.template == nil {
+                    isShowingNewTemplate = true
+                } else {
+                    isShowingTemplateDetail = true
+                }
+            }) {
+                HStack {
+                    if workoutDetail.workout.template == nil {
+                        Image(systemName: "plus")
+                            .foregroundColor(.accentColor)
+                            .font(.body.weight(.medium))
+                    } else {
+                        Text("Template")
+                            .foregroundColor(.secondaryLabel)
+                        Spacer()
+                    }
+                    Text(workoutDetail.workout.template?.name ?? "New Template from Workout")
+                        .fontWeight(.medium)
+                        .foregroundColor(workoutDetail.workout.template == nil ? .accentColor : .label)
+                    if workoutDetail.workout.template != nil {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondaryLabel)
+                            .font(.body.weight(.medium))
+                    } else {
+                        Spacer()
+                    }
+                }.padding()
+                    .background(Color.secondaryBackground)
+                    .cornerRadius(10)
+            }
+        }, footer: {
+            Text("Make your workout reusable and track your progress with it over time.")
+                .font(.footnote)
+                .foregroundColor(.secondaryLabel)
+                .padding(.horizontal)
+        }).listRowSeparator(.hidden)
+    }
     
     @ViewBuilder
     private func Header(for setGroup: WorkoutSetGroup) -> some View {
@@ -81,8 +145,7 @@ struct WorkoutDetailView: View {
                 NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(context: Database.shared.container.viewContext, exerciseID: exercise.objectID))) {
                     HStack {
                         Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
-                            .foregroundColor(.secondaryLabel)
-                            .font(.title2)
+                            .sectionHeaderStyle()
                         Text("\(exercise.name ?? "No Name")")
                             .foregroundColor(.label)
                             .font(.title2.weight(.semibold))
@@ -145,6 +208,6 @@ struct WorkoutDetailView: View {
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext, workoutID: NSManagedObjectID()))
+        WorkoutDetailView(canNavigateToTemplate: .constant(true), workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext, workoutID: NSManagedObjectID()))
     }
 }

@@ -22,7 +22,7 @@ struct AllWorkoutsView: View {
             ForEach(allWorkouts.sectionedWorkouts.indices, id:\.self) { index in
                 Section(content: {
                     ForEach(allWorkouts.sectionedWorkouts[index], id:\.objectID) { workout in
-                        WorkoutCellView(workout: workout)
+                        WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(true))
                     }.onDelete { indexSet in
                         for i in indexSet {
                             allWorkouts.delete(workout: allWorkouts.sectionedWorkouts[index][i])

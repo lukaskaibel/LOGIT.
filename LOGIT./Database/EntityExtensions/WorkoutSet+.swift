@@ -22,6 +22,20 @@ extension WorkoutSet {
         setGroup?.workout
     }
     
+    var hasEntry: Bool {
+        repetitions > 0 || weight > 0
+    }
+    
+    func clearEntries() {
+        repetitions = 0
+        weight = 0
+    }
+    
+    func match(_ template: TemplateWorkoutSet) {
+        repetitions = template.repetitions
+        weight = template.weight
+    }
+    
     func makeCopy() -> WorkoutSet? {
         guard let context = self.managedObjectContext else { return nil }
         let copy = WorkoutSet(context: context)

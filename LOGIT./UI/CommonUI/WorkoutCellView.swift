@@ -14,12 +14,15 @@ struct WorkoutCellView: View {
     
     @ObservedObject var workout: Workout
     
-    @State var isShowingAllExercises: Bool = false
+    @Binding var canNavigateToTemplate: Bool
     
+    @State private var isShowingAllExercises: Bool = false
+        
     //MARK: Body
     
     var body: some View {
-        NavigationLink(destination: WorkoutDetailView(workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext,
+        NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: $canNavigateToTemplate,
+                                                      workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext,
                                                                                    workoutID: workout.objectID))) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
@@ -29,10 +32,11 @@ struct WorkoutCellView: View {
                     Spacer()
                     Text(date)
                         .foregroundColor(.secondaryLabel)
+                        .font(.subheadline)
                 }
                 Text(exercisesString)
                     .foregroundColor(.secondaryLabel)
-                    .font(.body.weight(.medium))
+                    .font(.subheadline)
                     .lineLimit(1)
                     .frame(maxWidth: 280, alignment: .leading)
                 Text("\(workout.numberOfSetGroups) exercise\(workout.numberOfSetGroups == 1 ? "" : "s")")
@@ -67,6 +71,6 @@ struct WorkoutCellView: View {
 
 struct WorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutCellView(workout: Workout(context: Database.preview.container.viewContext))
+        WorkoutCellView(workout: Workout(context: Database.preview.container.viewContext), canNavigateToTemplate: .constant(true))
     }
 }

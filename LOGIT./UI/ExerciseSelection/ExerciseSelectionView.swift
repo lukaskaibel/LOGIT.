@@ -30,7 +30,9 @@ struct ExerciseSelectionView: View {
         }.listStyle(.plain)
             .navigationTitle(selectedExercise == nil  ? "Add Exercise" : "Select Exercise")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $exerciseSelection.searchedText, prompt: "Search in Exercises")
+            .searchable(text: $exerciseSelection.searchedText,
+                        placement: .navigationBarDrawer(displayMode: .always),
+                        prompt: "Search in Exercises")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {

@@ -40,7 +40,9 @@ final class TimerModel: ObservableObject {
     
     public func start() {
         startDate = Date.now
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateView), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            self?.updateView()
+        }
         updateView()
     }
     
@@ -66,8 +68,6 @@ final class TimerModel: ObservableObject {
     }
     
     @objc private func updateView() {
-        print(String(progress))
-        print(String(remainingTime ?? 0))
         if remainingTime ?? 0 <= 0 {
             reset()
         }

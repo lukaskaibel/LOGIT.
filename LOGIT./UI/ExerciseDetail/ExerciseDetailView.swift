@@ -95,7 +95,7 @@ struct ExerciseDetailView: View {
                     Button(action: { showingEditExercise.toggle() }, label: { Label("Edit Name", systemImage: "pencil") })
                     Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label("Delete", systemImage: "trash") } )
                 }) {
-                    Image(systemName: "ellipsis")
+                    Image(systemName: "ellipsis.circle")
                 }
             }
         }

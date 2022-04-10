@@ -14,6 +14,12 @@ class WorkoutRecorder: ObservableObject {
     @Published var exerciseForExerciseDetail: Exercise?
     @Published var selectedTimerDuration: Int = 0
     
+    public var template: TemplateWorkout? {
+        didSet { updateWorkoutWithTemplate() }
+    }
+    
+    private var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateWorkoutSet]()
+    
     public var showingExerciseDetail: Binding<Bool> {
         Binding(get: { self.exerciseForExerciseDetail != nil },
                 set: { _ in self.exerciseForExerciseDetail = nil })
@@ -81,13 +87,31 @@ class WorkoutRecorder: ObservableObject {
         updateView()
     }
     
-    public func delete(exercisesWithIndices indexSet: IndexSet) {
+    public func delete(setGroupsWithIndexes indexSet: IndexSet) {
         if let setGroups = workout.setGroups?.array as? [WorkoutSetGroup] {
             for index in indexSet {
                 database.delete(setGroups[index])
             }
             updateView()
         }
+    }
+    
+    public func repetitionsPlaceholder(for workoutSet: WorkoutSet) -> String {
+        if let template = workoutSetTemplateSetDictionary[workoutSet] {
+            return String(template.repetitions)
+        }
+        return "0"
+    }
+    
+    public func weightPlaceholder(for workoutSet: WorkoutSet) -> String {
+        if let template = workoutSetTemplateSetDictionary[workoutSet] {
+            return String(convertWeightForDisplaying(template.weight))
+        }
+        return "0"
+    }
+    
+    public func templateSet(for workoutSet: WorkoutSet) -> TemplateWorkoutSet? {
+        workoutSetTemplateSetDictionary[workoutSet]
     }
     
     public func delete(setsWithIndices indexSet: IndexSet, in setGroup: WorkoutSetGroup) {
@@ -106,6 +130,23 @@ class WorkoutRecorder: ObservableObject {
     
     public func deleteWorkout() {
         database.delete(workout)
+        updateView()
+    }
+    
+    public func updateWorkoutWithTemplate() {
+        if let template = template {
+            template.addToWorkouts(workout)
+            workout.name = template.name
+            for templateSetGroup in template.setGroups?.array as? [TemplateWorkoutSetGroup] ?? .emptyList {
+                let setGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false,
+                                                           exercise: templateSetGroup.exercise,
+                                                           workout: workout)
+                for templateSet in templateSetGroup.sets?.array as? [TemplateWorkoutSet] ?? .emptyList {
+                    let workoutSet = database.newWorkoutSet(setGroup: setGroup)
+                    workoutSetTemplateSetDictionary[workoutSet] = templateSet
+                }
+            }
+        }
         updateView()
     }
     

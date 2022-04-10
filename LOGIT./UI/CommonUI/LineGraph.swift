@@ -102,7 +102,7 @@ struct LineGraph: View {
     }
     
     private var maxYValue: Int {
-        (yValues.max() ?? 0) + 1
+        (yValues.max() ?? 0)
     }
 }
 

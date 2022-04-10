@@ -11,6 +11,14 @@ extension Array {
     
     static var emptyList: [Element] { [Element]() }
     
+    func elements(for indexSet: IndexSet) -> [Element] {
+        var result = [Element]()
+        for i in indexSet {
+            result.append(self[i])
+        }
+        return result
+    }
+    
 }
 
 extension Array where Element: Comparable {

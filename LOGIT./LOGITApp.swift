@@ -20,6 +20,9 @@ struct LOGIT: App {
         ])
         //FirstStartView Test
 //        UserDefaults.standard.set(false, forKey: "setupDone")
+        
+        //Fixes issue with wrong Accent Color in Alerts
+        UIView.appearance().tintColor = UIColor(named: "AccentColor")
     }
     
     let database = Database.shared

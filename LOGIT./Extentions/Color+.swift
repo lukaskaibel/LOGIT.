@@ -27,9 +27,6 @@ extension Color {
     
     static var shadow: Color { Color.black.opacity(0.2) }
 
-    static var repetitions: Color { Color(UIColor.systemIndigo) }
-    static var weight: Color { Color(UIColor.systemOrange) }
-    static var time: Color { Color(UIColor.systemGreen) }
+    static var accentColorBackground: Color { Color.accentColor.opacity(0.1) }
 
-    
 }

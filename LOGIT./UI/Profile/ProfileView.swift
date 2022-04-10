@@ -17,6 +17,13 @@ struct ProfileView: View {
     
     var body: some View {
         List {
+            Section(content: {
+                NavigationLink(destination: WorkoutTemplateListView()) {
+                    Text("My Workout Templates")
+                }
+            }, footer: {
+                Text("Workout Templates are templates for workouts that can be reused.")
+            })
             NavigationLink(destination: AllExercisesView()) {
                 Section(content: {
                     VStack(alignment: .leading) {
