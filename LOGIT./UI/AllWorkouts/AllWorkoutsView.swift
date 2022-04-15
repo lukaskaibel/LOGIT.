@@ -40,11 +40,12 @@ struct AllWorkoutsView: View {
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden, edges: .bottom)
         }.listStyle(.plain)
-            .searchable(text: $allWorkouts.searchedText, prompt: "Search in Workouts")
-            .navigationTitle("All Workouts")
+            .searchable(text: $allWorkouts.searchedText,
+                        prompt: NSLocalizedString("searchWorkouts", comment: "Searching in workouts"))
+            .navigationTitle(NSLocalizedString("workouts", comment: "Collection of exercises"))
             .toolbar  {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu("Sort by") {
+                    Menu(NSLocalizedString("sortBy", comment: "Order of a list")) {
                         Section {
                             Button(action: {
                                 if allWorkouts.sortingKey != .name {
@@ -52,7 +53,7 @@ struct AllWorkoutsView: View {
                                 }
                                 allWorkouts.sortingKey = .name
                             }) {
-                                Label("Name", systemImage: "textformat")
+                                Label(NSLocalizedString("name", comment: "What you call a person"), systemImage: "textformat")
                             }
                             Button(action: {
                                 if allWorkouts.sortingKey != .date {
@@ -60,14 +61,14 @@ struct AllWorkoutsView: View {
                                 }
                                 allWorkouts.sortingKey = .date
                             }) {
-                                Label("Date", systemImage: "calendar")
+                                Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
                             }
                         }
                         Section {
-                            Button(allWorkouts.sortingKey == .name ? "Ascending" : "Oldest First") {
+                            Button(allWorkouts.sortingKey == .name ? NSLocalizedString("ascending", comment: "") : NSLocalizedString("oldestFirst", comment: "")) {
                                 allWorkouts.ascending = true
                             }
-                            Button(allWorkouts.sortingKey == .name ? "Descending" : "Newest First") {
+                            Button(allWorkouts.sortingKey == .name ? NSLocalizedString("oldestFirst", comment: "") : NSLocalizedString("newestFirst", comment: "")) {
                                 allWorkouts.ascending = false
                             }
                         }
@@ -78,6 +79,7 @@ struct AllWorkoutsView: View {
     
     private func dateString(for date: Date) -> String {
         let formatter = DateFormatter()
+        formatter.locale = Locale.current
         formatter.dateFormat = "MMMM yyyy"
         return formatter.string(from: date)
     }

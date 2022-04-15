@@ -18,6 +18,8 @@ struct LOGIT: App {
             "workoutPerWeekTarget" : 3,
             "setupDone" : false
         ])
+        UserDefaults.standard.set(["de"], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
         //FirstStartView Test
 //        UserDefaults.standard.set(false, forKey: "setupDone")
         
@@ -30,8 +32,16 @@ struct LOGIT: App {
     var body: some Scene {
         WindowGroup {
             if setupDone {
-                HomeView(context: database.container.viewContext)
-                    .environment(\.managedObjectContext, database.container.viewContext)
+                TabView {
+                    HomeView(context: database.container.viewContext)
+                        .tabItem { Label("Home", systemImage: "house") }
+                    NavigationView {
+                        WorkoutTemplateListView()
+                    }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
+                    NavigationView {
+                        AllExercisesView()
+                    }.tabItem { Label(NSLocalizedString("exercises", comment: ""), systemImage: "stopwatch") }
+                }.environment(\.managedObjectContext, database.container.viewContext)
             } else {
                 FirstStartView()
             }

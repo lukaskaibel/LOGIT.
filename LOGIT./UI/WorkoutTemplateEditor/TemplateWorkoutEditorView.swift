@@ -24,7 +24,7 @@ struct TemplateWorkoutEditorView: View {
             List {
                 if !isEditing {
                     Section {
-                        TextField("Title", text: $templateWorkoutEditor.templateWorkoutName)
+                        TextField(NSLocalizedString("title", comment: ""), text: $templateWorkoutEditor.templateWorkoutName)
                             .font(.body.weight(.bold))
                             .padding(.vertical, 8)
                     }
@@ -42,40 +42,42 @@ struct TemplateWorkoutEditorView: View {
                         Button(action: { showingExerciseSelection = true }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
-                                Text("Add Exercise")
+                                Text(NSLocalizedString("addExercise", comment: ""))
                             }.padding(.vertical, 8)
                         }
                     }
                 }
             }.listStyle(.insetGrouped)
                 .interactiveDismissDisabled()
-                .navigationTitle(templateWorkoutEditor.isEditingExistingTemplate ? "Edit Workout Template" : "New Workout Template")
+                .navigationTitle(templateWorkoutEditor.isEditingExistingTemplate ? NSLocalizedString("editWorkoutTemplate", comment: "") : NSLocalizedString("newWorkoutTemplate", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .environment(\.editMode, $editMode)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(templateWorkoutEditor.isEditingExistingTemplate ? "Save" : "Add") {
+                        Button(NSLocalizedString("save", comment: "")) {
                             templateWorkoutEditor.saveTemplateWorkout()
                             dismiss()
                         }.font(.body.weight(.bold))
                             .disabled(!templateWorkoutEditor.canSaveTemplate)
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            templateWorkoutEditor.deleteTemplateWorkout()
+                        Button(NSLocalizedString("cancel", comment: "")) {
+                            if !templateWorkoutEditor.isEditingExistingTemplate {
+                                templateWorkoutEditor.deleteTemplateWorkout()
+                            }
                             dismiss()
                         }
                     }
                     ToolbarItem(placement: .keyboard) {
                         HStack {
                             Spacer()
-                            Button("Done") { hideKeyboard() }
+                            Button(NSLocalizedString("done", comment: "")) { hideKeyboard() }
                         }
                     }
                     ToolbarItem(placement: .bottomBar) {
                         HStack {
                             Spacer()
-                            Button(isEditing ? "Done" : "Reorder Exercises") {
+                            Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
                                 isEditing.toggle()
                                 editMode = isEditing ? .active : .inactive
                             }.disabled(templateWorkoutEditor.templateWorkout.numberOfSetGroups == 0)
@@ -97,7 +99,7 @@ struct TemplateWorkoutEditorView: View {
                         }))
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
-                                Button("Cancel", role: .cancel) {
+                                Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
                                     showingExerciseSelection = false
                                 }
                             }
@@ -128,7 +130,7 @@ struct TemplateWorkoutEditorView: View {
             }) {
                 HStack {
                     Image(systemName: "plus")
-                    Text("Add Set")
+                    Text(NSLocalizedString("addSet", comment: ""))
                     Spacer()
                 }
             }.padding(.vertical, 8)

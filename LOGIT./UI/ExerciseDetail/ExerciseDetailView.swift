@@ -23,7 +23,7 @@ struct ExerciseDetailView: View {
         List {
             VStack {
                 VStack(alignment: .leading) {
-                    Text("Personal Best")
+                    Text(NSLocalizedString("personalBest", comment: ""))
                         .foregroundColor(.secondaryLabel)
                     HStack {
                         Text("\(exerciseDetail.personalBest(for: exerciseDetail.selectedAttribute)) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
@@ -41,9 +41,9 @@ struct ExerciseDetailView: View {
                           selectedIndex: $selectedIndexInGraph)
                     .frame(height: 180)
                 Picker("Calendar Component", selection: $exerciseDetail.selectedCalendarComponentForWeight) {
-                    Text("Weekly").tag(Calendar.Component.weekOfYear)
-                    Text("Monthly").tag(Calendar.Component.month)
-                    Text("Yearly").tag(Calendar.Component.year)
+                    Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
+                    Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
+                    Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
                 }.pickerStyle(.segmented)
                     .padding(.top)
 
@@ -71,7 +71,7 @@ struct ExerciseDetailView: View {
                 }
             }, header: {
                 HStack {
-                    Text("Sets")
+                    Text(NSLocalizedString("sets", comment: ""))
                         .foregroundColor(.label)
                         .font(.title2.weight(.bold))
                         .fixedSize()
@@ -79,7 +79,7 @@ struct ExerciseDetailView: View {
                 }.padding(.vertical, 5)
                 .listRowSeparator(.hidden, edges: .top)
             }, footer: {
-                Text("\(exerciseDetail.sets.filter { $0.repetitions > 0 || $0.weight > 0 }.count) set\(exerciseDetail.sets.count == 1 ? "" : "s")")
+                Text("\(exerciseDetail.sets.filter { $0.repetitions > 0 || $0.weight > 0 }.count) \(NSLocalizedString("set\(exerciseDetail.sets.count == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
                     .padding(.top, 5)
@@ -92,15 +92,15 @@ struct ExerciseDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu(content: {
-                    Button(action: { showingEditExercise.toggle() }, label: { Label("Edit Name", systemImage: "pencil") })
-                    Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label("Delete", systemImage: "trash") } )
+                    Button(action: { showingEditExercise.toggle() }, label: { Label(NSLocalizedString("editName", comment: ""), systemImage: "pencil") })
+                    Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
                 }) {
                     Image(systemName: "ellipsis.circle")
                 }
             }
         }
-        .confirmationDialog(Text("Do you want to delete \(exerciseDetail.exercise.name ?? "")? This action can not be undone."), isPresented: $showDeletionAlert, titleVisibility: .visible) {
-            Button("Delete \(exerciseDetail.exercise.name ?? "")", role: .destructive, action: {
+        .confirmationDialog(Text(NSLocalizedString("deleteExerciseConfirmation", comment: "")), isPresented: $showDeletionAlert, titleVisibility: .visible) {
+            Button("\(NSLocalizedString("delete", comment: ""))", role: .destructive, action: {
                 exerciseDetail.deleteExercise()
                 dismiss()
             })
@@ -114,7 +114,7 @@ struct ExerciseDetailView: View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Personal Best")
+                    Text(NSLocalizedString("personalBest", comment: ""))
                         .foregroundColor(.secondaryLabel)
                     HStack(alignment: .lastTextBaseline) {
                         Text("\(exerciseDetail.personalBest(for: .repetitions)) reps")
@@ -131,9 +131,9 @@ struct ExerciseDetailView: View {
                 .padding([.leading, .bottom])
                 .padding(.trailing, 10)
             Picker("Select timeframe.", selection: $exerciseDetail.selectedCalendarComponentForRepetitions) {
-                Text("Week").tag(Calendar.Component.weekOfYear)
-                Text("Month").tag(Calendar.Component.month)
-                Text("Year").tag(Calendar.Component.year)
+                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
+                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
+                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
             }.pickerStyle(.segmented)
                 .padding([.horizontal, .bottom])
         }.background(Color.secondaryBackground)
@@ -145,7 +145,7 @@ struct ExerciseDetailView: View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Personal Best")
+                    Text(NSLocalizedString("personalBest", comment: ""))
                         .foregroundColor(.secondaryLabel)
                     HStack(alignment: .lastTextBaseline) {
                         Text("\(exerciseDetail.personalBest(for: .weight)) \(WeightUnit.used.rawValue)")
@@ -162,9 +162,9 @@ struct ExerciseDetailView: View {
                 .padding([.leading, .bottom])
                 .padding(.trailing, 10)
             Picker("Select timeframe.", selection: $exerciseDetail.selectedCalendarComponentForWeight) {
-                Text("Week").tag(Calendar.Component.weekOfYear)
-                Text("Month").tag(Calendar.Component.month)
-                Text("Year").tag(Calendar.Component.year)
+                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
+                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
+                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
             }.pickerStyle(.segmented)
                 .padding([.horizontal, .bottom])
         }.background(Color.secondaryBackground)
@@ -181,6 +181,7 @@ struct ExerciseDetailView: View {
     private func dateString(for workoutSet: WorkoutSet) -> String {
         if let date = workoutSet.setGroup?.workout?.date {
             let formatter = DateFormatter()
+            formatter.locale = Locale.current
             formatter.dateStyle = .short
             return formatter.string(from: date)
         } else {

@@ -19,27 +19,27 @@ struct EditExerciseView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
-                TextField("Exercise Name", text: $editExercise.exerciseName)
+                TextField(NSLocalizedString("exerciseName", comment: ""), text: $editExercise.exerciseName)
                     .font(.body.weight(.medium))
                     .padding()
                     .background(Color.secondaryBackground)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                Text("Enter the name for the exercise.")
+                Text(NSLocalizedString("exerciseNameDescription", comment: ""))
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                     .padding(.leading)
                 Spacer()
             }.padding()
-                .navigationTitle(editExercise.exerciseToEdit != nil ? "Edit \(editExercise.exerciseName)" : "New Exercise")
+                .navigationTitle(editExercise.exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(editExercise.exerciseName)" : NSLocalizedString("newExercise", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button(NSLocalizedString("cancel", comment: "")) {
                             dismiss()
                         }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(editExercise.exerciseToEdit != nil ? "Update" : "Save") {
+                        Button(editExercise.exerciseToEdit != nil ? NSLocalizedString("update", comment: "") : NSLocalizedString("save", comment: "")) {
                             if editExercise.exerciseExistsWithName(editExercise.exerciseName) {
                                 showingExerciseExistsAlert = true
                             } else if editExercise.exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -51,13 +51,13 @@ struct EditExerciseView: View {
                         }.font(.body.weight(.semibold))
                     }
                 }
-                .alert("\(editExercise.exerciseName.trimmingCharacters(in: .whitespaces)) already exists.", isPresented: $showingExerciseExistsAlert) {
-                    Button("Ok") {
+                .alert("\(editExercise.exerciseName.trimmingCharacters(in: .whitespaces)) \(NSLocalizedString("alreadyExists", comment: ""))", isPresented: $showingExerciseExistsAlert) {
+                    Button(NSLocalizedString("ok", comment: "")) {
                         showingExerciseExistsAlert = false
                     }
                 }
-                .alert("Name can't be empty.", isPresented: $showingExerciseNameEmptyAlert) {
-                    Button("Ok") {
+                .alert(NSLocalizedString("nameCantBeEmpty", comment: ""), isPresented: $showingExerciseNameEmptyAlert) {
+                    Button(NSLocalizedString("ok", comment: "")) {
                         showingExerciseNameEmptyAlert = false
                     }
                 }

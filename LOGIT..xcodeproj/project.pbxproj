@@ -12,6 +12,7 @@
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
+		794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 794C3C462804AD1A003CB9F1 /* Localizable.strings */; };
 		7955EEAE27FDC2F30010693C /* WorkoutTemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAD27FDC2F30010693C /* WorkoutTemplateListView.swift */; };
 		7955EEB027FDC30C0010693C /* WorkoutTemplateList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAF27FDC30C0010693C /* WorkoutTemplateList.swift */; };
 		7955EEB227FDC5680010693C /* WorkoutTemplateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB127FDC5680010693C /* WorkoutTemplateCell.swift */; };
@@ -89,6 +90,8 @@
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
+		794C3C452804AD1A003CB9F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		794C3C472804AD2A003CB9F1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7955EEAD27FDC2F30010693C /* WorkoutTemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateListView.swift; sourceTree = "<group>"; };
 		7955EEAF27FDC30C0010693C /* WorkoutTemplateList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateList.swift; sourceTree = "<group>"; };
 		7955EEB127FDC5680010693C /* WorkoutTemplateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTemplateCell.swift; sourceTree = "<group>"; };
@@ -381,6 +384,7 @@
 				79A4E33327E9EBED0089001F /* UI */,
 				801CDC482688BD9D00BB653D /* Extentions */,
 				8065AA742686668100F53A5A /* Preview Content */,
+				794C3C462804AD1A003CB9F1 /* Localizable.strings */,
 			);
 			path = LOGIT.;
 			sourceTree = "<group>";
@@ -464,6 +468,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 8065AA622686667F00F53A5A;
 			packageReferences = (
@@ -483,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */,
+				794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */,
 				8065AA762686668100F53A5A /* Preview Assets.xcassets in Resources */,
 				8065AA732686668100F53A5A /* Assets.xcassets in Resources */,
 			);
@@ -556,6 +562,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		794C3C462804AD1A003CB9F1 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				794C3C452804AD1A003CB9F1 /* en */,
+				794C3C472804AD2A003CB9F1 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		8065AA7D2686668100F53A5A /* Debug */ = {

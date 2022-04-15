@@ -19,7 +19,7 @@ struct WorkoutRecorderStartScreen: View {
     
     var body: some View {
         List {
-            Text("Choose a template or start an empty workout")
+            Text(NSLocalizedString("chooseTemplateText", comment: ""))
                 .foregroundColor(.secondaryLabel)
                 .font(.subheadline)
                 .padding(.top)
@@ -35,7 +35,7 @@ struct WorkoutRecorderStartScreen: View {
                             .overlay {
                                 Image(systemName: "plus")
                             }
-                        Text("Start Empty Workout")
+                        Text(NSLocalizedString("startEmpty", comment: ""))
                             .font(.body.weight(.semibold))
                         Spacer()
                         Image(systemName: "chevron.right")
@@ -59,17 +59,15 @@ struct WorkoutRecorderStartScreen: View {
                     }
                 }
             }, header: {
-                Text("My Templates")
+                Text(NSLocalizedString("myTemplates", comment: ""))
                     .font(.title2.weight(.bold))
                     .foregroundColor(.label)
                     .padding(.vertical, 5)
-            }, footer: {
-                Text("Templates can be added in your profile or from an existing workout.")
             }).textCase(.none)
-        }.navigationTitle("Start Workout")
+        }.navigationTitle(NSLocalizedString("startWorkout", comment: ""))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Dismiss") {
+                    Button(NSLocalizedString("dismiss", comment: "")) {
                         workoutRecorder.deleteWorkout()
                         dismiss()
                     }

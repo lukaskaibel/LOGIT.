@@ -18,47 +18,30 @@ struct ProfileView: View {
     var body: some View {
         List {
             Section(content: {
-                NavigationLink(destination: WorkoutTemplateListView()) {
-                    Text("My Workout Templates")
-                }
-            }, footer: {
-                Text("Workout Templates are templates for workouts that can be reused.")
-            })
-            NavigationLink(destination: AllExercisesView()) {
-                Section(content: {
-                    VStack(alignment: .leading) {
-                        Text("All Exercises")
-                        Text("\(database.numberOfExercises) exercise\(database.numberOfExercises == 1 ? "" : "s")")
-                            .foregroundColor(.secondaryLabel)
-                            .font(.footnote)
-                    }.padding(.vertical, 3)
-                })
-            }
-            Section(content: {
-                Picker("Target per week", selection: $workoutPerWeekTarget) {
+                Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $workoutPerWeekTarget) {
                     ForEach(1..<10, id:\.self) { i in
                         Text(String(i)).tag(i)
                     }
                 }
             }, footer: {
-                Text("Select your workout target per week.")
+                Text(NSLocalizedString("targetPerWeekDescription", comment: ""))
             })
             Section(content: {
-                Picker("Unit", selection: $weightUnit, content: {
+                Picker(NSLocalizedString("unit", comment: ""), selection: $weightUnit, content: {
                     Text("kg").tag(WeightUnit.kg)
                     Text("lbs").tag(WeightUnit.lbs)
                 })
             }, footer: {
-                Text("Select the unit you want to use. Any previous entries will be converted on change.")
+                Text(NSLocalizedString("unitDescription", comment: ""))
             })
         }.listStyle(.insetGrouped)
-            .navigationTitle("Account")
+            .navigationTitle(NSLocalizedString("profile", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(NSLocalizedString("done", comment: "")) {
                         dismiss()
-                    }.font(.body.weight(.bold))
+                    }.font(.body.weight(.semibold))
                 }
             }
     }

@@ -1,0 +1,134 @@
+/* 
+  Localizable.strings
+  LOGIT.
+
+  Created by Lukas Kaibel on 11.04.22.
+  
+*/
+
+
+"exercise" = "Übung";
+"exercises" = "Übungen";
+"newExercise" = "Neue Übung";
+"addExercise" = "Übung hinzufügen";
+"selectExercise" = "Übung auswählen";
+"searchExercises" = "In Übungen suchen";
+"defaultExercises" = "Standard Übungen";
+"exerciseName" = "Übungsname";
+"exerciseNameDescription" = "Gib den Namen der Übung ein.";
+"reorderExercises" = "Übungen umsortieren";
+
+"searchWorkouts" = "In Workouts suchen";
+"workouts" = "Workouts";
+"startWorkout" = "Workout starten";
+"recentWorkouts" = "Letzte Workouts";
+"finishWorkout" = "Workout beenden";
+"finishWorkoutConfimation" = "Möchtest du das Workout beenden?";
+"deleteSetsWithoutEntries" = "Alle Sätze ohne Einträge löschen und Workout beenden?";
+"deleteSets" = "Sätze löschen und Workout beenden";
+"noEntriesConfirmation" = "Das Workout hat kein Einträge. Workout verwerfen?";
+"discardWorkout" = "Workout verwerfen";
+"deleteWorkout" = "Workout löschen";
+"deleteWorkoutDescription" = "Workout unwiderruflich löschen?";
+
+"showAll" = "Alle anzeigen";
+"sortBy" = "Sortieren nach";
+"home" = "Home";
+"name" = "Name";
+"workoutTarget" = "Workout Ziel";
+"targetPerWeek" = "Ziel pro Woche";
+"targetPerWeekDescription" = "Wähle dein Workout Ziel pro Woche aus.";
+"perWeek" = "pro Woche";
+"weeklyAverage" = "Wöchentlicher Durchschnitt";
+"fromLastWeek" = "zu letzter Woche";
+"showDetails" = "Details anzeigen";
+"setTimer" = "Timer starten";
+"never" = "Nie";
+"lastUsed" = "Zuletzt benutzt";
+"unused" = "Unbenutzt";
+
+"unit" = "Einheit";
+"unitDescription" = "Wähle eine Einheit. Alle vorherigen Eingaben werden konvertiert.";
+"profile" = "Profil";
+
+"completed" = "Geschafft";
+"toGo" = "noch";
+"performed" = "Ausführungen:";
+"time" = "mal";
+"times" = "mal";
+
+"sec" = "sek";
+"date" = "Tag";
+"weekly" = "Wöchentlich";
+"monthly" = "Monatlich";
+"yearly" = "Jährlich";
+"today" = "Heute";
+"yesterday" = "Gestern";
+"set" = "Satz";
+"sets" = "Sätze";
+"addSet" = "Satz hinzufügen";
+"title" = "Titel";
+
+"ascending" = "Aufsteigend";
+"descending" = "Absteigend";
+"oldestFirst" = "Älteste zuerst";
+"newestFirst" = "Neueste zuerst";
+"selectDuration" = "Dauer auswählen";
+"alreadyExists" = "existiert schon.";
+
+"cancel" = "Abbrechen";
+"dismiss" = "Verwerfen";
+"done" = "Fertig";
+"stop" = "Stop";
+"start" = "Start";
+"edit" = "Bearbeiten";
+"update" = "Update";
+"save" = "Sichern";
+"ok" = "Ok";
+"nameCantBeEmpty" = "Name kann nicht leer sein.";
+"personalBest" = "Persönliche Bestleistung";
+"editName" = "Namen bearbeiten";
+"delete" = "Löschen";
+"remove" = "Entfernen";
+"deleteExerciseConfirmation" = "Möchtest du die Übung unwiderruflich löschen?";
+
+"myTemplates" = "Meine Vorlagen";
+"template" = "Vorlage";
+"templates" = "Vorlagen";
+"createTemplate" = "Vorlage erstellen";
+"chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
+"startEmpty" = "Leeres Workout starten";
+"workoutTemplates" = "Workout Vorlagen";
+"templateExplanation" = "Mit Workout Vorlagen kannst du dein Training im Vorhinein planen und wiederverwenden.";
+"deleteTemplate" = "Vorlage löschen";
+"deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";
+"editWorkoutTemplate" = "Workout Vorlagen bearbeiten";
+"newWorkoutTemplate" = "Neue Workout Vorlage";
+"newTemplateFromWorkout" = "Neue Vorlage aus Workout";
+
+"welcomeTo" = "Willkommen bei";
+"letsGetStarted" = "Los gehts";
+"letsGetStartedDescription" = "Bevor du trainieren kannst müssen wir ein kurzen Set-Up machen.";
+"weightUnit" = "Gewichts Einheit";
+"weightUnitDescription" = "Wähle deine bevorzugte Einheit aus.";
+"weeklyTarget" = "Wöchentliches Ziel";
+"weeklyTargetDescription" = "Wähle aus, wie viele Workouts du pro Woche machen möchtest.";
+"defaultExercisesDescription" = "Möchtest du die standard Übungen benutzen?";
+"useDefaultExercises" = "Standard Übungen benutzen";
+"(recommended)" = "(empfohlen)";
+"startSetup" = "Set-Up starten";
+"finishSetup" = "Set-Up beenden";
+"continue" = "Weiter";
+
+"zero" = "Null";
+"one" = "Eins";
+"two" = "Zwei";
+"three" = "Drei";
+"four" = "Vier";
+"five" = "Fünf";
+"six" = "Sechs";
+"seven" = "Sieben";
+"eight" = "Acht";
+"nine" = "Neun";
+
+

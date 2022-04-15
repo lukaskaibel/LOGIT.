@@ -28,11 +28,11 @@ struct ExerciseSelectionView: View {
                 ExerciseSection(for: group)
             }
         }.listStyle(.plain)
-            .navigationTitle(selectedExercise == nil  ? "Add Exercise" : "Select Exercise")
+            .navigationTitle(selectedExercise == nil  ? NSLocalizedString("addExercise", comment: "") : NSLocalizedString("selectExercise", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $exerciseSelection.searchedText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Search in Exercises")
+                        prompt: NSLocalizedString("searchExercises", comment: ""))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -72,7 +72,7 @@ struct ExerciseSelectionView: View {
                         Button(role: .destructive, action: {
                             exerciseSelection.delete(exercise: exercise)
                         }) {
-                            Label("Delete \(exercise.name ?? "")", systemImage: "trash")
+                            Label("\(NSLocalizedString("delete", comment: "")) \(exercise.name ?? "")", systemImage: "trash")
                         }
                     }) {
                         Image(systemName: "ellipsis")

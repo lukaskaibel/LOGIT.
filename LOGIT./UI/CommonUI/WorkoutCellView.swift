@@ -39,7 +39,7 @@ struct WorkoutCellView: View {
                     .font(.subheadline)
                     .lineLimit(1)
                     .frame(maxWidth: 280, alignment: .leading)
-                Text("\(workout.numberOfSetGroups) exercise\(workout.numberOfSetGroups == 1 ? "" : "s")")
+                Text("\(workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: "") )")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
             }

@@ -54,6 +54,10 @@ final class WorkoutDetail: ObservableObject {
         workout.date?.description(.long) ?? ""
     }
     
+    func templateForWorkout() -> TemplateWorkout {
+        workout.template ?? Database.shared.newTemplateWorkout(from: workout)
+    }
+    
     func remove(_ setGroup: WorkoutSetGroup) {
         database.delete(setGroup)
     }

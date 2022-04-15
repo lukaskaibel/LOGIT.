@@ -21,9 +21,9 @@ extension Date {
     func description(_ style: DateFormatter.Style) -> String {
         let formatter = DateFormatter()
         if Calendar.current.isDateInToday(self) {
-            return "Today"
+            return NSLocalizedString("today", comment: "")
         } else if Calendar.current.isDateInYesterday(self) {
-            return "Yesterday"
+            return NSLocalizedString("yesterday", comment: "")
         } else if self > Calendar.current.date(byAdding: .day, value: -7, to: Date.now)! {
             formatter.dateFormat = "EEEE"
         } else {

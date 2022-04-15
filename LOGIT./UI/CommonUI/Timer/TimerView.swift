@@ -44,7 +44,7 @@ struct TimerView: View {
                     .padding(.vertical, 20)
             } else {
                 VStack {
-                    Picker("Select Duration", selection: $timerModel.duration) {
+                    Picker(NSLocalizedString("selectDuration", comment: ""), selection: $timerModel.duration) {
                         ForEach(selectableSeconds, id:\.self) { i in
                             Text(String(i)).tag(i)
                         }
@@ -54,7 +54,7 @@ struct TimerView: View {
                             HStack {
                                 Image(systemName: "timer")
                                 Spacer()
-                                Text("sec")
+                                Text(NSLocalizedString("sec", comment: ""))
                             }//.font(.body.weight(.semibold))
                                 .foregroundColor(.label)
                                 .padding()
@@ -65,7 +65,7 @@ struct TimerView: View {
                 Button(action: {
                     timerModel.reset()
                 }) {
-                    Text("Cancel")
+                    Text(NSLocalizedString("cancel", comment: ""))
                         .foregroundColor(.label.opacity(0.8))
                         .padding(28)
                         .background(Color.secondaryBackground)
@@ -85,7 +85,7 @@ struct TimerView: View {
                         timerModel.start()
                     }
                 }) {
-                    Text(timerModel.isRunning ? "Stop" : "Start")
+                    Text(timerModel.isRunning ? NSLocalizedString("stop", comment: "") : NSLocalizedString("start", comment: ""))
                         .foregroundColor(timerModel.isRunning ? .white : .accentColor)
                         .font(.body.weight(.medium))
                         .padding(28)

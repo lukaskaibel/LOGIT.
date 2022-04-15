@@ -53,7 +53,7 @@ struct WorkoutDetailView: View {
                     Header(for: setGroup)
                         .listRowInsets(EdgeInsets())
                 }, footer: {
-                    Text("\(setGroup.numberOfSets) set\(setGroup.numberOfSets == 1 ? "" : "s")")
+                    Text("\(setGroup.numberOfSets) \(NSLocalizedString("set\(setGroup.numberOfSets == 1 ? "" : "s")", comment: ""))")
                         .foregroundColor(.secondaryLabel)
                         .font(.subheadline)
                         .listRowSeparator(.hidden, edges: .bottom)
@@ -61,7 +61,7 @@ struct WorkoutDetailView: View {
             }.listRowInsets(EdgeInsets())
             Footer
         }.listStyle(.plain)
-            .navigationTitle(workoutDetail.workout.name ?? "No Name")
+            .navigationTitle(workoutDetail.workout.name ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -72,16 +72,16 @@ struct WorkoutDetailView: View {
                     }
                 }
             }
-            .confirmationDialog("Delete \(workoutDetail.workout.name ?? "Workout")? This action cannot be undone.",
+            .confirmationDialog(NSLocalizedString("deleteWorkoutDescription", comment: ""),
                                 isPresented: $isShowingDeleteWorkoutAlert,
                                 titleVisibility: .visible) {
-                Button("Delete Workout", role: .destructive) {
+                Button(NSLocalizedString("deleteWorkout", comment: ""), role: .destructive) {
                     workoutDetail.deleteWorkout()
                     dismiss()
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: Database.shared.newTemplateWorkout(from: workoutDetail.workout)))
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.templateForWorkout()))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {
@@ -112,16 +112,16 @@ struct WorkoutDetailView: View {
                             .foregroundColor(.accentColor)
                             .font(.body.weight(.medium))
                     } else {
-                        Text("Template")
+                        Text(NSLocalizedString("template", comment: ""))
                             .foregroundColor(.secondaryLabel)
                         Spacer()
                     }
-                    Text(workoutDetail.workout.template?.name ?? "New Template from Workout")
+                    Text(workoutDetail.workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
                         .fontWeight(.medium)
-                        .foregroundColor(workoutDetail.workout.template == nil ? .accentColor : .label)
+                        .foregroundColor(.accentColor)
                     if workoutDetail.workout.template != nil {
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.secondaryLabel)
+                            .foregroundColor(.accentColor)
                             .font(.body.weight(.medium))
                     } else {
                         Spacer()
@@ -131,7 +131,7 @@ struct WorkoutDetailView: View {
                     .cornerRadius(10)
             }
         }, footer: {
-            Text("Make your workout reusable and track your progress with it over time.")
+            Text(NSLocalizedString("templateExplanation", comment: ""))
                 .font(.footnote)
                 .foregroundColor(.secondaryLabel)
                 .padding(.horizontal)
@@ -146,7 +146,7 @@ struct WorkoutDetailView: View {
                     HStack {
                         Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
                             .sectionHeaderStyle()
-                        Text("\(exercise.name ?? "No Name")")
+                        Text("\(exercise.name ?? "")")
                             .foregroundColor(.label)
                             .font(.title2.weight(.semibold))
                             .lineLimit(1)
@@ -167,7 +167,7 @@ struct WorkoutDetailView: View {
             Spacer()
             VStack {
                 Text("\(workoutDetail.workoutDateString), \(workoutDetail.workoutTimeString)")
-                Text("\(workoutDetail.workout.numberOfSetGroups) exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s"), \(workoutDetail.workout.numberOfSets) set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")")
+                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("", comment: "set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")")) ")
             }.foregroundColor(.secondaryLabel)
                 .font(.subheadline)
             Spacer()

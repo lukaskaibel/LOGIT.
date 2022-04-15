@@ -25,7 +25,7 @@ struct FirstStartView: View {
         VStack {
             HStack {
                 VStack(alignment:.leading) {
-                    Text("Welcome to")
+                    Text(NSLocalizedString("welcomeTo", comment: ""))
                         .font(.title2.weight(.medium))
                     Text("LOGIT.")
                         .font(.system(size: 50, weight: .bold, design: .default))
@@ -35,10 +35,10 @@ struct FirstStartView: View {
             Spacer()
             if setupStage == .start {
                 VStack {
-                    Text("Let's get started 💪")
+                    Text("\(NSLocalizedString("letsGetStarted", comment: "")) 💪")
                         .font(.title3.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("Before you can start working out we need to do a quick setup to optimise your experience.")
+                    Text(NSLocalizedString("letsGetStartedDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }.padding()
@@ -47,14 +47,14 @@ struct FirstStartView: View {
                     .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else if setupStage == .weightUnit {
                 VStack {
-                    Text("Weight Unit ⚖️")
+                    Text("\(NSLocalizedString("weightUnit", comment: "")) ⚖️")
                         .font(.title3.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("Select the unit you want to use throughout the app.")
+                    Text(NSLocalizedString("weightUnitDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
-                    Picker("Weight Unit", selection: $weightUnit, content: {
+                    Picker(NSLocalizedString("weightUnit", comment: ""), selection: $weightUnit, content: {
                         ForEach([WeightUnit.kg, .lbs]) { unit in
                             Text(unit.rawValue).tag(unit)
                         }
@@ -65,14 +65,14 @@ struct FirstStartView: View {
                     .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else if setupStage == .weeklyTarget {
                 VStack {
-                    Text("Weekly Target 🗓")
+                    Text("\(NSLocalizedString("weeklyTarget", comment: "")) 🗓")
                         .font(.title3.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("Select how many workouts you want to do per week.")
+                    Text(NSLocalizedString("weeklyTargetDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
-                    Picker("Weekly Target", selection: $weeklyWorkoutTarget, content: {
+                    Picker(NSLocalizedString("weeklyTarget", comment: ""), selection: $weeklyWorkoutTarget, content: {
                         ForEach(1..<10, id:\.self) { i in
                             Text(String(i)).tag(i)
                         }
@@ -83,17 +83,17 @@ struct FirstStartView: View {
                     .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else {
                 VStack {
-                    Text("Default Exercises")
+                    Text(NSLocalizedString("defaultExercises", comment: ""))
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Text("Do you want to use the default exercise library?")
+                    Text(NSLocalizedString("defaultExercisesDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
                     Toggle(isOn: $useStandardExercises, label: {
                         VStack(alignment: .leading) {
-                            Text("Use Default Exercises")
-                            Text("(recommended)")
+                            Text(NSLocalizedString("useDefaultExercises", comment: ""))
+                            Text(NSLocalizedString("(recommended)", comment: ""))
                                 .foregroundColor(.secondaryLabel)
                                 .font(.caption)
                         }
@@ -128,7 +128,7 @@ struct FirstStartView: View {
             }) {
                 HStack {
                     Image(systemName: setupStage == .standardExercises ? "checkmark.circle.fill" : "arrow.right.circle.fill")
-                    Text(setupStage == .start ? "Start Setup" : setupStage == .standardExercises ? "Finish Setup" : "Continue")
+                    Text(setupStage == .start ? NSLocalizedString("startSetup", comment: "") : setupStage == .standardExercises ? NSLocalizedString("finishSetup", comment: "") : NSLocalizedString("continue", comment: ""))
                 }.foregroundColor(.accentColor)
                     .font(.title3.weight(.bold))
             }.frame(maxWidth: .infinity)

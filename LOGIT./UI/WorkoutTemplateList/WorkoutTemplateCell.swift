@@ -28,11 +28,11 @@ struct WorkoutTemplateCell: View {
                 .lineLimit(1)
                 .frame(maxWidth: 280, alignment: .leading)
             HStack {
-                Text("\(workoutTemplate.numberOfSetGroups.description) exercise\(workoutTemplate.numberOfSetGroups == 1 ? "" : "s")")
+                Text("\(workoutTemplate.numberOfSetGroups.description) \(NSLocalizedString("exercise\(workoutTemplate.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
                 Spacer()
-                Text("Template")
+                Text(NSLocalizedString("template", comment: ""))
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                     .padding(.vertical, 2)
@@ -49,9 +49,9 @@ struct WorkoutTemplateCell: View {
     
     private var lastUsedDate: String {
         if let date = workoutTemplate.date {
-            return "Last used \(date.description(.short))"
+            return "\(NSLocalizedString("lastUsed", comment: "")) \(date.description(.short))"
         } else {
-            return "Unused"
+            return NSLocalizedString("unused", comment: "")
         }
     }
     

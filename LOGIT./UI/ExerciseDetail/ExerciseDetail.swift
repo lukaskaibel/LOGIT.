@@ -146,6 +146,7 @@ final class ExerciseDetail: ObservableObject {
     private func getFirstDayString(in component: Calendar.Component, for date: Date) -> String {
         let firstDayOfWeek = Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
         let formatter = DateFormatter()
+        formatter.locale = Locale.current
         formatter.dateFormat = component == .weekOfYear ? "dd.MM." : component == .month ? "MMM" : "yyyy"
         return formatter.string(from: firstDayOfWeek)
     }

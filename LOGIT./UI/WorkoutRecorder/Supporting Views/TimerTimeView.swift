@@ -27,12 +27,12 @@ struct TimerTimeView: View {
                     NavigationView {
                         TimerView(selectableSeconds: [15, 30, 45, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600])
                             .environmentObject(timer)
-                            .navigationBarTitle("Set Timer")
+                            .navigationBarTitle(NSLocalizedString("setTimer", comment: ""))
                             .navigationBarTitleDisplayMode(.inline)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(action: { showingTimerView = false }) {
-                                        Text("Dismiss")
+                                        Text(NSLocalizedString("dismiss", comment: ""))
                                     }
                                 }
                             }

@@ -34,9 +34,9 @@ struct AllExercisesView: View {
                 })
             }
         }.listStyle(.plain)
-            .searchable(text: $searchedText, placement: .navigationBarDrawer(displayMode: .always))
-            .navigationTitle("All Exercises")
-            .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $searchedText )
+            .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {

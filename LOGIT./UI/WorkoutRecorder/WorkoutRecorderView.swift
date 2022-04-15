@@ -52,7 +52,7 @@ struct WorkoutRecorderView: View {
                     }
                         .font(.body.monospacedDigit())
                     Spacer()
-                    Button(isEditing ? "Done" : "Reorder Exercises") {
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }.disabled(workoutRecorder.workout.numberOfSetGroups == 0)
@@ -72,7 +72,7 @@ struct WorkoutRecorderView: View {
                 }))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel", role: .cancel) {
+                        Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
                             showingExerciseSelection = false
                         }
                     }
@@ -85,24 +85,24 @@ struct WorkoutRecorderView: View {
                 ExerciseDetailView(exerciseDetail: exerciseDetail.with(exercise: workoutRecorder.exerciseForExerciseDetail!))
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button("Dismiss") { workoutRecorder.showingExerciseDetail.wrappedValue = false }
+                            Button(NSLocalizedString("dismiss", comment: "")) { workoutRecorder.showingExerciseDetail.wrappedValue = false }
                         }
                     }
             }
         }
         .navigationBarHidden(true)
-        .confirmationDialog(Text("Do you want to finish the workout?"),
+        .confirmationDialog(Text(NSLocalizedString("finishWorkoutConfimation", comment: "")),
                             isPresented: $showingFinishWorkoutAlert,
                             titleVisibility: .automatic) {
-            Button("Finish Workout") {
+            Button(NSLocalizedString("finishWorkout", comment: "")) {
                 workoutRecorder.saveWorkout()
                 dismiss()
             }.font(.body.weight(.semibold))
         }
-        .confirmationDialog(Text("Delete all sets without entries and finish workout?"),
+        .confirmationDialog(Text(NSLocalizedString("deleteSetsWithoutEntries", comment: "")),
                             isPresented: $showingDeleteUnusedSetsAndFinishWorkoutAlert,
                             titleVisibility: .visible) {
-            Button("Delete Sets and Finish Workout", role: .destructive) {
+            Button(NSLocalizedString("deleteSets", comment: ""), role: .destructive) {
                 workoutRecorder.deleteSetsWithoutRepsAndWeight()
                 if workoutRecorder.workout.isEmpty {
                     workoutRecorder.deleteWorkout()
@@ -112,10 +112,10 @@ struct WorkoutRecorderView: View {
                 dismiss()
             }
         }
-        .confirmationDialog(Text("This workout has to entries. Discard it?"),
+        .confirmationDialog(Text(NSLocalizedString("noEntriesConfirmation", comment: "")),
                             isPresented: $showingDiscardWorkoutAlert,
                             titleVisibility: .visible) {
-            Button("Discard Workout", role: .destructive) {
+            Button(NSLocalizedString("discardWorkout", comment: ""), role: .destructive) {
                 workoutRecorder.deleteSetsWithoutRepsAndWeight()
                 workoutRecorder.deleteWorkout()
                 dismiss()
@@ -185,7 +185,7 @@ struct WorkoutRecorderView: View {
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Spacer()
-                        Button("Done") {
+                        Button(NSLocalizedString("done", comment: "")) {
                             hideKeyboard()
                         }.font(.body.weight(.semibold))
                     }
@@ -207,7 +207,7 @@ struct WorkoutRecorderView: View {
                 workoutRecorder.addSet(to: setGroup)
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }) {
-                Label("Add Set", systemImage: "plus.circle.fill")
+                Label(NSLocalizedString("addSet", comment: ""), systemImage: "plus.circle.fill")
                     .foregroundColor(.accentColor)
                     .font(.body.weight(.bold))
             }.padding(15)
@@ -250,7 +250,7 @@ struct WorkoutRecorderView: View {
                             Button(action: {
                                 workoutRecorder.exerciseForExerciseDetail = setGroup.exercise
                             }) {
-                                Label("Show \(setGroup.exercise?.name ?? "")", systemImage: "info.circle")
+                                Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
                             }
                         }
                         Section {
@@ -259,7 +259,7 @@ struct WorkoutRecorderView: View {
                                     workoutRecorder.delete(setGroup: setGroup)
                                 }
                             }) {
-                                Label("Remove", systemImage: "xmark.circle")
+                                Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                             }
                         }
                     }) {
@@ -363,7 +363,7 @@ struct WorkoutRecorderView: View {
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             showingExerciseSelection = true
         }) {
-            Label("Add Exercise", systemImage: "plus.circle.fill")
+            Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                 .foregroundColor(.accentColor)
                 .font(.body.weight(.bold))
         }.frame(maxWidth: .infinity)

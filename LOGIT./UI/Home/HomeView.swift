@@ -16,7 +16,7 @@ struct HomeView: View {
     @State private var isShowingWorkoutRecorder: Bool = false
     @State private var isShowingProfile: Bool = false
     @State private var isShowingTemplateEditor = false
-    @State private var isShowingQuote: Bool = true
+    @State private var isShowingNewTemplate = false
     
     init(context: NSManagedObjectContext) {
         self.home = Home(context: context)
@@ -27,6 +27,35 @@ struct HomeView: View {
             List {
                 Group {
                     TargetWorkoutsView
+                    Section {
+                        HStack {
+                            Button(action: { isShowingNewTemplate = true }) {
+                                VStack(spacing: 5) {
+                                    Image(systemName: "list.bullet.rectangle.portrait")
+                                        .font(.body.weight(.semibold))
+                                    Text(NSLocalizedString("createTemplate", comment: ""))
+                                }.foregroundColor(.label)
+                            }.padding(15)
+                                .frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
+                                .background(Color.secondaryBackground)
+                                .cornerRadius(10)
+                            Button(action: { isShowingWorkoutRecorder = true }) {
+                                VStack(spacing: 5) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.body.weight(.semibold))
+                                    Text(NSLocalizedString("startWorkout", comment: ""))
+                                        .fontWeight(.bold)
+                                }.foregroundColor(.white)
+                            }.padding(15)
+                                .frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
+                                .background(Color.accentColor)
+                                .cornerRadius(10)
+                        }.font(.subheadline.weight(.semibold))
+                    }.padding(.top)
+                        .buttonStyle(.plain)
+                        .listRowSeparator(.hidden)
                     Section(content: {
                         ForEach(home.recentWorkouts, id:\.objectID) { (workout: Workout) in
                             WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(true))
@@ -37,13 +66,13 @@ struct HomeView: View {
                         }
                     }, header: {
                         HStack {
-                            Text("Recent Workouts")
+                            Text(NSLocalizedString("recentWorkouts", comment: ""))
                                 .foregroundColor(.label)
                                 .font(.title2.weight(.bold))
                                 .fixedSize()
                             Spacer()
                             NavigationLink(destination: AllWorkoutsView(context: home.context)) {
-                                Text("Show All")
+                                Text(NSLocalizedString("showAll", comment: ""))
                                     .foregroundColor(.accentColor)
                                     .frame(maxWidth: .infinity, alignment: .trailing)
                             }
@@ -54,23 +83,13 @@ struct HomeView: View {
                 Spacer(minLength: 50)
                     .listRowSeparator(.hidden, edges: .bottom)
             }.listStyle(.plain)
-                .navigationTitle("LOGIT.")
+                .navigationTitle(NSLocalizedString("home", comment: ""))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             isShowingProfile = true
                         }) {
                             Image(systemName: "person.crop.circle")
-                        }
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        Button(action: {
-                            isShowingWorkoutRecorder = true
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("New Workout")
-                            }.font(.body.weight(.bold))
                         }
                     }
                 }
@@ -84,6 +103,9 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $isShowingTemplateEditor) {
+            TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
+        }
+        .sheet(isPresented: $isShowingNewTemplate) {
             TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
         }
     }
@@ -106,10 +128,10 @@ struct HomeView: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Workout target")
+                        Text(NSLocalizedString("workoutTarget", comment: ""))
                             .foregroundColor(.secondaryLabel)
                         HStack(alignment: .lastTextBaseline) {
-                            Text("\(targetPerWeek) per week")
+                            Text("\(targetPerWeek) \(NSLocalizedString("perWeek", comment: ""))")
                                 .font(.title.weight(.medium))
                             Spacer()
                             if let workoutsThisWeek = home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed().last {
@@ -117,13 +139,13 @@ struct HomeView: View {
                                     HStack(spacing: 3) {
                                         Image(systemName: "checkmark.circle.fill")
                                             .font(.title3.weight(.bold))
-                                        Text("Completed")
+                                        Text(NSLocalizedString("completed", comment: ""))
                                             .font(.title3)
                                     }.foregroundColor(.green)
                                 } else {
                                     HStack(spacing: 5) {
                                         Image(systemName: "arrow.right.circle.fill")
-                                        Text("\(description(for: targetPerWeek - workoutsThisWeek)) to go")
+                                        Text("\(description(for: targetPerWeek - workoutsThisWeek)) \(NSLocalizedString("toGo", comment: ""))")
                                     }.foregroundColor(.secondaryLabel)
                                         .font(.title3)
                                 }
@@ -142,16 +164,16 @@ struct HomeView: View {
     
     private func description(for digit: Int) -> String {
         switch digit {
-        case 0: return "Zero"
-        case 1: return "One"
-        case 2: return "Two"
-        case 3: return "Three"
-        case 4: return "Four"
-        case 5: return "Five"
-        case 6: return "Six"
-        case 7: return "Seven"
-        case 8: return "Eight"
-        case 9: return "Nine"
+        case 0: return NSLocalizedString("zero", comment: "")
+        case 1: return NSLocalizedString("one", comment: "")
+        case 2: return NSLocalizedString("two", comment: "")
+        case 3: return NSLocalizedString("three", comment: "")
+        case 4: return NSLocalizedString("four", comment: "")
+        case 5: return NSLocalizedString("five", comment: "")
+        case 6: return NSLocalizedString("six", comment: "")
+        case 7: return NSLocalizedString("seven", comment: "")
+        case 8: return NSLocalizedString("eight", comment: "")
+        case 9: return NSLocalizedString("nine", comment: "")
         default: return "\(digit)"
         }
     }
@@ -161,16 +183,16 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Weekly Average")
+                        Text(NSLocalizedString("weeklyAverage", comment: ""))
                             .foregroundColor(.secondaryLabel)
                         HStack(alignment: .lastTextBaseline) {
-                            Text("\(home.averageWorkoutsPerWeek(for: home.numberOfWeeksInAnalysis)) per week")
+                            Text("\(home.averageWorkoutsPerWeek(for: home.numberOfWeeksInAnalysis)) \(NSLocalizedString("perWeek", comment: ""))")
                                 .font(.title.weight(.medium))
                             Spacer()
                             HStack(spacing: 3) {
                                 Image(systemName: "arrow.\(differenceBetweenLastTwoWeeks < 0 ? "down" : differenceBetweenLastTwoWeeks == 0 ? "right" : "up").circle.fill")
                                     .font(.body.weight(.bold))
-                                Text("\(abs(differenceBetweenLastTwoWeeks)) from last week")
+                                Text("\(abs(differenceBetweenLastTwoWeeks)) \(NSLocalizedString("fromLastWeek", comment: ""))")
                                     .monospacedDigit()
                             }.foregroundColor(differenceBetweenLastTwoWeeks <= 0 ? .secondaryLabel : .green)
                         }

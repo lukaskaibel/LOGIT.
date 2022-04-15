@@ -54,7 +54,7 @@ struct LineGraph: View {
                         HStack {
                             Spacer()
                             VStack {
-                                Text(String(maxYValue))
+                                Text(String(maxYValue - 1))
                                     .foregroundColor(.accentColor)
                                     .font(.footnote.weight(.semibold))
                                     .padding(5)
@@ -102,7 +102,7 @@ struct LineGraph: View {
     }
     
     private var maxYValue: Int {
-        (yValues.max() ?? 0)
+        (yValues.max() ?? 0) + 1
     }
 }
 

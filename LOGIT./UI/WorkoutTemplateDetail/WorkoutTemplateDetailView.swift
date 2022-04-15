@@ -25,7 +25,7 @@ struct WorkoutTemplateDetailView: View {
                 VStack {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("Last used")
+                            Text(NSLocalizedString("lastUsed", comment: ""))
                                 .foregroundColor(.secondaryLabel)
                             HStack(alignment: .lastTextBaseline) {
                                 Text(workoutTemplateDetail.lastUsedDateString)
@@ -40,9 +40,9 @@ struct WorkoutTemplateDetailView: View {
                              barColors: [Color](repeating: .accentColor, count: workoutTemplateDetail.graphYValues.count))
                         .frame(height: 150)
                     Picker("Calendar Component", selection: $workoutTemplateDetail.selectedCalendarComponent) {
-                        Text("Weekly").tag(Calendar.Component.weekOfYear)
-                        Text("Monthly").tag(Calendar.Component.month)
-                        Text("Yearly").tag(Calendar.Component.year)
+                        Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
+                        Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
+                        Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
                     }.pickerStyle(.segmented)
                         .padding(.top)
                 }.tileStyle()
@@ -53,7 +53,7 @@ struct WorkoutTemplateDetailView: View {
                     WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(false))
                 }
             }, header: {
-                Text("Performed \(workoutTemplateDetail.workouts.count) time\(workoutTemplateDetail.workouts.count == 1 ? "" : "s")")
+                Text("\(NSLocalizedString("performed", comment: "")) \(NSLocalizedString("\(workoutTemplateDetail.workouts.count) time\(workoutTemplateDetail.workouts.count == 1 ? "" : "s")", comment: ""))")
                     .sectionHeaderStyle()
             })
         }.listStyle(.plain)
@@ -63,7 +63,7 @@ struct WorkoutTemplateDetailView: View {
                     Button(action: {
                         showingTemplateInfoAlert = true
                     }) {
-                        Text("Template")
+                        Text(NSLocalizedString("template", comment: ""))
                             .font(.caption)
                             .foregroundColor(.secondaryLabel)
                             .padding(5)
@@ -71,22 +71,22 @@ struct WorkoutTemplateDetailView: View {
                             .clipShape(Capsule())
                     }
                     Menu(content: {
-                        Button(action: { showingTemplateEditor = true }, label: { Label("Edit", systemImage: "pencil") })
+                        Button(action: { showingTemplateEditor = true }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
                         Button(role: .destructive, action: {
                             showingDeletionAlert = true
-                        }, label: { Label("Delete", systemImage: "trash") } )
+                        }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
                     }) {
                         Image(systemName: "ellipsis.circle")
                     }
 
                 }
             }
-            .alert("Workout Templates",
+            .alert(NSLocalizedString("workoutTemplates", comment: ""),
                    isPresented: $showingTemplateInfoAlert,
                    actions: {  },
-                   message: { Text("Workout Templates make it possible to plan workouts before your training and track your progress for specific workouts over time.") })
-            .confirmationDialog("Do you want to delete this Template? This cannot be undone.", isPresented: $showingDeletionAlert) {
-                Button("Delete Template", role: .destructive) {
+                   message: { Text(NSLocalizedString("templateExplanation", comment: "")) })
+            .confirmationDialog(NSLocalizedString("deleteTemplateMsg", comment: ""), isPresented: $showingDeletionAlert) {
+                Button(NSLocalizedString("deleteTemplate", comment: ""), role: .destructive) {
                     workoutTemplateDetail.deleteWorkoutTemplate()
                     dismiss()
                 }

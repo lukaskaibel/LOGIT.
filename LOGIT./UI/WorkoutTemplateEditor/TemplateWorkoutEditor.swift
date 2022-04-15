@@ -97,7 +97,7 @@ final class TemplateWorkoutEditor: ObservableObject {
     }
     
     public func deleteTemplateWorkout() {
-        database.delete(templateWorkout)
+        database.delete(templateWorkout, saveContext: true)
     }
     
 }
