@@ -8,9 +8,8 @@
 import Foundation
 import CoreData
 
-final class WorkoutTemplateDetail: ObservableObject {
+final class WorkoutTemplateDetail: ViewModel {
     
-    private var database = Database.shared
     private var workoutTemplateID: NSManagedObjectID
     
     public init(workoutTemplateID: NSManagedObjectID) {
@@ -30,7 +29,7 @@ final class WorkoutTemplateDetail: ObservableObject {
     }
     
     public func deleteWorkoutTemplate() {
-        database.delete(workoutTemplate)
+        database.delete(workoutTemplate, saveContext: true)
     }
     
     //MARK: - Graph Stuff

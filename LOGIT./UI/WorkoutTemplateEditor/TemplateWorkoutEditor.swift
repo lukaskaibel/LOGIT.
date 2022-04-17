@@ -8,15 +8,14 @@
 import Foundation
 
 
-final class TemplateWorkoutEditor: ObservableObject {
+final class TemplateWorkoutEditor: ViewModel {
     
-    @Published var templateWorkout: TemplateWorkout
+    @Published var templateWorkout = TemplateWorkout()
     @Published var setGroupWithSelectedExercise: TemplateWorkoutSetGroup? = nil
-    @Published var isEditingExistingTemplate: Bool
-    
-    private var database = Database.shared
-    
+    @Published var isEditingExistingTemplate: Bool = false
+        
     init(templateWorkout: TemplateWorkout? = nil, from workout: Workout? = nil) {
+        super.init()
         if let templateWorkout = templateWorkout {
             self.templateWorkout = templateWorkout
             self.isEditingExistingTemplate = true
@@ -55,11 +54,7 @@ final class TemplateWorkoutEditor: ObservableObject {
     public func addSetGroup(for exercise: Exercise) {
         database.newTemplateWorkoutSetGroup(exercise: exercise, templateWorkout: templateWorkout)
     }
-    
-    public func updateView() {
-        objectWillChange.send()
-    }
-    
+        
     public func delete(setGroupWithIndexes indexSet: IndexSet) {
         if let setGroups = templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] {
             for index in indexSet {

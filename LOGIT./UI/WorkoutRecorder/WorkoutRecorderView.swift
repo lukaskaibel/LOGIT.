@@ -14,7 +14,7 @@ struct WorkoutRecorderView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @StateObject private var workoutRecorder = WorkoutRecorder(database: Database.shared)
+    @StateObject private var workoutRecorder = WorkoutRecorder()
     @StateObject private var exerciseSelection = ExerciseSelection()
     @StateObject private var exerciseDetail = ExerciseDetail(exerciseID: NSManagedObjectID())
     
@@ -345,6 +345,7 @@ struct WorkoutRecorderView: View {
                     } else {
                         workoutSet.match(templateSet)
                     }
+                    workoutRecorder.updateView()
                 }) {
                     Image(systemName: "checkmark")
                         .font(.body.weight(.semibold))

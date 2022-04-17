@@ -7,18 +7,17 @@
 
 import Foundation
 
-final class EditExercise: ObservableObject {
+final class EditExercise: ViewModel {
     
     @Published var exerciseName: String = ""
     let exerciseToEdit: Exercise?
-    
-    private var database: Database = Database.shared
-    
+        
     init(exerciseToEdit: Exercise? = nil) {
         self.exerciseToEdit = exerciseToEdit
         if let exercise = exerciseToEdit, let exerciseName = exercise.name {
             self.exerciseName = exerciseName
         }
+        super.init()
     }
     
     private var exercises: [Exercise] {

@@ -8,12 +8,10 @@
 import SwiftUI
 import CoreData
 
-final class WorkoutDetail: ObservableObject {
+final class WorkoutDetail: ViewModel {
     
     @Published var workoutID: NSManagedObjectID
-    
-    private var database = Database.shared
-    
+        
     init(workoutID: NSManagedObjectID) {
         self.workoutID = workoutID
     }
@@ -43,11 +41,7 @@ final class WorkoutDetail: ObservableObject {
     var workoutDateString: String {
         workout.date?.description(.long) ?? ""
     }
-        
-    func remove(_ setGroup: WorkoutSetGroup) {
-        database.delete(setGroup)
-    }
-    
+            
     func deleteWorkout() {
         database.delete(workout, saveContext: true)
     }

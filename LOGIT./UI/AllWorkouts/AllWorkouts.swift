@@ -9,18 +9,12 @@ import SwiftUI
 import CoreData
 
 
-final class AllWorkouts: ObservableObject {
+final class AllWorkouts: ViewModel {
     
     @Published var sortingKey: SortingKey = .date
     @Published var ascending: Bool = false
     @Published var searchedText: String = ""
-    
-    private let database = Database.shared
-    
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
-    }
-    
+        
     private var filteredAndSortedWorkouts: [Workout] {
         database.fetch(Workout.self,
                        sortingKey: sortingKey.rawValue,
@@ -49,10 +43,6 @@ final class AllWorkouts: ObservableObject {
     
     enum SortingKey: String {
         case date, name
-    }
-    
-    @objc private func updateView() {
-        objectWillChange.send()
     }
     
 }

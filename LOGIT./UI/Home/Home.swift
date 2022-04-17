@@ -9,16 +9,10 @@ import SwiftUI
 import CoreData
 
 
-final class Home: ObservableObject {
+final class Home: ViewModel {
     
     @Published var goalPerWeek: Int = 3
-    
-    private let database = Database.shared
-    
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
-    }
-    
+        
     var workouts: [Workout] {
         database.fetch(Workout.self, sortingKey: "date", ascending: false) as? [Workout] ?? .emptyList
     }
@@ -81,10 +75,5 @@ final class Home: ObservableObject {
     //MARK: Constants
     
     let numberOfWeeksInAnalysis = 5
-    
-    
-    @objc private func updateView() {
-        objectWillChange.send()
-    }
-    
+        
 }

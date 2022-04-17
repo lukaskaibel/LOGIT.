@@ -8,17 +8,17 @@
 import SwiftUI
 import CoreData
 
-final class ExerciseDetail: ObservableObject {
+final class ExerciseDetail: ViewModel {
     
     @Published var selectedAttribute: WorkoutSet.Attribute = .weight
     @Published var selectedCalendarComponentForRepetitions: Calendar.Component = .weekOfYear
     @Published var selectedCalendarComponentForWeight: Calendar.Component = .weekOfYear
     
-    private var database = Database.shared
     private var exerciseID: NSManagedObjectID
     
     init(exerciseID: NSManagedObjectID) {
         self.exerciseID = exerciseID
+        super.init()
     }
     
     func with(exercise: Exercise) -> ExerciseDetail {

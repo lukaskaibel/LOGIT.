@@ -81,7 +81,7 @@ struct WorkoutDetailView: View {
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template, workout: workoutDetail.workout))
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template, from: workoutDetail.workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {

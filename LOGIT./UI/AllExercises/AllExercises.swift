@@ -7,15 +7,9 @@
 
 import Foundation
 
-final class AllExercises: ObservableObject {
+final class AllExercises: ViewModel {
     
     @Published var searchedText = ""
-    
-    private let database = Database.shared
-    
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
-    }
     
     private var exercises: [Exercise] {
         database.fetch(Exercise.self,
@@ -38,10 +32,6 @@ final class AllExercises: ObservableObject {
     
     func getLetter(for group: [Exercise]) -> String {
         String(group.first?.name?.first ?? Character(" "))
-    }
-    
-    @objc private func updateView() {
-        objectWillChange.send()
     }
     
 }

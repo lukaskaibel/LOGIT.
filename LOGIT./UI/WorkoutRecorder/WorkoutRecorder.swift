@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-class WorkoutRecorder: ObservableObject {
+class WorkoutRecorder: ViewModel {
     
-    @Published var workout: Workout
+    @Published var workout: Workout = Workout()
     @Published var setGroupWithSelectedExercise: WorkoutSetGroup? = nil
     @Published var exerciseForExerciseDetail: Exercise?
     @Published var selectedTimerDuration: Int = 0
@@ -24,11 +24,9 @@ class WorkoutRecorder: ObservableObject {
         Binding(get: { self.exerciseForExerciseDetail != nil },
                 set: { _ in self.exerciseForExerciseDetail = nil })
     }
-    
-    private var database: Database
-    
-    public init(database: Database) {
-        self.database = database
+        
+    public override init() {
+        super.init()
         workout = database.newWorkout()
     }
         
@@ -71,10 +69,6 @@ class WorkoutRecorder: ObservableObject {
             }
         }
         return nil
-    }
-    
-    public func updateView() {
-        objectWillChange.send()
     }
     
     public func addSet(to setGroup: WorkoutSetGroup) {

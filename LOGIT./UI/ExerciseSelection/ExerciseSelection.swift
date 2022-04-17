@@ -9,15 +9,9 @@ import SwiftUI
 import CoreData
 
 
-final class ExerciseSelection: ObservableObject {
+final class ExerciseSelection: ViewModel {
     
     @Published var searchedText: String = ""
-    
-    private let database = Database.shared
-    
-    init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
-    }
     
     var exercises: [Exercise] {
         database.fetch(Exercise.self,
@@ -46,9 +40,5 @@ final class ExerciseSelection: ObservableObject {
         database.delete(exercise)
         objectWillChange.send()
     }
-    
-    @objc func updateView() {
-        objectWillChange.send()
-    }
-    
+
 }
