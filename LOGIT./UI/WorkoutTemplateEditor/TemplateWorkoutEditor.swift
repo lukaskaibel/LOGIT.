@@ -16,10 +16,13 @@ final class TemplateWorkoutEditor: ObservableObject {
     
     private var database = Database.shared
     
-    init(templateWorkout: TemplateWorkout? = nil) {
+    init(templateWorkout: TemplateWorkout? = nil, from workout: Workout? = nil) {
         if let templateWorkout = templateWorkout {
             self.templateWorkout = templateWorkout
             self.isEditingExistingTemplate = true
+        } else if let workout = workout {
+            self.templateWorkout = database.newTemplateWorkout(from: workout)
+            self.isEditingExistingTemplate = false
         } else {
             self.templateWorkout = database.newTemplateWorkout()
             self.isEditingExistingTemplate = false
@@ -32,6 +35,7 @@ final class TemplateWorkoutEditor: ObservableObject {
         }
         set {
             templateWorkout.name = newValue
+            updateView()
         }
     }
     

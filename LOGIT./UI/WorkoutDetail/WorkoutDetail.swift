@@ -12,31 +12,21 @@ final class WorkoutDetail: ObservableObject {
     
     @Published var workoutID: NSManagedObjectID
     
-    private var context: NSManagedObjectContext
     private var database = Database.shared
     
-    init(context: NSManagedObjectContext, workoutID: NSManagedObjectID) {
-        self.context = context
+    init(workoutID: NSManagedObjectID) {
         self.workoutID = workoutID
     }
     
     var workout: Workout {
         get {
-            if let workout = context.object(with: workoutID) as? Workout {
-                return workout
-            } else {
-                return Workout()
-            }
+            database.object(with: workoutID) as? Workout ?? Workout()
         }
         set {
-            do {
-                let workout = context.object(with: workoutID) as! Workout
-                workout.setGroups = newValue.setGroups
-                workout.name = newValue.name
-                try context.save()
-            } catch {
-                fatalError("Error while saving context on workout change")
-            }
+            let workout = database.object(with: workoutID) as! Workout
+            workout.setGroups = newValue.setGroups
+            workout.name = newValue.name
+            database.save()
         }
     }
     
@@ -53,22 +43,13 @@ final class WorkoutDetail: ObservableObject {
     var workoutDateString: String {
         workout.date?.description(.long) ?? ""
     }
-    
-    func templateForWorkout() -> TemplateWorkout {
-        workout.template ?? Database.shared.newTemplateWorkout(from: workout)
-    }
-    
+        
     func remove(_ setGroup: WorkoutSetGroup) {
         database.delete(setGroup)
     }
     
     func deleteWorkout() {
-        do {
-            context.delete(workout)
-            try context.save()
-        } catch {
-            fatalError("Deleting workout failed")
-        }
+        database.delete(workout, saveContext: true)
     }
     
 }

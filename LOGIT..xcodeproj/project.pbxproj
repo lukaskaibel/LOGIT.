@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7907B5A3280B7029003E5515 /* AllExercises.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A2280B7029003E5515 /* AllExercises.swift */; };
+		7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A4280B73E7003E5515 /* Database+Preview.swift */; };
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
 		791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
+		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
 		794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 794C3C462804AD1A003CB9F1 /* Localizable.strings */; };
 		7955EEAE27FDC2F30010693C /* WorkoutTemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAD27FDC2F30010693C /* WorkoutTemplateListView.swift */; };
@@ -84,11 +87,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7907B5A2280B7029003E5515 /* AllExercises.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExercises.swift; sourceTree = "<group>"; };
+		7907B5A4280B73E7003E5515 /* Database+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Preview.swift"; sourceTree = "<group>"; };
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
+		792F9740280AC65D0032761C /* Database+EntityCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityCreation.swift"; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
 		794C3C452804AD1A003CB9F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		794C3C472804AD2A003CB9F1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -246,8 +252,9 @@
 			isa = PBXGroup;
 			children = (
 				790E1A33279DB5B300EDB715 /* Database.swift */,
+				792F9740280AC65D0032761C /* Database+EntityCreation.swift */,
+				7907B5A4280B73E7003E5515 /* Database+Preview.swift */,
 				8065AA792686668100F53A5A /* WorkoutDiary.xcdatamodeld */,
-				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
 				79B70BF428030BF70012EAAD /* EntityExtensions */,
 			);
 			path = Database;
@@ -336,6 +343,7 @@
 		79F7E10127E6854E006D4354 /* AllExercises */ = {
 			isa = PBXGroup;
 			children = (
+				7907B5A2280B7029003E5515 /* AllExercises.swift */,
 				79F7E0FD27E67578006D4354 /* AllExercisesView.swift */,
 			);
 			path = AllExercises;
@@ -381,6 +389,7 @@
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */,
 				79A4E33227E9EBA20089001F /* Database */,
+				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
 				79A4E33327E9EBED0089001F /* UI */,
 				801CDC482688BD9D00BB653D /* Extentions */,
 				8065AA742686668100F53A5A /* Preview Content */,
@@ -454,7 +463,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1330;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					8065AA6A2686667F00F53A5A = {
 						CreatedOnToolsVersion = 12.5;
@@ -506,6 +515,7 @@
 				7974670C277137AB006518F0 /* WorkoutDetail.swift in Sources */,
 				7975E3B327CED8E5000BA25B /* Array+.swift in Sources */,
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
+				792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */,
 				799AAF2C2787831900C8BF0C /* ExerciseDetailView.swift in Sources */,
 				79F2D1222800CD0C00197E0A /* WorkoutTemplateDetailView.swift in Sources */,
 				79407A8B2772380C004F32A3 /* UnitView.swift in Sources */,
@@ -531,6 +541,7 @@
 				79F7E10327E68FAC006D4354 /* TargetPerWeekGraph.swift in Sources */,
 				801CDC552688C27400BB653D /* VisualEffektView.swift in Sources */,
 				8084604E2766631A00E0D0D0 /* AllWorkouts.swift in Sources */,
+				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,
 				79F1D26727F3360F003C5B45 /* TimerView.swift in Sources */,
 				801CDC592688C29A00BB653D /* OnDeleteModifier.swift in Sources */,
 				8058F49F268D2503006A94AC /* Workout+.swift in Sources */,
@@ -544,6 +555,7 @@
 				807FC47F268A909D00169820 /* Exercise+.swift in Sources */,
 				79898A8627F7BE4A00935E05 /* TemplateWorkoutSetGroup+.swift in Sources */,
 				796D611C27E53AC700E15F01 /* EditExercise.swift in Sources */,
+				7907B5A3280B7029003E5515 /* AllExercises.swift in Sources */,
 				79A4E33027E8CB0C0089001F /* FirstStartView.swift in Sources */,
 				790E1A34279DB5B300EDB715 /* Database.swift in Sources */,
 				801CDC4E2688BDD900BB653D /* Image+.swift in Sources */,
@@ -580,6 +592,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -641,6 +654,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

@@ -19,6 +19,7 @@ enum WeightUnit: String, Codable, Identifiable {
     }
 }
 
+//MARK: - Functions for translating weight from grams to kilograms or pounds
 
 public func convertWeightForStoring(_ value: Int64) -> Int64 {
     let unit = WeightUnit(rawValue: UserDefaults.standard.string(forKey: "weightUnit")!)!

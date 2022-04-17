@@ -193,6 +193,6 @@ struct ExerciseDetailView: View {
 
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseDetailView(exerciseDetail: ExerciseDetail(context: Database.preview.container.viewContext, exerciseID: NSManagedObjectID()))
+        ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: NSManagedObjectID()))
     }
 }

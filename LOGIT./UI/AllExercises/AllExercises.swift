@@ -1,17 +1,15 @@
 //
-//  ExerciseSelection.swift
-//  LOGIT
+//  AllExercises.swift
+//  LOGIT.
 //
-//  Created by Lukas Kaibel on 11.12.21.
+//  Created by Lukas Kaibel on 16.04.22.
 //
 
-import SwiftUI
-import CoreData
+import Foundation
 
-
-final class ExerciseSelection: ObservableObject {
+final class AllExercises: ObservableObject {
     
-    @Published var searchedText: String = ""
+    @Published var searchedText = ""
     
     private let database = Database.shared
     
@@ -19,14 +17,14 @@ final class ExerciseSelection: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
     }
     
-    var exercises: [Exercise] {
+    private var exercises: [Exercise] {
         database.fetch(Exercise.self,
                        sortingKey: "name",
                        ascending: true,
                        predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise]
     }
     
-    var groupedExercises: [[Exercise]] {
+    public var groupedExercises: [[Exercise]] {
         var result = [[Exercise]]()
         for exercise in exercises {
             if let lastExerciseNameFirstLetter = result.last?.last?.name?.first, let exerciseFirstLetter = exercise.name?.first, lastExerciseNameFirstLetter == exerciseFirstLetter {
@@ -42,12 +40,7 @@ final class ExerciseSelection: ObservableObject {
         String(group.first?.name?.first ?? Character(" "))
     }
     
-    func delete(exercise: Exercise) {
-        database.delete(exercise)
-        objectWillChange.send()
-    }
-    
-    @objc func updateView() {
+    @objc private func updateView() {
         objectWillChange.send()
     }
     

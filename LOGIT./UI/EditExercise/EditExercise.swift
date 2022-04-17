@@ -22,7 +22,7 @@ final class EditExercise: ObservableObject {
     }
     
     private var exercises: [Exercise] {
-        database.getExercises()
+        database.fetch(Exercise.self) as! [Exercise]
     }
     
     func exerciseExistsWithName(_ name: String) -> Bool {

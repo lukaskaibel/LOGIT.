@@ -11,16 +11,16 @@ import CoreData
 
 final class Home: ObservableObject {
     
-    @Published var workouts: [Workout]
     @Published var goalPerWeek: Int = 3
     
-    var context: NSManagedObjectContext
+    private let database = Database.shared
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
-        self.workouts = [Workout]()
-        NotificationCenter.default.addObserver(self, selector: #selector(contextChanged), name: .NSManagedObjectContextObjectsDidChange, object: context)
-        updateWorkouts()
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
+    }
+    
+    var workouts: [Workout] {
+        database.fetch(Workout.self, sortingKey: "date", ascending: false) as? [Workout] ?? .emptyList
     }
     
     var recentWorkouts: [Workout] {
@@ -28,24 +28,8 @@ final class Home: ObservableObject {
     }
     
     func delete(workout: Workout) {
-        do {
-            context.delete(workout)
-            try context.save()
-            updateWorkouts()
-            objectWillChange.send()
-        } catch {
-            fatalError("Error deleting workout: \(error)")
-        }
-    }
-    
-    func updateWorkouts() {
-        do {
-            let request = Workout.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-            try self.workouts = context.fetch(request)
-        } catch {
-            fatalError("Error fetching workouts: \(error)")
-        }
+        database.delete(workout, saveContext: true)
+        objectWillChange.send()
     }
     
     func workoutsPerWeek(for numberOfWeeks: Int) -> [Int] {
@@ -99,8 +83,8 @@ final class Home: ObservableObject {
     let numberOfWeeksInAnalysis = 5
     
     
-    @objc private func contextChanged() {
-        updateWorkouts()
+    @objc private func updateView() {
+        objectWillChange.send()
     }
     
 }

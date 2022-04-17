@@ -53,7 +53,7 @@ struct WorkoutTemplateDetailView: View {
                     WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(false))
                 }
             }, header: {
-                Text("\(NSLocalizedString("performed", comment: "")) \(NSLocalizedString("\(workoutTemplateDetail.workouts.count) time\(workoutTemplateDetail.workouts.count == 1 ? "" : "s")", comment: ""))")
+                Text("\(NSLocalizedString("performed", comment: "")) \(workoutTemplateDetail.workouts.count) \(NSLocalizedString("time\(workoutTemplateDetail.workouts.count == 1 ? "" : "s")", comment: ""))")
                     .sectionHeaderStyle()
             })
         }.listStyle(.plain)

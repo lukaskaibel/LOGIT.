@@ -12,25 +12,11 @@ struct WorkoutTemplateCell: View {
     @ObservedObject var workoutTemplate: TemplateWorkout
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text(workoutTemplate.name ?? "No Name")
-                    .font(.body.weight(.semibold))
-                    .lineLimit(1)
-                Spacer()
                 Text(lastUsedDate)
                     .foregroundColor(.secondaryLabel)
-                    .font(.subheadline)
-            }
-            Text(exercisesString)
-                .foregroundColor(.secondaryLabel)
-                .font(.subheadline)
-                .lineLimit(1)
-                .frame(maxWidth: 280, alignment: .leading)
-            HStack {
-                Text("\(workoutTemplate.numberOfSetGroups.description) \(NSLocalizedString("exercise\(workoutTemplate.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
-                    .foregroundColor(.secondaryLabel)
-                    .font(.footnote)
+                    .font(.caption.weight(.semibold))
                 Spacer()
                 Text(NSLocalizedString("template", comment: ""))
                     .foregroundColor(.secondaryLabel)
@@ -39,8 +25,14 @@ struct WorkoutTemplateCell: View {
                     .padding(.horizontal, 5)
                     .background(Color.fill)
                     .clipShape(Capsule())
-                    .padding(.top, 3)
             }
+            Text(workoutTemplate.name ?? "No Name")
+                .font(.body.weight(.semibold))
+                .lineLimit(1)
+            Text(exercisesString)
+                .lineLimit(1)
+                .frame(maxWidth: 280, alignment: .leading)
+                .padding(.top, 2)
         }
         .padding(.vertical, 4)
     }
@@ -69,6 +61,6 @@ struct WorkoutTemplateCell: View {
 
 struct WorkoutTemplateCell_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutTemplateCell(workoutTemplate: TemplateWorkout(context: Database.preview.container.viewContext))
+        WorkoutTemplateCell(workoutTemplate: Database.preview.newTemplateWorkout(name: "Pushday"))
     }
 }

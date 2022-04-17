@@ -12,24 +12,18 @@ final class WorkoutTemplateList: ObservableObject {
     private var database = Database.shared
     
     init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(contextChanged), name: .NSManagedObjectContextObjectsDidChange, object: database.container.viewContext)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
     }
     
     public var templateWorkouts: [TemplateWorkout] {
-        do {
-            let request = TemplateWorkout.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            return try database.container.viewContext.fetch(request)
-        } catch {
-            fatalError("Error fetching TemplateWorkouts: \(error)")
-        }
+        database.fetch(TemplateWorkout.self, sortingKey: "creationDate", ascending: false) as! [TemplateWorkout]
     }
     
     public func delete(_ workoutTemplate: TemplateWorkout) {
         database.delete(workoutTemplate, saveContext: true)
     }
     
-    @objc private func contextChanged() {
+    @objc private func updateView() {
         objectWillChange.send()
     }
     

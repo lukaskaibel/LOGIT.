@@ -42,7 +42,7 @@ struct ExerciseSelectionView: View {
                     })
                 }
             }
-            .sheet(isPresented: $isAddingExercise, onDismiss: { exerciseSelection.updateExercises() }) {
+            .sheet(isPresented: $isAddingExercise, onDismiss: { exerciseSelection.updateView() }) {
                 EditExerciseView(editExercise: editExercise)
             }
     }
@@ -91,7 +91,7 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(exerciseSelection: ExerciseSelection(context: Database.preview.container.viewContext), selectedExercise: .constant(Exercise()))
+            ExerciseSelectionView(exerciseSelection: ExerciseSelection(), selectedExercise: .constant(Exercise()))
         }
     }
 }

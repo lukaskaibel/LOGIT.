@@ -14,12 +14,10 @@ final class ExerciseDetail: ObservableObject {
     @Published var selectedCalendarComponentForRepetitions: Calendar.Component = .weekOfYear
     @Published var selectedCalendarComponentForWeight: Calendar.Component = .weekOfYear
     
-    private var context: NSManagedObjectContext
     private var database = Database.shared
     private var exerciseID: NSManagedObjectID
     
-    init(context: NSManagedObjectContext, exerciseID: NSManagedObjectID) {
-        self.context = context
+    init(exerciseID: NSManagedObjectID) {
         self.exerciseID = exerciseID
     }
     
@@ -30,45 +28,28 @@ final class ExerciseDetail: ObservableObject {
     
     var exercise: Exercise {
         get {
-            if let exercise = context.object(with: exerciseID) as? Exercise {
-                return exercise
-            } else {
-                return Exercise()
-            }
+            database.object(with: exerciseID) as! Exercise
         }
         set {
-            do {
-                let exercise = context.object(with: exerciseID) as! Exercise
-                exercise.name = newValue.name
-                exercise.isFavorite = newValue.isFavorite
-                try context.save()
-            } catch {
-                fatalError("Error while saving context on exercise change")
-            }
+            let exercise = database.object(with: exerciseID) as! Exercise
+            exercise.name = newValue.name
+            exercise.isFavorite = newValue.isFavorite
+            database.save()
         }
     }
     
     var sets: [WorkoutSet] {
-        do {
-            let request = WorkoutSet.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "setGroup.workout.date", ascending: false)]
-            var workoutSets = try context.fetch(request)
-            workoutSets = workoutSets.filter { $0.exercise == exercise }
-            return workoutSets
-        } catch {
-            fatalError("Error fetching sets for exercise")
-        }
+        (database.fetch(WorkoutSet.self,
+                       sortingKey: "setGroup.workout.date",
+                       ascending: false) as! [WorkoutSet])
+            .filter { $0.exercise == exercise }
     }
     
     private var workoutsWithExercise: [Workout] {
-        do {
-            let request = Workout.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
-            let workouts = try context.fetch(request)
-            return workouts.filter { $0.exercises.contains(exercise) }
-        } catch {
-            fatalError("ExerciseDetail: Error fetching workouts: \(error)")
-        }
+        (database.fetch(Workout.self,
+                        sortingKey: "date",
+                        ascending: true) as! [Workout])
+            .filter { $0.exercises.contains(exercise) }
     }
     
     func deleteExercise() {
@@ -76,15 +57,11 @@ final class ExerciseDetail: ObservableObject {
     }
     
     func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
-        do {
-            let request = WorkoutSet.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: attribute == .repetitions ? "repetitions" : "weight", ascending: false)]
-            var workoutSets = try context.fetch(request)
-            workoutSets = workoutSets.filter { $0.exercise == exercise }
-            return attribute == .repetitions ? Int(workoutSets.first?.repetitions ?? 0) : convertWeightForDisplaying(workoutSets.first?.weight ?? 0)
-        } catch {
-            fatalError("Error fetching sets for exercise")
-        }
+        let workoutSets = (database.fetch(WorkoutSet.self,
+                                          sortingKey: attribute == .repetitions ? "repetitions" : "weight",
+                                          ascending: false) as! [WorkoutSet]).filter { $0.exercise == exercise }
+        return attribute == .repetitions ? Int(workoutSets.first?.repetitions ?? 0) :
+                convertWeightForDisplaying(workoutSets.first?.weight ?? 0)
     }
     
     func weightValues() -> [Double] {
@@ -132,17 +109,7 @@ final class ExerciseDetail: ObservableObject {
         }
         return result.reversed()
     }
-    
-    func toggleFavorite() {
-        do {
-            exercise.isFavorite.toggle()
-            try context.save()
-            objectWillChange.send()
-        } catch {
-            fatalError("Failed to save context")
-        }
-    }
-    
+        
     private func getFirstDayString(in component: Calendar.Component, for date: Date) -> String {
         let firstDayOfWeek = Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
         let formatter = DateFormatter()

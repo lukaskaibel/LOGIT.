@@ -12,15 +12,11 @@ struct HomeView: View {
         
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
     
-    @ObservedObject private var home: Home
+    @StateObject var home = Home()
     @State private var isShowingWorkoutRecorder: Bool = false
     @State private var isShowingProfile: Bool = false
     @State private var isShowingTemplateEditor = false
     @State private var isShowingNewTemplate = false
-    
-    init(context: NSManagedObjectContext) {
-        self.home = Home(context: context)
-    }
     
     var body: some View {
         NavigationView {
@@ -71,7 +67,7 @@ struct HomeView: View {
                                 .font(.title2.weight(.bold))
                                 .fixedSize()
                             Spacer()
-                            NavigationLink(destination: AllWorkoutsView(context: home.context)) {
+                            NavigationLink(destination: AllWorkoutsView()) {
                                 Text(NSLocalizedString("showAll", comment: ""))
                                     .foregroundColor(.accentColor)
                                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -223,6 +219,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(context: Database.preview.container.viewContext)
+        HomeView()
     }
 }

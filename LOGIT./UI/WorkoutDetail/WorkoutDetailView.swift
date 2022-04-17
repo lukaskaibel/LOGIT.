@@ -81,14 +81,14 @@ struct WorkoutDetailView: View {
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.templateForWorkout()))
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template, workout: workoutDetail.workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {
                                         WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: workoutDetail.workout.template?.objectID ?? NSManagedObjectID()))
                                             .toolbar {
                                                 ToolbarItem(placement: .navigationBarLeading) {
-                                                    Button("Dismiss") { isShowingTemplateDetail = false }
+                                                    Button(NSLocalizedString("dismiss", comment: "")) { isShowingTemplateDetail = false }
                                                 }
                                             }
                                     }
@@ -142,7 +142,7 @@ struct WorkoutDetailView: View {
     private func Header(for setGroup: WorkoutSetGroup) -> some View {
         HStack {
             if let exercise = setGroup.exercise {
-                NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(context: Database.shared.container.viewContext, exerciseID: exercise.objectID))) {
+                NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
                     HStack {
                         Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
                             .sectionHeaderStyle()
@@ -167,7 +167,7 @@ struct WorkoutDetailView: View {
             Spacer()
             VStack {
                 Text("\(workoutDetail.workoutDateString), \(workoutDetail.workoutTimeString)")
-                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("", comment: "set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")")) ")
+                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")", comment: ""))")
             }.foregroundColor(.secondaryLabel)
                 .font(.subheadline)
             Spacer()
@@ -208,6 +208,6 @@ struct WorkoutDetailView: View {
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(canNavigateToTemplate: .constant(true), workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext, workoutID: NSManagedObjectID()))
+        WorkoutDetailView(canNavigateToTemplate: .constant(true), workoutDetail: WorkoutDetail(workoutID: NSManagedObjectID()))
     }
 }

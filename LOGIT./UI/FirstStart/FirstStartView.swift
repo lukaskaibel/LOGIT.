@@ -138,8 +138,7 @@ struct FirstStartView: View {
                 .padding(.bottom, 50)
         }.padding()
             .fullScreenCover(isPresented: $setupFinished) {
-                HomeView(context: Database.shared.container.viewContext)
-                    .environment(\.managedObjectContext, Database.shared.container.viewContext)
+                HomeView()
             }
     }
     

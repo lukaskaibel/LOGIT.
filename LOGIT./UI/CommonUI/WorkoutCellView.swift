@@ -22,8 +22,7 @@ struct WorkoutCellView: View {
     
     var body: some View {
         NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: $canNavigateToTemplate,
-                                                      workoutDetail: WorkoutDetail(context: Database.shared.container.viewContext,
-                                                                                   workoutID: workout.objectID))) {
+                                                      workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text(workout.name ?? "No Name")
@@ -71,6 +70,6 @@ struct WorkoutCellView: View {
 
 struct WorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutCellView(workout: Workout(context: Database.preview.container.viewContext), canNavigateToTemplate: .constant(true))
+        WorkoutCellView(workout: Database.preview.newWorkout(), canNavigateToTemplate: .constant(true))
     }
 }

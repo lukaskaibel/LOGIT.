@@ -11,7 +11,7 @@ import SwiftUI
 struct LOGIT: App {
     
     @AppStorage("setupDone") var setupDone: Bool = false
-    
+        
     init() {
         UserDefaults.standard.register(defaults: [
             "weightUnit" : WeightUnit.kg.rawValue,
@@ -33,7 +33,7 @@ struct LOGIT: App {
         WindowGroup {
             if setupDone {
                 TabView {
-                    HomeView(context: database.container.viewContext)
+                    HomeView()
                         .tabItem { Label("Home", systemImage: "house") }
                     NavigationView {
                         WorkoutTemplateListView()
@@ -41,7 +41,7 @@ struct LOGIT: App {
                     NavigationView {
                         AllExercisesView()
                     }.tabItem { Label(NSLocalizedString("exercises", comment: ""), systemImage: "stopwatch") }
-                }.environment(\.managedObjectContext, database.container.viewContext)
+                }.environment(\.managedObjectContext, database.context)
             } else {
                 FirstStartView()
             }

@@ -15,23 +15,17 @@ final class AllWorkouts: ObservableObject {
     @Published var ascending: Bool = false
     @Published var searchedText: String = ""
     
-    private let context: NSManagedObjectContext
+    private let database = Database.shared
     
-    init(context: NSManagedObjectContext) {
-        self.context = context
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
     }
     
     private var filteredAndSortedWorkouts: [Workout] {
-        do {
-            let request = Workout.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: sortingKey.rawValue, ascending: ascending)]
-            if !searchedText.isEmpty {
-               request.predicate = NSPredicate(format: "name CONTAINS[c] %@", searchedText)
-            }
-            return try context.fetch(request)
-        } catch {
-            fatalError("Fetching Workouts failed: \(error)")
-        }
+        database.fetch(Workout.self,
+                       sortingKey: sortingKey.rawValue,
+                       ascending: ascending,
+                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Workout]
     }
     
     var sectionedWorkouts: [[Workout]] {
@@ -49,17 +43,16 @@ final class AllWorkouts: ObservableObject {
     }
     
     func delete(workout: Workout) {
-        do {
-            context.delete(workout)
-            try context.save()
-            objectWillChange.send()
-        } catch {
-            fatalError("Error deleting workout: \(error)")
-        }
+        database.delete(workout, saveContext: true)
+        objectWillChange.send()
     }
     
     enum SortingKey: String {
         case date, name
+    }
+    
+    @objc private func updateView() {
+        objectWillChange.send()
     }
     
 }

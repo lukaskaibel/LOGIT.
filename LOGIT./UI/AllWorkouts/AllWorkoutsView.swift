@@ -11,11 +11,7 @@ import CoreData
 
 struct AllWorkoutsView: View {
     
-    @ObservedObject var allWorkouts: AllWorkouts
-    
-    init(context: NSManagedObjectContext) {
-        self.allWorkouts = AllWorkouts(context: context)
-    }
+    @StateObject var allWorkouts = AllWorkouts()
     
     var body: some View {
         List {
@@ -89,7 +85,7 @@ struct AllWorkoutsView: View {
 struct AllWorkoutsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            AllWorkoutsView(context: Database.preview.container.viewContext)
+            AllWorkoutsView()
         }
     }
 }

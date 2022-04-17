@@ -13,7 +13,7 @@ struct TemplateWorkoutEditorView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @StateObject var templateWorkoutEditor: TemplateWorkoutEditor
-    @StateObject private var exerciseSelection = ExerciseSelection(context: Database.shared.container.viewContext)
+    @StateObject private var exerciseSelection = ExerciseSelection()
     
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false

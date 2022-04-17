@@ -15,8 +15,8 @@ struct WorkoutRecorderView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @StateObject private var workoutRecorder = WorkoutRecorder(database: Database.shared)
-    @StateObject private var exerciseSelection = ExerciseSelection(context: Database.shared.container.viewContext)
-    @StateObject private var exerciseDetail = ExerciseDetail(context: Database.shared.container.viewContext, exerciseID: NSManagedObjectID())
+    @StateObject private var exerciseSelection = ExerciseSelection()
+    @StateObject private var exerciseDetail = ExerciseDetail(exerciseID: NSManagedObjectID())
     
     @State private var showingStartScreen = true
     @State private var editMode: EditMode = .inactive
