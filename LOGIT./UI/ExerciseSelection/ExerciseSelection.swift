@@ -12,12 +12,14 @@ import CoreData
 final class ExerciseSelection: ViewModel {
     
     @Published var searchedText: String = ""
+    @Published var selectedMuscleGroup: MuscleGroup?
     
     var exercises: [Exercise] {
-        database.fetch(Exercise.self,
-                       sortingKey: "name",
-                       ascending: true,
-                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise]
+        (database.fetch(Exercise.self,
+                   sortingKey: "name",
+                   ascending: true,
+                   predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise])
+            .filter { $0.muscleGroup == selectedMuscleGroup ?? $0.muscleGroup }
     }
     
     var groupedExercises: [[Exercise]] {

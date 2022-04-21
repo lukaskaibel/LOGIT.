@@ -12,7 +12,6 @@ struct ExerciseSelectionView: View {
     
     @Environment(\.dismiss) var dismiss
     @ObservedObject private var exerciseSelection: ExerciseSelection
-    @StateObject private var editExercise: EditExercise = EditExercise()
     
     @Binding var selectedExercise: Exercise?
     @State private var isAddingExercise: Bool = false
@@ -24,6 +23,9 @@ struct ExerciseSelectionView: View {
     
     var body: some View {
         List {
+            MuscleGroupSelector(selectedMuscleGroup: $exerciseSelection.selectedMuscleGroup)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
             ForEach(exerciseSelection.groupedExercises) { group in
                 ExerciseSection(for: group)
             }
@@ -43,7 +45,7 @@ struct ExerciseSelectionView: View {
                 }
             }
             .sheet(isPresented: $isAddingExercise, onDismiss: { exerciseSelection.updateView() }) {
-                EditExerciseView(editExercise: editExercise)
+                EditExerciseView(editExercise: EditExercise())
             }
     }
     

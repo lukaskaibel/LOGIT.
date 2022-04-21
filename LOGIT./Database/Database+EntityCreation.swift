@@ -53,11 +53,11 @@ extension Database {
     
     @discardableResult
     func newExercise(name: String = "",
-                     isFavorite: Bool = false,
+                     muscleGroup: MuscleGroup? = nil,
                      setGroups: [WorkoutSetGroup]? = nil) -> Exercise {
         let exercise = Exercise(context: context)
         exercise.name = name
-        exercise.isFavorite = isFavorite
+        exercise.muscleGroup = muscleGroup
         if let setGroups = setGroups {
             exercise.setGroups = NSOrderedSet(array: setGroups)
         }

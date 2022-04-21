@@ -18,19 +18,25 @@ struct EditExerciseView: View {
         
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                TextField(NSLocalizedString("exerciseName", comment: ""), text: $editExercise.exerciseName)
-                    .font(.body.weight(.medium))
-                    .padding()
-                    .background(Color.secondaryBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                Text(NSLocalizedString("exerciseNameDescription", comment: ""))
-                    .foregroundColor(.secondaryLabel)
-                    .font(.caption)
-                    .padding(.leading)
-                Spacer()
-            }.padding()
-                .navigationTitle(editExercise.exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(editExercise.exerciseName)" : NSLocalizedString("newExercise", comment: ""))
+            List {
+                Section(content: {
+                    TextField(NSLocalizedString("exerciseName", comment: ""),
+                              text: $editExercise.exerciseName)
+                        .font(.body.weight(.semibold))
+                        .padding(.vertical, 3)
+                }, footer: {
+                    Text(NSLocalizedString("exerciseNameDescription", comment: ""))
+                })
+                Section(content: {
+                    Picker(NSLocalizedString("muscleGroup", comment: ""),
+                           selection: $editExercise.muscleGroup) {
+                        ForEach(MuscleGroup.allCases) { muscleGroup in
+                            Text(muscleGroup.description).tag(muscleGroup)
+                        }
+                    }
+                })
+            }.listStyle(.insetGrouped)
+                .navigationTitle(editExercise.isEditingExistingExercise ? "\(NSLocalizedString("edit", comment: "")) \(editExercise.exerciseName)" : NSLocalizedString("newExercise", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -39,13 +45,13 @@ struct EditExerciseView: View {
                         }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(editExercise.exerciseToEdit != nil ? NSLocalizedString("update", comment: "") : NSLocalizedString("save", comment: "")) {
-                            if editExercise.exerciseExistsWithName(editExercise.exerciseName) {
-                                showingExerciseExistsAlert = true
-                            } else if editExercise.exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
+                        Button(NSLocalizedString("done", comment: "")) {
+                            if editExercise.nameIsEmpty() {
                                 showingExerciseNameEmptyAlert = true
+                            } else if editExercise.exerciseAlreadyExists() && !editExercise.isEditingExistingExercise {
+                                showingExerciseExistsAlert = true
                             } else {
-                                editExercise.saveName()
+                                editExercise.save()
                                 dismiss()
                             }
                         }.font(.body.weight(.semibold))

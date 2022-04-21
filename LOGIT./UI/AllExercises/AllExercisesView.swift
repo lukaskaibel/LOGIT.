@@ -15,6 +15,9 @@ struct AllExercisesView: View {
     
     var body: some View {
         List {
+            MuscleGroupSelector(selectedMuscleGroup: $allExercises.selectedMuscleGroup)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
             ForEach(allExercises.groupedExercises) { group in
                 Section(content: {
                     ForEach(group, id: \.objectID) { exercise in

@@ -33,7 +33,6 @@ final class ExerciseDetail: ViewModel {
         set {
             let exercise = database.object(with: exerciseID) as! Exercise
             exercise.name = newValue.name
-            exercise.isFavorite = newValue.isFavorite
             database.save()
         }
     }

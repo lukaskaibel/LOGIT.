@@ -10,7 +10,7 @@ import SwiftUI
 struct FirstStartView: View {
     
     private enum SetupStage {
-        case start, weightUnit, weeklyTarget, standardExercises
+        case start, weightUnit, weeklyTarget
     }
     
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
@@ -63,7 +63,7 @@ struct FirstStartView: View {
                     .background(Color.secondaryBackground)
                     .cornerRadius(20)
                     .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
-            } else if setupStage == .weeklyTarget {
+            } else {
                 VStack {
                     Text("\(NSLocalizedString("weeklyTarget", comment: "")) 🗓")
                         .font(.title3.weight(.semibold))
@@ -77,27 +77,6 @@ struct FirstStartView: View {
                             Text(String(i)).tag(i)
                         }
                     }).pickerStyle(.wheel)
-                }.padding()
-                    .background(Color.secondaryBackground)
-                    .cornerRadius(20)
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
-            } else {
-                VStack {
-                    Text(NSLocalizedString("defaultExercises", comment: ""))
-                        .font(.body.weight(.semibold))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(NSLocalizedString("defaultExercisesDescription", comment: ""))
-                        .foregroundColor(.secondaryLabel)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Divider()
-                    Toggle(isOn: $useStandardExercises, label: {
-                        VStack(alignment: .leading) {
-                            Text(NSLocalizedString("useDefaultExercises", comment: ""))
-                            Text(NSLocalizedString("(recommended)", comment: ""))
-                                .foregroundColor(.secondaryLabel)
-                                .font(.caption)
-                        }
-                    })
                 }.padding()
                     .background(Color.secondaryBackground)
                     .cornerRadius(20)
@@ -116,19 +95,14 @@ struct FirstStartView: View {
                     }
                 case .weeklyTarget:
                     withAnimation {
-                        setupStage = .standardExercises
+                        setupDone = true
+                        setupFinished = true
                     }
-                case .standardExercises:
-                    if useStandardExercises {
-                        addDefaultExercises()
-                    }
-                    setupDone = true
-                    setupFinished = true
                 }
             }) {
                 HStack {
-                    Image(systemName: setupStage == .standardExercises ? "checkmark.circle.fill" : "arrow.right.circle.fill")
-                    Text(setupStage == .start ? NSLocalizedString("startSetup", comment: "") : setupStage == .standardExercises ? NSLocalizedString("finishSetup", comment: "") : NSLocalizedString("continue", comment: ""))
+                    Image(systemName: setupStage == .weeklyTarget ? "checkmark.circle.fill" : "arrow.right.circle.fill")
+                    Text(setupStage == .start ? NSLocalizedString("startSetup", comment: "") : setupStage == .weeklyTarget ? NSLocalizedString("finishSetup", comment: "") : NSLocalizedString("continue", comment: ""))
                 }.foregroundColor(.accentColor)
                     .font(.title3.weight(.bold))
             }.frame(maxWidth: .infinity)
@@ -141,14 +115,7 @@ struct FirstStartView: View {
                 HomeView()
             }
     }
-    
-    private func addDefaultExercises() {
-        for exerciseName in Exercise.defaultExerciseNames {
-            Database.shared.newExercise(name: exerciseName)
-        }
-        Database.shared.save()
-    }
-    
+
 }
 
 struct FirstStartView_Previews: PreviewProvider {

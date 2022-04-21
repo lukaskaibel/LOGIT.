@@ -10,16 +10,9 @@ import CoreData
 
 extension Exercise {
     
-    static func testExercise() -> Exercise {
-        let exercise = Exercise()
-        exercise.name = "Bench Press"
-        let setGroup = WorkoutSetGroup()
-        let set = WorkoutSet()
-        set.setGroup = setGroup
-        set.repetitions = 12
-        set.weight = 60
-        set.time = 30
-        return exercise
+    var muscleGroup: MuscleGroup? {
+        get { MuscleGroup(rawValue: muscleGroupString ?? "")  }
+        set { muscleGroupString = newValue?.rawValue }
     }
     
     var sets: [WorkoutSet] {

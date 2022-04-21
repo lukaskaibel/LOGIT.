@@ -10,12 +10,14 @@ import Foundation
 final class AllExercises: ViewModel {
     
     @Published var searchedText = ""
+    @Published var selectedMuscleGroup: MuscleGroup?
     
     private var exercises: [Exercise] {
-        database.fetch(Exercise.self,
+        (database.fetch(Exercise.self,
                        sortingKey: "name",
                        ascending: true,
-                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise]
+                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise])
+            .filter { $0.muscleGroup == selectedMuscleGroup ?? $0.muscleGroup }
     }
     
     public var groupedExercises: [[Exercise]] {

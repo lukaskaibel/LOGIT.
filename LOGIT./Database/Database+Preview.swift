@@ -16,7 +16,7 @@ extension Database {
         for _ in 0..<Int.random(in: 1...20) {
             let workout = database.newWorkout(name: workoutNames.randomElement()!)
             for _ in 1..<Int.random(in: 1...10) {
-                let exercise = database.newExercise(name: exampleExerciseNames.randomElement()!, isFavorite: Bool.random())
+                let exercise = database.newExercise(name: exampleExerciseNames.randomElement()!)
                 let setGroup = database.newWorkoutSetGroup(exercise: exercise, workout: workout)
                 for _ in 1..<Int.random(in: 1...8) {
                     let _ = database.newWorkoutSet(repetitions: Int.random(in: 0...10), time: Int.random(in: 0...60), weight: Int.random(in: 0...200), setGroup: setGroup)

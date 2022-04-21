@@ -123,8 +123,7 @@ class WorkoutRecorder: ViewModel {
     }
     
     public func deleteWorkout() {
-        database.delete(workout)
-        updateView()
+        database.delete(workout, saveContext: true)
     }
     
     public func updateWorkoutWithTemplate() {

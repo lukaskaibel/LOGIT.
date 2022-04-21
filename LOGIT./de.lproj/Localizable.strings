@@ -52,7 +52,7 @@
 "profile" = "Profil";
 
 "completed" = "Geschafft";
-"toGo" = "noch";
+"toGo" = "übrig";
 "performed" = "Ausführungen:";
 "time" = "mal";
 "times" = "mal";
@@ -87,7 +87,7 @@
 "ok" = "Ok";
 "nameCantBeEmpty" = "Name kann nicht leer sein.";
 "personalBest" = "Persönliche Bestleistung";
-"editName" = "Namen bearbeiten";
+"edit" = "Bearbeiten";
 "delete" = "Löschen";
 "remove" = "Entfernen";
 "deleteExerciseConfirmation" = "Möchtest du die Übung unwiderruflich löschen?";
@@ -131,4 +131,11 @@
 "eight" = "Acht";
 "nine" = "Neun";
 
-
+"all" = "Alle";
+"muscleGroup" = "Muskelgruppe";
+"chest" = "Brust";
+"back" = "Rücken";
+"arms" = "Arme";
+"shoulders" = "Schultern";
+"abdominals" = "Bauch";
+"legs" = "Beine";

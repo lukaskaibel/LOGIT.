@@ -92,7 +92,7 @@ struct ExerciseDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu(content: {
-                    Button(action: { showingEditExercise.toggle() }, label: { Label(NSLocalizedString("editName", comment: ""), systemImage: "pencil") })
+                    Button(action: { showingEditExercise.toggle() }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
                     Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
                 }) {
                     Image(systemName: "ellipsis.circle")
