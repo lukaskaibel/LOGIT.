@@ -17,16 +17,16 @@ struct TargetPerWeekGraph: View {
         VStack(spacing: 20) {
             GeometryReader { geometry in
                 HStack(spacing: 20) {
-                    ForEach(yValues, id:\.self) { y in
+                    ForEach(yValues.indices, id:\.self) { index in
                         VStack(spacing: 0) {
                             Spacer()
                             VStack(spacing: 2) {
-                                if y == 0 {         // prevents columns from collapsing when y is 0
+                                if yValues[index] == 0 {         // prevents columns from collapsing when y is 0
                                     Rectangle()
                                         .foregroundColor(.clear)
                                         .frame(height: geometry.size.height / CGFloat(maxValue) - 2)
                                 } else {
-                                    ForEach(0..<y, id:\.self) { _ in
+                                    ForEach(0..<yValues[index], id:\.self) { _ in
                                         Rectangle()
                                             .frame(height: geometry.size.height / CGFloat(maxValue) - 2)
                                     }
@@ -34,7 +34,7 @@ struct TargetPerWeekGraph: View {
                             }.frame(width: 25)
                                 .cornerRadius(5)
                                 .frame(maxWidth: .infinity)
-                        }.foregroundColor(y >= target ? .accentColor: .accentColor.opacity(0.4))
+                        }.foregroundColor(yValues[index] >= target ? .accentColor: .accentColor.opacity(0.4))
                     }
                 }.frame(maxWidth: .infinity)
                     .padding(.horizontal, 10)
@@ -51,10 +51,10 @@ struct TargetPerWeekGraph: View {
                 }
             }
             HStack(spacing: 20) {
-                ForEach(xValues, id:\.self) { x in
-                    Text(x)
-                        .foregroundColor(xValues.last! == x ? .accentColor : .secondaryLabel)
-                        .font(.footnote.weight(xValues.last! == x ? .semibold : .regular))
+                ForEach(xValues.indices, id:\.self) { index in
+                    Text(xValues[index])
+                        .foregroundColor(xValues.last! == xValues[index] ? .accentColor : .secondaryLabel)
+                        .font(.footnote.weight(xValues.last! == xValues[index] ? .semibold : .regular))
                         .frame(maxWidth: .infinity)
                 }
             }.padding(.horizontal, 10)

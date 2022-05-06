@@ -31,4 +31,11 @@ extension Date {
         }
         return formatter.string(from: self)
     }
+    
+    var monthDescription: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM YYYY"
+        return formatter.string(from: self)
+    }
+
 }

@@ -18,8 +18,9 @@ struct LOGIT: App {
             "workoutPerWeekTarget" : 3,
             "setupDone" : false
         ])
-        UserDefaults.standard.set(["de"], forKey: "AppleLanguages")
-        UserDefaults.standard.synchronize()
+        //Start App in other language
+//        UserDefaults.standard.set(["eng"], forKey: "AppleLanguages")
+//        UserDefaults.standard.synchronize()
         //FirstStartView Test
 //        UserDefaults.standard.set(false, forKey: "setupDone")
         

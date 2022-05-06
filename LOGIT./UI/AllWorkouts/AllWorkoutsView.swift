@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
-
 
 struct AllWorkoutsView: View {
     
@@ -25,47 +23,29 @@ struct AllWorkoutsView: View {
                         }
                     }
                 }, header: {
-                    if let date = allWorkouts.sectionedWorkouts[index].first?.date {
-                        Text(dateString(for: date))
-                            .foregroundColor(.label)
-                            .font(.title2.weight(.bold))
-                            .padding(.bottom, 5)
-                    }
+                    Text(allWorkouts.header(for: index))
+                        .sectionHeaderStyle()
                 })
             }
             Spacer(minLength: 50)
-                .listRowSeparator(.hidden, edges: .bottom)
+                .listRowSeparator(.hidden)
         }.listStyle(.plain)
             .searchable(text: $allWorkouts.searchedText,
-                        prompt: NSLocalizedString("searchWorkouts", comment: "Searching in workouts"))
-            .navigationTitle(NSLocalizedString("workouts", comment: "Collection of exercises"))
+                        prompt: NSLocalizedString("searchWorkouts", comment: ""))
+            .navigationTitle(NSLocalizedString("workouts", comment: ""))
             .toolbar  {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu(NSLocalizedString("sortBy", comment: "Order of a list")) {
+                    Menu(NSLocalizedString("sortBy", comment: "")) {
                         Section {
                             Button(action: {
-                                if allWorkouts.sortingKey != .name {
-                                    allWorkouts.ascending = true
-                                }
                                 allWorkouts.sortingKey = .name
                             }) {
-                                Label(NSLocalizedString("name", comment: "What you call a person"), systemImage: "textformat")
+                                Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
                             }
                             Button(action: {
-                                if allWorkouts.sortingKey != .date {
-                                    allWorkouts.ascending = false
-                                }
                                 allWorkouts.sortingKey = .date
                             }) {
                                 Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
-                            }
-                        }
-                        Section {
-                            Button(allWorkouts.sortingKey == .name ? NSLocalizedString("ascending", comment: "") : NSLocalizedString("oldestFirst", comment: "")) {
-                                allWorkouts.ascending = true
-                            }
-                            Button(allWorkouts.sortingKey == .name ? NSLocalizedString("oldestFirst", comment: "") : NSLocalizedString("newestFirst", comment: "")) {
-                                allWorkouts.ascending = false
                             }
                         }
                     }
@@ -73,12 +53,7 @@ struct AllWorkoutsView: View {
             }
     }
     
-    private func dateString(for date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: date)
-    }
+    
     
 }
 

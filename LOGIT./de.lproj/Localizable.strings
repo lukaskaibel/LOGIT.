@@ -58,7 +58,7 @@
 "times" = "mal";
 
 "sec" = "sek";
-"date" = "Tag";
+"date" = "Datum";
 "weekly" = "Wöchentlich";
 "monthly" = "Monatlich";
 "yearly" = "Jährlich";
@@ -84,6 +84,7 @@
 "edit" = "Bearbeiten";
 "update" = "Update";
 "save" = "Sichern";
+"navBack" = "Zurück";
 "ok" = "Ok";
 "nameCantBeEmpty" = "Name kann nicht leer sein.";
 "personalBest" = "Persönliche Bestleistung";
@@ -130,6 +131,12 @@
 "seven" = "Sieben";
 "eight" = "Acht";
 "nine" = "Neun";
+
+"morning" = "Morgen";
+"noon" = "Mittag";
+"afternoon" = "Nachmittag";
+"evening" = "Abend";
+"night" = "Nacht";
 
 "all" = "Alle";
 "muscleGroup" = "Muskelgruppe";

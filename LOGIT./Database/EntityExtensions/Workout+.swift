@@ -45,6 +45,11 @@ extension Workout {
         return result
     }
     
+    var muscleGroups: [MuscleGroup] {
+        exercises
+            .compactMap { $0.muscleGroup }
+    }
+    
     func remove(setGroup: WorkoutSetGroup) {
         setGroups = NSOrderedSet(array: ((setGroups?.array as? [WorkoutSetGroup]) ?? .emptyList).filter { $0 != setGroup } )
     }
@@ -60,11 +65,11 @@ extension Workout {
         let hour = Calendar.current.component(.hour, from: date)
         let daytime: String
         switch hour {
-        case 6..<12: daytime = "Morning"
-        case 12..<14: daytime = "Noon"
-        case 14..<17: daytime = "Afternoon"
-        case 17..<22: daytime = "Evening"
-        default: daytime = "Night"
+        case 6..<12: daytime = NSLocalizedString("morning", comment: "")
+        case 12..<14: daytime = NSLocalizedString("noon", comment: "")
+        case 14..<17: daytime = NSLocalizedString("afternoon", comment: "")
+        case 17..<22: daytime = NSLocalizedString("evening", comment: "")
+        default: daytime = NSLocalizedString("night", comment: "")
         }
         return "\(weekday) \(daytime) Workout"
     }

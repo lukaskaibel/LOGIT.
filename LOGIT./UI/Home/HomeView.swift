@@ -74,10 +74,10 @@ struct HomeView: View {
                             }
                         }.padding(.vertical, 5)
                         .listRowSeparator(.hidden, edges: .top)
-                    }).listRowSeparator(.hidden)
+                    })
                 }
                 Spacer(minLength: 50)
-                    .listRowSeparator(.hidden, edges: .bottom)
+                    .listRowSeparator(.hidden)
             }.listStyle(.plain)
                 .navigationTitle(NSLocalizedString("home", comment: ""))
                 .toolbar {

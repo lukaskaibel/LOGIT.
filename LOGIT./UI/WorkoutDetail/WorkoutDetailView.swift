@@ -81,14 +81,15 @@ struct WorkoutDetailView: View {
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template, from: workoutDetail.workout))
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template,
+                                                                                                           from: workoutDetail.workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {
                                         WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: workoutDetail.workout.template?.objectID ?? NSManagedObjectID()))
                                             .toolbar {
                                                 ToolbarItem(placement: .navigationBarLeading) {
-                                                    Button(NSLocalizedString("dismiss", comment: "")) { isShowingTemplateDetail = false }
+                                                    Button(NSLocalizedString("navBack", comment: "")) { isShowingTemplateDetail = false }
                                                 }
                                             }
                                     }
@@ -118,6 +119,7 @@ struct WorkoutDetailView: View {
                     }
                     Text(workoutDetail.workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
                         .fontWeight(.medium)
+                        .lineLimit(1)
                         .foregroundColor(.accentColor)
                     if workoutDetail.workout.template != nil {
                         Image(systemName: "chevron.right")

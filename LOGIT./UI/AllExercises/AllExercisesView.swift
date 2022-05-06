@@ -30,6 +30,7 @@ struct AllExercisesView: View {
                     }
                 }, header: {
                     Text(allExercises.getLetter(for: group))
+                        .sectionHeaderStyle()
                 })
             }
         }.listStyle(.plain)
@@ -49,8 +50,6 @@ struct AllExercisesView: View {
                 EditExerciseView(editExercise: EditExercise())
             }
     }
-    
-    
     
 }
 

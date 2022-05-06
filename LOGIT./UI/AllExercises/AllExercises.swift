@@ -9,17 +9,11 @@ import Foundation
 
 final class AllExercises: ViewModel {
     
+    //MARK: - Public
+    
     @Published var searchedText = ""
     @Published var selectedMuscleGroup: MuscleGroup?
-    
-    private var exercises: [Exercise] {
-        (database.fetch(Exercise.self,
-                       sortingKey: "name",
-                       ascending: true,
-                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise])
-            .filter { $0.muscleGroup == selectedMuscleGroup ?? $0.muscleGroup }
-    }
-    
+        
     public var groupedExercises: [[Exercise]] {
         var result = [[Exercise]]()
         for exercise in exercises {
@@ -34,6 +28,16 @@ final class AllExercises: ViewModel {
     
     func getLetter(for group: [Exercise]) -> String {
         String(group.first?.name?.first ?? Character(" "))
+    }
+    
+    //MARK: - Private
+    
+    private var exercises: [Exercise] {
+        (database.fetch(Exercise.self,
+                       sortingKey: "name",
+                       ascending: true,
+                       predicate: searchedText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@", searchedText)) as! [Exercise])
+            .filter { $0.muscleGroup == selectedMuscleGroup ?? $0.muscleGroup }
     }
     
 }

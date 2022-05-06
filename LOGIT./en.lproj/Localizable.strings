@@ -83,6 +83,7 @@
 "edit" = "Edit";
 "update" = "Update";
 "save" = "Save";
+"navBack" = "Back";
 "ok" = "Ok";
 "nameCantBeEmpty" = "Name can't be empty.";
 "personalBest" = "Personal Best";
@@ -121,7 +122,7 @@
 
 "zero" = "Zero";
 "one" = "One";
-"two" = "Twp";
+"two" = "Two";
 "three" = "Three";
 "four" = "Four";
 "five" = "Five";
@@ -129,6 +130,12 @@
 "seven" = "Seven";
 "eight" = "Eight";
 "nine" = "Nine";
+
+"morning" = "Morning";
+"noon" = "Noon";
+"afternoon" = "Afternoon";
+"evening" = "Evening";
+"night" = "Night";
 
 "all" = "All";
 "muscleGroup" = "Muscle Group";

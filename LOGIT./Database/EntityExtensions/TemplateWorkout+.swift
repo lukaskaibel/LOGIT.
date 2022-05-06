@@ -29,4 +29,9 @@ extension TemplateWorkout {
         return result
     }
     
+    var muscleGroups: [MuscleGroup] {
+        exercises
+            .compactMap { $0.muscleGroup }
+    }
+    
 }

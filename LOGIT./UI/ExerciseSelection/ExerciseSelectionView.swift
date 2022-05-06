@@ -85,6 +85,7 @@ struct ExerciseSelectionView: View {
             }
         }, header: {
             Text(exerciseSelection.getLetter(for: group).uppercased())
+                .sectionHeaderStyle()
         })
     }
     
