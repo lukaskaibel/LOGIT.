@@ -158,17 +158,20 @@ struct TemplateWorkoutEditorView: View {
                     Button(action: {
                         templateWorkoutEditor.convertSetGroupToStandardSets(setGroup)
                     }) {
-                        Label("Normal", systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                        Label(NSLocalizedString("normalset", comment: ""),
+                              systemImage: setGroup.setType == .standard ? "checkmark" : "")
                     }
                     Button(action: {
                         
                     }) {
-                        Label("Superset", systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                        Label(NSLocalizedString("superset", comment: ""),
+                              systemImage: setGroup.setType == .superSet ? "checkmark" : "")
                     }
                     Button(action: {
                         templateWorkoutEditor.convertSetGroupToTemplateDropSets(setGroup)
                     }) {
-                        Label("Dropset", systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                        Label(NSLocalizedString("dropset", comment: ""),
+                              systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
                     }
                 }
             }) {

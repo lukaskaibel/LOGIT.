@@ -8,13 +8,13 @@
 import Foundation
 
 enum MuscleGroup: String, Identifiable, CaseIterable {
-    var id: String {
-        self.rawValue
-    }
     
     case chest, back, arms, shoulders, abdominals, legs
+    
+    var id: String { self.rawValue }
     
     var description: String {
         NSLocalizedString(self.rawValue, comment: "")
     }
+    
 }

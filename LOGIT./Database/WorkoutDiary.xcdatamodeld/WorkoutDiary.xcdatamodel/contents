@@ -13,7 +13,6 @@
     <entity name="StandardSet" representedClassName="StandardSet" parentEntity="WorkoutSet" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="time" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="TemplateDropSet" representedClassName="TemplateDropSet" parentEntity="TemplateSet" syncable="YES" codeGenerationType="class">
@@ -56,7 +55,8 @@
     <elements>
         <element name="DropSet" positionX="423" positionY="324" width="128" height="59"/>
         <element name="Exercise" positionX="820.7496337890625" positionY="358.6207275390625" width="128" height="89"/>
-        <element name="StandardSet" positionX="358.213134765625" positionY="163.2440490722656" width="128" height="89"/>
+        <element name="StandardSet" positionX="358.213134765625" positionY="163.2440490722656" width="128" height="74"/>
+        <element name="TemplateDropSet" positionX="423" positionY="324" width="128" height="59"/>
         <element name="TemplateSet" positionX="432" positionY="333" width="128" height="44"/>
         <element name="TemplateStandardSet" positionX="423" positionY="324" width="128" height="59"/>
         <element name="TemplateWorkout" positionX="441" positionY="342" width="128" height="89"/>
@@ -64,6 +64,5 @@
         <element name="Workout" positionX="219.9733276367188" positionY="464.2337951660156" width="128" height="104"/>
         <element name="WorkoutSet" positionX="423" positionY="324" width="128" height="44"/>
         <element name="WorkoutSetGroup" positionX="423" positionY="324" width="128" height="74"/>
-        <element name="TemplateDropSet" positionX="423" positionY="324" width="128" height="59"/>
     </elements>
 </model>

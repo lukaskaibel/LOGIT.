@@ -7,12 +7,16 @@
 
 import Foundation
 
+/// Provides a base for the view models in the project, that automatically publishes its objectWillChange publisher when the shared Database has changed.
 class ViewModel: ObservableObject {
     
     internal let database = Database.shared
     
     init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateView), name: .databaseDidChange, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateView),
+                                               name: .databaseDidChange,
+                                               object: nil)
     }
     
     @objc func updateView() {

@@ -9,10 +9,10 @@ import Foundation
 
 extension TemplateWorkoutSetGroup {
     
-    func index(of set: TemplateSet) -> Int? {
-        (sets?.array as? [TemplateSet])?.firstIndex(of: set)
+    @objc enum SetType: Int {
+        case standard, superSet, dropSet
     }
-
+    
     var setType: SetType {
         let firstSet = sets?.array.first
         if let _ = firstSet as? TemplateDropSet {
@@ -22,8 +22,8 @@ extension TemplateWorkoutSetGroup {
         }
     }
     
-    @objc enum SetType: Int {
-        case standard, superSet, dropSet
+    func index(of set: TemplateSet) -> Int? {
+        (sets?.array as? [TemplateSet])?.firstIndex(of: set)
     }
     
 }

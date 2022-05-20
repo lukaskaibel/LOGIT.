@@ -40,12 +40,10 @@ extension Database {
     
     @discardableResult
     func newStandardSet(repetitions: Int = 0,
-                       time: Int = 0,
                        weight: Int = 0,
                        setGroup: WorkoutSetGroup? = nil) -> StandardSet {
         let standardSet = StandardSet(context: context)
         standardSet.repetitions = Int64(repetitions)
-        standardSet.time = Int64(time)
         standardSet.weight = Int64(weight)
         standardSet.setGroup = setGroup
         return standardSet

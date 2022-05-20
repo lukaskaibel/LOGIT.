@@ -9,8 +9,8 @@ import Foundation
 
 extension TemplateSet {
     
-    @objc var hasEntry: Bool {
-        fatalError("TemplateSet: hasEntry must be implemented in subclass.")
+    @objc public var hasEntry: Bool {
+        fatalError("TemplateSet+: hasEntry must be implemented in subclass of TemplateSet")
     }
     
 }

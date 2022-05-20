@@ -146,3 +146,6 @@
 "abdominals" = "Abdominals";
 "legs" = "Legs";
 
+"normalset" = "Normal";
+"dropset" = "Dropset";
+"superset" = "Superset";

@@ -13,31 +13,19 @@ extension WorkoutSet {
         case repetitions, weight
     }
     
+    public static func == (lhs: WorkoutSet, rhs: WorkoutSet) -> Bool {
+        return lhs.objectID == rhs.objectID
+    }
+    
     public var exercise: Exercise? {
         setGroup?.exercise
     }
     
-    var workout: Workout? {
+    public var workout: Workout? {
         setGroup?.workout
     }
     
-    @objc public var maxRepetitions: Int {
-        fatalError("maxRepetitions must be implemented in subclass of WorkoutSet")
-    }
-    
-    @objc public var maxWeight: Int {
-        fatalError("maxWeight must be implemented in subclass of WorkoutSet")
-    }
-    
-    @objc public var hasEntry: Bool {
-        fatalError("hasEntry must be implemented in subclass of WorkoutSet")
-    }
-    
-    @objc public func clearEntries() {
-        fatalError("clearEntries must be implemented in subclass of WorkoutSet")
-    }
-    
-    @objc public func match(_ templateSet: TemplateSet) {
+    public func match(_ templateSet: TemplateSet) {
         if let standardSet = self as? StandardSet, let templateStandardSet = templateSet as? TemplateStandardSet {
             standardSet.repetitions = templateStandardSet.repetitions
             standardSet.weight = templateStandardSet.weight
@@ -45,12 +33,26 @@ extension WorkoutSet {
             dropSet.repetitions = templateDropSet.repetitions
             dropSet.weights = templateDropSet.weights
         } else {
-            fatalError("match not implemented for SuperSet")
+            fatalError("WorkoutSet+: match not implemented for SuperSet")
         }
     }
     
-    static func == (lhs: WorkoutSet, rhs: WorkoutSet) -> Bool {
-        return lhs.objectID == rhs.objectID
+    //MARK: Subclass Method Interface
+    
+    @objc public var maxRepetitions: Int {
+        fatalError("WorkoutSet+: maxRepetitions must be implemented in subclass of WorkoutSet")
+    }
+    
+    @objc public var maxWeight: Int {
+        fatalError("WorkoutSet+: maxWeight must be implemented in subclass of WorkoutSet")
+    }
+    
+    @objc public var hasEntry: Bool {
+        fatalError("WorkoutSet+: hasEntry must be implemented in subclass of WorkoutSet")
+    }
+    
+    @objc public func clearEntries() {
+        fatalError("WorkoutSet+: clearEntries must be implemented in subclass of WorkoutSet")
     }
     
 }

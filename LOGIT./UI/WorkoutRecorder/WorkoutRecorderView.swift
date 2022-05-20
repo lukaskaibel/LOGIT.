@@ -248,17 +248,20 @@ struct WorkoutRecorderView: View {
                             Button(action: {
                                 workoutRecorder.convertSetGroupToStandardSets(setGroup)
                             }) {
-                                Label("Normal", systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                                Label(NSLocalizedString("normalset", comment: ""),
+                                      systemImage: setGroup.setType == .standard ? "checkmark" : "")
                             }
                             Button(action: {
                                 
                             }) {
-                                Label("Superset", systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                                Label(NSLocalizedString("superset", comment: ""),
+                                      systemImage: setGroup.setType == .superSet ? "checkmark" : "")
                             }
                             Button(action: {
                                 workoutRecorder.convertSetGroupToDropSets(setGroup)
                             }) {
-                                Label("Dropset", systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                                Label(NSLocalizedString("dropset", comment: ""),
+                                      systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
                             }
                         }
                         Section {

@@ -9,10 +9,6 @@ import Foundation
 
 extension TemplateDropSet {
     
-    override var hasEntry: Bool {
-        (repetitions?.reduce(0, +) ?? 0) + (weights?.reduce(0, +) ?? 0) > 0
-    }
-    
     public func addDrop() {
         repetitions?.append(0)
         weights?.append(0)
@@ -24,5 +20,12 @@ extension TemplateDropSet {
             weights?.removeLast()
         }
     }
+
+    //MARK: Overrides from TemplateSet
+    
+    override public  var hasEntry: Bool {
+        (repetitions?.reduce(0, +) ?? 0) + (weights?.reduce(0, +) ?? 0) > 0
+    }
+    
     
 }

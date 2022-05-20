@@ -12,7 +12,8 @@ struct WorkoutRecorderStartScreen: View {
     @EnvironmentObject var workoutRecorder: WorkoutRecorder
     @Environment(\.dismiss) var dismiss
     @FetchRequest(entity: TemplateWorkout.entity(),
-                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                  sortDescriptors: [NSSortDescriptor(key: "creationDate",
+                                                     ascending: false)])
     var workoutTemplates: FetchedResults<TemplateWorkout>
     
     @Binding var showingStartScreen: Bool

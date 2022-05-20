@@ -9,7 +9,9 @@ import Foundation
 
 extension TemplateStandardSet {
     
-    override var hasEntry: Bool {
+    //MARK:  Overrides from TemplateSet
+    
+    override public var hasEntry: Bool {
         repetitions > 0 || weight > 0
     }
     

@@ -146,3 +146,7 @@
 "shoulders" = "Schultern";
 "abdominals" = "Bauch";
 "legs" = "Beine";
+
+"normalset" = "Normal";
+"dropset" = "Dropsatz";
+"superset" = "Supersatz";
