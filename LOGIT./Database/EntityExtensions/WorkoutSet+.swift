@@ -1,20 +1,19 @@
 //
 //  WorkoutSet+.swift
-//  LOGIT
+//  LOGIT.
 //
-//  Created by Lukas Kaibel on 27.06.21.
+//  Created by Lukas Kaibel on 06.05.22.
 //
 
 import Foundation
 
-
 extension WorkoutSet {
     
     public enum Attribute: String {
-        case repetitions, time="duration", weight
+        case repetitions, weight
     }
     
-    var exercise: Exercise? {
+    public var exercise: Exercise? {
         setGroup?.exercise
     }
     
@@ -22,34 +21,33 @@ extension WorkoutSet {
         setGroup?.workout
     }
     
-    var hasEntry: Bool {
-        repetitions > 0 || weight > 0
+    @objc public var maxRepetitions: Int {
+        fatalError("maxRepetitions must be implemented in subclass of WorkoutSet")
     }
     
-    func clearEntries() {
-        repetitions = 0
-        weight = 0
+    @objc public var maxWeight: Int {
+        fatalError("maxWeight must be implemented in subclass of WorkoutSet")
     }
     
-    func match(_ template: TemplateWorkoutSet) {
-        repetitions = template.repetitions
-        weight = template.weight
+    @objc public var hasEntry: Bool {
+        fatalError("hasEntry must be implemented in subclass of WorkoutSet")
     }
     
-    func makeCopy() -> WorkoutSet? {
-        guard let context = self.managedObjectContext else { return nil }
-        let copy = WorkoutSet(context: context)
-        copy.setGroup = self.setGroup
-        copy.repetitions = self.repetitions
-        copy.weight = self.weight
-        copy.time = self.time 
-        return copy
+    @objc public func clearEntries() {
+        fatalError("clearEntries must be implemented in subclass of WorkoutSet")
     }
     
-}
-
-
-extension WorkoutSet {
+    @objc public func match(_ templateSet: TemplateSet) {
+        if let standardSet = self as? StandardSet, let templateStandardSet = templateSet as? TemplateStandardSet {
+            standardSet.repetitions = templateStandardSet.repetitions
+            standardSet.weight = templateStandardSet.weight
+        } else if let dropSet = self as? DropSet, let templateDropSet = templateSet as? TemplateDropSet {
+            dropSet.repetitions = templateDropSet.repetitions
+            dropSet.weights = templateDropSet.weights
+        } else {
+            fatalError("match not implemented for SuperSet")
+        }
+    }
     
     static func == (lhs: WorkoutSet, rhs: WorkoutSet) -> Bool {
         return lhs.objectID == rhs.objectID

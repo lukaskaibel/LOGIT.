@@ -14,7 +14,7 @@ struct WorkoutRecorderView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
-    @StateObject private var workoutRecorder = WorkoutRecorder()
+    @StateObject internal var workoutRecorder = WorkoutRecorder()
     @StateObject private var exerciseSelection = ExerciseSelection()
     @StateObject private var exerciseDetail = ExerciseDetail(exerciseID: NSManagedObjectID())
     
@@ -31,11 +31,10 @@ struct WorkoutRecorderView: View {
         NavigationView {
             if showingStartScreen {
                 WorkoutRecorderStartScreen(showingStartScreen: $showingStartScreen)
-                    .environmentObject(workoutRecorder)
             } else {
                 RecorderView
             }
-        }
+        }.environmentObject(workoutRecorder)
     }
     
     private var RecorderView: some View {
@@ -43,8 +42,7 @@ struct WorkoutRecorderView: View {
             Header
             Divider()
             ExerciseList
-        }.environmentObject(workoutRecorder)
-            .environment(\.editMode, $editMode)
+        }.environment(\.editMode, $editMode)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { showingTimerView.toggle() }) {
@@ -103,7 +101,7 @@ struct WorkoutRecorderView: View {
                             isPresented: $showingDeleteUnusedSetsAndFinishWorkoutAlert,
                             titleVisibility: .visible) {
             Button(NSLocalizedString("deleteSets", comment: ""), role: .destructive) {
-                workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                workoutRecorder.deleteSetsWithoutEntries()
                 if workoutRecorder.workout.isEmpty {
                     workoutRecorder.deleteWorkout()
                 } else {
@@ -116,7 +114,7 @@ struct WorkoutRecorderView: View {
                             isPresented: $showingDiscardWorkoutAlert,
                             titleVisibility: .visible) {
             Button(NSLocalizedString("discardWorkout", comment: ""), role: .destructive) {
-                workoutRecorder.deleteSetsWithoutRepsAndWeight()
+                workoutRecorder.deleteSetsWithoutEntries()
                 workoutRecorder.deleteWorkout()
                 dismiss()
             }
@@ -134,7 +132,7 @@ struct WorkoutRecorderView: View {
                 Button(action: {
                     if workoutRecorder.workoutHasEntries {
                         UINotificationFeedbackGenerator().notificationOccurred(.success)
-                        if workoutRecorder.setsWithoutRepsAndWeight.isEmpty {
+                        if workoutRecorder.setsWithoutEntries.isEmpty {
                             showingFinishWorkoutAlert.toggle()
                         } else {
                             showingDeleteUnusedSetsAndFinishWorkoutAlert.toggle()
@@ -248,12 +246,27 @@ struct WorkoutRecorderView: View {
                     Menu(content: {
                         Section {
                             Button(action: {
+                                workoutRecorder.convertSetGroupToStandardSets(setGroup)
+                            }) {
+                                Label("Normal", systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                            }
+                            Button(action: {
+                                
+                            }) {
+                                Label("Superset", systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                            }
+                            Button(action: {
+                                workoutRecorder.convertSetGroupToDropSets(setGroup)
+                            }) {
+                                Label("Dropset", systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                            }
+                        }
+                        Section {
+                            Button(action: {
                                 workoutRecorder.exerciseForExerciseDetail = setGroup.exercise
                             }) {
                                 Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
                             }
-                        }
-                        Section {
                             Button(role: .destructive, action: {
                                 withAnimation {
                                     workoutRecorder.delete(setGroup: setGroup)
@@ -277,67 +290,24 @@ struct WorkoutRecorderView: View {
         }
     }
     
+    @ViewBuilder
     private func WorkoutSetCell(workoutSet: WorkoutSet) -> some View {
-        var repetitionsString: Binding<String> {
-            Binding<String>(
-                get: { workoutSet.repetitions == 0 ? "" : String(workoutSet.repetitions) },
-                set: {
-                    value in workoutSet.repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
-                    workoutRecorder.updateView()
-                }
-            )
-        }
-        
-        var weightString: Binding<String> {
-            Binding<String>(
-                get: { workoutSet.weight == 0 ? "" : String(convertWeightForDisplaying(workoutSet.weight)) },
-                set: {
-                    value in workoutSet.weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
-                    workoutRecorder.updateView()
-                }
-            )
-        }
-        
-        return HStack {
+        HStack {
             Text(String((workoutRecorder.indexInSetGroup(for: workoutSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
+                .frame(maxHeight: .infinity, alignment: .top)
                 .padding()
-            TextField(workoutRecorder.repetitionsPlaceholder(for: workoutSet), text: repetitionsString)
-                .keyboardType(.numberPad)
-                .foregroundColor(.accentColor)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
-                .padding(7)
-                .background(workoutSet.repetitions == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : .accentColorBackground)
-                .cornerRadius(5)
-                .overlay {
-                    HStack {
-                        Image(systemName: "arrow.counterclockwise")
-                            .foregroundColor(workoutSet.repetitions == 0 ? .secondaryLabel : .accentColor)
-                            .font(.caption.weight(.bold))
-                            .padding(7)
-                        Spacer()
-                    }
-                }
-            TextField(workoutRecorder.weightPlaceholder(for: workoutSet), text: weightString)
-                .keyboardType(.numberPad)
-                .foregroundColor(.accentColor)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
-                .padding(7)
-                .background(workoutSet.weight == 0 ? (colorScheme == .light ? Color.secondaryBackground : .background) : .accentColorBackground)
-                .cornerRadius(5)
-                .overlay {
-                    HStack {
-                        Image(systemName: "scalemass")
-                            .foregroundColor(workoutSet.weight == 0 ? .secondaryLabel : .accentColor)
-                            .font(.caption.weight(.bold))
-                            .padding(7)
-                        Spacer()
-                    }
-                }
-            if let templateSet = workoutRecorder.templateSet(for: workoutSet), templateSet.hasEntry {
+            if let standardSet = workoutSet as? StandardSet {
+                StandardSetCell(for: standardSet)
+            } else if let dropSet = workoutSet as? DropSet {
+                DropSetCell(for: dropSet)
+                    .padding(.top, 8)
+            } else {
+                fatalError("WorkoutSetCell not implemented for given workoutSet type: \(type(of: workoutSet))")
+            }
+            if let templateSet = workoutRecorder.templateSet(for: workoutSet),
+               templateSet.hasEntry {
                 Button(action: {
                     UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                     if workoutSet.hasEntry {
@@ -351,13 +321,14 @@ struct WorkoutRecorderView: View {
                         .font(.body.weight(.semibold))
                         .foregroundColor(workoutSet.hasEntry ? .accentColor : .secondaryLabel)
                         .padding(7)
-                        .background(workoutSet.hasEntry ? Color.accentColorBackground : .secondaryBackground)
+                        .frame(maxHeight: .infinity)
+                        .background(workoutSet.hasEntry ? Color.accentColorBackground : .tertiaryFill)
                         .cornerRadius(5)
+                        .padding(.vertical, 8)
                 }
             }
         }.padding(.trailing)
     }
-    
     
     private var AddExerciseButton: some View {
         Button(action: {

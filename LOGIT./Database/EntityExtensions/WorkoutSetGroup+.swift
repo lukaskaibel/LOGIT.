@@ -28,4 +28,19 @@ extension WorkoutSetGroup {
         (sets?.array as? [WorkoutSet])?.firstIndex(of: set)
     }
     
+    var setType: SetType {
+        let firstSet = sets?.array.first
+        if let _ = firstSet as? StandardSet {
+            return .standard
+        } else if let _ = firstSet as? DropSet {
+            return .dropSet
+        } else {
+            fatalError("SetType not implemented for SuperSet")
+        }
+    }
+    
+    @objc enum SetType: Int {
+        case standard, superSet, dropSet
+    }
+    
 }

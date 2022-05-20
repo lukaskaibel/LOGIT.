@@ -46,8 +46,13 @@ final class TemplateWorkoutEditor: ViewModel {
         templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] ?? .emptyList
     }
     
-    public func addSet(to setGroup: TemplateWorkoutSetGroup) {
-        database.newTemplateWorkoutSet(setGroup: setGroup)
+    public func addSet(to templateSetGroup: TemplateWorkoutSetGroup) {
+        let lastSet = (templateSetGroup.sets?.array as? [TemplateSet])?.last
+        if let _ = lastSet as? TemplateDropSet {
+            database.newTemplateDropSet(templateSetGroup: templateSetGroup)
+        } else {
+            database.newTemplateStandardSet(setGroup: templateSetGroup)
+        }
         updateView()
     }
     
@@ -66,16 +71,16 @@ final class TemplateWorkoutEditor: ViewModel {
     
     public func delete(setsWithIndices indexSet: IndexSet, in setGroup: TemplateWorkoutSetGroup) {
         for index in indexSet {
-            if let sets = setGroup.sets?.array as? [TemplateWorkoutSet] {
+            if let sets = setGroup.sets?.array as? [TemplateSet] {
                 database.delete(sets[index])
             }
         }
         updateView()
     }
     
-    public func indexInSetGroup(for workoutSet: TemplateWorkoutSet) -> Int? {
+    public func indexInSetGroup(for templateSet: TemplateSet) -> Int? {
         for setGroup in setGroups {
-            if let index = setGroup.index(of: workoutSet) {
+            if let index = setGroup.index(of: templateSet) {
                 return index
             }
         }
@@ -97,6 +102,65 @@ final class TemplateWorkoutEditor: ViewModel {
     
     public func deleteTemplateWorkout() {
         database.delete(templateWorkout, saveContext: true)
+    }
+    
+    //MARK: TemplateDropSet Functions
+    
+    func addDrop(to templateDropSet: TemplateDropSet) {
+        templateDropSet.addDrop()
+        updateView()
+    }
+    
+    func removeLastDrop(from templateDropSet: TemplateDropSet) {
+        templateDropSet.removeLastDrop()
+        database.refreshObjects()
+        updateView()
+    }
+    
+    //MARK: WorkoutSet convert functions
+    
+    public func convertSetGroupToStandardSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
+        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+            .forEach { convertToStandardSet($0) }
+        updateView()
+    }
+    
+    @discardableResult
+    private func convertToStandardSet(_ templateSet: TemplateSet) -> TemplateStandardSet {
+        var standardSet = TemplateStandardSet()
+        if let standardSet_ = templateSet as? TemplateStandardSet {
+            standardSet = standardSet_
+        } else if let templateDropSet = templateSet as? TemplateDropSet {
+            standardSet = database.newTemplateStandardSet(repetitions: Int(templateDropSet.repetitions?.first ?? 0),
+                                                  weight: Int(templateDropSet.weights?.first ?? 0))
+            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: standardSet)
+        } else {
+            fatalError("StandardSet convertion not implemented")
+        }
+        database.delete(templateSet)
+        return standardSet
+    }
+    
+    public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
+        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+            .forEach { convertToTemplateDropSet($0) }
+        updateView()
+    }
+    
+    @discardableResult
+    private func convertToTemplateDropSet(_ templateSet: TemplateSet) -> TemplateDropSet {
+        var templateDropSet = TemplateDropSet()
+        if let templateStandardSet = templateSet as? TemplateStandardSet {
+            let templateDropSet = database.newTemplateDropSet(repetitions: [templateStandardSet.repetitions].map { Int($0) },
+                                              weights: [templateStandardSet.weight].map { Int($0) })
+            templateStandardSet.setGroup?.replaceSets(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateDropSet)
+        } else if let templateDropSet_ = templateSet as? TemplateDropSet {
+            templateDropSet = templateDropSet_
+        } else {
+            fatalError("templateDropSet convertion not implemented")
+        }
+        database.delete(templateSet)
+        return templateDropSet
     }
     
 }

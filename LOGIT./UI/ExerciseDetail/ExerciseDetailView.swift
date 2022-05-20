@@ -50,22 +50,14 @@ struct ExerciseDetailView: View {
             }.tileStyle()
                 .listRowSeparator(.hidden)
             Section(content: {
-                ForEach(exerciseDetail.sets.indices, id:\.self) { index in
-                    if let workoutSet = exerciseDetail.sets[index], workoutSet.repetitions > 0 || workoutSet.weight > 0 {
+                ForEach(exerciseDetail.sets) { workoutSet in
+                    if workoutSet.hasEntry {
                         HStack {
                             Text(dateString(for: workoutSet))
+                                .frame(maxHeight: .infinity, alignment: .top)
+                                .padding(.vertical, 5)
                             Spacer()
-                            if workoutSet.repetitions > 0 {
-                                UnitView(value: String(workoutSet.repetitions), unit: "RPS")
-                                    .padding(.horizontal, 8)
-                            }
-                            if workoutSet.weight > 0 {
-                                if workoutSet.repetitions > 0 {
-                                    dividerCircle
-                                }
-                                UnitView(value: String(convertWeightForDisplaying(workoutSet.weight)), unit: WeightUnit.used.rawValue.uppercased())
-                                    .padding(.horizontal, 8)
-                            }
+                            WorkoutSetCell(workoutSet: workoutSet)
                         }
                     }
                 }
@@ -79,7 +71,7 @@ struct ExerciseDetailView: View {
                 }.padding(.vertical, 5)
                 .listRowSeparator(.hidden, edges: .top)
             }, footer: {
-                Text("\(exerciseDetail.sets.filter { $0.repetitions > 0 || $0.weight > 0 }.count) \(NSLocalizedString("set\(exerciseDetail.sets.count == 1 ? "" : "s")", comment: ""))")
+                Text("\(exerciseDetail.sets.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(exerciseDetail.sets.count == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
                     .padding(.top, 5)
@@ -108,37 +100,6 @@ struct ExerciseDetailView: View {
         .sheet(isPresented: $showingEditExercise) {
             EditExerciseView(editExercise: EditExercise(exerciseToEdit: exerciseDetail.exercise))
         }
-    }
-    
-    private var RepetitionsView: some View {
-        VStack(spacing: 0) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(NSLocalizedString("personalBest", comment: ""))
-                        .foregroundColor(.secondaryLabel)
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("\(exerciseDetail.personalBest(for: .repetitions)) reps")
-                            .font(.title.weight(.medium))
-                        Spacer()
-                    }
-                }
-                Spacer()
-            }.padding()
-            BarGraph(xValues: exerciseDetail.getGraphXValues(for: .repetitions),
-                      yValues: exerciseDetail.getGraphYValues(for: .repetitions),
-                      barColors: [.accentColor, .accentColor, .accentColor, .accentColor, .accentColor])
-                .frame(height: 120)
-                .padding([.leading, .bottom])
-                .padding(.trailing, 10)
-            Picker("Select timeframe.", selection: $exerciseDetail.selectedCalendarComponentForRepetitions) {
-                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
-                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
-                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
-            }.pickerStyle(.segmented)
-                .padding([.horizontal, .bottom])
-        }.background(Color.secondaryBackground)
-            .cornerRadius(10)
-            .listRowSeparator(.hidden)
     }
     
     private var WeightView: some View {

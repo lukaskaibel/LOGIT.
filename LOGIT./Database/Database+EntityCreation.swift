@@ -31,7 +31,7 @@ extension Database {
         if let sets = sets, !sets.isEmpty {
             setGroup.sets = NSOrderedSet(array: sets)
         } else if createFirstSetAutomatically {
-            newWorkoutSet(setGroup: setGroup)
+            newStandardSet(setGroup: setGroup)
         }
         setGroup.exercise = exercise
         setGroup.workout = workout
@@ -39,16 +39,37 @@ extension Database {
     }
     
     @discardableResult
-    func newWorkoutSet(repetitions: Int = 0,
+    func newStandardSet(repetitions: Int = 0,
                        time: Int = 0,
                        weight: Int = 0,
-                       setGroup: WorkoutSetGroup? = nil) -> WorkoutSet {
-        let workoutSet = WorkoutSet(context: context)
-        workoutSet.repetitions = Int64(repetitions)
-        workoutSet.time = Int64(time)
-        workoutSet.weight = Int64(weight)
-        workoutSet.setGroup = setGroup
-        return workoutSet
+                       setGroup: WorkoutSetGroup? = nil) -> StandardSet {
+        let standardSet = StandardSet(context: context)
+        standardSet.repetitions = Int64(repetitions)
+        standardSet.time = Int64(time)
+        standardSet.weight = Int64(weight)
+        standardSet.setGroup = setGroup
+        return standardSet
+    }
+    
+    @discardableResult
+    func newDropSet(repetitions: [Int] = [0],
+                    weights: [Int] = [0],
+                    setGroup: WorkoutSetGroup? = nil) -> DropSet {
+        let dropSet = DropSet(context: context)
+        dropSet.repetitions = repetitions.map { Int64($0) }
+        dropSet.weights = weights.map { Int64($0) }
+        dropSet.setGroup = setGroup
+        return dropSet
+    }
+    
+    @discardableResult
+    func newDropSet(from templateDropSet: TemplateDropSet,
+                    setGroup: WorkoutSetGroup? = nil) -> DropSet {
+        let dropSet = DropSet(context: context)
+        dropSet.repetitions = Array(repeatElement(0, count: templateDropSet.repetitions?.count ?? 0))
+        dropSet.weights = Array(repeating: 0, count: templateDropSet.weights?.count ?? 0)
+        dropSet.setGroup = setGroup
+        return dropSet
     }
     
     @discardableResult
@@ -85,16 +106,14 @@ extension Database {
                                                               exercise: setGroup.exercise,
                                                               templateWorkout: template)
             for workoutSet in setGroup.sets?.array as? [WorkoutSet] ?? .emptyList {
-                newTemplateWorkoutSet(repetitions: Int(workoutSet.repetitions),
-                                      weight: Int(workoutSet.weight),
-                                      setGroup: templateSetGroup)
+                newTemplateSet(from: workoutSet, templateSetGroup: templateSetGroup)
             }
         }
         return template
     }
     
     @discardableResult
-    func newTemplateWorkoutSetGroup(templateSets: [TemplateWorkoutSet]? = nil,
+    func newTemplateWorkoutSetGroup(templateSets: [TemplateSet]? = nil,
                                     createFirstSetAutomatically: Bool = true,
                                     exercise: Exercise? = nil,
                                     templateWorkout: TemplateWorkout? = nil) -> TemplateWorkoutSetGroup {
@@ -102,7 +121,7 @@ extension Database {
         if let templateSets = templateSets, !templateSets.isEmpty {
             templateSetGroup.sets = NSOrderedSet(array: templateSets)
         } else if createFirstSetAutomatically {
-            newTemplateWorkoutSet(setGroup: templateSetGroup)
+            newTemplateStandardSet(setGroup: templateSetGroup)
         }
         templateSetGroup.exercise = exercise
         templateSetGroup.workout = templateWorkout
@@ -110,14 +129,46 @@ extension Database {
     }
     
     @discardableResult
-    func newTemplateWorkoutSet(repetitions: Int = 0,
+    func newTemplateSet(from workoutSet: WorkoutSet,
+                        templateSetGroup: TemplateWorkoutSetGroup? = nil) -> TemplateSet {
+        if let standardSet = workoutSet as? StandardSet {
+            let templateStandardSet = TemplateStandardSet(context: context)
+            templateStandardSet.repetitions = standardSet.repetitions
+            templateStandardSet.weight = standardSet.weight
+            templateStandardSet.setGroup = templateSetGroup
+            return templateStandardSet
+
+        } else if let dropSet = workoutSet as? DropSet {
+            let templateDropSet = TemplateDropSet(context: context)
+            templateDropSet.repetitions = dropSet.repetitions
+            templateDropSet.weights = dropSet.weights
+            templateDropSet.setGroup = templateSetGroup
+            return templateDropSet
+        } else {
+            fatalError("Not implemented for SuperSet")
+        }
+    }
+    
+    @discardableResult
+    func newTemplateStandardSet(repetitions: Int = 0,
                                weight: Int = 0,
-                               setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateWorkoutSet {
-        let templateWorkoutSet = TemplateWorkoutSet(context: context)
+                               setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateStandardSet {
+        let templateWorkoutSet = TemplateStandardSet(context: context)
         templateWorkoutSet.repetitions = Int64(repetitions)
         templateWorkoutSet.weight = Int64(weight)
         templateWorkoutSet.setGroup = setGroup
         return templateWorkoutSet
+    }
+        
+    @discardableResult
+    func newTemplateDropSet(repetitions: [Int] = [0],
+                            weights: [Int] = [0],
+                            templateSetGroup: TemplateWorkoutSetGroup? = nil) -> TemplateDropSet {
+        let templateDropSet = TemplateDropSet(context: context)
+        templateDropSet.repetitions = repetitions.map { Int64($0) }
+        templateDropSet.weights = weights.map { Int64($0) }
+        templateDropSet.setGroup = templateSetGroup
+        return templateDropSet
     }
 
     

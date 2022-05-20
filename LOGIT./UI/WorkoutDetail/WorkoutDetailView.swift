@@ -177,34 +177,7 @@ struct WorkoutDetailView: View {
             .padding(.vertical, 50)
     }
     
-    struct WorkoutSetCell: View {
-        
-        @ObservedObject var workoutSet: WorkoutSet
-        
-        var body: some View {
-            HStack {
-                if workoutSet.repetitions > 0 {
-                    UnitView(value: String(workoutSet.repetitions), unit: "RPS")
-                }
-                if workoutSet.weight > 0 {
-                    if workoutSet.repetitions > 0 {
-                        dividerCircle
-                            .padding(.horizontal, 8)
-                    }
-                    UnitView(value: String(convertWeightForDisplaying(workoutSet.weight)), unit: WeightUnit.used.rawValue.uppercased())
-                } else {
-                    UnitView(value: "", unit: "") //needed in order for cell not to collapse if reps and weight = 0
-                }
-            }.padding(.vertical, 5)
-        }
-                
-        var dividerCircle: some View {
-            Circle()
-                .foregroundColor(.separator)
-                .frame(width: 4, height: 4)
-        }
-        
-    }
+    
     
 }
 

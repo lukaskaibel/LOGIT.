@@ -8,7 +8,6 @@
 import SwiftUI
 import CoreData
 
-
 final class Home: ViewModel {
     
     @Published var goalPerWeek: Int = 3

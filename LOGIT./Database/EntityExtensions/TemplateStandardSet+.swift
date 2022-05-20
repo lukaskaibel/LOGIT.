@@ -7,9 +7,9 @@
 
 import Foundation
 
-extension TemplateWorkoutSet {
+extension TemplateStandardSet {
     
-    var hasEntry: Bool {
+    override var hasEntry: Bool {
         repetitions > 0 || weight > 0
     }
     

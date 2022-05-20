@@ -109,7 +109,7 @@ struct TemplateWorkoutEditorView: View {
                 .onAppear {
                     UIScrollView.appearance().keyboardDismissMode = .interactive
                 }
-        }
+        }.environmentObject(templateWorkoutEditor)
     }
     
     private func SetGroupCellForEditing(for setGroup: TemplateWorkoutSetGroup) -> some View {
@@ -119,7 +119,7 @@ struct TemplateWorkoutEditorView: View {
     private func SetGroupCellWithSets(for setGroup: TemplateWorkoutSetGroup) -> some View {
         Section {
             SetGroupHeader(for: setGroup)
-            ForEach(setGroup.sets?.array as? [TemplateWorkoutSet] ?? .emptyList, id:\.objectID) { templateSet in
+            ForEach(setGroup.sets?.array as? [TemplateSet] ?? .emptyList, id:\.objectID) { templateSet in
                 TemplateWorkoutSetCell(for: templateSet)
                     .listRowSeparator(.hidden, edges: .bottom)
             }.onDelete { indexSet in
@@ -153,70 +153,51 @@ struct TemplateWorkoutEditorView: View {
                 }
             }
             Spacer()
+            Menu(content: {
+                Section {
+                    Button(action: {
+                        templateWorkoutEditor.convertSetGroupToStandardSets(setGroup)
+                    }) {
+                        Label("Normal", systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                    }
+                    Button(action: {
+                        
+                    }) {
+                        Label("Superset", systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                    }
+                    Button(action: {
+                        templateWorkoutEditor.convertSetGroupToTemplateDropSets(setGroup)
+                    }) {
+                        Label("Dropset", systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                    }
+                }
+            }) {
+                Image(systemName: "ellipsis")
+                    .foregroundColor(.label)
+                    .padding(7)
+            }
+
         }.padding(.vertical, 8)
     }
     
-    private func TemplateWorkoutSetCell(for workoutSet: TemplateWorkoutSet) -> some View {
-        var repetitionsString: Binding<String> {
-            Binding<String>(
-                get: { workoutSet.repetitions == 0 ? "" : String(workoutSet.repetitions) },
-                set: {
-                    value in workoutSet.repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
-                    templateWorkoutEditor.updateView()
-                }
-            )
-        }
-        
-        var weightString: Binding<String> {
-            Binding<String>(
-                get: { workoutSet.weight == 0 ? "" : String(convertWeightForDisplaying(workoutSet.weight)) },
-                set: {
-                    value in workoutSet.weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
-                    templateWorkoutEditor.updateView()
-                }
-            )
-        }
-        
-        return HStack {
-            Text(String((templateWorkoutEditor.indexInSetGroup(for: workoutSet) ?? 0) + 1))
+    @ViewBuilder
+    private func TemplateWorkoutSetCell(for templateSet: TemplateSet) -> some View {
+        HStack {
+            Text(String((templateWorkoutEditor.indexInSetGroup(for: templateSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
-                .padding(.horizontal, 8)
-            TextField("0", text: repetitionsString)
-                .keyboardType(.numberPad)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
-                .padding(7)
-                .background(colorScheme == .light ? Color.secondaryBackground : .background)
-                .cornerRadius(7)
-                .overlay {
-                    HStack {
-                        Image(systemName: "arrow.counterclockwise")
-                            .foregroundColor(workoutSet.repetitions == 0 ? .secondaryLabel : .label)
-                            .font(.caption.weight(.bold))
-                            .padding(7)
-                        Spacer()
-                    }
-                }
-            TextField("0", text: weightString)
-                .keyboardType(.numberPad)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
-                .padding(7)
-                .background(colorScheme == .light ? Color.secondaryBackground : .background)
-                .cornerRadius(7)
-                .overlay {
-                    HStack {
-                        Image(systemName: "scalemass")
-                            .foregroundColor(workoutSet.weight == 0 ? .secondaryLabel : .label)
-                            .font(.caption.weight(.bold))
-                            .padding(7)
-                        Spacer()
-                    }
-                }
+                .frame(maxHeight: .infinity, alignment: .top)
+                .padding()
+            if let templateStandardSet = templateSet as? TemplateStandardSet {
+                TemplateStandardSetCell(for: templateStandardSet)
+            } else if let templateDropSet = templateSet as? TemplateDropSet {
+                TemplateDropSetCell(for: templateDropSet)
+            } else {
+                EmptyView()
+                fatalError("SuperSet Cell not implemented.")
+            }
         }
     }
-
     
 }
 

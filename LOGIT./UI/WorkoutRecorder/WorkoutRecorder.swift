@@ -18,7 +18,7 @@ class WorkoutRecorder: ViewModel {
         didSet { updateWorkoutWithTemplate() }
     }
     
-    private var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateWorkoutSet]()
+    private var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
     
     public var showingExerciseDetail: Binding<Bool> {
         Binding(get: { self.exerciseForExerciseDetail != nil },
@@ -49,15 +49,15 @@ class WorkoutRecorder: ViewModel {
     }
     
     public var workoutHasEntries: Bool {
-        setsWithoutRepsAndWeight.count != workout.numberOfSets
+        setsWithoutEntries.count != workout.numberOfSets
     }
    
-    public var setsWithoutRepsAndWeight: [WorkoutSet] {
-        workout.sets.filter { $0.repetitions == 0 && $0.weight == 0 }
+    public var setsWithoutEntries: [WorkoutSet] {
+        workout.sets.filter { !$0.hasEntry }
     }
     
-    public func deleteSetsWithoutRepsAndWeight() {
-        for workoutSet in setsWithoutRepsAndWeight {
+    public func deleteSetsWithoutEntries() {
+        for workoutSet in setsWithoutEntries {
             database.delete(workoutSet)
         }
     }
@@ -72,7 +72,12 @@ class WorkoutRecorder: ViewModel {
     }
     
     public func addSet(to setGroup: WorkoutSetGroup) {
-        database.newWorkoutSet(setGroup: setGroup)
+        let lastSet = (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList).last
+        if let _ = lastSet as? DropSet {
+            database.newDropSet(setGroup: setGroup)
+        } else {
+            database.newStandardSet(setGroup: setGroup)
+        }
         updateView()
     }
         
@@ -80,6 +85,7 @@ class WorkoutRecorder: ViewModel {
         database.newWorkoutSetGroup(exercise: exercise, workout: workout)
         updateView()
     }
+ 
     
     public func delete(setGroupsWithIndexes indexSet: IndexSet) {
         if let setGroups = workout.setGroups?.array as? [WorkoutSetGroup] {
@@ -90,21 +96,39 @@ class WorkoutRecorder: ViewModel {
         }
     }
     
-    public func repetitionsPlaceholder(for workoutSet: WorkoutSet) -> String {
-        if let template = workoutSetTemplateSetDictionary[workoutSet] {
-            return String(template.repetitions)
+    //MARK: Placeholder Methods
+    
+    public func repetitionsPlaceholder(for standardSet: StandardSet) -> String {
+        if let templateStandardSet = templateSet(for: standardSet) as? TemplateStandardSet {
+            return String(templateStandardSet.repetitions)
         }
         return "0"
     }
     
-    public func weightPlaceholder(for workoutSet: WorkoutSet) -> String {
-        if let template = workoutSetTemplateSetDictionary[workoutSet] {
-            return String(convertWeightForDisplaying(template.weight))
+    public func weightPlaceholder(for standardSet: StandardSet) -> String {
+        if let templateStandardSet = templateSet(for: standardSet) as? TemplateStandardSet {
+            return String(convertWeightForDisplaying(templateStandardSet.weight))
         }
         return "0"
     }
     
-    public func templateSet(for workoutSet: WorkoutSet) -> TemplateWorkoutSet? {
+    public func repetitionsPlaceholder(for dropSet: DropSet) -> [String] {
+        if let templateDropSet = templateSet(for: dropSet) as? TemplateDropSet {
+            return templateDropSet.repetitions?.map { String($0) } ?? .emptyList
+        }
+        return ["0"]
+    }
+    
+    public func weightsPlaceholder(for dropSet: DropSet) -> [String] {
+        if let templateDropSet = templateSet(for: dropSet) as? TemplateDropSet {
+            return templateDropSet.weights?.map { String(convertWeightForDisplaying($0)) } ?? .emptyList
+        }
+        return ["0"]
+    }
+
+    
+    
+    public func templateSet(for workoutSet: WorkoutSet) -> TemplateSet? {
         workoutSetTemplateSetDictionary[workoutSet]
     }
     
@@ -134,10 +158,19 @@ class WorkoutRecorder: ViewModel {
                 let setGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false,
                                                            exercise: templateSetGroup.exercise,
                                                            workout: workout)
-                for templateSet in templateSetGroup.sets?.array as? [TemplateWorkoutSet] ?? .emptyList {
-                    let workoutSet = database.newWorkoutSet(setGroup: setGroup)
-                    workoutSetTemplateSetDictionary[workoutSet] = templateSet
-                }
+                templateSetGroup.sets?.array
+                    .compactMap { $0 as? TemplateSet }
+                    .forEach { templateSet in
+                        if let templateStandardSet = templateSet as? TemplateStandardSet {
+                            let standardSet = database.newStandardSet(setGroup: setGroup)
+                            workoutSetTemplateSetDictionary[standardSet] = templateStandardSet
+                        } else if let templateDropSet = templateSet as? TemplateDropSet {
+                            let dropSet = database.newDropSet(from: templateDropSet, setGroup: setGroup)
+                            workoutSetTemplateSetDictionary[dropSet] = templateDropSet
+                        } else {
+                            fatalError("Not implemented for SuperSet")
+                        }
+                    }
             }
         }
         updateView()
@@ -148,6 +181,65 @@ class WorkoutRecorder: ViewModel {
             workout.name = Workout.getStandardName(for: Date())
         }
         database.save()
+    }
+    
+    //MARK: DropSet Functions
+    
+    func addDrop(to dropSet: DropSet) {
+        dropSet.addDrop()
+        updateView()
+    }
+    
+    func removeLastDrop(from dropSet: DropSet) {
+        dropSet.removeLastDrop()
+        database.refreshObjects()
+        updateView()
+    }
+    
+    //MARK: WorkoutSet convert functions
+    
+    public func convertSetGroupToStandardSets(_ setGroup: WorkoutSetGroup) {
+        (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList)
+            .forEach { convertToStandardSet($0) }
+        updateView()
+    }
+    
+    @discardableResult
+    private func convertToStandardSet(_ workoutSet: WorkoutSet) -> StandardSet {
+        var standardSet = StandardSet()
+        if let standardSet_ = workoutSet as? StandardSet {
+            standardSet = standardSet_
+        } else if let dropSet = workoutSet as? DropSet {
+            standardSet = database.newStandardSet(repetitions: Int(dropSet.repetitions?.first ?? 0),
+                                                  weight: Int(dropSet.weights?.first ?? 0))
+            dropSet.setGroup?.replaceSets(at: dropSet.setGroup?.index(of: dropSet) ?? 0, with: standardSet)
+        } else {
+            fatalError("StandardSet convertion not implemented")
+        }
+        database.delete(workoutSet)
+        return standardSet
+    }
+    
+    public func convertSetGroupToDropSets(_ setGroup: WorkoutSetGroup) {
+        (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList)
+            .forEach { convertToDropSet($0) }
+        updateView()
+    }
+    
+    @discardableResult
+    private func convertToDropSet(_ workoutSet: WorkoutSet) -> DropSet {
+        var dropSet = DropSet()
+        if let standardSet = workoutSet as? StandardSet {
+            let dropSet = database.newDropSet(repetitions: [standardSet.repetitions].map { Int($0) },
+                                              weights: [standardSet.weight].map { Int($0) })
+            standardSet.setGroup?.replaceSets(at: standardSet.setGroup?.index(of: standardSet) ?? 0, with: dropSet)
+        } else if let dropSet_ = workoutSet as? DropSet {
+            dropSet = dropSet_
+        } else {
+            fatalError("Dropset convertion not implemented")
+        }
+        database.delete(workoutSet)
+        return dropSet
     }
     
 }

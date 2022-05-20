@@ -56,39 +56,31 @@ final class ExerciseDetail: ViewModel {
     }
     
     func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
-        let workoutSets = (database.fetch(WorkoutSet.self,
-                                          sortingKey: attribute == .repetitions ? "repetitions" : "weight",
-                                          ascending: false) as! [WorkoutSet]).filter { $0.exercise == exercise }
-        return attribute == .repetitions ? Int(workoutSets.first?.repetitions ?? 0) :
-                convertWeightForDisplaying(workoutSets.first?.weight ?? 0)
-    }
-    
-    func weightValues() -> [Double] {
-        var result = [Double]()
-        for workout in workoutsWithExercise {
-            let setGroupsWithExercise = (workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList).filter { $0.exercise == exercise }
-            let maxValue = (setGroupsWithExercise.map { ($0.sets?.array as? [WorkoutSet] ?? .emptyList).map { selectedAttribute == .repetitions ? $0.repetitions : $0.weight } }).reduce([], +).max()
-            if let maxValue = maxValue, maxValue > 0 {
-                result.append(Double(selectedAttribute == .weight ? convertWeightForDisplaying(maxValue) : Int(maxValue)))
+        database.fetch(WorkoutSet.self)
+            .compactMap { $0 as? WorkoutSet }
+            .filter { $0.exercise == exercise }
+            .map { workoutSet in
+                if let standardSet = workoutSet as? StandardSet {
+                    return attribute == .repetitions ? Int(standardSet.repetitions) : convertWeightForDisplaying(standardSet.weight)
+                }
+                //TODO: Add for SuperSet and DropSet
+                return 0
             }
-        }
-        result = result.count == 0 ? [0, 0] : result.count == 1 ? [0, result[0]] : result
-        return result
+            .max() ?? 0
     }
-    
+        
     func getGraphYValues(for attribute: WorkoutSet.Attribute) -> [Int] {
         let selectedCalendarComponent = attribute == .repetitions ? selectedCalendarComponentForRepetitions : selectedCalendarComponentForWeight
         let numberOfValues = numberOfValues(for: selectedCalendarComponent)
         var result = [Int](repeating: 0, count: numberOfValues)
         for i in 0..<numberOfValues {
             if let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent, value: -i, to: Date()) {
-                for workoutSet in  exercise.sets {
-                    if let setDate = workoutSet.workout?.date {
+                for workoutSet in exercise.sets {
+                    if let setDate = workoutSet.setGroup?.workout?.date {
                         if Calendar.current.isDate(setDate, equalTo: iteratedDay, toGranularity: selectedCalendarComponent) {
                             switch attribute {
-                            case .repetitions: result[i] = max(result[i], Int(workoutSet.repetitions))
-                            case .weight: result[i] = max(result[i], convertWeightForDisplaying(workoutSet.weight))
-                            case .time: continue
+                            case .repetitions: result[i] = max(result[i], Int(workoutSet.maxRepetitions))
+                            case .weight: result[i] = max(result[i], convertWeightForDisplaying(workoutSet.maxWeight))
                             }
                         }
                     }

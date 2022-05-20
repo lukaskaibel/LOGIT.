@@ -19,6 +19,23 @@ extension Array {
         return result
     }
     
+    /// Index safe operation for retrieving the arrays element at a given index.
+    /// - Parameter index: Index for the element that should be returned.
+    /// - Returns: The value at given index if it is contained in the array. Otherwise returns nil.
+    func value(at index: Int) -> Element? {
+        guard self.indices.contains(index) else { return nil }
+        return self[index]
+    }
+    
+    /// Index safe operation for setting arrays value at given index. If the index is out of range the value won't be inserted.
+    /// - Parameters:
+    ///   - index: Index that should be replaced
+    ///   - value: New value for the given index
+    mutating func replaceValue(at index: Int, with value: Element) {
+        guard self.indices.contains(index) else { return }
+        self[index] = value
+    }
+    
 }
 
 extension Array where Element: Comparable {
