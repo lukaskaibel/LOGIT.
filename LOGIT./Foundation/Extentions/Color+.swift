@@ -27,5 +27,6 @@ extension Color {
     static var shadow: Color { Color.black.opacity(0.2) }
 
     static var accentColorBackground: Color { Color.accentColor.opacity(0.1) }
+    static var secondaryAccentColor: Color { Color.accentColor.opacity(0.5)}
 
 }

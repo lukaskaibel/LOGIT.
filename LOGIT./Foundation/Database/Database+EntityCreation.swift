@@ -63,11 +63,32 @@ extension Database {
     @discardableResult
     func newDropSet(from templateDropSet: TemplateDropSet,
                     setGroup: WorkoutSetGroup? = nil) -> DropSet {
-        let dropSet = DropSet(context: context)
-        dropSet.repetitions = Array(repeatElement(0, count: templateDropSet.repetitions?.count ?? 0))
-        dropSet.weights = Array(repeating: 0, count: templateDropSet.weights?.count ?? 0)
-        dropSet.setGroup = setGroup
-        return dropSet
+        return newDropSet(repetitions: Array(repeatElement(0, count: templateDropSet.repetitions?.count ?? 0)),
+                          weights: Array(repeating: 0, count: templateDropSet.weights?.count ?? 0),
+                          setGroup: setGroup)
+    }
+    
+    @discardableResult
+    func newSuperSet(repetitionsFirstExercise: Int = 0,
+                     repeptitionsSecondExercise: Int = 0,
+                     weightFirstExercise: Int = 0,
+                     weightSecondExercise: Int = 0,
+                     setGroup: WorkoutSetGroup? = nil) -> SuperSet {
+        let superSet = SuperSet(context: context)
+        superSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
+        superSet.repetitionsSecondExercise = Int64(repeptitionsSecondExercise)
+        superSet.weightFirstExercise = Int64(weightFirstExercise)
+        superSet.weightSecondExercise = Int64(weightSecondExercise)
+        superSet.setGroup = setGroup
+        return superSet
+    }
+    
+    @discardableResult
+    func newSuperSet(from templateSuperSet: TemplateSuperSet,
+                     setGroup: WorkoutSetGroup? = nil) -> SuperSet {
+        let superSet = newSuperSet(setGroup: setGroup)
+        setGroup?.secondaryExercise = templateSuperSet.secondaryExercise
+        return superSet
     }
     
     @discardableResult
@@ -142,8 +163,17 @@ extension Database {
             templateDropSet.weights = dropSet.weights
             templateDropSet.setGroup = templateSetGroup
             return templateDropSet
+        } else if let superSet = workoutSet as? SuperSet {
+            let templateSuperSet = TemplateSuperSet(context: context)
+            templateSuperSet.repetitionsFirstExercise = superSet.repetitionsFirstExercise
+            templateSuperSet.repetitionsSecondExercise = superSet.repetitionsSecondExercise
+            templateSuperSet.weightFirstExercise = superSet.weightFirstExercise
+            templateSuperSet.weightSecondExercise = superSet.weightSecondExercise
+            templateSuperSet.setGroup = templateSetGroup
+            templateSetGroup?.secondaryExercise = superSet.secondaryExercise
+            return templateSuperSet
         } else {
-            fatalError("Not implemented for SuperSet")
+            fatalError("Database: Not implemented for variation of TemplateSet.")
         }
     }
     
@@ -169,5 +199,19 @@ extension Database {
         return templateDropSet
     }
 
+    @discardableResult
+    func newTemplateSuperSet(repetitionsFirstExercise: Int = 0,
+                             repetitionsSecondExercise: Int = 0,
+                             weightFirstExercise: Int = 0,
+                             weightSecondExercise: Int = 0,
+                             setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateSuperSet {
+        let templateSuperSet = TemplateSuperSet(context: context)
+        templateSuperSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
+        templateSuperSet.repetitionsSecondExercise = Int64(repetitionsSecondExercise)
+        templateSuperSet.weightFirstExercise = Int64(weightFirstExercise)
+        templateSuperSet.weightSecondExercise = Int64(weightSecondExercise)
+        templateSuperSet.setGroup = setGroup
+        return templateSuperSet
+    }
     
 }

@@ -13,6 +13,8 @@ final class TemplateWorkoutEditor: ViewModel {
     @Published var templateWorkout = TemplateWorkout()
     @Published var setGroupWithSelectedExercise: TemplateWorkoutSetGroup? = nil
     @Published var isEditingExistingTemplate: Bool = false
+    
+    public var isSelectingSecondaryExercise = false
         
     init(templateWorkout: TemplateWorkout? = nil, from workout: Workout? = nil) {
         super.init()
@@ -50,6 +52,8 @@ final class TemplateWorkoutEditor: ViewModel {
         let lastSet = (templateSetGroup.sets?.array as? [TemplateSet])?.last
         if let _ = lastSet as? TemplateDropSet {
             database.newTemplateDropSet(templateSetGroup: templateSetGroup)
+        } else if let _ = lastSet as? TemplateSuperSet {
+            database.newTemplateSuperSet(setGroup: templateSetGroup)
         } else {
             database.newTemplateStandardSet(setGroup: templateSetGroup)
         }
@@ -125,20 +129,18 @@ final class TemplateWorkoutEditor: ViewModel {
         updateView()
     }
     
-    @discardableResult
-    private func convertToStandardSet(_ templateSet: TemplateSet) -> TemplateStandardSet {
-        var standardSet = TemplateStandardSet()
-        if let standardSet_ = templateSet as? TemplateStandardSet {
-            standardSet = standardSet_
-        } else if let templateDropSet = templateSet as? TemplateDropSet {
-            standardSet = database.newTemplateStandardSet(repetitions: Int(templateDropSet.repetitions?.first ?? 0),
+    private func convertToStandardSet(_ templateSet: TemplateSet) {
+        if let templateDropSet = templateSet as? TemplateDropSet {
+            let templateStandardSet = database.newTemplateStandardSet(repetitions: Int(templateDropSet.repetitions?.first ?? 0),
                                                   weight: Int(templateDropSet.weights?.first ?? 0))
-            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: standardSet)
-        } else {
-            fatalError("StandardSet convertion not implemented")
+            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateStandardSet)
+            database.delete(templateDropSet)
+        } else if let templateSuperSet = templateSet as? TemplateSuperSet {
+            let templateStandardSet = database.newTemplateStandardSet(repetitions: Int(templateSuperSet.repetitionsFirstExercise),
+                                                                      weight: Int(templateSuperSet.weightFirstExercise))
+            templateSuperSet.setGroup?.replaceSets(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateStandardSet)
+            database.delete(templateSuperSet)
         }
-        database.delete(templateSet)
-        return standardSet
     }
     
     public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
@@ -147,20 +149,38 @@ final class TemplateWorkoutEditor: ViewModel {
         updateView()
     }
     
-    @discardableResult
-    private func convertToTemplateDropSet(_ templateSet: TemplateSet) -> TemplateDropSet {
-        var templateDropSet = TemplateDropSet()
+    private func convertToTemplateDropSet(_ templateSet: TemplateSet) {
         if let templateStandardSet = templateSet as? TemplateStandardSet {
             let templateDropSet = database.newTemplateDropSet(repetitions: [templateStandardSet.repetitions].map { Int($0) },
                                               weights: [templateStandardSet.weight].map { Int($0) })
             templateStandardSet.setGroup?.replaceSets(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateDropSet)
-        } else if let templateDropSet_ = templateSet as? TemplateDropSet {
-            templateDropSet = templateDropSet_
-        } else {
-            fatalError("templateDropSet convertion not implemented")
+            database.delete(templateStandardSet)
+        } else if let templateSuperSet = templateSet as? TemplateSuperSet {
+            let templateDropSet = database.newTemplateDropSet(repetitions: [Int(templateSuperSet.repetitionsFirstExercise)],
+                                                              weights: [Int(templateSuperSet.weightFirstExercise)])
+            templateSuperSet.setGroup?.replaceSets(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateDropSet)
+            database.delete(templateSuperSet)
         }
-        database.delete(templateSet)
-        return templateDropSet
+    }
+    
+    public func convertSetGroupToTemplateSuperSet(_ templateSetGroup: TemplateWorkoutSetGroup) {
+        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+            .forEach { convertToTemplateSuperSet($0) }
+        updateView()
+    }
+    
+    private func convertToTemplateSuperSet(_ templateSet: TemplateSet) {
+        if let templateStandardSet = templateSet as? TemplateStandardSet {
+            let templateSuperSet = database.newTemplateSuperSet(repetitionsFirstExercise: Int(templateStandardSet.repetitions),
+                                                                weightFirstExercise: Int(templateStandardSet.weight))
+            templateStandardSet.setGroup?.replaceSets(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateSuperSet)
+            database.delete(templateStandardSet)
+        } else if let templateDropSet = templateSet as? TemplateDropSet {
+            let templateSuperSet = database.newTemplateSuperSet(repetitionsFirstExercise: Int(templateDropSet.repetitions?.first ?? 0),
+                                                                weightFirstExercise: Int(templateDropSet.weights?.first ?? 0))
+            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateSuperSet)
+            database.delete(templateDropSet)
+        }
     }
     
 }

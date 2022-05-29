@@ -16,6 +16,8 @@ struct WorkoutSetCell: View {
             StandardSetCell(for: standardSet)
         } else if let dropSet = workoutSet as? DropSet {
             DropSetCell(for: dropSet)
+        } else if let superSet = workoutSet as? SuperSet {
+            SuperSetCell(for: superSet)
         }
     }
     
@@ -28,6 +30,27 @@ struct WorkoutSetCell: View {
             ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
                 WorkoutSetEntry(repetitions: Int(dropSet.repetitions?.value(at: index) ?? 0),
                                 weight: Int(dropSet.weights?.value(at: index) ?? 0))
+            }
+        }
+    }
+    
+    private func SuperSetCell(for superSet: SuperSet) -> some View {
+        VStack {
+            HStack {
+                WorkoutSetEntry(repetitions: Int(superSet.repetitionsFirstExercise),
+                                weight: Int(superSet.weightFirstExercise))
+                Spacer()
+                Text(superSet.exercise?.name ?? "")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.caption)
+            }
+            HStack {
+                WorkoutSetEntry(repetitions: Int(superSet.repetitionsSecondExercise),
+                                weight: Int(superSet.weightSecondExercise))
+                Spacer()
+                Text(superSet.secondaryExercise?.name ?? "")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.caption)
             }
         }
     }

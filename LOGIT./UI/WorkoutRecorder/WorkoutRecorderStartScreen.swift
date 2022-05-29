@@ -48,7 +48,7 @@ struct WorkoutRecorderStartScreen: View {
             Section(content: {
                 ForEach(workoutTemplates, id:\.objectID) { template in
                     Button(action: {
-                        workoutRecorder.template = template
+                        workoutRecorder.updateWorkout(with: template) 
                         showingStartScreen = false
                     }) {
                         HStack {

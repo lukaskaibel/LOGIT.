@@ -60,11 +60,7 @@ final class ExerciseDetail: ViewModel {
             .compactMap { $0 as? WorkoutSet }
             .filter { $0.exercise == exercise }
             .map { workoutSet in
-                if let standardSet = workoutSet as? StandardSet {
-                    return attribute == .repetitions ? Int(standardSet.repetitions) : convertWeightForDisplaying(standardSet.weight)
-                }
-                //TODO: Add for SuperSet and DropSet
-                return 0
+                return attribute == .repetitions ? workoutSet.maxRepetitions : workoutSet.maxWeight
             }
             .max() ?? 0
     }
@@ -74,16 +70,17 @@ final class ExerciseDetail: ViewModel {
         let numberOfValues = numberOfValues(for: selectedCalendarComponent)
         var result = [Int](repeating: 0, count: numberOfValues)
         for i in 0..<numberOfValues {
-            if let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent, value: -i, to: Date()) {
-                for workoutSet in exercise.sets {
-                    if let setDate = workoutSet.setGroup?.workout?.date {
-                        if Calendar.current.isDate(setDate, equalTo: iteratedDay, toGranularity: selectedCalendarComponent) {
-                            switch attribute {
-                            case .repetitions: result[i] = max(result[i], Int(workoutSet.maxRepetitions))
-                            case .weight: result[i] = max(result[i], convertWeightForDisplaying(workoutSet.maxWeight))
-                            }
-                        }
-                    }
+            guard let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent,
+                                                          value: -i,
+                                                          to: Date()) else { continue }
+            for workoutSet in exercise.sets {
+                guard let setDate = workoutSet.setGroup?.workout?.date,
+                        Calendar.current.isDate(setDate,
+                                                equalTo: iteratedDay,
+                                                toGranularity: selectedCalendarComponent) else { continue }
+                switch attribute {
+                case .repetitions: result[i] = max(result[i], Int(workoutSet.maxRepetitions))
+                case .weight: result[i] = max(result[i], convertWeightForDisplaying(workoutSet.maxWeight))
                 }
             }
         }
@@ -94,9 +91,8 @@ final class ExerciseDetail: ViewModel {
         var result = [String]()
         let selectedCalendarComponent = attribute == .repetitions ? selectedCalendarComponentForRepetitions : selectedCalendarComponentForWeight
         for i in 0..<numberOfValues(for: selectedCalendarComponent) {
-            if let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent, value: -i, to: Date()) {
-                result.append(getFirstDayString(in: selectedCalendarComponent, for: iteratedDay))
-            }
+            guard let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent, value: -i, to: Date()) else { continue }
+            result.append(getFirstDayString(in: selectedCalendarComponent, for: iteratedDay))
         }
         return result.reversed()
     }

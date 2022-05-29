@@ -7,13 +7,18 @@
     <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
         <attribute name="muscleGroupString" optional="YES" attributeType="String" customClassName="MuscleGroup"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="exercise" inverseEntity="WorkoutSetGroup"/>
-        <relationship name="templateSetGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateWorkoutSetGroup" inverseName="exercise" inverseEntity="TemplateWorkoutSetGroup"/>
+        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="exercises" inverseEntity="WorkoutSetGroup"/>
+        <relationship name="templateSetGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateWorkoutSetGroup" inverseName="exercises" inverseEntity="TemplateWorkoutSetGroup"/>
     </entity>
     <entity name="StandardSet" representedClassName="StandardSet" parentEntity="WorkoutSet" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="SuperSet" representedClassName="SuperSet" parentEntity="WorkoutSet" syncable="YES" codeGenerationType="class">
+        <attribute name="repetitionsFirstExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="repetitionsSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weightFirstExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weightSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="TemplateDropSet" representedClassName="TemplateDropSet" parentEntity="TemplateSet" syncable="YES" codeGenerationType="class">
         <attribute name="repetitions" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int64]"/>
@@ -26,6 +31,12 @@
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="TemplateSuperSet" representedClassName="TemplateSuperSet" parentEntity="TemplateSet" syncable="YES" codeGenerationType="class">
+        <attribute name="repetitionsFirstExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="repetitionsSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weightFirstExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weightSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="TemplateWorkout" representedClassName="TemplateWorkout" syncable="YES" codeGenerationType="class">
         <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -33,7 +44,7 @@
         <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Workout" inverseName="template" inverseEntity="Workout"/>
     </entity>
     <entity name="TemplateWorkoutSetGroup" representedClassName="TemplateWorkoutSetGroup" syncable="YES" codeGenerationType="class">
-        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="templateSetGroups" inverseEntity="Exercise"/>
+        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="templateSetGroups" inverseEntity="Exercise"/>
         <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateSet" inverseName="setGroup" inverseEntity="TemplateSet"/>
         <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkout" inverseName="setGroups" inverseEntity="TemplateWorkout"/>
     </entity>
@@ -48,17 +59,19 @@
         <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutSetGroup" inverseName="sets" inverseEntity="WorkoutSetGroup"/>
     </entity>
     <entity name="WorkoutSetGroup" representedClassName="WorkoutSetGroup" syncable="YES" codeGenerationType="class">
-        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Exercise" inverseName="setGroups" inverseEntity="Exercise"/>
+        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="setGroups" inverseEntity="Exercise"/>
         <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSet" inverseName="setGroup" inverseEntity="WorkoutSet"/>
         <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="setGroups" inverseEntity="Workout"/>
     </entity>
     <elements>
         <element name="DropSet" positionX="423" positionY="324" width="128" height="59"/>
         <element name="Exercise" positionX="820.7496337890625" positionY="358.6207275390625" width="128" height="89"/>
-        <element name="StandardSet" positionX="358.213134765625" positionY="163.2440490722656" width="128" height="74"/>
+        <element name="StandardSet" positionX="358.213134765625" positionY="163.2440490722656" width="128" height="59"/>
+        <element name="SuperSet" positionX="423" positionY="324" width="128" height="89"/>
         <element name="TemplateDropSet" positionX="423" positionY="324" width="128" height="59"/>
         <element name="TemplateSet" positionX="432" positionY="333" width="128" height="44"/>
         <element name="TemplateStandardSet" positionX="423" positionY="324" width="128" height="59"/>
+        <element name="TemplateSuperSet" positionX="432" positionY="333" width="128" height="89"/>
         <element name="TemplateWorkout" positionX="441" positionY="342" width="128" height="89"/>
         <element name="TemplateWorkoutSetGroup" positionX="432" positionY="333" width="128" height="74"/>
         <element name="Workout" positionX="219.9733276367188" positionY="464.2337951660156" width="128" height="104"/>

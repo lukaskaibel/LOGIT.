@@ -13,4 +13,8 @@ extension TemplateSet {
         fatalError("TemplateSet+: hasEntry must be implemented in subclass of TemplateSet")
     }
     
+    public var exercise: Exercise? {
+        setGroup?.exercise
+    }
+    
 }

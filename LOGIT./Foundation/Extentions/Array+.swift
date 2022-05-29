@@ -11,6 +11,10 @@ extension Array {
     
     static var emptyList: [Element] { [Element]() }
     
+    var second: Element? {
+        value(at: 1)
+    }
+    
     func elements(for indexSet: IndexSet) -> [Element] {
         var result = [Element]()
         for i in indexSet {

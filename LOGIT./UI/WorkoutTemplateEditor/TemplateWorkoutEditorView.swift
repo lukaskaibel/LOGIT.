@@ -85,16 +85,20 @@ struct TemplateWorkoutEditorView: View {
                         }
                     }
                 }
-                .sheet(isPresented: $showingExerciseSelection, onDismiss: { templateWorkoutEditor.setGroupWithSelectedExercise = nil }) {
+                .sheet(isPresented: $showingExerciseSelection,
+                       onDismiss: { templateWorkoutEditor.setGroupWithSelectedExercise = nil; templateWorkoutEditor.isSelectingSecondaryExercise = false }) {
                     NavigationView {
                         ExerciseSelectionView(exerciseSelection: exerciseSelection,
-                                              selectedExercise: Binding(get: { templateWorkoutEditor.setGroupWithSelectedExercise?.exercise }, set: {
-                            if let exercise = $0 {
-                                if let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise {
-                                    setGroup.exercise = exercise
-                                } else {
-                                    templateWorkoutEditor.addSetGroup(for: exercise)
-                                }
+                                              selectedExercise: Binding(get: {
+                            guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { return nil }
+                            return templateWorkoutEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
+                        }, set: {
+                            guard let exercise = $0 else { return }
+                            guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { templateWorkoutEditor.addSetGroup(for: exercise); return }
+                            if templateWorkoutEditor.isSelectingSecondaryExercise {
+                                setGroup.secondaryExercise = exercise
+                            } else {
+                                setGroup.exercise = exercise
                             }
                         }))
                         .toolbar {
@@ -138,49 +142,79 @@ struct TemplateWorkoutEditorView: View {
     }
     
     private func SetGroupHeader(for setGroup: TemplateWorkoutSetGroup) -> some View {
-        HStack {
-            Button(action: {
-                templateWorkoutEditor.setGroupWithSelectedExercise = setGroup
-                showingExerciseSelection = true
-            }) {
-                HStack {
-                    Text(setGroup.exercise?.name ?? "")
-                        .fontWeight(.medium)
+        VStack(spacing: 5) {
+            HStack {
+                Button(action: {
+                    templateWorkoutEditor.setGroupWithSelectedExercise = setGroup
+                    showingExerciseSelection = true
+                }) {
+                    HStack {
+                        if setGroup.setType == .superSet {
+                            Image(systemName: "1.circle")
+                        }
+                        Text(setGroup.exercise?.name ?? "")
+                            .fontWeight(.medium)
+                    }.foregroundColor(setGroup.exercise == nil ? .secondaryLabel : .label)
+                        .lineLimit(1)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(Color.tertiaryFill)
+                        .cornerRadius(5)
+                }
+                Spacer()
+                Menu(content: {
+                    Section {
+                        Button(action: {
+                            templateWorkoutEditor.convertSetGroupToStandardSets(setGroup)
+                        }) {
+                            Label(NSLocalizedString("normalset", comment: ""),
+                                  systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                        }
+                        Button(action: {
+                            templateWorkoutEditor.convertSetGroupToTemplateSuperSet(setGroup)
+                        }) {
+                            Label(NSLocalizedString("superset", comment: ""),
+                                  systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                        }
+                        Button(action: {
+                            templateWorkoutEditor.convertSetGroupToTemplateDropSets(setGroup)
+                        }) {
+                            Label(NSLocalizedString("dropset", comment: ""),
+                                  systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                        }
+                    }
+                }) {
+                    Image(systemName: "ellipsis")
                         .foregroundColor(.label)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.secondaryLabel)
-                        .font(.caption.weight(.semibold))
+                        .padding(7)
                 }
             }
-            Spacer()
-            Menu(content: {
-                Section {
+            if setGroup.setType == .superSet {
+                HStack {
+                    Image(systemName: "arrow.turn.down.right")
+                        .padding(.leading)
                     Button(action: {
-                        templateWorkoutEditor.convertSetGroupToStandardSets(setGroup)
+                        templateWorkoutEditor.setGroupWithSelectedExercise = setGroup
+                        templateWorkoutEditor.isSelectingSecondaryExercise = true
+                        showingExerciseSelection = true
                     }) {
-                        Label(NSLocalizedString("normalset", comment: ""),
-                              systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                        HStack {
+                            Image(systemName: "2.circle")
+                            Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
+                                .fontWeight(.medium)
+                        }.foregroundColor(setGroup.secondaryExercise == nil ? .secondaryLabel : .label)
+                            .lineLimit(1)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
+                            .background(Color.tertiaryFill)
+                            .cornerRadius(5)
                     }
-                    Button(action: {
-                        
-                    }) {
-                        Label(NSLocalizedString("superset", comment: ""),
-                              systemImage: setGroup.setType == .superSet ? "checkmark" : "")
-                    }
-                    Button(action: {
-                        templateWorkoutEditor.convertSetGroupToTemplateDropSets(setGroup)
-                    }) {
-                        Label(NSLocalizedString("dropset", comment: ""),
-                              systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
-                    }
+                    Spacer()
                 }
-            }) {
-                Image(systemName: "ellipsis")
-                    .foregroundColor(.label)
-                    .padding(7)
             }
 
         }.padding(.vertical, 8)
+            .buttonStyle(PlainButtonStyle())
     }
     
     @ViewBuilder
@@ -195,9 +229,10 @@ struct TemplateWorkoutEditorView: View {
                 TemplateStandardSetCell(for: templateStandardSet)
             } else if let templateDropSet = templateSet as? TemplateDropSet {
                 TemplateDropSetCell(for: templateDropSet)
-            } else {
-                EmptyView()
-                fatalError("SuperSet Cell not implemented.")
+                    .padding(.top, 8)
+            } else if let templateSuperSet = templateSet as? TemplateSuperSet {
+                TemplateSuperSetCell(for: templateSuperSet)
+                    .padding(.top, 8)
             }
         }
     }

@@ -32,8 +32,11 @@ extension WorkoutSet {
         } else if let dropSet = self as? DropSet, let templateDropSet = templateSet as? TemplateDropSet {
             dropSet.repetitions = templateDropSet.repetitions
             dropSet.weights = templateDropSet.weights
-        } else {
-            fatalError("WorkoutSet+: match not implemented for SuperSet")
+        } else if let superSet = self as? SuperSet, let templateSuperSet = templateSet as? TemplateSuperSet {
+            superSet.repetitionsFirstExercise = templateSuperSet.repetitionsFirstExercise
+            superSet.repetitionsSecondExercise = templateSuperSet.repetitionsSecondExercise
+            superSet.weightFirstExercise = templateSuperSet.weightFirstExercise
+            superSet.weightSecondExercise = templateSuperSet.weightSecondExercise
         }
     }
     
