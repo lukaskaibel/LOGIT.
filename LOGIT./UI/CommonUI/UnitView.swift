@@ -16,10 +16,10 @@ struct UnitView: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Text(value)
-                .font(.subheadline)
+                .font(.body.weight(.medium).monospacedDigit())
             Text(unit)
-                .font(.caption2)
-        }
+                .font(.caption2.weight(.medium))
+        }.frame(minWidth: 60)
     }
     
 }

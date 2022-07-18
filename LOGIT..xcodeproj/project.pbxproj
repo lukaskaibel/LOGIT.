@@ -73,6 +73,7 @@
 		79F2D1242800D54300197E0A /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2D1232800D54300197E0A /* Styles.swift */; };
 		79F7E0FE27E67578006D4354 /* AllExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E0FD27E67578006D4354 /* AllExercisesView.swift */; };
 		79F7E10327E68FAC006D4354 /* TargetPerWeekGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E10227E68FAC006D4354 /* TargetPerWeekGraph.swift */; };
+		8010137B284791AB00309279 /* PieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8010137A284791AB00309279 /* PieGraph.swift */; };
 		801CDC4C2688BDC800BB653D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801CDC4B2688BDC800BB653D /* Color+.swift */; };
 		801CDC502688BDE600BB653D /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801CDC4F2688BDE600BB653D /* View+.swift */; };
 		8033F98E27072B0600EC707A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8033F98D27072B0600EC707A /* ProfileView.swift */; };
@@ -172,6 +173,7 @@
 		79F2D1232800D54300197E0A /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		79F7E0FD27E67578006D4354 /* AllExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExercisesView.swift; sourceTree = "<group>"; };
 		79F7E10227E68FAC006D4354 /* TargetPerWeekGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetPerWeekGraph.swift; sourceTree = "<group>"; };
+		8010137A284791AB00309279 /* PieGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieGraph.swift; sourceTree = "<group>"; };
 		801CDC4B2688BDC800BB653D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		801CDC4F2688BDE600BB653D /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		8033F98D27072B0600EC707A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 			children = (
 				79D570D7277B4C520005E006 /* BarGraph.swift */,
 				792DAB7227EB97E80062C20D /* LineGraph.swift */,
+				8010137A284791AB00309279 /* PieGraph.swift */,
 				79F7E10227E68FAC006D4354 /* TargetPerWeekGraph.swift */,
 			);
 			path = Graphs;
@@ -611,6 +614,7 @@
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
 				795920F028421D8A0057369A /* WorkoutRecorderView+SuperSetCell.swift in Sources */,
 				792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */,
+				8010137B284791AB00309279 /* PieGraph.swift in Sources */,
 				79457C38283AF20200411F03 /* WorkoutRecorderView+SetGroupCell.swift in Sources */,
 				799AAF2C2787831900C8BF0C /* ExerciseDetailView.swift in Sources */,
 				79F2D1222800CD0C00197E0A /* WorkoutTemplateDetailView.swift in Sources */,
@@ -836,7 +840,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = lukaskbl.WorkoutDiary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -858,7 +862,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = lukaskbl.WorkoutDiary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

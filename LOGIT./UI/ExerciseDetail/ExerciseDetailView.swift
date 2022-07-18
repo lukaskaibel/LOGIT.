@@ -68,6 +68,23 @@ struct ExerciseDetailView: View {
                         .font(.title2.weight(.bold))
                         .fixedSize()
                     Spacer()
+                    Menu(NSLocalizedString("sortBy", comment: "")) {
+                        Button(action: {
+                            exerciseDetail.setSortingKey = .date
+                        }) {
+                            Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
+                        }
+                        Button(action: {
+                            exerciseDetail.setSortingKey = .maxRepetitions
+                        }) {
+                            Label(NSLocalizedString("repetitions", comment: ""), systemImage: "calendar")
+                        }
+                        Button(action: {
+                            exerciseDetail.setSortingKey = .maxWeight
+                        }) {
+                            Label(NSLocalizedString("weight", comment: ""), systemImage: "calendar")
+                        }
+                    }
                 }.padding(.vertical, 5)
                 .listRowSeparator(.hidden, edges: .top)
             }, footer: {

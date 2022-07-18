@@ -74,6 +74,8 @@
 "newestFirst" = "Newest First";
 "selectDuration" = "Select Duration";
 "alreadyExists" = "already exists.";
+"repetitions" = "Repetitions";
+"weight" = "Weight";
 
 "cancel" = "Cancel";
 "dismiss" = "Dismiss";

@@ -12,12 +12,15 @@ struct WorkoutSetCell: View {
     @ObservedObject var workoutSet: WorkoutSet
     
     var body: some View {
-        if let standardSet = workoutSet as? StandardSet {
-            StandardSetCell(for: standardSet)
-        } else if let dropSet = workoutSet as? DropSet {
-            DropSetCell(for: dropSet)
-        } else if let superSet = workoutSet as? SuperSet {
-            SuperSetCell(for: superSet)
+        HStack {
+            Spacer()
+            if let standardSet = workoutSet as? StandardSet {
+                StandardSetCell(for: standardSet)
+            } else if let dropSet = workoutSet as? DropSet {
+                DropSetCell(for: dropSet)
+            } else if let superSet = workoutSet as? SuperSet {
+                SuperSetCell(for: superSet)
+            }
         }
     }
     
@@ -26,7 +29,7 @@ struct WorkoutSetCell: View {
     }
     
     private func DropSetCell(for dropSet: DropSet) -> some View {
-        VStack {
+        VStack(alignment: .trailing) {
             ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
                 WorkoutSetEntry(repetitions: Int(dropSet.repetitions?.value(at: index) ?? 0),
                                 weight: Int(dropSet.weights?.value(at: index) ?? 0))
@@ -35,22 +38,20 @@ struct WorkoutSetCell: View {
     }
     
     private func SuperSetCell(for superSet: SuperSet) -> some View {
-        VStack {
+        VStack(alignment: .trailing) {
             HStack {
-                WorkoutSetEntry(repetitions: Int(superSet.repetitionsFirstExercise),
-                                weight: Int(superSet.weightFirstExercise))
-                Spacer()
                 Text(superSet.exercise?.name ?? "")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
+                WorkoutSetEntry(repetitions: Int(superSet.repetitionsFirstExercise),
+                                weight: Int(superSet.weightFirstExercise))
             }
             HStack {
-                WorkoutSetEntry(repetitions: Int(superSet.repetitionsSecondExercise),
-                                weight: Int(superSet.weightSecondExercise))
-                Spacer()
                 Text(superSet.secondaryExercise?.name ?? "")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
+                WorkoutSetEntry(repetitions: Int(superSet.repetitionsSecondExercise),
+                                weight: Int(superSet.weightSecondExercise))
             }
         }
     }
@@ -63,7 +64,6 @@ struct WorkoutSetCell: View {
             if weight > 0 {
                 if repetitions > 0 {
                     dividerCircle
-                        .padding(.horizontal, 8)
                 }
                 UnitView(value: String(convertWeightForDisplaying(weight)), unit: WeightUnit.used.rawValue.uppercased())
             } else {

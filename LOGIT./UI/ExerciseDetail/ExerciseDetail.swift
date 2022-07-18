@@ -10,9 +10,14 @@ import CoreData
 
 final class ExerciseDetail: ViewModel {
     
+    public enum SetSortingKey {
+        case date, maxRepetitions, maxWeight
+    }
+    
     @Published var selectedAttribute: WorkoutSet.Attribute = .weight
     @Published var selectedCalendarComponentForRepetitions: Calendar.Component = .weekOfYear
     @Published var selectedCalendarComponentForWeight: Calendar.Component = .weekOfYear
+    @Published var setSortingKey: SetSortingKey = .date
     
     private var exerciseID: NSManagedObjectID
     
@@ -41,7 +46,14 @@ final class ExerciseDetail: ViewModel {
         (database.fetch(WorkoutSet.self,
                        sortingKey: "setGroup.workout.date",
                        ascending: false) as! [WorkoutSet])
-            .filter { $0.exercise == exercise }
+            .filter { $0.exercise == exercise || ($0 as? SuperSet)?.secondaryExercise == exercise }
+            .sorted {
+                switch setSortingKey {
+                case .date: return false
+                case .maxRepetitions: return $0.maxRepetitions > $1.maxRepetitions
+                case .maxWeight: return $0.maxWeight > $1.maxWeight
+                }
+            }
     }
     
     private var workoutsWithExercise: [Workout] {
@@ -60,7 +72,7 @@ final class ExerciseDetail: ViewModel {
             .compactMap { $0 as? WorkoutSet }
             .filter { $0.exercise == exercise }
             .map { workoutSet in
-                return attribute == .repetitions ? workoutSet.maxRepetitions : workoutSet.maxWeight
+                return attribute == .repetitions ? workoutSet.maxRepetitions : convertWeightForDisplaying(workoutSet.maxWeight) 
             }
             .max() ?? 0
     }

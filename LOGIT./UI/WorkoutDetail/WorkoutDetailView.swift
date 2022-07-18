@@ -34,19 +34,19 @@ struct WorkoutDetailView: View {
                     VStack(spacing: 0) {
                         Divider()
                         ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
-                            HStack {
-                                Text(String((setGroup.index(of: workoutSet) ?? 0) + 1))
-                                    .font(.body.monospacedDigit())
-                                    .foregroundColor(.secondaryLabel)
-                                    .frame(width: 20)
-                                VStack(alignment: .leading, spacing: 0) {
-                                    EmptyView()
-                                        .frame(height: 1)
+                            VStack(alignment: .leading, spacing: 0) {
+                                EmptyView()
+                                    .frame(height: 1)
+                                HStack {
+                                    Text("\(NSLocalizedString("set", comment: "")) \((setGroup.index(of: workoutSet) ?? 0) + 1)")
+                                        .font(.body.monospacedDigit())
+                                        .foregroundColor(.secondaryLabel)
                                     WorkoutSetCell(workoutSet: workoutSet)
                                         .padding(.vertical, 8)
-                                    Divider()
+                                        .padding(.horizontal)
                                 }
-                            }
+                                Divider()
+                            }.padding(.leading)
                         }
                     }.listRowSeparator(.hidden)
                 }, header: {
@@ -55,7 +55,7 @@ struct WorkoutDetailView: View {
                 }, footer: {
                     Text("\(setGroup.numberOfSets) \(NSLocalizedString("set\(setGroup.numberOfSets == 1 ? "" : "s")", comment: ""))")
                         .foregroundColor(.secondaryLabel)
-                        .font(.subheadline)
+                        .font(.footnote)
                         .listRowSeparator(.hidden, edges: .bottom)
                 }).padding(.leading)
             }.listRowInsets(EdgeInsets())
@@ -142,23 +142,43 @@ struct WorkoutDetailView: View {
     
     @ViewBuilder
     private func Header(for setGroup: WorkoutSetGroup) -> some View {
-        HStack {
-            if let exercise = setGroup.exercise {
-                NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
-                    HStack {
-                        Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
-                            .sectionHeaderStyle()
-                        Text("\(exercise.name ?? "")")
-                            .foregroundColor(.label)
-                            .font(.title2.weight(.semibold))
-                            .lineLimit(1)
-                            .multilineTextAlignment(.leading)
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.separator)
-                            .font(.caption.weight(.semibold))
+        VStack(spacing: 0) {
+            HStack {
+                if let exercise = setGroup.exercise {
+                    Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
+                        .sectionHeaderStyle()
+                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
+                        HStack(spacing: 3) {
+                            Text("\(exercise.name ?? "")")
+                                .sectionHeaderStyle()
+                                .lineLimit(1)
+                                .multilineTextAlignment(.leading)
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.separator)
+                                .font(.caption.weight(.semibold))
+                        }
                     }
+                    Spacer()
                 }
-                Spacer()
+            }
+            if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
+                HStack {
+                    Image(systemName: "arrow.turn.down.right")
+                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: secondaryExercise.objectID))) {
+                        HStack(spacing: 3) {
+                            Text("\(secondaryExercise.name ?? "")")
+                                .font(.title2.weight(.bold))
+                                .foregroundColor(.label)
+                                .lineLimit(1)
+                                .multilineTextAlignment(.leading)
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.separator)
+                                .font(.caption.weight(.semibold))
+                        }
+                    }
+                    Spacer()
+                }.padding(.leading, 30)
+                    .padding(.bottom, 8)
             }
         }
     }

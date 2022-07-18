@@ -75,6 +75,8 @@
 "newestFirst" = "Neueste zuerst";
 "selectDuration" = "Dauer auswählen";
 "alreadyExists" = "existiert schon.";
+"repetitions" = "Wiederholungen";
+"weight" = "Gewicht";
 
 "cancel" = "Abbrechen";
 "dismiss" = "Verwerfen";
