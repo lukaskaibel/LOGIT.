@@ -15,7 +15,6 @@ struct TimerView: View {
     
     init(selectableSeconds: [Int]) {
         self.selectableSeconds = selectableSeconds
-        //self.duration = selectableSeconds.first ?? 0
     }
         
     var body: some View {
@@ -66,6 +65,7 @@ struct TimerView: View {
                     timerModel.reset()
                 }) {
                     Text(NSLocalizedString("cancel", comment: ""))
+                        .font(.footnote.weight(.semibold))
                         .foregroundColor(.label.opacity(0.8))
                         .padding(28)
                         .background(Color.secondaryBackground)
@@ -87,7 +87,7 @@ struct TimerView: View {
                 }) {
                     Text(timerModel.isRunning ? NSLocalizedString("stop", comment: "") : NSLocalizedString("start", comment: ""))
                         .foregroundColor(timerModel.isRunning ? .white : .accentColor)
-                        .font(.body.weight(.medium))
+                        .font(.footnote.weight(.semibold))
                         .padding(28)
                         .background(Color.accentColor.opacity(timerModel.isRunning ? 1.0 : 0.2))
                         .clipShape(Circle())

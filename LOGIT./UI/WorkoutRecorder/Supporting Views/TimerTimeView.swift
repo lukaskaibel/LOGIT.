@@ -32,7 +32,7 @@ struct TimerTimeView: View {
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(action: { showingTimerView = false }) {
-                                        Text(NSLocalizedString("dismiss", comment: ""))
+                                        Text(NSLocalizedString("back", comment: ""))
                                     }
                                 }
                             }

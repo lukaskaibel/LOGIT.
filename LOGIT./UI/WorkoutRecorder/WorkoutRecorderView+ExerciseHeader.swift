@@ -26,6 +26,8 @@ extension WorkoutRecorderView {
                             }
                             Text(setGroup.exercise?.name ?? "No Name")
                                 .font(.title3.weight(.medium))
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
                         }.foregroundColor(setGroup.exercise == nil ? .secondaryAccentColor : .accentColor)
                             .lineLimit(1)
                             .padding(.horizontal, 8)
@@ -86,10 +88,12 @@ extension WorkoutRecorderView {
                             workoutRecorder.isSelectingSecondaryExercise = true
                             showingExerciseSelection = true
                         }) {
-                            HStack {
+                            HStack(spacing: 3) {
                                 Image(systemName: "2.circle")
                                 Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
                                     .font(.title3.weight(.medium))
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
                             }.foregroundColor(setGroup.secondaryExercise == nil ? .secondaryAccentColor : .accentColor)
                                 .lineLimit(1)
                                 .padding(.horizontal, 8)

@@ -68,6 +68,7 @@
 "sets" = "Sätze";
 "addSet" = "Satz hinzufügen";
 "title" = "Titel";
+"target" = "Ziel";
 
 "ascending" = "Aufsteigend";
 "descending" = "Absteigend";
@@ -85,7 +86,7 @@
 "start" = "Start";
 "edit" = "Bearbeiten";
 "update" = "Update";
-"save" = "Sichern";
+"save" = "Speichern";
 "navBack" = "Zurück";
 "ok" = "Ok";
 "nameCantBeEmpty" = "Name kann nicht leer sein.";
@@ -94,6 +95,7 @@
 "delete" = "Löschen";
 "remove" = "Entfernen";
 "deleteExerciseConfirmation" = "Möchtest du die Übung unwiderruflich löschen?";
+"create" = "Create";
 
 "myTemplates" = "Meine Vorlagen";
 "template" = "Vorlage";
@@ -102,11 +104,11 @@
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
 "startEmpty" = "Leeres Workout starten";
 "workoutTemplates" = "Workout Vorlagen";
-"templateExplanation" = "Mit Workout Vorlagen kannst du dein Training im Vorhinein planen und wiederverwenden.";
+"templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
 "deleteTemplate" = "Vorlage löschen";
 "deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";
-"editWorkoutTemplate" = "Workout Vorlagen bearbeiten";
-"newWorkoutTemplate" = "Neue Workout Vorlage";
+"editWorkoutTemplate" = "Vorlagen bearbeiten";
+"newWorkoutTemplate" = "Vorlage erstellen";
 "newTemplateFromWorkout" = "Neue Vorlage aus Workout";
 
 "welcomeTo" = "Willkommen bei";

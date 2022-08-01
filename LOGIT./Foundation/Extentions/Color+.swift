@@ -28,5 +28,9 @@ extension Color {
 
     static var accentColorBackground: Color { Color.accentColor.opacity(0.1) }
     static var secondaryAccentColor: Color { Color.accentColor.opacity(0.5)}
+    
+    static var grouped: Color { Color(UIColor.systemGroupedBackground) }
+    static var secondaryGrouped: Color { Color(UIColor.secondarySystemGroupedBackground) }
+    static var tertiaryGrouped: Color { Color(UIColor.tertiarySystemGroupedBackground) }
 
 }

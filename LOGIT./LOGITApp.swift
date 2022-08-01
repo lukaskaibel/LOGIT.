@@ -37,11 +37,8 @@ struct LOGIT: App {
                     HomeView()
                         .tabItem { Label("Home", systemImage: "house") }
                     NavigationView {
-                        WorkoutTemplateListView()
-                    }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
-                    NavigationView {
-                        AllExercisesView()
-                    }.tabItem { Label(NSLocalizedString("exercises", comment: ""), systemImage: "stopwatch") }
+                        ProfileView()
+                    }.tabItem { Label(NSLocalizedString("profile", comment: ""), systemImage: "person.fill") }
                 }.environment(\.managedObjectContext, database.context)
             } else {
                 FirstStartView()

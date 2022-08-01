@@ -77,12 +77,12 @@ struct ExerciseDetailView: View {
                         Button(action: {
                             exerciseDetail.setSortingKey = .maxRepetitions
                         }) {
-                            Label(NSLocalizedString("repetitions", comment: ""), systemImage: "calendar")
+                            Label(NSLocalizedString("repetitions", comment: ""), systemImage: "arrow.counterclockwise")
                         }
                         Button(action: {
                             exerciseDetail.setSortingKey = .maxWeight
                         }) {
-                            Label(NSLocalizedString("weight", comment: ""), systemImage: "calendar")
+                            Label(NSLocalizedString("weight", comment: ""), systemImage: "scalemass")
                         }
                     }
                 }.padding(.vertical, 5)

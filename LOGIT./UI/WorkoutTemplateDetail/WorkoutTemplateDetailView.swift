@@ -50,7 +50,19 @@ struct WorkoutTemplateDetailView: View {
             }
             Section(content: {
                 ForEach(workoutTemplateDetail.workoutTemplate.workouts?.array as? [Workout] ?? .emptyList, id:\.objectID) { workout in
-                    WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(false))
+                    ZStack {
+                        WorkoutCell(workout: workout)
+                        NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(false
+                                                                                                      ),
+                                                                      workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
+                            EmptyView()
+                        }.opacity(0)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 2)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
+
                 }
             }, header: {
                 Text("\(NSLocalizedString("performed", comment: "")) \(workoutTemplateDetail.workouts.count) \(NSLocalizedString("time\(workoutTemplateDetail.workouts.count == 1 ? "" : "s")", comment: ""))")

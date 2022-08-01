@@ -17,6 +17,20 @@ struct ProfileView: View {
     
     var body: some View {
         List {
+            Section {
+                NavigationLink(destination: AllExercisesView()) {
+                    HStack {
+                        Text(NSLocalizedString("exercises", comment: ""))
+                        Spacer()
+                    }
+                }
+                NavigationLink(destination: WorkoutTemplateListView()) {
+                    HStack {
+                        Text(NSLocalizedString("templates", comment: ""))
+                        Spacer()
+                    }
+                }
+            }
             Section(content: {
                 Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $workoutPerWeekTarget) {
                     ForEach(1..<10, id:\.self) { i in
@@ -37,13 +51,6 @@ struct ProfileView: View {
         }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("profile", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(NSLocalizedString("done", comment: "")) {
-                        dismiss()
-                    }.font(.body.weight(.semibold))
-                }
-            }
     }
 }
 

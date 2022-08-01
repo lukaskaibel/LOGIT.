@@ -25,6 +25,7 @@ struct WorkoutTemplateListView: View {
                     .forEach { workoutTemplateList.delete($0) }
             }
         }.listStyle(.plain)
+            .navigationBarTitleDisplayMode(.large)
             .navigationTitle(NSLocalizedString("templates", comment: ""))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

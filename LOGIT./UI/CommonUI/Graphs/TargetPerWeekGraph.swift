@@ -38,12 +38,19 @@ struct TargetPerWeekGraph: View {
                     }
                 }.frame(maxWidth: .infinity)
                     .padding(.horizontal, 10)
-                .background {
+                .overlay {
                     VStack {
                         Spacer()
                         Rectangle()
                             .frame(height: 2)
                             .foregroundColor(.accentColor.opacity(0.4))
+                            .overlay {
+                                Text(NSLocalizedString("target", comment: ""))
+                                    .font(.footnote.weight(.medium))
+                                    .foregroundColor(.accentColor.opacity(0.4))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .offset(x: 0, y: 12)
+                            }
                         Rectangle()
                             .foregroundColor(.clear)
                             .frame(height: (geometry.size.height / CGFloat(maxValue)) * CGFloat(target) - 10)

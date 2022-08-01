@@ -21,14 +21,7 @@ struct WorkoutDetailView: View {
     
     var body: some View {
         List {
-            if canNavigateToTemplate {
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(height: 1)
-                    .listRowSeparator(.hidden)
-                TemplateView
-                    .buttonStyle(PlainButtonStyle())
-            }
+            WorkoutHeader
             ForEach(workoutDetail.setGroups) { setGroup in
                 Section(content: {
                     VStack(spacing: 0) {
@@ -52,16 +45,18 @@ struct WorkoutDetailView: View {
                 }, header: {
                     Header(for: setGroup)
                         .listRowInsets(EdgeInsets())
-                }, footer: {
-                    Text("\(setGroup.numberOfSets) \(NSLocalizedString("set\(setGroup.numberOfSets == 1 ? "" : "s")", comment: ""))")
-                        .foregroundColor(.secondaryLabel)
-                        .font(.footnote)
-                        .listRowSeparator(.hidden, edges: .bottom)
                 }).padding(.leading)
             }.listRowInsets(EdgeInsets())
-            Footer
+            if canNavigateToTemplate {
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(height: 1)
+                    .listRowSeparator(.hidden)
+                TemplateView
+                    .buttonStyle(PlainButtonStyle())
+            }
         }.listStyle(.plain)
-            .navigationTitle(workoutDetail.workout.name ?? "")
+            .navigationTitle(workoutDetail.workout.date?.description(.medium) ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -97,6 +92,27 @@ struct WorkoutDetailView: View {
     }
         
     //MARK: - Supporting Views
+    
+    private var WorkoutHeader: some View {
+        HStack {
+            Image(systemName: "swift")
+                .font(.title)
+                .foregroundColor(.accentColor)
+                .padding()
+                .background(LinearGradient(colors: [.accentColor.opacity(0.03), .accentColor.opacity(0.3)],
+                                           startPoint: .leading,
+                                           endPoint: .trailing))
+                .clipShape(Circle())
+            VStack(alignment: .leading) {
+                Text(workoutDetail.workout.name ?? "No Name")
+                    .font(.title3.weight(.bold))
+                    .lineLimit(1)
+                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")", comment: ""))")
+                    .foregroundColor(.accentColor)
+            }
+            Spacer()
+        }.listRowSeparator(.hidden)
+    }
     
     private var TemplateView: some View {
         Section(content: {
@@ -146,63 +162,49 @@ struct WorkoutDetailView: View {
             HStack {
                 if let exercise = setGroup.exercise {
                     Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
-                        .sectionHeaderStyle()
                     NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
                         HStack(spacing: 3) {
                             Text("\(exercise.name ?? "")")
-                                .sectionHeaderStyle()
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.separator)
-                                .font(.caption.weight(.semibold))
+                                .font(.caption)
                         }
                     }
                     Spacer()
                 }
-            }
+            }.font(.body.weight(.semibold))
+                .foregroundColor(.label)
+                .padding(.vertical, 8)
             if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
+                        .font(.caption) 
                     NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: secondaryExercise.objectID))) {
                         HStack(spacing: 3) {
                             Text("\(secondaryExercise.name ?? "")")
-                                .font(.title2.weight(.bold))
-                                .foregroundColor(.label)
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.separator)
-                                .font(.caption.weight(.semibold))
+                                .font(.caption)
                         }
                     }
                     Spacer()
                 }.padding(.leading, 30)
                     .padding(.bottom, 8)
             }
-        }
+        }.font(.body.weight(.semibold))
+            .foregroundColor(.label)
+            .padding(.vertical, 8)
     }
-    
-    @ViewBuilder
-    private var Footer: some View {
-        HStack {
-            Spacer()
-            VStack {
-                Text("\(workoutDetail.workoutDateString), \(workoutDetail.workoutTimeString)")
-                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")", comment: ""))")
-            }.foregroundColor(.secondaryLabel)
-                .font(.subheadline)
-            Spacer()
-        }.listRowSeparator(.hidden)
-            .padding(.vertical, 50)
-    }
-    
-    
     
 }
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(canNavigateToTemplate: .constant(true), workoutDetail: WorkoutDetail(workoutID: NSManagedObjectID()))
+        WorkoutDetailView(canNavigateToTemplate: .constant(false),
+                          workoutDetail: WorkoutDetail(workoutID: (Database.preview.fetch(Workout.self).first! as! Workout).objectID))
     }
 }
