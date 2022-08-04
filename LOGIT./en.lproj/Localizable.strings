@@ -109,6 +109,7 @@
 "editWorkoutTemplate" = "Edit Template";
 "newWorkoutTemplate" = "New Template";
 "newTemplateFromWorkout" = "New Template from Workout";
+"reps" = "reps";
 
 "welcomeTo" = "Welcome to";
 "letsGetStarted" = "Let's get started";

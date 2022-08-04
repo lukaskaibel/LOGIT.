@@ -57,18 +57,11 @@ struct WorkoutSetCell: View {
     }
     
     private func WorkoutSetEntry(repetitions: Int, weight: Int) -> some View {
-        HStack {
-            if repetitions > 0 {
-                UnitView(value: String(repetitions), unit: "RPS")
-            }
-            if weight > 0 {
-                if repetitions > 0 {
-                    dividerCircle
-                }
-                UnitView(value: String(convertWeightForDisplaying(weight)), unit: WeightUnit.used.rawValue.uppercased())
-            } else {
-                UnitView(value: "", unit: "") //needed in order for cell not to collapse if reps and weight = 0
-            }
+        HStack(spacing: WorkoutDetailView.columnSpace) {
+            Text(repetitions > 0 ? String(repetitions) : "")
+                .frame(maxWidth: WorkoutDetailView.columnWidth)
+            Text(weight > 0 ? String(convertWeightForDisplaying(weight)) : "")
+                .frame(maxWidth: WorkoutDetailView.columnWidth)
         }.padding(.vertical, 5)
     }
             

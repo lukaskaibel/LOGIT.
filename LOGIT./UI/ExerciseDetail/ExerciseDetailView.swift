@@ -62,31 +62,51 @@ struct ExerciseDetailView: View {
                     }
                 }
             }, header: {
-                HStack {
-                    Text(NSLocalizedString("sets", comment: ""))
-                        .foregroundColor(.label)
-                        .font(.title2.weight(.bold))
-                        .fixedSize()
-                    Spacer()
-                    Menu(NSLocalizedString("sortBy", comment: "")) {
-                        Button(action: {
-                            exerciseDetail.setSortingKey = .date
-                        }) {
-                            Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
-                        }
-                        Button(action: {
-                            exerciseDetail.setSortingKey = .maxRepetitions
-                        }) {
-                            Label(NSLocalizedString("repetitions", comment: ""), systemImage: "arrow.counterclockwise")
-                        }
-                        Button(action: {
-                            exerciseDetail.setSortingKey = .maxWeight
-                        }) {
-                            Label(NSLocalizedString("weight", comment: ""), systemImage: "scalemass")
+                VStack {
+                    HStack {
+                        Text(NSLocalizedString("sets", comment: ""))
+                            .foregroundColor(.label)
+                            .font(.title2.weight(.bold))
+                            .fixedSize()
+                        Spacer()
+                        Menu {
+                            Button(action: {
+                                exerciseDetail.setSortingKey = .date
+                            }) {
+                                Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
+                            }
+                            Button(action: {
+                                exerciseDetail.setSortingKey = .maxRepetitions
+                            }) {
+                                Label(NSLocalizedString("repetitions", comment: ""), systemImage: "arrow.counterclockwise")
+                            }
+                            Button(action: {
+                                exerciseDetail.setSortingKey = .maxWeight
+                            }) {
+                                Label(NSLocalizedString("weight", comment: ""), systemImage: "scalemass")
+                            }
+                        } label: {
+                            Label(NSLocalizedString(exerciseDetail.setSortingKey == .date ? "date" : exerciseDetail.setSortingKey == .maxRepetitions ? "repetitions" : "weight", comment: ""),
+                                  systemImage: "arrow.up.arrow.down")
+                            .font(.body)
                         }
                     }
-                }.padding(.vertical, 5)
-                .listRowSeparator(.hidden, edges: .top)
+                    HStack(spacing: WorkoutDetailView.columnSpace) {
+                        Text(NSLocalizedString("date", comment: ""))
+                            .font(.footnote)
+                            .foregroundColor(.secondaryLabel)
+                            .frame(maxWidth: WorkoutDetailView.columnWidth, alignment: .leading)
+                        Spacer()
+                        Text(NSLocalizedString("reps", comment: "").uppercased())
+                            .font(.footnote)
+                            .foregroundColor(.secondaryLabel)
+                            .frame(maxWidth: WorkoutDetailView.columnWidth)
+                        Text(WeightUnit.used.rawValue.uppercased())
+                            .font(.footnote)
+                            .foregroundColor(.secondaryLabel)
+                            .frame(maxWidth: WorkoutDetailView.columnWidth)
+                    }
+                }.listRowSeparator(.hidden, edges: .top)
             }, footer: {
                 Text("\(exerciseDetail.sets.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(exerciseDetail.sets.count == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)

@@ -17,15 +17,6 @@ struct WorkoutCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top) {
-                Spacer()
-                HStack(spacing: 5) {
-                    Text(workout.date?.description(.short) ?? "")
-                        .foregroundColor(.secondaryLabel)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.separator)
-                }.font(.footnote)
-            }
             HStack {
                 Image(systemName: "swift")
                     .foregroundColor(.accentColor)
@@ -34,19 +25,22 @@ struct WorkoutCell: View {
                                                startPoint: .leading,
                                                endPoint: .trailing))
                     .clipShape(Circle())
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading) {
+                    Text(workout.date?.description(.short) ?? "")
+                        .font(.footnote.weight(.medium))
+                        .foregroundColor(.secondaryLabel)
                     Text(workout.name ?? "No name")
                         .font(.headline)
                         .lineLimit(1)
                     Text(exercisesString)
                         .lineLimit(1)
-                        .font(.subheadline)
                 }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote)
+                    .foregroundColor(.separator)
             }
-            Text(" ")
-                .font(.footnote)
-        }.padding(.horizontal, 10)
-            .padding(.vertical, 8)
+        }.padding(10)
             .background(Color.secondaryBackground)
             .cornerRadius(12)
     }

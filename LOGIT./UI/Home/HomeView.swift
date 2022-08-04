@@ -29,10 +29,10 @@ struct HomeView: View {
                                 NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(true),
                                                                               workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
                                     EmptyView()
-                                }.opacity(0)
+                                }.opacity(0).buttonStyle(PlainButtonStyle())
                             }
                             .padding(.horizontal)
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 3)
                                 .listRowSeparator(.hidden)
                                 .listRowInsets(EdgeInsets())
                         }.onDelete { indexSet in
@@ -40,7 +40,6 @@ struct HomeView: View {
                                 home.delete(workout: home.recentWorkouts[index])
                             }
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }, header: {
                         HStack {
                             Text(NSLocalizedString("recentWorkouts", comment: ""))

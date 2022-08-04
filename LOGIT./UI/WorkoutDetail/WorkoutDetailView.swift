@@ -19,6 +19,9 @@ struct WorkoutDetailView: View {
     @State private var isShowingNewTemplate: Bool = false
     @State private var isShowingTemplateDetail: Bool = false
     
+    static let columnWidth: CGFloat = 70
+    static let columnSpace: CGFloat = 20
+    
     var body: some View {
         List {
             WorkoutHeader
@@ -26,14 +29,14 @@ struct WorkoutDetailView: View {
                 Section(content: {
                     VStack(spacing: 0) {
                         Divider()
+                            .padding(.leading)
                         ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
-                            VStack(alignment: .leading, spacing: 0) {
+                            VStack(alignment: .trailing, spacing: 0) {
                                 EmptyView()
                                     .frame(height: 1)
                                 HStack {
                                     Text("\(NSLocalizedString("set", comment: "")) \((setGroup.index(of: workoutSet) ?? 0) + 1)")
                                         .font(.body.monospacedDigit())
-                                        .foregroundColor(.secondaryLabel)
                                     WorkoutSetCell(workoutSet: workoutSet)
                                         .padding(.vertical, 8)
                                         .padding(.horizontal)
@@ -158,7 +161,7 @@ struct WorkoutDetailView: View {
     
     @ViewBuilder
     private func Header(for setGroup: WorkoutSetGroup) -> some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 3) {
             HStack {
                 if let exercise = setGroup.exercise {
                     Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
@@ -176,7 +179,6 @@ struct WorkoutDetailView: View {
                 }
             }.font(.body.weight(.semibold))
                 .foregroundColor(.label)
-                .padding(.vertical, 8)
             if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
@@ -193,11 +195,22 @@ struct WorkoutDetailView: View {
                     }
                     Spacer()
                 }.padding(.leading, 30)
-                    .padding(.bottom, 8)
             }
+            HStack(spacing: WorkoutDetailView.columnSpace) {
+                Spacer()
+                Text(NSLocalizedString("reps", comment: "").uppercased())
+                    .font(.footnote)
+                    .foregroundColor(.secondaryLabel)
+                    .frame(maxWidth: WorkoutDetailView.columnWidth)
+                Text(WeightUnit.used.rawValue.uppercased())
+                    .font(.footnote)
+                    .foregroundColor(.secondaryLabel)
+                    .frame(maxWidth: WorkoutDetailView.columnWidth)
+            }.padding(.horizontal)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)
-            .padding(.vertical, 8)
+            .padding(.top, 8)
+            .padding(.bottom, 5)
     }
     
 }

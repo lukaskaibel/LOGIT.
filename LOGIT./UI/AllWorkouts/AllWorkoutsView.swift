@@ -16,7 +16,17 @@ struct AllWorkoutsView: View {
             ForEach(allWorkouts.sectionedWorkouts.indices, id:\.self) { index in
                 Section(content: {
                     ForEach(allWorkouts.sectionedWorkouts[index], id:\.objectID) { workout in
-                        WorkoutCellView(workout: workout, canNavigateToTemplate: .constant(true))
+                        ZStack {
+                            WorkoutCell(workout: workout)
+                            NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(true),
+                                                                          workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
+                                EmptyView()
+                            }.opacity(0).buttonStyle(PlainButtonStyle())
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 3)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
                     }.onDelete { indexSet in
                         for i in indexSet {
                             allWorkouts.delete(workout: allWorkouts.sectionedWorkouts[index][i])

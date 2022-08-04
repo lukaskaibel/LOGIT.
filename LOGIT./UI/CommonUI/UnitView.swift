@@ -19,6 +19,7 @@ struct UnitView: View {
                 .font(.body.weight(.medium).monospacedDigit())
             Text(unit)
                 .font(.caption2.weight(.medium))
+            Spacer()
         }.frame(minWidth: 60)
     }
     
