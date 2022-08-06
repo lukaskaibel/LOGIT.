@@ -26,7 +26,7 @@ struct WorkoutDetailView: View {
         List {
             WorkoutHeader
             ForEach(workoutDetail.setGroups) { setGroup in
-                Section(content: {
+                Section {
                     VStack(spacing: 0) {
                         Divider()
                             .padding(.leading)
@@ -45,10 +45,10 @@ struct WorkoutDetailView: View {
                             }.padding(.leading)
                         }
                     }.listRowSeparator(.hidden)
-                }, header: {
+                } header: {
                     Header(for: setGroup)
                         .listRowInsets(EdgeInsets())
-                }).padding(.leading)
+                }.padding(.leading)
             }.listRowInsets(EdgeInsets())
             if canNavigateToTemplate {
                 Rectangle()
@@ -209,7 +209,7 @@ struct WorkoutDetailView: View {
             }.padding(.horizontal)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)
-            .padding(.top, 8)
+            .padding(.top)
             .padding(.bottom, 5)
     }
     

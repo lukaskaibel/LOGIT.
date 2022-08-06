@@ -45,7 +45,7 @@ struct AllWorkoutsView: View {
             .navigationTitle(NSLocalizedString("workouts", comment: ""))
             .toolbar  {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu(NSLocalizedString("sortBy", comment: "")) {
+                    Menu {
                         Section {
                             Button(action: {
                                 allWorkouts.sortingKey = .name
@@ -58,6 +58,8 @@ struct AllWorkoutsView: View {
                                 Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
                             }
                         }
+                    } label: {
+                        Label(NSLocalizedString(allWorkouts.sortingKey == .name ? "name" : "date", comment: ""), systemImage: "arrow.up.arrow.down")
                     }
                 }
             }

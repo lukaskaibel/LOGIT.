@@ -154,6 +154,8 @@ struct TemplateWorkoutEditorView: View {
                         }
                         Text(setGroup.exercise?.name ?? "")
                             .fontWeight(.medium)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
                     }.foregroundColor(setGroup.exercise == nil ? .secondaryLabel : .label)
                         .lineLimit(1)
                         .padding(.horizontal, 8)
@@ -202,6 +204,8 @@ struct TemplateWorkoutEditorView: View {
                             Image(systemName: "2.circle")
                             Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
                                 .fontWeight(.medium)
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
                         }.foregroundColor(setGroup.secondaryExercise == nil ? .secondaryLabel : .label)
                             .lineLimit(1)
                             .padding(.horizontal, 8)
