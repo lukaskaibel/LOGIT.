@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CoreData
-
+import Charts
 
 struct ExerciseDetailView: View {
     
@@ -15,6 +15,8 @@ struct ExerciseDetailView: View {
     
     @StateObject var exerciseDetail: ExerciseDetail
     
+    @State private var selectedAttribute: WorkoutSet.Attribute = .weight
+    @State private var selectedCalendarComponent: Calendar.Component = .weekOfYear
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
     @State private var selectedIndexInGraph: Int? = nil
@@ -26,21 +28,28 @@ struct ExerciseDetailView: View {
                     Text(NSLocalizedString("personalBest", comment: ""))
                         .foregroundColor(.secondaryLabel)
                     HStack {
-                        Text("\(exerciseDetail.personalBest(for: exerciseDetail.selectedAttribute)) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
+                        Text("\(exerciseDetail.personalBest(for: selectedAttribute)) \(selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
                             .font(.title.weight(.medium))
                         Spacer()
+                        /*
                         if let selectedIndexInGraph = selectedIndexInGraph {
                             Text("\(exerciseDetail.getGraphYValues(for: exerciseDetail.selectedAttribute)[selectedIndexInGraph]) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
                                 .foregroundColor(.accentColor)
                                 .font(.title.weight(.medium))
                         }
+                         */
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading)
-                LineGraph(xValues: exerciseDetail.getGraphXValues(for: exerciseDetail.selectedAttribute),
-                          yValues: exerciseDetail.getGraphYValues(for: exerciseDetail.selectedAttribute),
-                          selectedIndex: $selectedIndexInGraph)
-                    .frame(height: 180)
-                Picker("Calendar Component", selection: $exerciseDetail.selectedCalendarComponentForWeight) {
+                Chart {
+                    ForEach(exerciseDetail.personalBests(for: selectedAttribute, per: selectedCalendarComponent)) { chartEntry in
+                        LineMark(x: .value("CalendarComponent", chartEntry.xValue),
+                                 y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                        AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
+                                 y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                        .foregroundStyle(.linearGradient(colors: [.accentColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
+                    }
+                }.frame(height: 180)
+                Picker("Calendar Component", selection: $selectedCalendarComponent) {
                     Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
                     Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
                     Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
@@ -139,6 +148,7 @@ struct ExerciseDetailView: View {
         }
     }
     
+    /*
     private var WeightView: some View {
         VStack(spacing: 0) {
             HStack {
@@ -169,6 +179,7 @@ struct ExerciseDetailView: View {
             .cornerRadius(10)
             .listRowSeparator(.hidden)
     }
+     */
     
     var dividerCircle: some View {
         Circle()

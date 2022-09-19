@@ -35,7 +35,7 @@ struct LOGIT: App {
             if setupDone {
                 TabView {
                     HomeView()
-                        .tabItem { Label("Home", systemImage: "house") }
+                        .tabItem { Label("Home", image: "LOGIT") }
                     NavigationView {
                         ProfileView()
                     }.tabItem { Label(NSLocalizedString("profile", comment: ""), systemImage: "person.fill") }

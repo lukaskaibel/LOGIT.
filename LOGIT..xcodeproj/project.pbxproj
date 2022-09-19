@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7907B5A3280B7029003E5515 /* AllExercises.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A2280B7029003E5515 /* AllExercises.swift */; };
 		7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A4280B73E7003E5515 /* Database+Preview.swift */; };
+		7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7907FDE9289E99B1006AF271 /* CloudKit.framework */; };
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
 		791C3CBD27E4C76100B44A86 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
@@ -81,7 +82,7 @@
 		8065AA6F2686667F00F53A5A /* LOGITApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA6E2686667F00F53A5A /* LOGITApp.swift */; };
 		8065AA732686668100F53A5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8065AA722686668100F53A5A /* Assets.xcassets */; };
 		8065AA762686668100F53A5A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8065AA752686668100F53A5A /* Preview Assets.xcassets */; };
-		8065AA7B2686668100F53A5A /* WorkoutDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA792686668100F53A5A /* WorkoutDiary.xcdatamodeld */; };
+		8065AA7B2686668100F53A5A /* LOGIT.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8065AA792686668100F53A5A /* LOGIT.xcdatamodeld */; };
 		806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C4FF92688B46400A9B01D /* StandardSet+.swift */; };
 		807163522887323B00BE5094 /* ProgressInWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807163512887323B00BE5094 /* ProgressInWeekView.swift */; };
 		807FC47F268A909D00169820 /* Exercise+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807FC47E268A909D00169820 /* Exercise+.swift */; };
@@ -110,6 +111,8 @@
 /* Begin PBXFileReference section */
 		7907B5A2280B7029003E5515 /* AllExercises.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExercises.swift; sourceTree = "<group>"; };
 		7907B5A4280B73E7003E5515 /* Database+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Preview.swift"; sourceTree = "<group>"; };
+		7907FDE8289E99A5006AF271 /* LOGIT..entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LOGIT..entitlements; sourceTree = "<group>"; };
+		7907FDE9289E99B1006AF271 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		791C3CBC27E4C76100B44A86 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -204,6 +207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +217,7 @@
 		792D522827F1160800B08813 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7907FDE9289E99B1006AF271 /* CloudKit.framework */,
 				792D522B27F1160800B08813 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
@@ -334,7 +339,7 @@
 				79B70BF428030BF70012EAAD /* EntityExtensions */,
 				798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */,
 				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
-				8065AA792686668100F53A5A /* WorkoutDiary.xcdatamodeld */,
+				8065AA792686668100F53A5A /* LOGIT.xcdatamodeld */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -478,6 +483,7 @@
 		8065AA6D2686667F00F53A5A /* LOGIT. */ = {
 			isa = PBXGroup;
 			children = (
+				7907FDE8289E99A5006AF271 /* LOGIT..entitlements */,
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				80DC993228282A3B007E20C7 /* Foundation */,
 				8065AA7C2686668100F53A5A /* Info.plist */,
@@ -648,7 +654,7 @@
 				79898A8427F7B0FC00935E05 /* TemplateWorkoutEditor.swift in Sources */,
 				8084604B276662A000E0D0D0 /* AllWorkoutsView.swift in Sources */,
 				7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */,
-				8065AA7B2686668100F53A5A /* WorkoutDiary.xcdatamodeld in Sources */,
+				8065AA7B2686668100F53A5A /* LOGIT.xcdatamodeld in Sources */,
 				797F40BD28300AB2002D8807 /* WorkoutSetCell.swift in Sources */,
 				80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* TargetPerWeekGraph.swift in Sources */,
@@ -835,18 +841,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LOGIT./LOGIT..entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"LOGIT./Preview Content\"";
 				DEVELOPMENT_TEAM = S2F6F7JZ8C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = lukaskbl.WorkoutDiary;
+				PRODUCT_BUNDLE_IDENTIFIER = .com.lukaskbl.LOGIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -857,17 +867,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LOGIT./LOGIT..entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"LOGIT./Preview Content\"";
 				DEVELOPMENT_TEAM = S2F6F7JZ8C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = lukaskbl.WorkoutDiary;
+				PRODUCT_BUNDLE_IDENTIFIER = .com.lukaskbl.LOGIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -898,13 +910,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		8065AA792686668100F53A5A /* WorkoutDiary.xcdatamodeld */ = {
+		8065AA792686668100F53A5A /* LOGIT.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				8065AA7A2686668100F53A5A /* WorkoutDiary.xcdatamodel */,
 			);
 			currentVersion = 8065AA7A2686668100F53A5A /* WorkoutDiary.xcdatamodel */;
-			path = WorkoutDiary.xcdatamodeld;
+			path = LOGIT.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -32,7 +32,7 @@ extension DropSet {
     }
     
     public override var hasEntry: Bool {
-        (repetitions?.reduce(0, +) ?? 0) + (weights?.reduce(0, +) ?? 0) > 0
+        (repetitions?.reduce(0, +) ?? 0) > 0 && (weights?.reduce(0, +) ?? 0) > 0
     }
     
     public override func clearEntries() {

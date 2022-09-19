@@ -18,7 +18,7 @@ struct WorkoutCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Image(systemName: "swift")
+                Image("Chest")
                     .foregroundColor(.accentColor)
                     .padding(14)
                     .background(LinearGradient(colors: [.accentColor.opacity(0.03), .accentColor.opacity(0.3)],

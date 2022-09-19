@@ -13,10 +13,7 @@ final class ExerciseDetail: ViewModel {
     public enum SetSortingKey {
         case date, maxRepetitions, maxWeight
     }
-    
-    @Published var selectedAttribute: WorkoutSet.Attribute = .weight
-    @Published var selectedCalendarComponentForRepetitions: Calendar.Component = .weekOfYear
-    @Published var selectedCalendarComponentForWeight: Calendar.Component = .weekOfYear
+
     @Published var setSortingKey: SetSortingKey = .date
     
     private var exerciseID: NSManagedObjectID
@@ -76,37 +73,27 @@ final class ExerciseDetail: ViewModel {
             }
             .max() ?? 0
     }
-        
-    func getGraphYValues(for attribute: WorkoutSet.Attribute) -> [Int] {
-        let selectedCalendarComponent = attribute == .repetitions ? selectedCalendarComponentForRepetitions : selectedCalendarComponentForWeight
-        let numberOfValues = numberOfValues(for: selectedCalendarComponent)
-        var result = [Int](repeating: 0, count: numberOfValues)
+    
+    func personalBests(for attribute: WorkoutSet.Attribute, per calendarComponent: Calendar.Component) -> [ChartEntry] {
+        let numberOfValues = numberOfValues(for: calendarComponent)
+        var result = [(String, Int)](repeating: ("", 0), count: numberOfValues)
         for i in 0..<numberOfValues {
-            guard let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent,
+            guard let iteratedDay = Calendar.current.date(byAdding: calendarComponent,
                                                           value: -i,
                                                           to: Date()) else { continue }
+            result[i].0 = getFirstDayString(in: calendarComponent, for: iteratedDay)
             for workoutSet in exercise.sets {
                 guard let setDate = workoutSet.setGroup?.workout?.date,
                         Calendar.current.isDate(setDate,
                                                 equalTo: iteratedDay,
-                                                toGranularity: selectedCalendarComponent) else { continue }
+                                                toGranularity: calendarComponent) else { continue }
                 switch attribute {
-                case .repetitions: result[i] = max(result[i], Int(workoutSet.maxRepetitions))
-                case .weight: result[i] = max(result[i], convertWeightForDisplaying(workoutSet.maxWeight))
+                case .repetitions: result[i].1 = max(result[i].1, Int(workoutSet.maxRepetitions))
+                case .weight: result[i].1 = max(result[i].1, convertWeightForDisplaying(workoutSet.maxWeight))
                 }
             }
         }
-        return result.reversed()
-    }
-    
-    func getGraphXValues(for attribute: WorkoutSet.Attribute) -> [String] {
-        var result = [String]()
-        let selectedCalendarComponent = attribute == .repetitions ? selectedCalendarComponentForRepetitions : selectedCalendarComponentForWeight
-        for i in 0..<numberOfValues(for: selectedCalendarComponent) {
-            guard let iteratedDay = Calendar.current.date(byAdding: selectedCalendarComponent, value: -i, to: Date()) else { continue }
-            result.append(getFirstDayString(in: selectedCalendarComponent, for: iteratedDay))
-        }
-        return result.reversed()
+        return result.reversed().map { ChartEntry(xValue: $0.0, yValue: $0.1) }
     }
         
     private func getFirstDayString(in component: Calendar.Component, for date: Date) -> String {
@@ -119,8 +106,15 @@ final class ExerciseDetail: ViewModel {
     
     private func numberOfValues(for calendarComponent: Calendar.Component) -> Int {
         switch calendarComponent {
+        case .month: return 12
         default: return 5
         }
     }
     
+}
+
+struct ChartEntry: Identifiable {
+    let id = UUID()
+    var xValue: String
+    var yValue: Int
 }
