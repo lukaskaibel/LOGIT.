@@ -24,7 +24,7 @@ extension SuperSet {
     }
     
     public override var hasEntry: Bool {
-        maxRepetitions > 0 && maxWeight > 0
+        maxRepetitions > 0 || maxWeight > 0
     }
     
     public override func clearEntries() {

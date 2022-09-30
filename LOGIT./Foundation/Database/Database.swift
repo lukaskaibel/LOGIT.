@@ -20,7 +20,7 @@ struct Database {
     //MARK: - Init
     
     init(isPreview: Bool = false) {
-        container = NSPersistentContainer(name: "LOGIT")
+        container = NSPersistentCloudKitContainer(name: "LOGIT")
         if isPreview {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }

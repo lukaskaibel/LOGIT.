@@ -35,6 +35,9 @@ extension Database {
             newStandardSet(setGroup: setGroup)
         }
         exercise?.setGroups.append(setGroup)
+        if let exercise = exercise {
+            setGroup.exerciseOrder = [exercise.id!]
+        }
         workout?.setGroups.append(setGroup)
         return setGroup
     }
@@ -100,9 +103,10 @@ extension Database {
                      muscleGroup: MuscleGroup? = nil,
                      setGroups: [WorkoutSetGroup] = []) -> Exercise {
         let exercise = Exercise(context: context)
+        exercise.id = UUID()
         exercise.name = name
         exercise.muscleGroup = muscleGroup
-        exercise.setGroups = setGroups
+        setGroups.forEach { $0.exercise = exercise }
         return exercise
     }
     
@@ -145,8 +149,10 @@ extension Database {
         } else if createFirstSetAutomatically {
             newTemplateStandardSet(setGroup: templateSetGroup)
         }
-        templateSetGroup.exercise = exercise
-        exercise?.templateSetGroupOrder?.append(templateSetGroup.id!)
+        exercise?.templateSetGroups.append(templateSetGroup)
+        if let exercise = exercise {
+            templateSetGroup.exerciseOrder = [exercise.id!]
+        }
         templateWorkout?.setGroups.append(templateSetGroup)
         return templateSetGroup
     }
