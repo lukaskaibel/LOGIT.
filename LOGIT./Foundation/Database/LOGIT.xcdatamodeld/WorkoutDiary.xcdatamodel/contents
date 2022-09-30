@@ -7,8 +7,10 @@
     <entity name="Exercise" representedClassName="Exercise" syncable="YES" codeGenerationType="class">
         <attribute name="muscleGroupString" optional="YES" attributeType="String" customClassName="MuscleGroup"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="exercises" inverseEntity="WorkoutSetGroup"/>
-        <relationship name="templateSetGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateWorkoutSetGroup" inverseName="exercises" inverseEntity="TemplateWorkoutSetGroup"/>
+        <attribute name="setGroupOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <attribute name="templateSetGroupOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <relationship name="setGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WorkoutSetGroup" inverseName="exercises" inverseEntity="WorkoutSetGroup"/>
+        <relationship name="templateSetGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TemplateWorkoutSetGroup" inverseName="exercises" inverseEntity="TemplateWorkoutSetGroup"/>
     </entity>
     <entity name="StandardSet" representedClassName="StandardSet" parentEntity="WorkoutSet" syncable="YES" codeGenerationType="class">
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -25,7 +27,8 @@
         <attribute name="weights" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int64]"/>
     </entity>
     <entity name="TemplateSet" representedClassName="TemplateSet" isAbstract="YES" syncable="YES" codeGenerationType="class">
-        <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkoutSetGroup" inverseName="sets" inverseEntity="TemplateWorkoutSetGroup"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkoutSetGroup" inverseName="sets_" inverseEntity="TemplateWorkoutSetGroup"/>
     </entity>
     <entity name="TemplateStandardSet" representedClassName="TemplateStandardSet" parentEntity="TemplateSet" syncable="YES" codeGenerationType="class">
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -40,27 +43,34 @@
     <entity name="TemplateWorkout" representedClassName="TemplateWorkout" syncable="YES" codeGenerationType="class">
         <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateWorkoutSetGroup" inverseName="workout" inverseEntity="TemplateWorkoutSetGroup"/>
-        <relationship name="workouts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Workout" inverseName="template" inverseEntity="Workout"/>
+        <attribute name="templateSetGroupOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <relationship name="setGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TemplateWorkoutSetGroup" inverseName="workout" inverseEntity="TemplateWorkoutSetGroup"/>
+        <relationship name="workouts_" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Workout" inverseName="template" inverseEntity="Workout"/>
     </entity>
     <entity name="TemplateWorkoutSetGroup" representedClassName="TemplateWorkoutSetGroup" syncable="YES" codeGenerationType="class">
-        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="templateSetGroups" inverseEntity="Exercise"/>
-        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TemplateSet" inverseName="setGroup" inverseEntity="TemplateSet"/>
-        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkout" inverseName="setGroups" inverseEntity="TemplateWorkout"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="setOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="templateSetGroups_" inverseEntity="Exercise"/>
+        <relationship name="sets_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TemplateSet" inverseName="setGroup" inverseEntity="TemplateSet"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkout" inverseName="setGroups_" inverseEntity="TemplateWorkout"/>
     </entity>
     <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" defaultDateTimeInterval="646345140" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String" defaultValueString=""/>
-        <relationship name="setGroups" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSetGroup" inverseName="workout" inverseEntity="WorkoutSetGroup"/>
-        <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkout" inverseName="workouts" inverseEntity="TemplateWorkout"/>
+        <attribute name="setGroupOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <relationship name="setGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WorkoutSetGroup" inverseName="workout" inverseEntity="WorkoutSetGroup"/>
+        <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateWorkout" inverseName="workouts_" inverseEntity="TemplateWorkout"/>
     </entity>
     <entity name="WorkoutSet" representedClassName="WorkoutSet" isAbstract="YES" syncable="YES" codeGenerationType="class">
-        <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutSetGroup" inverseName="sets" inverseEntity="WorkoutSetGroup"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="setGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WorkoutSetGroup" inverseName="sets_" inverseEntity="WorkoutSetGroup"/>
     </entity>
     <entity name="WorkoutSetGroup" representedClassName="WorkoutSetGroup" syncable="YES" codeGenerationType="class">
-        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="setGroups" inverseEntity="Exercise"/>
-        <relationship name="sets" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WorkoutSet" inverseName="setGroup" inverseEntity="WorkoutSet"/>
-        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="setGroups" inverseEntity="Workout"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="setOrder" optional="YES" attributeType="Transformable" customClassName="[UUID]"/>
+        <relationship name="exercises" optional="YES" toMany="YES" maxCount="2" deletionRule="Nullify" ordered="YES" destinationEntity="Exercise" inverseName="setGroups_" inverseEntity="Exercise"/>
+        <relationship name="sets_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WorkoutSet" inverseName="setGroup" inverseEntity="WorkoutSet"/>
+        <relationship name="workout" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Workout" inverseName="setGroups_" inverseEntity="Workout"/>
     </entity>
 </model>

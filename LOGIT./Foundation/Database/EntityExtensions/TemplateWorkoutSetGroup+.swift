@@ -13,6 +13,17 @@ extension TemplateWorkoutSetGroup {
         case standard, superSet, dropSet
     }
     
+    public var sets: [TemplateSet] {
+        get {
+            return (setOrder ?? .emptyList)
+                .compactMap { id in (sets_?.allObjects as? [TemplateSet])?.first { $0.id == id } }
+        }
+        set {
+            setOrder = newValue.map { $0.id! }
+            sets_ = NSSet(array: newValue)
+        }
+    }
+    
     public var exercise: Exercise? {
         get { exercises?.firstObject as? Exercise }
         set {
@@ -40,7 +51,7 @@ extension TemplateWorkoutSetGroup {
     }
     
     var setType: SetType {
-        let firstSet = sets?.array.first
+        let firstSet = sets.first
         if let _ = firstSet as? TemplateDropSet {
             return .dropSet
         } else if let _ = firstSet as? TemplateSuperSet {
@@ -51,7 +62,7 @@ extension TemplateWorkoutSetGroup {
     }
     
     func index(of set: TemplateSet) -> Int? {
-        (sets?.array as? [TemplateSet])?.firstIndex(of: set)
+        sets.firstIndex(of: set)
     }
     
 }

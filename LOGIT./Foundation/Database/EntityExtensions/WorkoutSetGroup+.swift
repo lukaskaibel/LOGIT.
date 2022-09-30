@@ -14,12 +14,23 @@ extension WorkoutSetGroup {
         case standard, superSet, dropSet
     }
     
+    var sets: [WorkoutSet] {
+        get {
+            return (setOrder ?? .emptyList)
+                .compactMap { id in (sets_?.allObjects as? [WorkoutSet])?.first { $0.id == id } }
+        }
+        set {
+            setOrder = newValue.map { $0.id! }
+            sets_ = NSSet(array: newValue)
+        }
+    }
+    
     public var isEmpty: Bool {
-        sets?.array.isEmpty ?? true
+        sets.isEmpty
     }
     
     public var numberOfSets: Int {
-        sets?.array.count ?? 0
+        sets.count
     }
     
     public var exercise: Exercise? {
@@ -49,7 +60,7 @@ extension WorkoutSetGroup {
     }
     
     public var setType: SetType {
-        let firstSet = sets?.array.first
+        let firstSet = sets.first
         if let _ = firstSet as? DropSet {
             return .dropSet
         } else if let _ = firstSet as? SuperSet {
@@ -60,11 +71,11 @@ extension WorkoutSetGroup {
     }
     
     public subscript(index: Int) -> WorkoutSet {
-        get { (sets?.array as? [WorkoutSet] ?? .emptyList)[index] }
+        get { sets[index] }
     }
     
     public func index(of set: WorkoutSet) -> Int? {
-        (sets?.array as? [WorkoutSet])?.firstIndex(of: set)
+        sets.firstIndex(of: set)
     }
     
 }

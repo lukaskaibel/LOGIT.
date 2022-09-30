@@ -30,7 +30,7 @@ struct WorkoutDetailView: View {
                     VStack(spacing: 0) {
                         Divider()
                             .padding(.leading)
-                        ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
+                        ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                             VStack(alignment: .trailing, spacing: 0) {
                                 EmptyView()
                                     .frame(height: 1)

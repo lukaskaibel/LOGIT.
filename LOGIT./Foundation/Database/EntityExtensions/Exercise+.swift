@@ -15,14 +15,32 @@ extension Exercise {
         set { muscleGroupString = newValue?.rawValue }
     }
     
+    var setGroups: [WorkoutSetGroup] {
+        get {
+            return (setGroupOrder ?? .emptyList)
+                .compactMap { id in (setGroups_?.allObjects as? [WorkoutSetGroup])?.first { setGroup in setGroup.id == id } }
+        }
+        set {
+            setGroupOrder = newValue.map { $0.id! }
+            setGroups_ = NSSet(array: newValue)
+        }
+    }
+    
+    var templateSetGroups: [TemplateWorkoutSetGroup] {
+        get {
+            return (templateSetGroupOrder ?? .emptyList)
+                .compactMap { id in (templateSetGroups_?.allObjects as? [TemplateWorkoutSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
+        }
+        set {
+            templateSetGroupOrder = newValue.map { $0.id! }
+            templateSetGroups_ = NSSet(array: newValue)
+        }
+    }
+    
     var sets: [WorkoutSet] {
         var result = [WorkoutSet]()
-        if let array = setGroups?.array as? [WorkoutSetGroup] {
-            for setGroup in array {
-                if let sets = setGroup.sets?.array as? [WorkoutSet] {
-                    result.append(contentsOf: sets)
-                }
-            }
+        for setGroup in setGroups {
+            result.append(contentsOf: setGroup.sets)
         }
         return result
     }

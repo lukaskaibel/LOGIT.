@@ -49,7 +49,7 @@ struct WorkoutTemplateDetailView: View {
                     .listRowSeparator(.hidden)
             }
             Section(content: {
-                ForEach(workoutTemplateDetail.workoutTemplate.workouts?.array as? [Workout] ?? .emptyList, id:\.objectID) { workout in
+                ForEach(workoutTemplateDetail.workoutTemplate.workouts, id:\.objectID) { workout in
                     ZStack {
                         WorkoutCell(workout: workout)
                         NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(false

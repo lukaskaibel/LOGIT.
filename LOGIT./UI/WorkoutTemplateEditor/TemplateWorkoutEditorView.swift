@@ -29,7 +29,7 @@ struct TemplateWorkoutEditorView: View {
                             .padding(.vertical, 8)
                     }
                 }
-                ForEach(templateWorkoutEditor.templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] ?? .emptyList, id:\.objectID) { setGroup in
+                ForEach(templateWorkoutEditor.templateWorkout.setGroups, id:\.objectID) { setGroup in
                     if isEditing {
                         SetGroupCellForEditing(for: setGroup)
                     } else {
@@ -123,7 +123,7 @@ struct TemplateWorkoutEditorView: View {
     private func SetGroupCellWithSets(for setGroup: TemplateWorkoutSetGroup) -> some View {
         Section {
             SetGroupHeader(for: setGroup)
-            ForEach(setGroup.sets?.array as? [TemplateSet] ?? .emptyList, id:\.objectID) { templateSet in
+            ForEach(setGroup.sets, id:\.objectID) { templateSet in
                 TemplateWorkoutSetCell(for: templateSet)
                     .listRowSeparator(.hidden, edges: .bottom)
             }.onDelete { indexSet in

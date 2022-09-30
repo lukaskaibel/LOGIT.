@@ -13,7 +13,7 @@ extension WorkoutRecorderView {
         Section {
             ExerciseHeader(setGroup: setGroup)
                 .deleteDisabled(true)
-            ForEach(setGroup.sets?.array as? [WorkoutSet] ?? .emptyList, id:\.objectID) { workoutSet in
+            ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                 WorkoutSetCell(workoutSet: workoutSet)
             }.onDelete { indexSet in
                 workoutRecorder.delete(setsWithIndices: indexSet, in: setGroup)

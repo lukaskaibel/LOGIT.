@@ -33,13 +33,11 @@ class WorkoutRecorder: ViewModel {
     }
     
     public var setGroups: [WorkoutSetGroup] {
-        workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList
+        workout.setGroups
     }
     
     public func moveSetGroups(from source: IndexSet, to destination: Int) {
-        guard var setGroups = workout.setGroups?.array as? [WorkoutSetGroup] else { return }
-        setGroups.move(fromOffsets: source, toOffset: destination)
-        workout.setGroups = NSOrderedSet(array: setGroups)
+        workout.setGroups.move(fromOffsets: source, toOffset: destination)
         database.refreshObjects()
         objectWillChange.send()
     }
@@ -68,7 +66,7 @@ class WorkoutRecorder: ViewModel {
     }
     
     public func addSet(to setGroup: WorkoutSetGroup) {
-        let lastSet = (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList).last
+        let lastSet = setGroup.sets.last
         if let _ = lastSet as? DropSet {
             database.newDropSet(setGroup: setGroup)
         } else if let _ = lastSet as? SuperSet {
@@ -86,9 +84,8 @@ class WorkoutRecorder: ViewModel {
  
     
     public func delete(setGroupsWithIndexes indexSet: IndexSet) {
-        guard let setGroups = workout.setGroups?.array as? [WorkoutSetGroup] else { return }
         for index in indexSet {
-            database.delete(setGroups[index])
+            database.delete(workout.setGroups[index])
         }
         updateView()
     }
@@ -133,9 +130,7 @@ class WorkoutRecorder: ViewModel {
     
     public func delete(setsWithIndices indexSet: IndexSet, in setGroup: WorkoutSetGroup) {
         for index in indexSet {
-            if let sets = setGroup.sets?.array as? [WorkoutSet] {
-                database.delete(sets[index])
-            }
+            database.delete(setGroup.sets[index])
         }
         updateView()
     }
@@ -150,14 +145,13 @@ class WorkoutRecorder: ViewModel {
     }
     
     public func updateWorkout(with template: TemplateWorkout){
-        template.addToWorkouts(workout)
+        template.workouts.append(workout)
         workout.name = template.name
-        for templateSetGroup in template.setGroups?.array as? [TemplateWorkoutSetGroup] ?? .emptyList {
+        for templateSetGroup in template.setGroups {
             let setGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false,
                                                        exercise: templateSetGroup.exercise,
                                                        workout: workout)
-            templateSetGroup.sets?.array
-                .compactMap { $0 as? TemplateSet }
+            templateSetGroup.sets
                 .forEach { templateSet in
                     if let templateStandardSet = templateSet as? TemplateStandardSet {
                         let standardSet = database.newStandardSet(setGroup: setGroup)
@@ -197,7 +191,7 @@ class WorkoutRecorder: ViewModel {
     //MARK: WorkoutSet convert functions
     
     public func convertSetGroupToStandardSets(_ setGroup: WorkoutSetGroup) {
-        (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList)
+        setGroup.sets
             .forEach { convertToStandardSet($0) }
         updateView()
     }
@@ -206,18 +200,18 @@ class WorkoutRecorder: ViewModel {
         if let dropSet = workoutSet as? DropSet {
             let standardSet = database.newStandardSet(repetitions: Int(dropSet.repetitions?.first ?? 0),
                                                   weight: Int(dropSet.weights?.first ?? 0))
-            dropSet.setGroup?.replaceSets(at: dropSet.setGroup?.index(of: dropSet) ?? 0, with: standardSet)
+            dropSet.setGroup?.sets.replaceValue(at: dropSet.setGroup?.index(of: dropSet) ?? 0, with: standardSet)
             database.delete(dropSet)
         } else if let superSet = workoutSet as? SuperSet {
             let standardSet = database.newStandardSet(repetitions: Int(superSet.repetitionsFirstExercise),
                                                       weight: Int(superSet.weightFirstExercise))
-            superSet.setGroup?.replaceSets(at: superSet.setGroup?.index(of: superSet) ?? 0, with: standardSet)
+            superSet.setGroup?.sets.replaceValue(at: superSet.setGroup?.index(of: superSet) ?? 0, with: standardSet)
             database.delete(superSet)
         }
     }
     
     public func convertSetGroupToDropSets(_ setGroup: WorkoutSetGroup) {
-        (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList)
+        setGroup.sets
             .forEach { convertToDropSet($0) }
         updateView()
     }
@@ -226,18 +220,18 @@ class WorkoutRecorder: ViewModel {
         if let standardSet = workoutSet as? StandardSet {
             let dropSet = database.newDropSet(repetitions: [standardSet.repetitions].map { Int($0) },
                                               weights: [standardSet.weight].map { Int($0) })
-            standardSet.setGroup?.replaceSets(at: standardSet.setGroup?.index(of: standardSet) ?? 0, with: dropSet)
+            standardSet.setGroup?.sets.replaceValue(at: standardSet.setGroup?.index(of: standardSet) ?? 0, with: dropSet)
             database.delete(workoutSet)
         } else if let superSet = workoutSet as? SuperSet {
             let dropSet = database.newDropSet(repetitions: [superSet.repetitionsFirstExercise].map { Int($0) },
                                               weights: [superSet.weightFirstExercise].map { Int($0) })
-            superSet.setGroup?.replaceSets(at: superSet.setGroup?.index(of: superSet) ?? 0, with: dropSet)
+            superSet.setGroup?.sets.replaceValue(at: superSet.setGroup?.index(of: superSet) ?? 0, with: dropSet)
             database.delete(superSet)
         }
     }
     
     public func convertSetGroupToSuperSets(_ setGroup: WorkoutSetGroup) {
-        (setGroup.sets?.array as? [WorkoutSet] ?? .emptyList)
+        setGroup.sets
             .forEach { convertToSuperSet($0) }
         updateView()
     }
@@ -246,12 +240,12 @@ class WorkoutRecorder: ViewModel {
         if let standardSet = workoutSet as? StandardSet {
             let superSet = database.newSuperSet(repetitionsFirstExercise: Int(standardSet.repetitions),
                                                 weightFirstExercise: Int(standardSet.weight))
-            standardSet.setGroup?.replaceSets(at: standardSet.setGroup?.index(of: standardSet) ?? 0, with: superSet)
+            standardSet.setGroup?.sets.replaceValue(at: standardSet.setGroup?.index(of: standardSet) ?? 0, with: superSet)
             database.delete(standardSet)
         } else if let dropSet = workoutSet as? DropSet {
             let superSet = database.newSuperSet(repetitionsFirstExercise: Int(dropSet.repetitions?.first ?? 0),
                                                 weightFirstExercise: Int(dropSet.weights?.first ?? 0))
-            dropSet.setGroup?.replaceSets(at: dropSet.setGroup?.index(of: dropSet) ?? 0, with: superSet)
+            dropSet.setGroup?.sets.replaceValue(at: dropSet.setGroup?.index(of: dropSet) ?? 0, with: superSet)
             database.delete(dropSet)
         }
     }

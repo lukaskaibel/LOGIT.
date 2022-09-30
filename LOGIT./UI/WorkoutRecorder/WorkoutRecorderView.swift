@@ -154,7 +154,7 @@ struct WorkoutRecorderView: View {
     
     private var ExerciseList: some View {
         List {
-            ForEach(workoutRecorder.workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList, id:\.objectID) { setGroup in
+            ForEach(workoutRecorder.workout.setGroups, id:\.objectID) { setGroup in
                 // Neccessary because onMode crashes with Sections
                 if isEditing {
                     ReorderSetGroupCell(for: setGroup)

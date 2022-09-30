@@ -29,7 +29,7 @@ final class WorkoutDetail: ViewModel {
     }
     
     var setGroups: [WorkoutSetGroup] {
-        workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList
+        workout.setGroups
     }
     
     var workoutTimeString: String {

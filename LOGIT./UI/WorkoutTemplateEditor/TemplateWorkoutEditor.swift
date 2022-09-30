@@ -45,11 +45,11 @@ final class TemplateWorkoutEditor: ViewModel {
     }
     
     public var setGroups: [TemplateWorkoutSetGroup] {
-        templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] ?? .emptyList
+        templateWorkout.setGroups
     }
     
     public func addSet(to templateSetGroup: TemplateWorkoutSetGroup) {
-        let lastSet = (templateSetGroup.sets?.array as? [TemplateSet])?.last
+        let lastSet = templateSetGroup.sets.last
         if let _ = lastSet as? TemplateDropSet {
             database.newTemplateDropSet(templateSetGroup: templateSetGroup)
         } else if let _ = lastSet as? TemplateSuperSet {
@@ -65,19 +65,15 @@ final class TemplateWorkoutEditor: ViewModel {
     }
         
     public func delete(setGroupWithIndexes indexSet: IndexSet) {
-        if let setGroups = templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] {
-            for index in indexSet {
-                database.delete(setGroups[index])
-            }
-            updateView()
+        for index in indexSet {
+            database.delete(setGroups[index])
         }
+        updateView()
     }
     
     public func delete(setsWithIndices indexSet: IndexSet, in setGroup: TemplateWorkoutSetGroup) {
         for index in indexSet {
-            if let sets = setGroup.sets?.array as? [TemplateSet] {
-                database.delete(sets[index])
-            }
+            database.delete(setGroup.sets[index])
         }
         updateView()
     }
@@ -92,12 +88,9 @@ final class TemplateWorkoutEditor: ViewModel {
     }
     
     public func moveSetGroups(from source: IndexSet, to destination: Int) {
-        if var setGroups = templateWorkout.setGroups?.array as? [TemplateWorkoutSetGroup] {
-            setGroups.move(fromOffsets: source, toOffset: destination)
-            templateWorkout.setGroups = NSOrderedSet(array: setGroups)
-            database.refreshObjects()
-            updateView()
-        }
+        templateWorkout.setGroups.move(fromOffsets: source, toOffset: destination)
+        database.refreshObjects()
+        updateView()
     }
 
     public func saveTemplateWorkout() {
@@ -124,7 +117,7 @@ final class TemplateWorkoutEditor: ViewModel {
     //MARK: WorkoutSet convert functions
     
     public func convertSetGroupToStandardSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
-        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+        templateSetGroup.sets
             .forEach { convertToStandardSet($0) }
         updateView()
     }
@@ -133,18 +126,18 @@ final class TemplateWorkoutEditor: ViewModel {
         if let templateDropSet = templateSet as? TemplateDropSet {
             let templateStandardSet = database.newTemplateStandardSet(repetitions: Int(templateDropSet.repetitions?.first ?? 0),
                                                   weight: Int(templateDropSet.weights?.first ?? 0))
-            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateStandardSet)
+            templateDropSet.setGroup?.sets.replaceValue(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateStandardSet)
             database.delete(templateDropSet)
         } else if let templateSuperSet = templateSet as? TemplateSuperSet {
             let templateStandardSet = database.newTemplateStandardSet(repetitions: Int(templateSuperSet.repetitionsFirstExercise),
                                                                       weight: Int(templateSuperSet.weightFirstExercise))
-            templateSuperSet.setGroup?.replaceSets(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateStandardSet)
+            templateSuperSet.setGroup?.sets.replaceValue(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateStandardSet)
             database.delete(templateSuperSet)
         }
     }
     
     public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
-        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+        templateSetGroup.sets
             .forEach { convertToTemplateDropSet($0) }
         updateView()
     }
@@ -153,18 +146,18 @@ final class TemplateWorkoutEditor: ViewModel {
         if let templateStandardSet = templateSet as? TemplateStandardSet {
             let templateDropSet = database.newTemplateDropSet(repetitions: [templateStandardSet.repetitions].map { Int($0) },
                                               weights: [templateStandardSet.weight].map { Int($0) })
-            templateStandardSet.setGroup?.replaceSets(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateDropSet)
+            templateStandardSet.setGroup?.sets.replaceValue(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateDropSet)
             database.delete(templateStandardSet)
         } else if let templateSuperSet = templateSet as? TemplateSuperSet {
             let templateDropSet = database.newTemplateDropSet(repetitions: [Int(templateSuperSet.repetitionsFirstExercise)],
                                                               weights: [Int(templateSuperSet.weightFirstExercise)])
-            templateSuperSet.setGroup?.replaceSets(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateDropSet)
+            templateSuperSet.setGroup?.sets.replaceValue(at: templateSuperSet.setGroup?.index(of: templateSuperSet) ?? 0, with: templateDropSet)
             database.delete(templateSuperSet)
         }
     }
     
     public func convertSetGroupToTemplateSuperSet(_ templateSetGroup: TemplateWorkoutSetGroup) {
-        (templateSetGroup.sets?.array as? [TemplateSet] ?? .emptyList)
+        templateSetGroup.sets
             .forEach { convertToTemplateSuperSet($0) }
         updateView()
     }
@@ -173,12 +166,12 @@ final class TemplateWorkoutEditor: ViewModel {
         if let templateStandardSet = templateSet as? TemplateStandardSet {
             let templateSuperSet = database.newTemplateSuperSet(repetitionsFirstExercise: Int(templateStandardSet.repetitions),
                                                                 weightFirstExercise: Int(templateStandardSet.weight))
-            templateStandardSet.setGroup?.replaceSets(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateSuperSet)
+            templateStandardSet.setGroup?.sets.replaceValue(at: templateStandardSet.setGroup?.index(of: templateStandardSet) ?? 0, with: templateSuperSet)
             database.delete(templateStandardSet)
         } else if let templateDropSet = templateSet as? TemplateDropSet {
             let templateSuperSet = database.newTemplateSuperSet(repetitionsFirstExercise: Int(templateDropSet.repetitions?.first ?? 0),
                                                                 weightFirstExercise: Int(templateDropSet.weights?.first ?? 0))
-            templateDropSet.setGroup?.replaceSets(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateSuperSet)
+            templateDropSet.setGroup?.sets.replaceValue(at: templateDropSet.setGroup?.index(of: templateDropSet) ?? 0, with: templateSuperSet)
             database.delete(templateDropSet)
         }
     }

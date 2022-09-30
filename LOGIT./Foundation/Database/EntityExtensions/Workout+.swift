@@ -14,20 +14,29 @@ extension Workout {
         sets.count
     }
     var numberOfSetGroups: Int {
-        setGroups?.array.count ?? 0
+        setGroups.count
     }
     
     var isEmpty: Bool {
-        setGroups?.array.isEmpty ?? true
+        setGroups.isEmpty
+    }
+    
+    var setGroups: [WorkoutSetGroup] {
+        get {
+            return (setGroupOrder ?? .emptyList)
+                .compactMap { id in (setGroups_?.allObjects as? [WorkoutSetGroup])?.first { setGroup in setGroup.id == id } }
+        }
+        set {
+            setGroupOrder = newValue.map { $0.id! }
+            setGroups_ = NSSet(array: newValue)
+        }
     }
     
     var exercises: [Exercise] {
         var result = [Exercise]()
-        if let array = setGroups?.array as? [WorkoutSetGroup] {
-            for setGroup in array {
-                if let exercise = setGroup.exercise {
-                    result.append(exercise)
-                }
+        for setGroup in setGroups {
+            if let exercise = setGroup.exercise {
+                result.append(exercise)
             }
         }
         return result
@@ -35,12 +44,8 @@ extension Workout {
     
     var sets: [WorkoutSet] {
         var result = [WorkoutSet]()
-        if let array = setGroups?.array as? [WorkoutSetGroup] {
-            for setGroup in array {
-                if let workoutSets = setGroup.sets?.array as? [WorkoutSet] {
-                    result.append(contentsOf: workoutSets)
-                }
-            }
+        for setGroup in setGroups {
+            result.append(contentsOf: setGroup.sets)
         }
         return result
     }
@@ -51,11 +56,11 @@ extension Workout {
     }
     
     func remove(setGroup: WorkoutSetGroup) {
-        setGroups = NSOrderedSet(array: ((setGroups?.array as? [WorkoutSetGroup]) ?? .emptyList).filter { $0 != setGroup } )
+        setGroups = setGroups.filter { $0 != setGroup }
     }
     
     func index(of setGroup: WorkoutSetGroup) -> Int? {
-        (setGroups?.array as? [WorkoutSetGroup] ?? .emptyList).firstIndex(of: setGroup)
+        setGroups.firstIndex(of: setGroup)
     }
     
     static func getStandardName(for date: Date) -> String {

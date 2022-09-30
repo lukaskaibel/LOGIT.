@@ -21,7 +21,7 @@ final class WorkoutTemplateDetail: ViewModel {
     }
     
     public var workouts: [Workout] {
-        workoutTemplate.workouts?.array as? [Workout] ?? .emptyList
+        workoutTemplate.workouts
     }
     
     public var lastUsedDateString: String {

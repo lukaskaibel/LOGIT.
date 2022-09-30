@@ -9,21 +9,39 @@ import Foundation
 
 extension TemplateWorkout {
     
+    var workouts: [Workout] {
+        get {
+            (workouts_?.allObjects as? [Workout] ?? .emptyList).sorted { $0.date ?? .now < $1.date ?? .now }
+        }
+        set {
+            workouts_ = NSSet(array: newValue)
+        }
+    }
+    
     var date: Date? {
-        return (workouts?.array as? [Workout])?.last?.date
+        return workouts.last?.date
+    }
+    
+    var setGroups: [TemplateWorkoutSetGroup] {
+        get {
+            return (templateSetGroupOrder ?? .emptyList)
+                .compactMap { id in (setGroups_?.allObjects as? [TemplateWorkoutSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
+        }
+        set {
+            templateSetGroupOrder = newValue.map { $0.id! }
+            setGroups_ = NSSet(array: newValue)
+        }
     }
     
     var numberOfSetGroups: Int {
-        setGroups?.array.count ?? 0
+        setGroups.count
     }
     
     var exercises: [Exercise] {
         var result = [Exercise]()
-        if let array = setGroups?.array as? [TemplateWorkoutSetGroup] {
-            for setGroup in array {
-                if let exercise = setGroup.exercise {
-                    result.append(exercise)
-                }
+        for setGroup in setGroups {
+            if let exercise = setGroup.exercise {
+                result.append(exercise)
             }
         }
         return result

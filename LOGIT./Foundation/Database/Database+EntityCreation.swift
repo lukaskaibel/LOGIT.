@@ -18,23 +18,24 @@ extension Database {
         let workout = Workout(context: context)
         workout.name = name
         workout.date = date
-        workout.setGroups = NSOrderedSet(array: setGroups)
+        workout.setGroups = setGroups
         return workout
     }
     
     @discardableResult
-    func newWorkoutSetGroup(sets: [WorkoutSet]? = nil,
+    func newWorkoutSetGroup(sets: [WorkoutSet] = [],
                             createFirstSetAutomatically: Bool = true,
                             exercise: Exercise? = nil,
                             workout: Workout? = nil) -> WorkoutSetGroup {
         let setGroup = WorkoutSetGroup(context: context)
-        if let sets = sets, !sets.isEmpty {
-            setGroup.sets = NSOrderedSet(array: sets)
+        setGroup.id = UUID()
+        if !sets.isEmpty {
+            setGroup.sets = sets
         } else if createFirstSetAutomatically {
             newStandardSet(setGroup: setGroup)
         }
-        setGroup.exercise = exercise
-        setGroup.workout = workout
+        exercise?.setGroups.append(setGroup)
+        workout?.setGroups.append(setGroup)
         return setGroup
     }
     
@@ -43,9 +44,10 @@ extension Database {
                        weight: Int = 0,
                        setGroup: WorkoutSetGroup? = nil) -> StandardSet {
         let standardSet = StandardSet(context: context)
+        standardSet.id = UUID()
         standardSet.repetitions = Int64(repetitions)
         standardSet.weight = Int64(weight)
-        standardSet.setGroup = setGroup
+        setGroup?.sets.append(standardSet)
         return standardSet
     }
     
@@ -54,9 +56,10 @@ extension Database {
                     weights: [Int] = [0],
                     setGroup: WorkoutSetGroup? = nil) -> DropSet {
         let dropSet = DropSet(context: context)
+        dropSet.id = UUID()
         dropSet.repetitions = repetitions.map { Int64($0) }
         dropSet.weights = weights.map { Int64($0) }
-        dropSet.setGroup = setGroup
+        setGroup?.sets.append(dropSet)
         return dropSet
     }
     
@@ -75,11 +78,12 @@ extension Database {
                      weightSecondExercise: Int = 0,
                      setGroup: WorkoutSetGroup? = nil) -> SuperSet {
         let superSet = SuperSet(context: context)
+        superSet.id = UUID()
         superSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
         superSet.repetitionsSecondExercise = Int64(repeptitionsSecondExercise)
         superSet.weightFirstExercise = Int64(weightFirstExercise)
         superSet.weightSecondExercise = Int64(weightSecondExercise)
-        superSet.setGroup = setGroup
+        setGroup?.sets.append(superSet)
         return superSet
     }
     
@@ -94,13 +98,11 @@ extension Database {
     @discardableResult
     func newExercise(name: String = "",
                      muscleGroup: MuscleGroup? = nil,
-                     setGroups: [WorkoutSetGroup]? = nil) -> Exercise {
+                     setGroups: [WorkoutSetGroup] = []) -> Exercise {
         let exercise = Exercise(context: context)
         exercise.name = name
         exercise.muscleGroup = muscleGroup
-        if let setGroups = setGroups {
-            exercise.setGroups = NSOrderedSet(array: setGroups)
-        }
+        exercise.setGroups = setGroups
         return exercise
     }
     
@@ -112,7 +114,7 @@ extension Database {
         let templateWorkout = TemplateWorkout(context: context)
         templateWorkout.name = name
         templateWorkout.creationDate = Date.now
-        templateWorkout.setGroups = NSOrderedSet(array: setGroups)
+        templateWorkout.setGroups = setGroups
         return templateWorkout
     }
     
@@ -120,11 +122,11 @@ extension Database {
     func newTemplateWorkout(from workout: Workout) -> TemplateWorkout {
         let template = newTemplateWorkout(name: workout.name ?? "")
         workout.template = template
-        for setGroup in workout.setGroups?.array as? [WorkoutSetGroup] ?? .emptyList {
+        for setGroup in workout.setGroups {
             let templateSetGroup = newTemplateWorkoutSetGroup(createFirstSetAutomatically: false,
                                                               exercise: setGroup.exercise,
                                                               templateWorkout: template)
-            for workoutSet in setGroup.sets?.array as? [WorkoutSet] ?? .emptyList {
+            for workoutSet in setGroup.sets {
                 newTemplateSet(from: workoutSet, templateSetGroup: templateSetGroup)
             }
         }
@@ -137,13 +139,15 @@ extension Database {
                                     exercise: Exercise? = nil,
                                     templateWorkout: TemplateWorkout? = nil) -> TemplateWorkoutSetGroup {
         let templateSetGroup = TemplateWorkoutSetGroup(context: context)
+        templateSetGroup.id = UUID()
         if let templateSets = templateSets, !templateSets.isEmpty {
-            templateSetGroup.sets = NSOrderedSet(array: templateSets)
+            templateSetGroup.sets = templateSets
         } else if createFirstSetAutomatically {
             newTemplateStandardSet(setGroup: templateSetGroup)
         }
         templateSetGroup.exercise = exercise
-        templateSetGroup.workout = templateWorkout
+        exercise?.templateSetGroupOrder?.append(templateSetGroup.id!)
+        templateWorkout?.setGroups.append(templateSetGroup)
         return templateSetGroup
     }
     
@@ -152,24 +156,27 @@ extension Database {
                         templateSetGroup: TemplateWorkoutSetGroup? = nil) -> TemplateSet {
         if let standardSet = workoutSet as? StandardSet {
             let templateStandardSet = TemplateStandardSet(context: context)
+            templateStandardSet.id = UUID()
             templateStandardSet.repetitions = standardSet.repetitions
             templateStandardSet.weight = standardSet.weight
-            templateStandardSet.setGroup = templateSetGroup
+            templateSetGroup?.sets.append(templateStandardSet)
             return templateStandardSet
 
         } else if let dropSet = workoutSet as? DropSet {
             let templateDropSet = TemplateDropSet(context: context)
+            templateDropSet.id = UUID()
             templateDropSet.repetitions = dropSet.repetitions
             templateDropSet.weights = dropSet.weights
-            templateDropSet.setGroup = templateSetGroup
+            templateSetGroup?.sets.append(templateDropSet)
             return templateDropSet
         } else if let superSet = workoutSet as? SuperSet {
             let templateSuperSet = TemplateSuperSet(context: context)
+            templateSuperSet.id = UUID()
             templateSuperSet.repetitionsFirstExercise = superSet.repetitionsFirstExercise
             templateSuperSet.repetitionsSecondExercise = superSet.repetitionsSecondExercise
             templateSuperSet.weightFirstExercise = superSet.weightFirstExercise
             templateSuperSet.weightSecondExercise = superSet.weightSecondExercise
-            templateSuperSet.setGroup = templateSetGroup
+            templateSetGroup?.sets.append(templateSuperSet)
             templateSetGroup?.secondaryExercise = superSet.secondaryExercise
             return templateSuperSet
         } else {
@@ -179,12 +186,13 @@ extension Database {
     
     @discardableResult
     func newTemplateStandardSet(repetitions: Int = 0,
-                               weight: Int = 0,
-                               setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateStandardSet {
+                                weight: Int = 0,
+                                setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateStandardSet {
         let templateWorkoutSet = TemplateStandardSet(context: context)
+        templateWorkoutSet.id = UUID()
         templateWorkoutSet.repetitions = Int64(repetitions)
         templateWorkoutSet.weight = Int64(weight)
-        templateWorkoutSet.setGroup = setGroup
+        setGroup?.sets.append(templateWorkoutSet)
         return templateWorkoutSet
     }
         
@@ -193,9 +201,10 @@ extension Database {
                             weights: [Int] = [0],
                             templateSetGroup: TemplateWorkoutSetGroup? = nil) -> TemplateDropSet {
         let templateDropSet = TemplateDropSet(context: context)
+        templateDropSet.id = UUID()
         templateDropSet.repetitions = repetitions.map { Int64($0) }
         templateDropSet.weights = weights.map { Int64($0) }
-        templateDropSet.setGroup = templateSetGroup
+        templateSetGroup?.sets.append(templateDropSet)
         return templateDropSet
     }
 
@@ -206,11 +215,12 @@ extension Database {
                              weightSecondExercise: Int = 0,
                              setGroup: TemplateWorkoutSetGroup? = nil) -> TemplateSuperSet {
         let templateSuperSet = TemplateSuperSet(context: context)
+        templateSuperSet.id = UUID()
         templateSuperSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
         templateSuperSet.repetitionsSecondExercise = Int64(repetitionsSecondExercise)
         templateSuperSet.weightFirstExercise = Int64(weightFirstExercise)
         templateSuperSet.weightSecondExercise = Int64(weightSecondExercise)
-        templateSuperSet.setGroup = setGroup
+        setGroup?.sets.append(templateSuperSet)
         return templateSuperSet
     }
     
