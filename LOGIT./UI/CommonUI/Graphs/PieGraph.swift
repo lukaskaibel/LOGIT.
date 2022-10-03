@@ -9,16 +9,46 @@ import SwiftUI
 
 struct PieGraph: View {
     
+    enum Configuration {
+        case normal, small
+    }
+    
     let items: [Item]
-    private let circleLineWidth: CGFloat = 15
+    let circleLineWidth: CGFloat
+    let configuration: Configuration
+    let showZeroValuesInLegend: Bool
+    
+    init(items: [Item], configuration: Configuration = .normal, showZeroValuesInLegend: Bool = false) {
+        self.items = items.filter { showZeroValuesInLegend ? true : $0.amount > 0 }
+        self.circleLineWidth = configuration == .small ? 10 : 15
+        self.configuration = configuration
+        self.showZeroValuesInLegend = showZeroValuesInLegend
+    }
     
     var body: some View {
         HStack {
+            if configuration == .normal {
+                HStack {
+                    Grid(verticalSpacing: 5) {
+                        ForEach(0..<((items.count+1)/2), id:\.self) { index in
+                            GridRow {
+                                HStack {
+                                    itemView(for: items[index*2])
+                                    if items.indices.contains(index*2+1) {
+                                        itemView(for: items[index*2+1])
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
             ZStack {
                 ForEach(items) { item in
                     Circle()
                         .trim(from: trimFrom(for: item), to: trimTo(for: item))
-                        .stroke(lineWidth: 15)
+                        .stroke(lineWidth: circleLineWidth)
                         .rotation(Angle(degrees: -90))
                         .foregroundColor(item.color)
                 }
@@ -27,21 +57,22 @@ struct PieGraph: View {
                     .stroke(lineWidth: circleLineWidth)
                     .foregroundColor(.white)
                     .shadow(radius: 4)
-            }
-            VStack(alignment: .leading) {
-                ForEach(items) { item in
-                    HStack {
-                        Text(String(item.amount))
-                            .font(.caption.weight(.medium))
-                            .foregroundColor(.white)
-                            .padding(5)
-                            .background(item.color)
-                            .clipShape(Circle())
-                        Text(item.title)
-                    }
-                }
-            }.frame(maxWidth: .infinity)
+            }.frame(minHeight: configuration == .small ? 0 : 100)
+                .padding(configuration == .small ? 5 : 15)
         }
+    }
+    
+    @ViewBuilder
+    private func itemView(for item: Item) -> some View {
+        VStack(alignment: .leading) {
+            Text(item.title)
+            UnitView(value: "\(percentage(for: item))", unit: "%  (\(item.amount))")
+                .foregroundColor(item.amount > 0 ? item.color : .secondaryLabel)
+        }.frame(minWidth: 80, alignment: .leading)
+    }
+    
+    private func percentage(for item: Item) -> Int {
+        Int(round(Float(item.amount)/Float(items.map(\.amount).reduce(0, +))*100))
     }
         
     private func trimFrom(for item: Item) -> CGFloat {
@@ -70,20 +101,15 @@ struct PieGraph: View {
 
 struct PieGraph_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            Text("Workouts per Muscle-Group")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .sectionHeaderStyle()
             PieGraph(items: [PieGraph.Item(title: "Chest", amount: 4, color: .blue),
                              PieGraph.Item(title: "Back", amount: 3, color: .green),
                              PieGraph.Item(title: "Arms", amount: 4, color: .yellow),
                              PieGraph.Item(title: "Shoulders", amount: 2, color: .purple),
-                             PieGraph.Item(title: "Abdominals", amount: 1, color: .cyan),
+                             PieGraph.Item(title: "Abs", amount: 1, color: .cyan),
                              PieGraph.Item(title: "Legs", amount: 2, color: .red)
-                            ])
-            .frame(maxHeight: 200)
-
-        }
-        .tileStyle()
+                            ], configuration: .small)
+            .frame(height: 40)
+            .tileStyle()
+            .padding()
     }
 }

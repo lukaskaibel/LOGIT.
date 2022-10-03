@@ -23,41 +23,19 @@ struct ExerciseDetailView: View {
     
     var body: some View {
         List {
-            VStack {
-                VStack(alignment: .leading) {
-                    Text(NSLocalizedString("personalBest", comment: ""))
-                        .foregroundColor(.secondaryLabel)
-                    HStack {
-                        Text("\(exerciseDetail.personalBest(for: selectedAttribute)) \(selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
-                            .font(.title.weight(.medium))
-                        Spacer()
-                        /*
-                        if let selectedIndexInGraph = selectedIndexInGraph {
-                            Text("\(exerciseDetail.getGraphYValues(for: exerciseDetail.selectedAttribute)[selectedIndexInGraph]) \(exerciseDetail.selectedAttribute == .repetitions ? "reps" : WeightUnit.used.rawValue)")
-                                .foregroundColor(.accentColor)
-                                .font(.title.weight(.medium))
-                        }
-                         */
-                    }
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                Chart {
-                    ForEach(exerciseDetail.personalBests(for: selectedAttribute, per: selectedCalendarComponent)) { chartEntry in
-                        LineMark(x: .value("CalendarComponent", chartEntry.xValue),
-                                 y: .value(selectedAttribute.rawValue, chartEntry.yValue))
-                        AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
-                                 y: .value(selectedAttribute.rawValue, chartEntry.yValue))
-                        .foregroundStyle(.linearGradient(colors: [.accentColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
-                    }
-                }.frame(height: 180)
-                Picker("Calendar Component", selection: $selectedCalendarComponent) {
-                    Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
-                    Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
-                    Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
-                }.pickerStyle(.segmented)
-                    .padding(.top)
-
-            }.tileStyle()
-                .listRowSeparator(.hidden)
+            Section {
+                header
+            }.padding(.bottom)
+                .listRowSeparator(.hidden, edges: .top)
+            Section {
+                exerciseInfo
+            }
+            Section {
+                weightGraph
+            } header: {
+                Text(NSLocalizedString("weight", comment: ""))
+                    .sectionHeaderStyle()
+            }.listRowSeparator(.hidden)
             Section(content: {
                 ForEach(exerciseDetail.sets) { workoutSet in
                     if workoutSet.hasEntry {
@@ -100,20 +78,20 @@ struct ExerciseDetailView: View {
                             .font(.body)
                         }
                     }
-                    HStack(spacing: WorkoutDetailView.columnSpace) {
+                    HStack(spacing: SetGroupDetailView.columnSpace) {
                         Text(NSLocalizedString("date", comment: ""))
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: WorkoutDetailView.columnWidth, alignment: .leading)
+                            .frame(maxWidth: SetGroupDetailView.columnWidth, alignment: .leading)
                         Spacer()
                         Text(NSLocalizedString("reps", comment: "").uppercased())
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: WorkoutDetailView.columnWidth)
+                            .frame(maxWidth: SetGroupDetailView.columnWidth)
                         Text(WeightUnit.used.rawValue.uppercased())
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: WorkoutDetailView.columnWidth)
+                            .frame(maxWidth: SetGroupDetailView.columnWidth)
                     }
                 }.listRowSeparator(.hidden, edges: .top)
             }, footer: {
@@ -125,7 +103,6 @@ struct ExerciseDetailView: View {
                     .listRowSeparator(.hidden, edges: .bottom)
             })
         }.listStyle(.plain)
-        .navigationTitle(exerciseDetail.exercise.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -180,6 +157,54 @@ struct ExerciseDetailView: View {
             .listRowSeparator(.hidden)
     }
      */
+    
+    // MARK: - Supporting Views
+    
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(exerciseDetail.exercise.name ?? "")
+                .font(.largeTitle.weight(.bold))
+                .lineLimit(2)
+            Text(exerciseDetail.exercise.muscleGroup?.description.capitalized ?? "")
+                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .clear)
+        }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var exerciseInfo: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("maxReps", comment: ""))
+                UnitView(value: String(exerciseDetail.personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
+                    .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .label)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("maxWeight", comment: ""))
+                UnitView(value: String(exerciseDetail.personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)
+                    .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .label)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    private var weightGraph: some View {
+        VStack {
+            Chart {
+                ForEach(exerciseDetail.personalBests(for: selectedAttribute, per: selectedCalendarComponent)) { chartEntry in
+                    LineMark(x: .value("CalendarComponent", chartEntry.xValue),
+                             y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                    AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
+                             y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                    .foregroundStyle(.linearGradient(colors: [.accentColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
+                }
+            }.frame(height: 180)
+            Picker("Calendar Component", selection: $selectedCalendarComponent) {
+                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
+                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
+                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
+            }.pickerStyle(.segmented)
+                .padding(.top)
+        }.tileStyle()
+    }
     
     var dividerCircle: some View {
         Circle()

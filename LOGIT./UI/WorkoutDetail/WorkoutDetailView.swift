@@ -19,44 +19,38 @@ struct WorkoutDetailView: View {
     @State private var isShowingNewTemplate: Bool = false
     @State private var isShowingTemplateDetail: Bool = false
     
-    static let columnWidth: CGFloat = 70
-    static let columnSpace: CGFloat = 20
-    
     var body: some View {
         List {
-            WorkoutHeader
-            ForEach(workoutDetail.setGroups) { setGroup in
-                Section {
-                    VStack(spacing: 0) {
-                        Divider()
-                            .padding(.leading)
-                        ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                            VStack(alignment: .trailing, spacing: 0) {
-                                EmptyView()
-                                    .frame(height: 1)
-                                HStack {
-                                    Text("\(NSLocalizedString("set", comment: "")) \((setGroup.index(of: workoutSet) ?? 0) + 1)")
-                                        .font(.body.monospacedDigit())
-                                    WorkoutSetCell(workoutSet: workoutSet)
-                                        .padding(.vertical, 8)
-                                        .padding(.horizontal)
-                                }
-                                Divider()
-                            }.padding(.leading)
-                        }
-                    }.listRowSeparator(.hidden)
-                } header: {
-                    Header(for: setGroup)
-                        .listRowInsets(EdgeInsets())
-                }.padding(.leading)
-            }.listRowInsets(EdgeInsets())
+            Section {
+                workoutHeader
+            }.padding(.bottom)
+                .listRowSeparator(.hidden, edges: .top)
+            Section {
+                workoutInfo
+            }
+            Section {
+                setsPerMuscleGroup
+            } header: {
+                Text("Sets per Muscle Group")
+                    .sectionHeaderStyle()
+            }.listRowSeparator(.hidden)
+            Section {
+                ForEach(workoutDetail.setGroups) { setGroup in
+                    SetGroupDetailView(setGroup: setGroup,
+                                       indexInWorkout: workoutDetail.workout.index(of: setGroup) ?? 1)
+                }
+            } header: {
+                Text("Summary")
+                    .sectionHeaderStyle()
+            }.listRowSeparator(.hidden)
             if canNavigateToTemplate {
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(height: 1)
-                    .listRowSeparator(.hidden)
-                TemplateView
-                    .buttonStyle(PlainButtonStyle())
+                Section {
+                    templateView
+                        .buttonStyle(PlainButtonStyle())
+                } header: {
+                    Text(NSLocalizedString("template", comment: ""))
+                        .sectionHeaderStyle()
+                }
             }
         }.listStyle(.plain)
             .navigationTitle(workoutDetail.workout.date?.description(.medium) ?? "")
@@ -96,28 +90,54 @@ struct WorkoutDetailView: View {
         
     //MARK: - Supporting Views
     
-    private var WorkoutHeader: some View {
-        HStack {
-            Image(systemName: "swift")
-                .font(.title)
-                .foregroundColor(.accentColor)
-                .padding()
-                .background(LinearGradient(colors: [.accentColor.opacity(0.03), .accentColor.opacity(0.3)],
-                                           startPoint: .leading,
-                                           endPoint: .trailing))
-                .clipShape(Circle())
-            VStack(alignment: .leading) {
-                Text(workoutDetail.workout.name ?? "No Name")
-                    .font(.title3.weight(.bold))
-                    .lineLimit(1)
-                Text("\(workoutDetail.workout.numberOfSetGroups) \(NSLocalizedString("exercise\(workoutDetail.workout.numberOfSetGroups == 1 ? "" : "s")", comment: "")) , \(workoutDetail.workout.numberOfSets) \(NSLocalizedString("set\(workoutDetail.workout.numberOfSets == 1 ? "" : "s")", comment: ""))")
-                    .foregroundColor(.accentColor)
-            }
-            Spacer()
-        }.listRowSeparator(.hidden)
+    private var workoutHeader: some View {
+        Text(workoutDetail.workout.name ?? "")
+            .font(.largeTitle.weight(.bold))
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var TemplateView: some View {
+    private var workoutInfo: some View {
+        VStack(spacing: 10) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("starttime", comment: ""))
+                    Text("\(workoutDetail.workout.date?.timeString ?? "")")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("duration", comment: ""))
+                    Text("\(workoutDetail.workoutDurationString)")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("exercises", comment: ""))
+                    Text("\(workoutDetail.workout.numberOfSetGroups)")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("sets", comment: ""))
+                    Text("\(workoutDetail.workout.numberOfSets)")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+    
+    private var setsPerMuscleGroup: some View {
+        PieGraph(items: workoutDetail.workout.muscleGroupOccurances
+            .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
+                                 amount: $0.1,
+                                 color: $0.0.color) }
+        ).tileStyle()
+    }
+    
+    private var templateView: some View {
         Section(content: {
             Button(action: {
                 if workoutDetail.workout.template == nil {
@@ -131,16 +151,13 @@ struct WorkoutDetailView: View {
                         Image(systemName: "plus")
                             .foregroundColor(.accentColor)
                             .font(.body.weight(.medium))
-                    } else {
-                        Text(NSLocalizedString("template", comment: ""))
-                            .foregroundColor(.secondaryLabel)
-                        Spacer()
                     }
                     Text(workoutDetail.workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
                         .fontWeight(.medium)
                         .lineLimit(1)
                         .foregroundColor(.accentColor)
                     if workoutDetail.workout.template != nil {
+                        Spacer()
                         Image(systemName: "chevron.right")
                             .foregroundColor(.accentColor)
                             .font(.body.weight(.medium))
@@ -157,60 +174,7 @@ struct WorkoutDetailView: View {
                 .foregroundColor(.secondaryLabel)
                 .padding(.horizontal)
         }).listRowSeparator(.hidden)
-    }
-    
-    @ViewBuilder
-    private func Header(for setGroup: WorkoutSetGroup) -> some View {
-        VStack(spacing: 3) {
-            HStack {
-                if let exercise = setGroup.exercise {
-                    Text("\((workoutDetail.workout.index(of: setGroup) ?? 0) + 1).")
-                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
-                        HStack(spacing: 3) {
-                            Text("\(exercise.name ?? "")")
-                                .lineLimit(1)
-                                .multilineTextAlignment(.leading)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
-                        }
-                    }
-                    Spacer()
-                }
-            }.font(.body.weight(.semibold))
-                .foregroundColor(.label)
-            if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
-                HStack {
-                    Image(systemName: "arrow.turn.down.right")
-                        .font(.caption) 
-                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: secondaryExercise.objectID))) {
-                        HStack(spacing: 3) {
-                            Text("\(secondaryExercise.name ?? "")")
-                                .lineLimit(1)
-                                .multilineTextAlignment(.leading)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
-                        }
-                    }
-                    Spacer()
-                }.padding(.leading, 30)
-            }
-            HStack(spacing: WorkoutDetailView.columnSpace) {
-                Spacer()
-                Text(NSLocalizedString("reps", comment: "").uppercased())
-                    .font(.footnote)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(maxWidth: WorkoutDetailView.columnWidth)
-                Text(WeightUnit.used.rawValue.uppercased())
-                    .font(.footnote)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(maxWidth: WorkoutDetailView.columnWidth)
-            }.padding(.horizontal)
-        }.font(.body.weight(.semibold))
-            .foregroundColor(.label)
-            .padding(.top)
-            .padding(.bottom, 5)
+        
     }
     
 }

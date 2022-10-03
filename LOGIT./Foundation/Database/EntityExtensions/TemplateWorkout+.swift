@@ -47,6 +47,10 @@ extension TemplateWorkout {
         return result
     }
     
+    func index(of templateSetGroup: TemplateWorkoutSetGroup) -> Int? {
+        setGroups.firstIndex(of: templateSetGroup)
+    }
+    
     var muscleGroups: [MuscleGroup] {
         exercises
             .compactMap { $0.muscleGroup }

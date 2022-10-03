@@ -31,6 +31,8 @@
 "deleteWorkoutDescription" = "Delete Workout? This action cannot be undone.";
 "create" = "Create";
 
+"duration" = "Duration";
+
 "showAll" = "Show All";
 "sortBy" = "Sort by";
 "home" = "Home";
@@ -148,9 +150,13 @@
 "back" = "Back";
 "arms" = "Arms";
 "shoulders" = "Shoulders";
-"abdominals" = "Abdominals";
+"abdominals" = "Abs";
 "legs" = "Legs";
 
 "normalset" = "Normal";
 "dropset" = "Dropset";
 "superset" = "Superset";
+
+"starttime" = "Start Time";
+"maxReps" = "Max Reps";
+"maxWeight" = "Max Weight";

@@ -20,7 +20,19 @@ struct WorkoutTemplateDetailView: View {
     
     var body: some View {
         List {
-            
+            Section {
+                templateHeader
+            }.listRowSeparator(.hidden)
+            Section {
+                ForEach(workoutTemplateDetail.workoutTemplate.setGroups) { templateSetGroup in
+                    TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
+                                               indexInWorkout: workoutTemplateDetail.workoutTemplate.index(of: templateSetGroup) ?? 0)
+                }
+            } header: {
+                Text("Summary")
+                    .sectionHeaderStyle()
+            }.listRowSeparator(.hidden)
+            /*
             Section {
                 VStack {
                     HStack {
@@ -48,6 +60,7 @@ struct WorkoutTemplateDetailView: View {
                 }.tileStyle()
                     .listRowSeparator(.hidden)
             }
+            */
             Section(content: {
                 ForEach(workoutTemplateDetail.workoutTemplate.workouts, id:\.objectID) { workout in
                     ZStack {
@@ -69,19 +82,10 @@ struct WorkoutTemplateDetailView: View {
                     .sectionHeaderStyle()
             })
         }.listStyle(.plain)
-            .navigationTitle(workoutTemplateDetail.workoutTemplate.name ?? "")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (workoutTemplateDetail.workoutTemplate.date?.description(.short) ?? ""))
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingTemplateInfoAlert = true
-                    }) {
-                        Text(NSLocalizedString("template", comment: ""))
-                            .font(.caption)
-                            .foregroundColor(.secondaryLabel)
-                            .padding(5)
-                            .background(Color.fill)
-                            .clipShape(Capsule())
-                    }
                     Menu(content: {
                         Button(action: { showingTemplateEditor = true }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
                         Button(role: .destructive, action: {
@@ -107,5 +111,21 @@ struct WorkoutTemplateDetailView: View {
                 TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutTemplateDetail.workoutTemplate))
             }
     }
+    
+    //MARK: - Supporting Views
+    
+    private var templateHeader: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(workoutTemplateDetail.workoutTemplate.name ?? "")
+                .font(.largeTitle.weight(.bold))
+                .lineLimit(2)
+            HStack {
+                Image(systemName: "list.bullet.rectangle.portrait")
+                Text(NSLocalizedString("template", comment: ""))
+            }.font(.system(.title3, design: .rounded, weight: .semibold))
+                .foregroundColor(.secondaryLabel)
+        }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
 }
 

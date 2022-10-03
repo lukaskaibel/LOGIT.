@@ -32,6 +32,10 @@ final class WorkoutDetail: ViewModel {
         workout.setGroups
     }
     
+    var workoutsFromTemplate: [Workout] {
+        workout.template?.workouts ?? .emptyList
+    }
+    
     var workoutTimeString: String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -40,6 +44,13 @@ final class WorkoutDetail: ViewModel {
     
     var workoutDateString: String {
         workout.date?.description(.long) ?? ""
+    }
+    
+    var workoutDurationString: String {
+        guard let start = workout.date, let end = workout.endDate else { return "0:00" }
+        let hours = Calendar.current.dateComponents([.hour], from: start, to: end).hour ?? 0
+        let minutes = Calendar.current.dateComponents([.minute], from: start, to: end).minute ?? 0
+        return "\(hours):\(minutes < 10 ? "0" : "")\(minutes)"
     }
             
     func deleteWorkout() {

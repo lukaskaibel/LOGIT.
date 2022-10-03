@@ -25,6 +25,9 @@ extension WorkoutSet {
         setGroup?.workout
     }
     
+    public var isSuperSet: Bool { (self as? SuperSet) != nil }
+    public var isDropSet: Bool { (self as? DropSet) != nil }
+    
     public func match(_ templateSet: TemplateSet) {
         if let standardSet = self as? StandardSet, let templateStandardSet = templateSet as? TemplateStandardSet {
             standardSet.repetitions = templateStandardSet.repetitions

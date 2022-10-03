@@ -37,5 +37,10 @@ extension Date {
         formatter.dateFormat = "MMMM YYYY"
         return formatter.string(from: self)
     }
+    
+    var timeString: String {
+        let minute = Calendar.current.component(.minute, from: self)
+        return "\(Calendar.current.component(.hour, from: self)):\(minute/10)\(minute%10)"
+    }
 
 }

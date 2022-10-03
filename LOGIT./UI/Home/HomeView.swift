@@ -20,42 +20,51 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             List {
-                Group {
-                    TargetWorkoutsView
-                    Section(content: {
-                        ForEach(home.recentWorkouts, id:\.objectID) { (workout: Workout) in
-                            ZStack {
-                                WorkoutCell(workout: workout)
-                                NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(true),
-                                                                              workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
-                                    EmptyView()
-                                }.opacity(0).buttonStyle(PlainButtonStyle())
-                            }
-                            .padding(.horizontal)
-                            .padding(.vertical, 3)
-                                .listRowSeparator(.hidden)
-                                .listRowInsets(EdgeInsets())
-                        }.onDelete { indexSet in
-                            for index in indexSet {
-                                home.delete(workout: home.recentWorkouts[index])
-                            }
+                Section {
+                    targetWorkoutsView
+                } header: {
+                    Text("Workout Target")
+                        .sectionHeaderStyle()
+                }.listRowSeparator(.hidden)
+                Section {
+                    muscleGroupPercentageView
+                } header: {
+                    Text("Sets per Muscle Group")
+                        .sectionHeaderStyle()
+                }.listRowSeparator(.hidden)
+                Section(content: {
+                    ForEach(home.recentWorkouts, id:\.objectID) { (workout: Workout) in
+                        ZStack {
+                            WorkoutCell(workout: workout)
+                            NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(true),
+                                                                          workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
+                                EmptyView()
+                            }.opacity(0)
                         }
-                    }, header: {
-                        HStack {
-                            Text(NSLocalizedString("recentWorkouts", comment: ""))
-                                .foregroundColor(.label)
-                                .font(.title2.weight(.bold))
-                                .fixedSize()
-                            Spacer()
-                            NavigationLink(destination: AllWorkoutsView()) {
-                                Text(NSLocalizedString("showAll", comment: ""))
-                                    .font(.body)
-                                    .foregroundColor(.accentColor)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                        }.listRowSeparator(.hidden, edges: .top)
-                    })
-                }
+                        .padding(.horizontal)
+                        .padding(.vertical, 3)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                    }.onDelete { indexSet in
+                        for index in indexSet {
+                            home.delete(workout: home.recentWorkouts[index])
+                        }
+                    }
+                }, header: {
+                    HStack {
+                        Text(NSLocalizedString("recentWorkouts", comment: ""))
+                            .foregroundColor(.label)
+                            .font(.title2.weight(.bold))
+                            .fixedSize()
+                        Spacer()
+                        NavigationLink(destination: AllWorkoutsView()) {
+                            Text(NSLocalizedString("showAll", comment: ""))
+                                .font(.body)
+                                .foregroundColor(.accentColor)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                    }.listRowSeparator(.hidden, edges: .top)
+                })
                 Spacer(minLength: 50)
                     .listRowSeparator(.hidden)
             }.listStyle(.plain)
@@ -88,50 +97,56 @@ struct HomeView: View {
         }
     }
     
-    private var TargetWorkoutsView: some View {
-        Section(content: {
-            VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("workoutTarget", comment: ""))
+    private var muscleGroupPercentageView: some View {
+        PieGraph(items: home.getOverallMuscleGroupOccurances()
+                                .map { PieGraph.Item(title: $0.0.description.capitalized,
+                                                     amount: $0.1,
+                                                     color: $0.0.color) },
+                 showZeroValuesInLegend: true)
+            .tileStyle()
+    }
+    
+    private var targetWorkoutsView: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "target")
+                        Text(NSLocalizedString("target", comment: ""))
+                    }
+                    UnitView(value: "\(targetPerWeek)", unit: "/"+NSLocalizedString("week", comment: ""))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "flame.fill")
+                        Text(NSLocalizedString("Streak", comment: ""))
+                    }
+                    UnitView(value: "\(targetPerWeek)", unit: NSLocalizedString("weeks", comment: ""))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading) {
+                    HStack(spacing: 2) {
+                        Image(systemName: "calendar")
+                        Text(NSLocalizedString("Last", comment: ""))
+                    }
+                    Text("\(home.workouts.last?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+            TargetPerWeekGraph(xValues: home.getWeeksString().reversed(),
+                              yValues: home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed(),
+                              target: targetPerWeek)
+                .frame(height: 170)
+                .overlay {
+                    if home.workouts.isEmpty {
+                        Text("No Data")
+                            .fontWeight(.bold)
                             .foregroundColor(.secondaryLabel)
-                        HStack(alignment: .lastTextBaseline) {
-                            Text("\(targetPerWeek) \(NSLocalizedString("perWeek", comment: ""))")
-                                .font(.title.weight(.medium))
-                            Spacer()
-                            if let workoutsThisWeek = home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed().last {
-                                if workoutsThisWeek >= targetPerWeek {
-                                    HStack(spacing: 3) {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .font(.title3.weight(.bold))
-                                        Text(NSLocalizedString("completed", comment: ""))
-                                            .font(.title3)
-                                    }.foregroundColor(.accentColor)
-                                } else {
-                                    HStack(spacing: 5) {
-                                        Image(systemName: "arrow.right.circle.fill")
-                                        Text("\(description(for: targetPerWeek - workoutsThisWeek)) \(NSLocalizedString("toGo", comment: ""))")
-                                    }.foregroundColor(.secondaryLabel)
-                                        .font(.title3)
-                                }
-                            }
-                        }
                     }
-                    Spacer()
                 }
-                TargetPerWeekGraph(xValues: home.getWeeksString().reversed(),
-                                  yValues: home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed(),
-                                  target: targetPerWeek)
-                    .frame(height: 170)
-                    .overlay {
-                        if home.workouts.isEmpty {
-                            Text("No Data")
-                                .fontWeight(.bold)
-                                .foregroundColor(.secondaryLabel)
-                        }
-                    }
-            }.tileStyle()
-        }).listRowSeparator(.hidden)
+        }.tileStyle()
     }
     
     private func description(for digit: Int) -> String {

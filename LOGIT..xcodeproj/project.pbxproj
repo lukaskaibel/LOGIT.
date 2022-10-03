@@ -16,6 +16,8 @@
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
+		7944663828E8875300487092 /* SetGroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944663728E8875300487092 /* SetGroupDetailView.swift */; };
+		7944663C28E8C52E00487092 /* TemplateSetGroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944663B28E8C52E00487092 /* TemplateSetGroupDetailView.swift */; };
 		79457C38283AF20200411F03 /* WorkoutRecorderView+SetGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79457C37283AF20200411F03 /* WorkoutRecorderView+SetGroupCell.swift */; };
 		79457C3A283AF2DA00411F03 /* WorkoutRecorderView+ExerciseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79457C39283AF2DA00411F03 /* WorkoutRecorderView+ExerciseHeader.swift */; };
 		79457C3C283AF35D00411F03 /* WorkoutRecorderView+WorkoutSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79457C3B283AF35D00411F03 /* WorkoutRecorderView+WorkoutSetCell.swift */; };
@@ -52,6 +54,7 @@
 		79898A8827F86DC800935E05 /* TemplateWorkout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79898A8727F86DC800935E05 /* TemplateWorkout+.swift */; };
 		798CEE6B280C714F00114FEE /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CEE6A280C714F00114FEE /* ViewModel.swift */; };
 		798CEE6D280DC7CE00114FEE /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */; };
+		7990D90028E8796E00D43D10 /* WorkoutDoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7990D8FF28E8796E00D43D10 /* WorkoutDoneView.swift */; };
 		799AAF2A2787820300C8BF0C /* ExerciseDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF292787820300C8BF0C /* ExerciseDetail.swift */; };
 		799AAF2C2787831900C8BF0C /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF2B2787831900C8BF0C /* ExerciseDetailView.swift */; };
 		79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */; };
@@ -120,6 +123,8 @@
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		792F9740280AC65D0032761C /* Database+EntityCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityCreation.swift"; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
+		7944663728E8875300487092 /* SetGroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGroupDetailView.swift; sourceTree = "<group>"; };
+		7944663B28E8C52E00487092 /* TemplateSetGroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSetGroupDetailView.swift; sourceTree = "<group>"; };
 		79457C37283AF20200411F03 /* WorkoutRecorderView+SetGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderView+SetGroupCell.swift"; sourceTree = "<group>"; };
 		79457C39283AF2DA00411F03 /* WorkoutRecorderView+ExerciseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderView+ExerciseHeader.swift"; sourceTree = "<group>"; };
 		79457C3B283AF35D00411F03 /* WorkoutRecorderView+WorkoutSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderView+WorkoutSetCell.swift"; sourceTree = "<group>"; };
@@ -157,6 +162,7 @@
 		79898A8727F86DC800935E05 /* TemplateWorkout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateWorkout+.swift"; sourceTree = "<group>"; };
 		798CEE6A280C714F00114FEE /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
+		7990D8FF28E8796E00D43D10 /* WorkoutDoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDoneView.swift; sourceTree = "<group>"; };
 		799AAF292787820300C8BF0C /* ExerciseDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetail.swift; sourceTree = "<group>"; };
 		799AAF2B2787831900C8BF0C /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 		79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SuperSet+.swift"; sourceTree = "<group>"; };
@@ -313,6 +319,14 @@
 			path = WorkoutTemplateEditor;
 			sourceTree = "<group>";
 		};
+		7990D90128E8797100D43D10 /* WorkoutDone */ = {
+			isa = PBXGroup;
+			children = (
+				7990D8FF28E8796E00D43D10 /* WorkoutDoneView.swift */,
+			);
+			path = WorkoutDone;
+			sourceTree = "<group>";
+		};
 		799AAF28278781E900C8BF0C /* ExerciseDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,6 +375,7 @@
 				79F2D11D2800CCD600197E0A /* WorkoutTemplateDetail */,
 				79898A7E27F7B00400935E05 /* WorkoutTemplateEditor */,
 				7955EEAC27FDC2D10010693C /* WorkoutTemplateList */,
+				7990D90128E8797100D43D10 /* WorkoutDone */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -429,6 +444,7 @@
 				80E9FAF02700C42900C670D5 /* WorkoutCellView.swift */,
 				797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */,
 				80D9A7DA28860BB1000BF05E /* WorkoutCell.swift */,
+				7944663728E8875300487092 /* SetGroupDetailView.swift */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -438,6 +454,7 @@
 			children = (
 				79F2D11F2800CCFC00197E0A /* WorkoutTemplateDetail.swift */,
 				79F2D1212800CD0C00197E0A /* WorkoutTemplateDetailView.swift */,
+				7944663B28E8C52E00487092 /* TemplateSetGroupDetailView.swift */,
 			);
 			path = WorkoutTemplateDetail;
 			sourceTree = "<group>";
@@ -632,6 +649,7 @@
 				79F2D1222800CD0C00197E0A /* WorkoutTemplateDetailView.swift in Sources */,
 				79407A8B2772380C004F32A3 /* UnitView.swift in Sources */,
 				7955EEB427FDD8820010693C /* WorkoutRecorderStartScreen.swift in Sources */,
+				7944663C28E8C52E00487092 /* TemplateSetGroupDetailView.swift in Sources */,
 				79A934DF27C7F15600ED9321 /* WorkoutRecorder.swift in Sources */,
 				79A27AF8283D8F6A000A8EF7 /* TemplateSuperSet+.swift in Sources */,
 				79CD8BEC28240E010052D83C /* Calendar+.swift in Sources */,
@@ -683,6 +701,7 @@
 				7955EEB227FDC5680010693C /* WorkoutTemplateCell.swift in Sources */,
 				79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */,
 				79F2D1202800CCFC00197E0A /* WorkoutTemplateDetail.swift in Sources */,
+				7990D90028E8796E00D43D10 /* WorkoutDoneView.swift in Sources */,
 				795BFA3028384C07005E59FE /* TemplateSet+.swift in Sources */,
 				795D9B89282EAEE900866C06 /* WorkoutRecorderView+WorkoutSetEntryView.swift in Sources */,
 				79457C3C283AF35D00411F03 /* WorkoutRecorderView+WorkoutSetCell.swift in Sources */,
@@ -692,6 +711,7 @@
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,
 				8065AA6F2686667F00F53A5A /* LOGITApp.swift in Sources */,
+				7944663828E8875300487092 /* SetGroupDetailView.swift in Sources */,
 				79898A8027F7B02100935E05 /* TemplateWorkoutEditorView.swift in Sources */,
 				795D9B85282EAD3A00866C06 /* WorkoutRecorderView+StandardSetCell.swift in Sources */,
 				807163522887323B00BE5094 /* ProgressInWeekView.swift in Sources */,

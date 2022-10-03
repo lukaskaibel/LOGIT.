@@ -172,6 +172,7 @@ class WorkoutRecorder: ViewModel {
         if workout.name?.isEmpty ?? true {
             workout.name = Workout.getStandardName(for: Date())
         }
+        workout.endDate = .now
         database.save()
     }
     

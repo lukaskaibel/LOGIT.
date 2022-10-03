@@ -71,6 +71,14 @@ final class Home: ViewModel {
         return formatter.string(from: firstDayOfWeek)
     }
     
+    func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
+        Array(workouts
+            .reduce([:], { current, workout in
+                current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
+            })
+        ).sorted { $0.key.rawValue < $1.key.rawValue }
+    }
+    
     //MARK: Constants
     
     let numberOfWeeksInAnalysis = 5

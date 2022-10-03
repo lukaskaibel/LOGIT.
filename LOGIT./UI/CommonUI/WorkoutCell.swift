@@ -18,22 +18,18 @@ struct WorkoutCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Image("Chest")
-                    .foregroundColor(.accentColor)
-                    .padding(14)
-                    .background(LinearGradient(colors: [.accentColor.opacity(0.03), .accentColor.opacity(0.3)],
-                                               startPoint: .leading,
-                                               endPoint: .trailing))
-                    .clipShape(Circle())
-                VStack(alignment: .leading) {
-                    Text(workout.date?.description(.short) ?? "")
-                        .font(.footnote.weight(.medium))
-                        .foregroundColor(.secondaryLabel)
-                    Text(workout.name ?? "No name")
-                        .font(.headline)
-                        .lineLimit(1)
-                    Text(exercisesString)
-                        .lineLimit(1)
+                HStack(alignment: .top) {
+                    muscleGroupIndicator
+                    VStack(alignment: .leading) {
+                        Text(workout.date?.description(.short) ?? "")
+                            .font(.footnote.weight(.medium))
+                            .foregroundColor(.secondaryLabel)
+                        Text(workout.name ?? "No name")
+                            .font(.headline)
+                            .lineLimit(1)
+                        Text(exercisesString)
+                            .lineLimit(2, reservesSpace: true)
+                    }
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
@@ -43,6 +39,19 @@ struct WorkoutCell: View {
         }.padding(10)
             .background(Color.secondaryBackground)
             .cornerRadius(12)
+    }
+
+    private var muscleGroupIndicator: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                ForEach(workout.muscleGroupOccurances, id:\.self.0.rawValue) { muscleGroupOccurance in
+                    Rectangle()
+                        .foregroundColor(muscleGroupOccurance.0.color)
+                        .frame(maxHeight: geometry.size.height * CGFloat(muscleGroupOccurance.1)/CGFloat(workout.numberOfSets))
+                }
+            }
+        }.frame(width: 7, height: 80)
+            .clipShape(Capsule())
     }
     
     private var exercisesString: String {

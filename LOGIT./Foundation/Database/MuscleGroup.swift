@@ -5,7 +5,7 @@
 //  Created by Lukas Kaibel on 18.04.22.
 //
 
-import Foundation
+import SwiftUI
 
 enum MuscleGroup: String, Identifiable, CaseIterable {
     
@@ -15,6 +15,17 @@ enum MuscleGroup: String, Identifiable, CaseIterable {
     
     var description: String {
         NSLocalizedString(self.rawValue, comment: "")
+    }
+    
+    var color: Color {
+        switch self {
+        case .chest: return .mint
+        case .back: return .green
+        case .arms: return .orange
+        case .shoulders: return .purple
+        case .abdominals: return .yellow
+        case .legs: return .blue
+        }
     }
     
 }

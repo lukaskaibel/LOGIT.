@@ -16,11 +16,10 @@ struct UnitView: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Text(value)
-                .font(.body.weight(.medium).monospacedDigit())
-            Text(unit)
-                .font(.caption2.weight(.medium))
-            Spacer()
-        }.frame(minWidth: 60)
+                .font(.system(.title3, design: .rounded, weight: .bold))
+            Text(unit.uppercased())
+                .font(.system(.subheadline, design: .rounded, weight: .bold))
+        }
     }
     
 }
@@ -28,6 +27,6 @@ struct UnitView: View {
 
 struct UnitView_Previews: PreviewProvider {
     static var previews: some View {
-        UnitView(value: "12", unit: "RPS")
+        UnitView(value: "12", unit: "rps")
     }
 }

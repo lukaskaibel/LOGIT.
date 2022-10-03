@@ -40,14 +40,14 @@ struct WorkoutSetCell: View {
     private func SuperSetCell(for superSet: SuperSet) -> some View {
         VStack(alignment: .trailing) {
             HStack {
-                Text(superSet.exercise?.name ?? "")
+                Text("1")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                 WorkoutSetEntry(repetitions: Int(superSet.repetitionsFirstExercise),
                                 weight: Int(superSet.weightFirstExercise))
             }
             HStack {
-                Text(superSet.secondaryExercise?.name ?? "")
+                Text("2")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                 WorkoutSetEntry(repetitions: Int(superSet.repetitionsSecondExercise),
@@ -57,11 +57,13 @@ struct WorkoutSetCell: View {
     }
     
     private func WorkoutSetEntry(repetitions: Int, weight: Int) -> some View {
-        HStack(spacing: WorkoutDetailView.columnSpace) {
+        HStack(spacing: SetGroupDetailView.columnSpace) {
             Text(repetitions > 0 ? String(repetitions) : "")
-                .frame(maxWidth: WorkoutDetailView.columnWidth)
+                .font(.system(.body, design: .rounded, weight: .semibold))
+                .frame(maxWidth: SetGroupDetailView.columnWidth)
             Text(weight > 0 ? String(convertWeightForDisplaying(weight)) : "")
-                .frame(maxWidth: WorkoutDetailView.columnWidth)
+                .font(.system(.body, design: .rounded, weight: .semibold))
+                .frame(maxWidth: SetGroupDetailView.columnWidth)
         }.padding(.vertical, 5)
     }
             
