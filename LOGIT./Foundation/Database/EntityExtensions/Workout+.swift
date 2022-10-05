@@ -58,13 +58,13 @@ extension Workout {
     var muscleGroupOccurances: [(MuscleGroup, Int)] {
         Array(sets
             .compactMap({ $0.exercise?.muscleGroup })
-            .reduce(into: [:]) { $0[$1, default: 0] += 1 }
+            .reduce(into: [MuscleGroup:Int]()) { $0[$1, default: 0] += 1 }
             .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
         ).sorted { $0.key.rawValue < $1.key.rawValue }
     }
     
     private var allMuscleGroupZeroDict: [MuscleGroup:Int] {
-        MuscleGroup.allCases.reduce(into: [:], { $0[$1, default: 0] = 0 })
+        MuscleGroup.allCases.reduce(into: [MuscleGroup:Int](), { $0[$1, default: 0] = 0 })
     }
     
     func remove(setGroup: WorkoutSetGroup) {

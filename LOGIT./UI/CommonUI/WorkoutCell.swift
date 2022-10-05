@@ -19,7 +19,7 @@ struct WorkoutCell: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 HStack(alignment: .top) {
-                    muscleGroupIndicator
+                    VerticalMuscleGroupIndicator(muscleGroupAmounts: workout.muscleGroupOccurances)
                     VStack(alignment: .leading) {
                         Text(workout.date?.description(.short) ?? "")
                             .font(.footnote.weight(.medium))
@@ -33,26 +33,13 @@ struct WorkoutCell: View {
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.footnote)
+                    .font(.body.weight(.medium))
                     .foregroundColor(.separator)
             }
-        }.padding(10)
-            .background(Color.secondaryBackground)
-            .cornerRadius(12)
+        }.cellTileStyle()
     }
-
-    private var muscleGroupIndicator: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 0) {
-                ForEach(workout.muscleGroupOccurances, id:\.self.0.rawValue) { muscleGroupOccurance in
-                    Rectangle()
-                        .foregroundColor(muscleGroupOccurance.0.color)
-                        .frame(maxHeight: geometry.size.height * CGFloat(muscleGroupOccurance.1)/CGFloat(workout.numberOfSets))
-                }
-            }
-        }.frame(width: 7, height: 80)
-            .clipShape(Capsule())
-    }
+    
+    //MARK: - Computed UI Properties
     
     private var exercisesString: String {
         var result = ""

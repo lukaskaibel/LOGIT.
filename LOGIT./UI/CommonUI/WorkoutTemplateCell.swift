@@ -9,32 +9,32 @@ import SwiftUI
 
 struct WorkoutTemplateCell: View {
     
+    // MARK: - Variables
+    
     @ObservedObject var workoutTemplate: TemplateWorkout
     
+    // MARK: - Body
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Text(lastUsedDate)
-                    .foregroundColor(.secondaryLabel)
-                    .font(.caption.weight(.semibold))
-                Spacer()
-                Text(NSLocalizedString("template", comment: ""))
-                    .foregroundColor(.secondaryLabel)
-                    .font(.caption)
-                    .padding(.vertical, 2)
-                    .padding(.horizontal, 5)
-                    .background(Color.fill)
-                    .clipShape(Capsule())
+        HStack {
+            HStack(alignment: .top) {
+                VerticalMuscleGroupIndicator(muscleGroupAmounts: workoutTemplate.muscleGroupOccurances)
+                VStack(alignment: .leading) {
+                    Text(lastUsedDate)
+                        .font(.footnote.weight(.medium))
+                        .foregroundColor(.secondaryLabel)
+                    Text(workoutTemplate.name ?? "No name")
+                        .font(.headline)
+                        .lineLimit(1)
+                    Text(exercisesString)
+                        .lineLimit(2, reservesSpace: true)
+                }
             }
-            Text(workoutTemplate.name ?? "No Name")
-                .font(.body.weight(.semibold))
-                .lineLimit(1)
-            Text(exercisesString)
-                .lineLimit(1)
-                .frame(maxWidth: 280, alignment: .leading)
-                .padding(.top, 2)
-        }
-        .padding(.vertical, 4)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.body.weight(.medium))
+                .foregroundColor(.secondaryLabel)
+        }.cellTileStyle()
     }
     
     //MARK: - Computed UI Properties

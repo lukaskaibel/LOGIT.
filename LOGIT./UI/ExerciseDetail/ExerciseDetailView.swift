@@ -104,6 +104,7 @@ struct ExerciseDetailView: View {
             })
         }.listStyle(.plain)
         .navigationBarTitleDisplayMode(.inline)
+        .tint(muscleGroupColor)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu(content: {
@@ -124,39 +125,6 @@ struct ExerciseDetailView: View {
             EditExerciseView(editExercise: EditExercise(exerciseToEdit: exerciseDetail.exercise))
         }
     }
-    
-    /*
-    private var WeightView: some View {
-        VStack(spacing: 0) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(NSLocalizedString("personalBest", comment: ""))
-                        .foregroundColor(.secondaryLabel)
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("\(exerciseDetail.personalBest(for: .weight)) \(WeightUnit.used.rawValue)")
-                            .font(.title.weight(.medium))
-                        Spacer()
-                    }
-                }
-                Spacer()
-            }.padding()
-            BarGraph(xValues: exerciseDetail.getGraphXValues(for: .weight),
-                      yValues: exerciseDetail.getGraphYValues(for: .weight),
-                      barColors: [.accentColor, .accentColor, .accentColor, .accentColor, .accentColor])
-                .frame(height: 120)
-                .padding([.leading, .bottom])
-                .padding(.trailing, 10)
-            Picker("Select timeframe.", selection: $exerciseDetail.selectedCalendarComponentForWeight) {
-                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
-                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
-                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
-            }.pickerStyle(.segmented)
-                .padding([.horizontal, .bottom])
-        }.background(Color.secondaryBackground)
-            .cornerRadius(10)
-            .listRowSeparator(.hidden)
-    }
-     */
     
     // MARK: - Supporting Views
     
@@ -192,9 +160,10 @@ struct ExerciseDetailView: View {
                 ForEach(exerciseDetail.personalBests(for: selectedAttribute, per: selectedCalendarComponent)) { chartEntry in
                     LineMark(x: .value("CalendarComponent", chartEntry.xValue),
                              y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                    .foregroundStyle(muscleGroupColor)
                     AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
                              y: .value(selectedAttribute.rawValue, chartEntry.yValue))
-                    .foregroundStyle(.linearGradient(colors: [.accentColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
+                    .foregroundStyle(.linearGradient(colors: [muscleGroupColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
                 }
             }.frame(height: 180)
             Picker("Calendar Component", selection: $selectedCalendarComponent) {
@@ -206,11 +175,13 @@ struct ExerciseDetailView: View {
         }.tileStyle()
     }
     
-    var dividerCircle: some View {
+    private var dividerCircle: some View {
         Circle()
             .foregroundColor(.separator)
             .frame(width: 4, height: 4)
     }
+    
+    // MARK: - Computed Properties
     
     private func dateString(for workoutSet: WorkoutSet) -> String {
         if let date = workoutSet.setGroup?.workout?.date {
@@ -221,6 +192,10 @@ struct ExerciseDetailView: View {
         } else {
             return ""
         }
+    }
+    
+    private var muscleGroupColor: Color {
+        exerciseDetail.exercise.muscleGroup?.color ?? .accentColor
     }
     
 }

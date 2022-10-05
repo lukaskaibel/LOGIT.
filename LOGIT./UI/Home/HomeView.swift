@@ -13,7 +13,6 @@ struct HomeView: View {
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
     
     @StateObject var home = Home()
-    @State private var isShowingWorkoutRecorder: Bool = false
     @State private var isShowingTemplateEditor = false
     @State private var isShowingNewTemplate = false
     
@@ -69,26 +68,7 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
             }.listStyle(.plain)
                 .navigationTitle(NSLocalizedString("home", comment: ""))
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Menu(content: {
-                            Button(action: { isShowingWorkoutRecorder = true } ) {
-                                Label(NSLocalizedString("startWorkout", comment: ""),
-                                      systemImage: "plus")
-                            }
-                            Button(action: { isShowingNewTemplate = true } ) {
-                                Label(NSLocalizedString("createTemplate", comment: ""),
-                                      systemImage: "list.bullet.rectangle.portrait")
-                            }
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                    }
-                }
         } .navigationViewStyle(.stack)
-        .fullScreenCover(isPresented: $isShowingWorkoutRecorder) {
-            WorkoutRecorderView()
-        }
         .sheet(isPresented: $isShowingTemplateEditor) {
             TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
         }

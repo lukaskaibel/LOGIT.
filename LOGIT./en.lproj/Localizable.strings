@@ -146,6 +146,7 @@
 
 "all" = "All";
 "muscleGroup" = "Muscle Group";
+"muscleGroups" = "Muscle Groups";
 "chest" = "Chest";
 "back" = "Back";
 "arms" = "Arms";
@@ -160,3 +161,6 @@
 "starttime" = "Start Time";
 "maxReps" = "Max Reps";
 "maxWeight" = "Max Weight";
+
+"settings" = "Settings";
+"summary" = "Summary";

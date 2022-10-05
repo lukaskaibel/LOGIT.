@@ -9,22 +9,33 @@ import SwiftUI
 
 struct WorkoutTemplateListView: View {
     
+    // MARK: - State Objects
+    
     @StateObject private var workoutTemplateList = WorkoutTemplateList()
     
+    // MARK: - State
+    
     @State private var showingTemplateCreation = false
+    
+    // MARK: - Body
     
     var body: some View {
         List {
             ForEach(workoutTemplateList.templateWorkouts, id:\.objectID) { templateWorkout in
-                NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: templateWorkout.objectID))) {
+                ZStack {
                     WorkoutTemplateCell(workoutTemplate: templateWorkout)
+                    NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: templateWorkout.objectID))) {
+                        EmptyView()
+                    }.opacity(0)
                 }
             }.onDelete { indexSet in
                 workoutTemplateList.templateWorkouts
                     .elements(for: indexSet)
                     .forEach { workoutTemplateList.delete($0) }
             }
+            .listRowSeparator(.hidden)
         }.listStyle(.plain)
+            .searchable(text: $workoutTemplateList.searchedText)
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(NSLocalizedString("templates", comment: ""))
             .toolbar {

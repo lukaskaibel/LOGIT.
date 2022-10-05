@@ -9,9 +9,15 @@ import SwiftUI
 
 struct AllExercisesView: View {
     
+    // MARK: - State Objects
+    
     @StateObject private var allExercises = AllExercises()
     
+    // MARK: - State
+    
     @State private var showingAddExercise = false
+    
+    // MARK: - Body
     
     var body: some View {
         List {
@@ -21,13 +27,18 @@ struct AllExercisesView: View {
             ForEach(allExercises.groupedExercises) { group in
                 Section(content: {
                     ForEach(group, id: \.objectID) { exercise in
-                        NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
-                            Text(exercise.name ?? "")
-                                .font(.body.weight(.semibold))
-                                .lineLimit(1)
-                                .padding(.vertical, 8)
+                        ZStack {
+                            ExerciseCell(exercise: exercise)
+                            Image(systemName: "chevron.right")
+                                .font(.body.weight(.medium))
+                                .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
+                                .padding(.trailing)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
+                                EmptyView()
+                            }.opacity(0)
                         }
-                    }
+                    }.listRowSeparator(.hidden)
                 }, header: {
                     Text(allExercises.getLetter(for: group))
                         .sectionHeaderStyle()

@@ -31,7 +31,7 @@ struct WorkoutDetailView: View {
             Section {
                 setsPerMuscleGroup
             } header: {
-                Text("Sets per Muscle Group")
+                Text(NSLocalizedString("muscleGroups", comment: ""))
                     .sectionHeaderStyle()
             }.listRowSeparator(.hidden)
             Section {
@@ -40,7 +40,7 @@ struct WorkoutDetailView: View {
                                        indexInWorkout: workoutDetail.workout.index(of: setGroup) ?? 1)
                 }
             } header: {
-                Text("Summary")
+                Text(NSLocalizedString("summary", comment: ""))
                     .sectionHeaderStyle()
             }.listRowSeparator(.hidden)
             if canNavigateToTemplate {

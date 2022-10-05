@@ -9,49 +9,37 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @Environment(\.dismiss) var dismiss
-    private var database: Database = Database.shared
+    // MARK: - UserDefaults
     
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
     @AppStorage("workoutPerWeekTarget") var workoutPerWeekTarget: Int = 3
     
+    // MARK: - Body
+    
     var body: some View {
         List {
             Section {
-                NavigationLink(destination: AllExercisesView()) {
-                    HStack {
-                        Text(NSLocalizedString("exercises", comment: ""))
-                        Spacer()
-                    }
-                }
-                NavigationLink(destination: WorkoutTemplateListView()) {
-                    HStack {
-                        Text(NSLocalizedString("templates", comment: ""))
-                        Spacer()
-                    }
-                }
-            }
-            Section(content: {
                 Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $workoutPerWeekTarget) {
                     ForEach(1..<10, id:\.self) { i in
                         Text(String(i)).tag(i)
                     }
                 }
-            }, footer: {
+            } footer: {
                 Text(NSLocalizedString("targetPerWeekDescription", comment: ""))
-            })
-            Section(content: {
+            }
+            Section {
                 Picker(NSLocalizedString("unit", comment: ""), selection: $weightUnit, content: {
                     Text("kg").tag(WeightUnit.kg)
                     Text("lbs").tag(WeightUnit.lbs)
                 })
-            }, footer: {
+            } footer: {
                 Text(NSLocalizedString("unitDescription", comment: ""))
-            })
+            }
         }.listStyle(.insetGrouped)
-            .navigationTitle(NSLocalizedString("profile", comment: ""))
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(NSLocalizedString("settings", comment: ""))
+            .navigationBarTitleDisplayMode(.large)
     }
+    
 }
 
 struct ProfileView_Previews: PreviewProvider {

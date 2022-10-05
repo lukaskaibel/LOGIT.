@@ -11,12 +11,18 @@ import CoreData
 
 struct WorkoutRecorderView: View {
     
+    // MARK: - Environment
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    // MARK: - State Objects
     
     @StateObject internal var workoutRecorder = WorkoutRecorder()
     @StateObject private var exerciseSelection = ExerciseSelection()
     @StateObject private var exerciseDetail = ExerciseDetail(exerciseID: NSManagedObjectID())
+    
+    // MARK: - State
     
     @State internal var isEditing: Bool = false
     @State internal var showingExerciseSelection = false
@@ -26,14 +32,18 @@ struct WorkoutRecorderView: View {
     @State private var showingFinishWorkoutAlert = false
     @State private var showingDeleteUnusedSetsAndFinishWorkoutAlert = false
     @State private var showingDiscardWorkoutAlert = false
+    
+    // MARK: - Init
+    
+    init(template: TemplateWorkout?) {
+        if let template = template {
+            workoutRecorder.updateWorkout(with: template)
+        }
+    }
         
     var body: some View {
         NavigationView {
-            if showingStartScreen {
-                WorkoutRecorderStartScreen(showingStartScreen: $showingStartScreen)
-            } else {
-                RecorderView
-            }
+            RecorderView
         }.environmentObject(workoutRecorder)
     }
     
@@ -48,13 +58,20 @@ struct WorkoutRecorderView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { showingTimerView.toggle() }) {
                         TimerTimeView(showingTimerView: $showingTimerView)
-                    }
-                        .font(.body.monospacedDigit())
+                    }.font(.body.monospacedDigit())
                     Spacer()
                     Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }.disabled(workoutRecorder.workout.numberOfSetGroups == 0)
+                }
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(NSLocalizedString("done", comment: "")) {
+                            hideKeyboard()
+                        }.font(.body.weight(.semibold))
+                    }
                 }
             }
             .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil; workoutRecorder.isSelectingSecondaryExercise = false }) {
@@ -178,16 +195,6 @@ struct WorkoutRecorderView: View {
             .onAppear {
                 UIScrollView.appearance().keyboardDismissMode = .interactive
             }
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button(NSLocalizedString("done", comment: "")) {
-                            hideKeyboard()
-                        }.font(.body.weight(.semibold))
-                    }
-                }
-            }
             
     }
         
@@ -214,6 +221,6 @@ struct WorkoutRecorderView: View {
 
 struct WorkoutRecorderListView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderView()
+        WorkoutRecorderView(template: nil)
     }
 }

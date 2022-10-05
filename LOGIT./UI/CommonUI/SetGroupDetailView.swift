@@ -92,7 +92,7 @@ struct SetGroupDetailView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.separator)
                                 .font(.caption)
-                        }
+                        }.buttonStyle(.plain)
                     }
                     Spacer()
                 }.padding(.leading, 30)

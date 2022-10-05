@@ -16,6 +16,15 @@ struct TileModifier: ViewModifier {
    }
 }
 
+struct CellTileModifier: ViewModifier {
+    func body(content: Content) -> some View {
+       content
+            .padding(10)
+            .background(Color.secondaryBackground)
+            .cornerRadius(20)
+   }
+}
+
 struct SectionHeaderModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -28,6 +37,10 @@ struct SectionHeaderModifier: ViewModifier {
 extension View {
     func tileStyle() -> some View {
         modifier(TileModifier())
+    }
+    
+    func cellTileStyle() -> some View {
+        modifier(CellTileModifier())
     }
     
     func sectionHeaderStyle() -> some View {

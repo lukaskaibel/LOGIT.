@@ -35,10 +35,19 @@ struct LOGIT: App {
             if setupDone {
                 TabView {
                     HomeView()
-                        .tabItem { Label("Home", image: "LOGIT") }
+                        .tabItem { Label("Home", systemImage: "house.fill") }
+                    NavigationView {
+                        WorkoutTemplateListView()
+                    }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
+                    NavigationView {
+                        StartWorkoutView()
+                    }.tabItem { Label(NSLocalizedString("startWorkout", comment: ""), systemImage: "plus") }
+                    NavigationView {
+                        AllExercisesView()
+                    }.tabItem { Label(NSLocalizedString("exercises", comment: ""), image: "LOGIT") }
                     NavigationView {
                         ProfileView()
-                    }.tabItem { Label(NSLocalizedString("profile", comment: ""), systemImage: "person.fill") }
+                    }.tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
                 }.environment(\.managedObjectContext, database.context)
             } else {
                 FirstStartView()

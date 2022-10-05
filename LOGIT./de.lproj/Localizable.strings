@@ -147,6 +147,7 @@
 
 "all" = "Alle";
 "muscleGroup" = "Muskelgruppe";
+"muscleGroups" = "Muskelgruppen";
 "chest" = "Brust";
 "back" = "Rücken";
 "arms" = "Arme";
@@ -161,4 +162,7 @@
 "starttime" = "Startzeit";
 "maxReps" = "Max Wdh";
 "maxWeight" = "Max Gewicht";
+
+"settings" = "Einstellungen";
+"summary" = "Zusammenfassung";
 

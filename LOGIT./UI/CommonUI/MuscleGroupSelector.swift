@@ -26,8 +26,8 @@ struct MuscleGroupSelector: View {
                         .font(.subheadline.weight(.semibold))
                         .padding(.vertical, 8)
                         .padding(.horizontal, 15)
-                        .foregroundColor(selectedMuscleGroup == muscleGroup ? .white : .accentColor)
-                        .background(selectedMuscleGroup == muscleGroup ? Color.accentColor : .accentColorBackground)
+                        .foregroundColor(selectedMuscleGroup == muscleGroup ? .white : muscleGroup.color)
+                        .background(muscleGroup.color.opacity(selectedMuscleGroup == muscleGroup ? 1 : 0.1))
                         .clipShape(Capsule())
                 }
             }.padding(.horizontal)

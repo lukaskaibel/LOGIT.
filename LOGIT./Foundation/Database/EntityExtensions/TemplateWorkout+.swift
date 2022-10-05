@@ -22,6 +22,14 @@ extension TemplateWorkout {
         return workouts.last?.date
     }
     
+    var sets: [TemplateSet] {
+        var result = [TemplateSet]()
+        for setGroup in setGroups {
+            result.append(contentsOf: setGroup.sets)
+        }
+        return result
+    }
+    
     var setGroups: [TemplateWorkoutSetGroup] {
         get {
             return (templateSetGroupOrder ?? .emptyList)
@@ -54,6 +62,18 @@ extension TemplateWorkout {
     var muscleGroups: [MuscleGroup] {
         exercises
             .compactMap { $0.muscleGroup }
+    }
+    
+    var muscleGroupOccurances: [(MuscleGroup, Int)] {
+        Array(sets
+            .compactMap({ $0.exercise?.muscleGroup })
+            .reduce(into: [:]) { $0[$1, default: 0] += 1 }
+            .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
+        ).sorted { $0.key.rawValue < $1.key.rawValue }
+    }
+    
+    private var allMuscleGroupZeroDict: [MuscleGroup:Int] {
+        MuscleGroup.allCases.reduce(into: [:], { $0[$1, default: 0] = 0 })
     }
     
 }
