@@ -48,4 +48,21 @@ extension Database {
         return workout
     }
     
+    var testTemplate: TemplateWorkout {
+        let exampleExerciseNames = ["Pushup", "Deadlift", "Squats", "Pushup", "Bar-Bell Curl"]
+        let template = self.newTemplateWorkout(name: "Perfect Push-Day")
+        for name in exampleExerciseNames {
+            let exercise = self.newExercise(name: name, muscleGroup: MuscleGroup.allCases.randomElement()!)
+            let setGroup = self.newTemplateWorkoutSetGroup(exercise: exercise, templateWorkout: template)
+            for _ in 1..<Int.random(in: 2...5) {
+                self.newTemplateStandardSet(repetitions: Int.random(in: 0...10),
+                                                weight: Int.random(in: 0...150),
+                                                setGroup: setGroup)
+            }
+        }
+        self.save()
+        self.refreshObjects()
+        return template
+    }
+    
 }

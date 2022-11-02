@@ -221,6 +221,6 @@ struct WorkoutRecorderView: View {
 
 struct WorkoutRecorderListView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderView(template: nil)
+        WorkoutRecorderView(template: Database.preview.testTemplate)
     }
 }
