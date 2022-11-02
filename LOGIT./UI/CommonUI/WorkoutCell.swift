@@ -39,7 +39,7 @@ struct WorkoutCell: View {
         }.cellTileStyle()
     }
     
-    //MARK: - Computed UI Properties
+    // MARK: - Computed UI Properties
     
     private var exercisesString: String {
         var result = ""

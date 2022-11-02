@@ -37,7 +37,7 @@ struct WorkoutTemplateCell: View {
         }.cellTileStyle()
     }
     
-    //MARK: - Computed UI Properties
+    // MARK: - Computed UI Properties
     
     private var lastUsedDate: String {
         if let date = workoutTemplate.date {

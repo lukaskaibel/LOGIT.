@@ -13,7 +13,6 @@ struct TemplateWorkoutEditorView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @StateObject var templateWorkoutEditor: TemplateWorkoutEditor
-    @StateObject private var exerciseSelection = ExerciseSelection()
     
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
@@ -88,8 +87,7 @@ struct TemplateWorkoutEditorView: View {
                 .sheet(isPresented: $showingExerciseSelection,
                        onDismiss: { templateWorkoutEditor.setGroupWithSelectedExercise = nil; templateWorkoutEditor.isSelectingSecondaryExercise = false }) {
                     NavigationView {
-                        ExerciseSelectionView(exerciseSelection: exerciseSelection,
-                                              selectedExercise: Binding(get: {
+                        ExerciseSelectionView(selectedExercise: Binding(get: {
                             guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { return nil }
                             return templateWorkoutEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
                         }, set: {

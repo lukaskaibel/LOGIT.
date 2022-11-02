@@ -13,7 +13,7 @@ extension TemplateSuperSet {
         setGroup?.secondaryExercise
     }
     
-    //MARK: Overrides from TemplateSet
+    // MARK: Overrides from TemplateSet
     
     public override var hasEntry: Bool {
         repetitionsFirstExercise + repetitionsSecondExercise + weightFirstExercise + weightSecondExercise > 0

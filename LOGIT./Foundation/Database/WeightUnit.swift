@@ -21,7 +21,7 @@ enum WeightUnit: String, Codable, Identifiable {
     
 }
 
-//MARK: - Functions for translating weight from grams to kilograms or pounds
+// MARK: - Functions for translating weight from grams to kilograms or pounds
 
 private let KG_TO_GRAMS: Int = 1000
 private let LBS_TO_GRAMS: Int = 454

@@ -138,7 +138,7 @@ struct BarGraph: View {
             .fixedSize(horizontal: false, vertical: true)
     }
     
-    //MARK: Computed Properties
+    // MARK: Computed Properties
     
     private var maxValue: Int {
         ((yValues.max() ?? 1) / 4) * 4 + 4

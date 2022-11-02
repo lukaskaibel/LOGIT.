@@ -8,14 +8,11 @@
 import SwiftUI
 
 struct StartWorkoutView: View {
+    
+    // MARK: - Environment
+    
+    @EnvironmentObject var database: Database
 
-    // MARK: - Database Fetch
-    
-    @FetchRequest(entity: TemplateWorkout.entity(),
-                  sortDescriptors: [NSSortDescriptor(key: "creationDate",
-                                                     ascending: false)])
-    var workoutTemplates: FetchedResults<TemplateWorkout>
-    
     // MARK: - State
     
     private struct TemplateSelection: Identifiable {
@@ -85,7 +82,7 @@ struct StartWorkoutView: View {
     }
     
     private var templateList: some View {
-        ForEach(workoutTemplates, id:\.objectID) { template in
+        ForEach(database.getTemplateWorkouts(), id:\.objectID) { template in
             Button(action: {
                 selectedTemplate = TemplateSelection(value: template)
             }) {

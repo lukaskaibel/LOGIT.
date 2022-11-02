@@ -9,7 +9,7 @@ import Foundation
 
 extension Database {
     
-    //MARK: - Normal Entitiy Creation
+    // MARK: - Normal Entitiy Creation
     
     @discardableResult
     func newWorkout(name: String = "",
@@ -110,7 +110,7 @@ extension Database {
         return exercise
     }
     
-    //MARK: - Template Entitiy Creation
+    // MARK: - Template Entitiy Creation
     
     @discardableResult
     func newTemplateWorkout(name: String = "",

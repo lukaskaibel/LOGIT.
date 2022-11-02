@@ -28,7 +28,7 @@ struct SingleSetView: View {
         }.tileStyle()
     }
     
-    //MARK: - Supporting Views
+    // MARK: - Supporting Views
     
     private var repetitionsView: some View {
         HStack {

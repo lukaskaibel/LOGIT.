@@ -9,7 +9,7 @@ import SwiftUI
 
 class WorkoutRecorder: ViewModel {
     
-    @Published var workout: Workout = Workout()
+    @Published var workout: Workout = Database.shared.newWorkout()
     @Published var setGroupWithSelectedExercise: WorkoutSetGroup? = nil
     @Published var exerciseForExerciseDetail: Exercise?
     @Published var selectedTimerDuration: Int = 0
@@ -90,7 +90,7 @@ class WorkoutRecorder: ViewModel {
         updateView()
     }
     
-    //MARK: Placeholder Methods
+    // MARK: Placeholder Methods
     
     public func repetitionsPlaceholder(for standardSet: StandardSet) -> String {
         guard let templateStandardSet = templateSet(for: standardSet) as? TemplateStandardSet else { return "0" }
@@ -176,7 +176,7 @@ class WorkoutRecorder: ViewModel {
         database.save()
     }
     
-    //MARK: DropSet Functions
+    // MARK: DropSet Functions
     
     func addDrop(to dropSet: DropSet) {
         dropSet.addDrop()
@@ -189,7 +189,7 @@ class WorkoutRecorder: ViewModel {
         updateView()
     }
     
-    //MARK: WorkoutSet convert functions
+    // MARK: WorkoutSet convert functions
     
     public func convertSetGroupToStandardSets(_ setGroup: WorkoutSetGroup) {
         setGroup.sets

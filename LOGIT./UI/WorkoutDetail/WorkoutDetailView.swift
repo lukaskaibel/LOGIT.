@@ -10,14 +10,23 @@ import CoreData
 
 struct WorkoutDetailView: View {
     
+    // MARK: - Environment
+    
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var database: Database
     
-    @Binding var canNavigateToTemplate: Bool
+    // MARK: - State
     
-    @StateObject var workoutDetail: WorkoutDetail
     @State private var isShowingDeleteWorkoutAlert: Bool = false
     @State private var isShowingNewTemplate: Bool = false
     @State private var isShowingTemplateDetail: Bool = false
+    
+    // MARK: - Variables
+    
+    let workout: Workout
+    let canNavigateToTemplate: Bool
+    
+    // MARK: - Body
     
     var body: some View {
         List {
@@ -35,9 +44,9 @@ struct WorkoutDetailView: View {
                     .sectionHeaderStyle()
             }.listRowSeparator(.hidden)
             Section {
-                ForEach(workoutDetail.setGroups) { setGroup in
+                ForEach(workout.setGroups) { setGroup in
                     SetGroupDetailView(setGroup: setGroup,
-                                       indexInWorkout: workoutDetail.workout.index(of: setGroup) ?? 1)
+                                       indexInWorkout: workout.index(of: setGroup) ?? 1)
                 }
             } header: {
                 Text(NSLocalizedString("summary", comment: ""))
@@ -53,7 +62,7 @@ struct WorkoutDetailView: View {
                 }
             }
         }.listStyle(.plain)
-            .navigationTitle(workoutDetail.workout.date?.description(.medium) ?? "")
+            .navigationTitle(workout.date?.description(.medium) ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -68,17 +77,17 @@ struct WorkoutDetailView: View {
                                 isPresented: $isShowingDeleteWorkoutAlert,
                                 titleVisibility: .visible) {
                 Button(NSLocalizedString("deleteWorkout", comment: ""), role: .destructive) {
-                    workoutDetail.deleteWorkout()
+                    database.delete(workout, saveContext: true)
                     dismiss()
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutDetail.workout.template,
-                                                                                                           from: workoutDetail.workout))
+                                    TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workout.template,
+                                                                                                           from: workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {
-                                        WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: workoutDetail.workout.template?.objectID ?? NSManagedObjectID()))
+                                        WorkoutTemplateDetailView(workoutTemplate: workout.template!)
                                             .toolbar {
                                                 ToolbarItem(placement: .navigationBarLeading) {
                                                     Button(NSLocalizedString("navBack", comment: "")) { isShowingTemplateDetail = false }
@@ -88,10 +97,10 @@ struct WorkoutDetailView: View {
                                 }
     }
         
-    //MARK: - Supporting Views
+    // MARK: - Supporting Views
     
     private var workoutHeader: some View {
-        Text(workoutDetail.workout.name ?? "")
+        Text(workout.name ?? "")
             .font(.largeTitle.weight(.bold))
             .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -101,13 +110,13 @@ struct WorkoutDetailView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("starttime", comment: ""))
-                    Text("\(workoutDetail.workout.date?.timeString ?? "")")
+                    Text("\(workout.date?.timeString ?? "")")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
-                    Text("\(workoutDetail.workoutDurationString)")
+                    Text("\(workoutDurationString)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
@@ -115,13 +124,13 @@ struct WorkoutDetailView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("exercises", comment: ""))
-                    Text("\(workoutDetail.workout.numberOfSetGroups)")
+                    Text("\(workout.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
-                    Text("\(workoutDetail.workout.numberOfSets)")
+                    Text("\(workout.numberOfSets)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
@@ -130,7 +139,7 @@ struct WorkoutDetailView: View {
     }
     
     private var setsPerMuscleGroup: some View {
-        PieGraph(items: workoutDetail.workout.muscleGroupOccurances
+        PieGraph(items: workout.muscleGroupOccurances
             .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
                                  amount: $0.1,
                                  color: $0.0.color) }
@@ -140,23 +149,23 @@ struct WorkoutDetailView: View {
     private var templateView: some View {
         Section(content: {
             Button(action: {
-                if workoutDetail.workout.template == nil {
+                if workout.template == nil {
                     isShowingNewTemplate = true
                 } else {
                     isShowingTemplateDetail = true
                 }
             }) {
                 HStack {
-                    if workoutDetail.workout.template == nil {
+                    if workout.template == nil {
                         Image(systemName: "plus")
                             .foregroundColor(.accentColor)
                             .font(.body.weight(.medium))
                     }
-                    Text(workoutDetail.workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
+                    Text(workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
                         .fontWeight(.medium)
                         .lineLimit(1)
                         .foregroundColor(.accentColor)
-                    if workoutDetail.workout.template != nil {
+                    if workout.template != nil {
                         Spacer()
                         Image(systemName: "chevron.right")
                             .foregroundColor(.accentColor)
@@ -177,11 +186,19 @@ struct WorkoutDetailView: View {
         
     }
     
+    // MARK: - Supporting Methods
+    
+    private var workoutDurationString: String {
+        guard let start = workout.date, let end = workout.endDate else { return "0:00" }
+        let hours = Calendar.current.dateComponents([.hour], from: start, to: end).hour ?? 0
+        let minutes = Calendar.current.dateComponents([.minute], from: start, to: end).minute ?? 0
+        return "\(hours):\(minutes < 10 ? "0" : "")\(minutes)"
+    }
+    
 }
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(canNavigateToTemplate: .constant(false),
-                          workoutDetail: WorkoutDetail(workoutID: (Database.preview.fetch(Workout.self).first! as! Workout).objectID))
+        WorkoutDetailView(workout: Workout(), canNavigateToTemplate: false)
     }
 }

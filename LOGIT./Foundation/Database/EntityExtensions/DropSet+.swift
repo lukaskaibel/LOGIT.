@@ -21,7 +21,7 @@ extension DropSet {
         }
     }
     
-    //MARK: Overrides from WorkoutSet
+    // MARK: Overrides from WorkoutSet
     
     public override var maxRepetitions: Int {
         return Int(repetitions?.max() ?? 0)

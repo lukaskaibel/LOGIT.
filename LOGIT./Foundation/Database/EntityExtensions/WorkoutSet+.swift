@@ -43,7 +43,7 @@ extension WorkoutSet {
         }
     }
     
-    //MARK: Subclass Method Interface
+    // MARK: Subclass Method Interface
     
     @objc public var maxRepetitions: Int {
         fatalError("WorkoutSet+: maxRepetitions must be implemented in subclass of WorkoutSet")

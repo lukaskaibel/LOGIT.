@@ -21,7 +21,7 @@ extension TemplateDropSet {
         }
     }
 
-    //MARK: Overrides from TemplateSet
+    // MARK: Overrides from TemplateSet
     
     override public  var hasEntry: Bool {
         (repetitions?.reduce(0, +) ?? 0) + (weights?.reduce(0, +) ?? 0) > 0

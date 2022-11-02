@@ -10,19 +10,20 @@ import SwiftUI
 
 struct WorkoutCellView: View {
     
-    //MARK: Variables
-    
-    @ObservedObject var workout: Workout
-    
-    @Binding var canNavigateToTemplate: Bool
+    // MARK: - State
     
     @State private var isShowingAllExercises: Bool = false
+    
+    // MARK: - Variables
+    
+    @ObservedObject var workout: Workout
+    let canNavigateToTemplate: Bool
         
-    //MARK: Body
+    // MARK: - Body
     
     var body: some View {
-        NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: $canNavigateToTemplate,
-                                                      workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
+        NavigationLink(destination: WorkoutDetailView(workout: workout,
+                                                      canNavigateToTemplate: canNavigateToTemplate)) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack {
                     Text(workout.name ?? "No Name")
@@ -46,7 +47,7 @@ struct WorkoutCellView: View {
         }
     }
     
-    //MARK: Computed Variabels
+    // MARK: - Computed Variabels
     
     private var date: String {
         if let date = workout.date {
@@ -70,6 +71,6 @@ struct WorkoutCellView: View {
 
 struct WorkoutView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutCellView(workout: Database.preview.newWorkout(), canNavigateToTemplate: .constant(true))
+        WorkoutCellView(workout: Database.preview.newWorkout(), canNavigateToTemplate: true)
     }
 }

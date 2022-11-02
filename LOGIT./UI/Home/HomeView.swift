@@ -9,12 +9,21 @@ import SwiftUI
 import CoreData
 
 struct HomeView: View {
+    
+    // MARK: - AppStorage
         
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
     
-    @StateObject var home = Home()
+    // MARK: - Environment
+    
+    @EnvironmentObject var database: Database
+    
+    // MARK: - State
+
     @State private var isShowingTemplateEditor = false
     @State private var isShowingNewTemplate = false
+    
+    // MARK: - Body
     
     var body: some View {
         NavigationView {
@@ -32,11 +41,10 @@ struct HomeView: View {
                         .sectionHeaderStyle()
                 }.listRowSeparator(.hidden)
                 Section(content: {
-                    ForEach(home.recentWorkouts, id:\.objectID) { (workout: Workout) in
+                    ForEach(recentWorkouts, id:\.objectID) { workout in
                         ZStack {
                             WorkoutCell(workout: workout)
-                            NavigationLink(destination: WorkoutDetailView(canNavigateToTemplate: .constant(true),
-                                                                          workoutDetail: WorkoutDetail(workoutID: workout.objectID))) {
+                            NavigationLink(destination: WorkoutDetailView(workout: workout, canNavigateToTemplate: true)) {
                                 EmptyView()
                             }.opacity(0)
                         }
@@ -46,7 +54,7 @@ struct HomeView: View {
                             .listRowInsets(EdgeInsets())
                     }.onDelete { indexSet in
                         for index in indexSet {
-                            home.delete(workout: home.recentWorkouts[index])
+                            database.delete(recentWorkouts.value(at: index), saveContext: true)
                         }
                     }
                 }, header: {
@@ -78,7 +86,7 @@ struct HomeView: View {
     }
     
     private var muscleGroupPercentageView: some View {
-        PieGraph(items: home.getOverallMuscleGroupOccurances()
+        PieGraph(items: getOverallMuscleGroupOccurances()
                                 .map { PieGraph.Item(title: $0.0.description.capitalized,
                                                      amount: $0.1,
                                                      color: $0.0.color) },
@@ -110,17 +118,17 @@ struct HomeView: View {
                         Image(systemName: "calendar")
                         Text(NSLocalizedString("Last", comment: ""))
                     }
-                    Text("\(home.workouts.last?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
+                    Text("\(workouts.last?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
-            TargetPerWeekGraph(xValues: home.getWeeksString().reversed(),
-                              yValues: home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed(),
+            TargetPerWeekGraph(xValues: getWeeksString().reversed(),
+                              yValues: workoutsPerWeek(for: numberOfWeeksInAnalysis).reversed(),
                               target: targetPerWeek)
                 .frame(height: 170)
                 .overlay {
-                    if home.workouts.isEmpty {
+                    if workouts.isEmpty {
                         Text("No Data")
                             .fontWeight(.bold)
                             .foregroundColor(.secondaryLabel)
@@ -129,61 +137,64 @@ struct HomeView: View {
         }.tileStyle()
     }
     
-    private func description(for digit: Int) -> String {
-        switch digit {
-        case 0: return NSLocalizedString("zero", comment: "")
-        case 1: return NSLocalizedString("one", comment: "")
-        case 2: return NSLocalizedString("two", comment: "")
-        case 3: return NSLocalizedString("three", comment: "")
-        case 4: return NSLocalizedString("four", comment: "")
-        case 5: return NSLocalizedString("five", comment: "")
-        case 6: return NSLocalizedString("six", comment: "")
-        case 7: return NSLocalizedString("seven", comment: "")
-        case 8: return NSLocalizedString("eight", comment: "")
-        case 9: return NSLocalizedString("nine", comment: "")
-        default: return "\(digit)"
-        }
+    // MARK: - Supportings Methods
+    
+    var workouts: [Workout] {
+        database.getWorkouts(sortedBy: .date)
     }
     
-    private var AverageWorkoutsView: some View {
-        Section(content: {
-            VStack(spacing: 0) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("weeklyAverage", comment: ""))
-                            .foregroundColor(.secondaryLabel)
-                        HStack(alignment: .lastTextBaseline) {
-                            Text("\(home.averageWorkoutsPerWeek(for: home.numberOfWeeksInAnalysis)) \(NSLocalizedString("perWeek", comment: ""))")
-                                .font(.title.weight(.medium))
-                            Spacer()
-                            HStack(spacing: 3) {
-                                Image(systemName: "arrow.\(differenceBetweenLastTwoWeeks < 0 ? "down" : differenceBetweenLastTwoWeeks == 0 ? "right" : "up").circle.fill")
-                                    .font(.body.weight(.bold))
-                                Text("\(abs(differenceBetweenLastTwoWeeks)) \(NSLocalizedString("fromLastWeek", comment: ""))")
-                                    .monospacedDigit()
-                            }.foregroundColor(differenceBetweenLastTwoWeeks <= 0 ? .secondaryLabel : .green)
+    var recentWorkouts: [Workout] {
+        Array(database.getWorkouts(sortedBy: .date).prefix(8))
+    }
+    
+    func workoutsPerWeek(for numberOfWeeks: Int) -> [Int] {
+        var result = [Int](repeating: 0, count: numberOfWeeks)
+        for i in 0..<numberOfWeeks {
+            if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date()) {
+                for workout in workouts {
+                    if let workoutDate = workout.date {
+                        if Calendar.current.isDate(workoutDate, equalTo: iteratedDay, toGranularity: .weekOfYear) {
+                            result[i] += 1
                         }
                     }
-                    Spacer()
-                }.padding()
-                BarGraph(xValues: home.getWeeksString().reversed(),
-                          yValues: home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis).reversed(),
-                          barColors: home.barColorsForWeeks().reversed())
-                    .frame(height: 120)
-                    .padding([.bottom, .horizontal])
-                
-            }.background(Color.secondaryBackground)
-            .cornerRadius(10)
-        }).listRowSeparator(.hidden)
+                }
+            }
+        }
+        return result
     }
     
-    private var differenceBetweenLastTwoWeeks: Int {
-        let workoutsPerWeek = home.workoutsPerWeek(for: home.numberOfWeeksInAnalysis)
-        if workoutsPerWeek.count > 1 {
-            return workoutsPerWeek[0] - workoutsPerWeek[1]
-        }
-        return workoutsPerWeek.first ?? 0
+    func barColorsForWeeks() -> [Color] {
+        workoutsPerWeek(for: numberOfWeeksInAnalysis).map { $0 >= targetPerWeek ? .accentColor : .accentColor }
     }
+    
+    func getWeeksString() -> [String] {
+        var result = [String]()
+        for i in 0..<numberOfWeeksInAnalysis {
+            if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date()) {
+                result.append(getFirstDayOfWeekString(for: iteratedDay))
+            }
+        }
+        return result
+    }
+    
+    func getFirstDayOfWeekString(for date: Date) -> String {
+        let firstDayOfWeek = Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM."
+        return formatter.string(from: firstDayOfWeek)
+    }
+    
+    func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
+        Array(workouts
+            .reduce([:], { current, workout in
+                current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
+            })
+        ).sorted { $0.key.rawValue < $1.key.rawValue }
+    }
+    
+    // MARK: Constants
+    
+    let numberOfWeeksInAnalysis = 5
     
 }
 
@@ -191,5 +202,6 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .environmentObject(Database.preview)
     }
 }

@@ -28,7 +28,7 @@ struct LOGIT: App {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")
     }
     
-    let database = Database.shared
+    @StateObject private var database = Database.shared
 
     var body: some Scene {
         WindowGroup {
@@ -49,6 +49,7 @@ struct LOGIT: App {
                         ProfileView()
                     }.tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
                 }.environment(\.managedObjectContext, database.context)
+                    .environmentObject(database)
             } else {
                 FirstStartView()
             }

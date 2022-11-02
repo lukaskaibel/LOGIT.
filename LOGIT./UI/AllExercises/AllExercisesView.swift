@@ -9,22 +9,25 @@ import SwiftUI
 
 struct AllExercisesView: View {
     
-    // MARK: - State Objects
+    // MARK: - Environment
     
-    @StateObject private var allExercises = AllExercises()
+    @EnvironmentObject var database: Database
     
     // MARK: - State
     
+    @State private var searchedText = ""
+    @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingAddExercise = false
     
     // MARK: - Body
     
     var body: some View {
         List {
-            MuscleGroupSelector(selectedMuscleGroup: $allExercises.selectedMuscleGroup)
+            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
-            ForEach(allExercises.groupedExercises) { group in
+            ForEach(database.getGroupedExercises(withNameIncluding: searchedText,
+                                                 for: selectedMuscleGroup)) { group in
                 Section(content: {
                     ForEach(group, id: \.objectID) { exercise in
                         ZStack {
@@ -34,32 +37,36 @@ struct AllExercisesView: View {
                                 .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
                                 .padding(.trailing)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
-                            NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
+                            NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
                                 EmptyView()
                             }.opacity(0)
                         }
                     }.listRowSeparator(.hidden)
                 }, header: {
-                    Text(allExercises.getLetter(for: group))
+                    Text(getLetter(for: group))
                         .sectionHeaderStyle()
                 })
             }
         }.listStyle(.plain)
-            .searchable(text: $allExercises.searchedText )
+            .searchable(text: $searchedText )
             .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingAddExercise.toggle()
-                    }) {
+                    Button(action: { showingAddExercise.toggle() }) {
                         Image(systemName: "plus")
                     }
                 }
             }
             .sheet(isPresented: $showingAddExercise) {
-                EditExerciseView(editExercise: EditExercise())
+                EditExerciseView()
             }
+    }
+    
+    // MARK: - Supporting Functions
+    
+    func getLetter(for group: [Exercise]) -> String {
+        String(group.first?.name?.first ?? Character(" "))
     }
     
 }

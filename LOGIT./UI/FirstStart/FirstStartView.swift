@@ -13,13 +13,19 @@ struct FirstStartView: View {
         case start, weightUnit, weeklyTarget
     }
     
+    // MARK: - AppStorage
+    
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
     @AppStorage("workoutPerWeekTarget") var weeklyWorkoutTarget: Int = 3
     @AppStorage("setupDone") var setupDone: Bool = false
     
+    // MARK: - State
+    
     @State private var setupStage: SetupStage = .start
     @State private var useStandardExercises: Bool = true
     @State private var setupFinished = false
+    
+    // MARK: - Body
     
     var body: some View {
         VStack {

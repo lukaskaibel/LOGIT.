@@ -11,15 +11,23 @@ import Charts
 
 struct ExerciseDetailView: View {
     
+    // MARK: - Environment
+    
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var database: Database
     
-    @StateObject var exerciseDetail: ExerciseDetail
+    // MARK: - State
     
-    @State private var selectedAttribute: WorkoutSet.Attribute = .weight
+    @State private var sortingKey: Database.WorkoutSetSortingKey = .date
     @State private var selectedCalendarComponent: Calendar.Component = .weekOfYear
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
-    @State private var selectedIndexInGraph: Int? = nil
+    
+    // MARK: - Variables
+    
+    let exercise: Exercise
+    
+    // MARK: - Body
     
     var body: some View {
         List {
@@ -37,7 +45,7 @@ struct ExerciseDetailView: View {
                     .sectionHeaderStyle()
             }.listRowSeparator(.hidden)
             Section(content: {
-                ForEach(exerciseDetail.sets) { workoutSet in
+                ForEach(setsForExercise) { workoutSet in
                     if workoutSet.hasEntry {
                         HStack {
                             Text(dateString(for: workoutSet))
@@ -58,22 +66,22 @@ struct ExerciseDetailView: View {
                         Spacer()
                         Menu {
                             Button(action: {
-                                exerciseDetail.setSortingKey = .date
+                                sortingKey = .date
                             }) {
                                 Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
                             }
                             Button(action: {
-                                exerciseDetail.setSortingKey = .maxRepetitions
+                                sortingKey = .maxRepetitions
                             }) {
                                 Label(NSLocalizedString("repetitions", comment: ""), systemImage: "arrow.counterclockwise")
                             }
                             Button(action: {
-                                exerciseDetail.setSortingKey = .maxWeight
+                                sortingKey = .maxWeight
                             }) {
                                 Label(NSLocalizedString("weight", comment: ""), systemImage: "scalemass")
                             }
                         } label: {
-                            Label(NSLocalizedString(exerciseDetail.setSortingKey == .date ? "date" : exerciseDetail.setSortingKey == .maxRepetitions ? "repetitions" : "weight", comment: ""),
+                            Label(NSLocalizedString(sortingKey == .date ? "date" : sortingKey == .maxRepetitions ? "repetitions" : "weight", comment: ""),
                                   systemImage: "arrow.up.arrow.down")
                             .font(.body)
                         }
@@ -95,7 +103,7 @@ struct ExerciseDetailView: View {
                     }
                 }.listRowSeparator(.hidden, edges: .top)
             }, footer: {
-                Text("\(exerciseDetail.sets.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(exerciseDetail.sets.count == 1 ? "" : "s")", comment: ""))")
+                Text("\(setsForExercise.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(setsForExercise.count == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)
                     .font(.footnote)
                     .padding(.top, 5)
@@ -117,12 +125,12 @@ struct ExerciseDetailView: View {
         }
         .confirmationDialog(Text(NSLocalizedString("deleteExerciseConfirmation", comment: "")), isPresented: $showDeletionAlert, titleVisibility: .visible) {
             Button("\(NSLocalizedString("delete", comment: ""))", role: .destructive, action: {
-                exerciseDetail.deleteExercise()
+                database.delete(exercise, saveContext: true)
                 dismiss()
             })
         }
         .sheet(isPresented: $showingEditExercise) {
-            EditExerciseView(editExercise: EditExercise(exerciseToEdit: exerciseDetail.exercise))
+            EditExerciseView(exerciseToEdit: exercise)
         }
     }
     
@@ -130,12 +138,12 @@ struct ExerciseDetailView: View {
     
     private var header: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text(exerciseDetail.exercise.name ?? "")
+            Text(exercise.name ?? "")
                 .font(.largeTitle.weight(.bold))
                 .lineLimit(2)
-            Text(exerciseDetail.exercise.muscleGroup?.description.capitalized ?? "")
+            Text(exercise.muscleGroup?.description.capitalized ?? "")
                 .font(.system(.title2, design: .rounded, weight: .semibold))
-                .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .clear)
+                .foregroundColor(exercise.muscleGroup?.color ?? .clear)
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
     
@@ -143,13 +151,13 @@ struct ExerciseDetailView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxReps", comment: ""))
-                UnitView(value: String(exerciseDetail.personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
-                    .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .label)
+                UnitView(value: String(personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
+                    .foregroundColor(exercise.muscleGroup?.color ?? .label)
             }.frame(maxWidth: .infinity, alignment: .leading)
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxWeight", comment: ""))
-                UnitView(value: String(exerciseDetail.personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)
-                    .foregroundColor(exerciseDetail.exercise.muscleGroup?.color ?? .label)
+                UnitView(value: String(personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)
+                    .foregroundColor(exercise.muscleGroup?.color ?? .label)
             }.frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -157,12 +165,12 @@ struct ExerciseDetailView: View {
     private var weightGraph: some View {
         VStack {
             Chart {
-                ForEach(exerciseDetail.personalBests(for: selectedAttribute, per: selectedCalendarComponent)) { chartEntry in
+                ForEach(personalBests(for: .weight, per: selectedCalendarComponent)) { chartEntry in
                     LineMark(x: .value("CalendarComponent", chartEntry.xValue),
-                             y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                             y: .value("Weight", chartEntry.yValue))
                     .foregroundStyle(muscleGroupColor)
                     AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
-                             y: .value(selectedAttribute.rawValue, chartEntry.yValue))
+                             y: .value("Weight", chartEntry.yValue))
                     .foregroundStyle(.linearGradient(colors: [muscleGroupColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
                 }
             }.frame(height: 180)
@@ -181,7 +189,55 @@ struct ExerciseDetailView: View {
             .frame(width: 4, height: 4)
     }
     
-    // MARK: - Computed Properties
+    // MARK: - Supporting Methods
+    
+    func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
+        database.getWorkoutSets(with: exercise)
+            .map { workoutSet in
+                return attribute == .repetitions ? workoutSet.maxRepetitions : convertWeightForDisplaying(workoutSet.maxWeight)
+            }
+            .max() ?? 0
+    }
+    
+    struct ChartEntry: Identifiable {
+        let id = UUID()
+        let xValue: String
+        let yValue: Int
+    }
+    
+    func personalBests(for attribute: WorkoutSet.Attribute, per calendarComponent: Calendar.Component) -> [ChartEntry] {
+        let numberOfValues = calendarComponent == .month ? 12 : 5
+        var result = [(String, Int)](repeating: ("", 0), count: numberOfValues)
+        for i in 0..<numberOfValues {
+            guard let iteratedDay = Calendar.current.date(byAdding: calendarComponent,
+                                                          value: -i,
+                                                          to: Date()) else { continue }
+            result[i].0 = getFirstDayString(in: calendarComponent, for: iteratedDay)
+            for workoutSet in exercise.sets {
+                guard let setDate = workoutSet.setGroup?.workout?.date,
+                        Calendar.current.isDate(setDate,
+                                                equalTo: iteratedDay,
+                                                toGranularity: calendarComponent) else { continue }
+                switch attribute {
+                case .repetitions: result[i].1 = max(result[i].1, Int(workoutSet.maxRepetitions))
+                case .weight: result[i].1 = max(result[i].1, convertWeightForDisplaying(workoutSet.maxWeight))
+                }
+            }
+        }
+        return result.reversed().map { ChartEntry(xValue: $0.0, yValue: $0.1) }
+    }
+    
+    private func getFirstDayString(in component: Calendar.Component, for date: Date) -> String {
+        let firstDayOfWeek = Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.dateFormat = component == .weekOfYear ? "dd.MM." : component == .month ? "MMM" : "yyyy"
+        return formatter.string(from: firstDayOfWeek)
+    }
+    
+    private var setsForExercise: [WorkoutSet] {
+        database.getWorkoutSets(with: exercise, sortedBy: sortingKey)
+    }
     
     private func dateString(for workoutSet: WorkoutSet) -> String {
         if let date = workoutSet.setGroup?.workout?.date {
@@ -195,13 +251,13 @@ struct ExerciseDetailView: View {
     }
     
     private var muscleGroupColor: Color {
-        exerciseDetail.exercise.muscleGroup?.color ?? .accentColor
+        exercise.muscleGroup?.color ?? .accentColor
     }
     
 }
 
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: NSManagedObjectID()))
+        ExerciseDetailView(exercise: Database.preview.newExercise(name: "Pushup"))
     }
 }

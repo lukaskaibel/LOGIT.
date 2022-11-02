@@ -9,33 +9,34 @@ import SwiftUI
 
 struct WorkoutTemplateListView: View {
     
-    // MARK: - State Objects
+    // MARK: - Environment
     
-    @StateObject private var workoutTemplateList = WorkoutTemplateList()
+    @EnvironmentObject var database: Database
     
     // MARK: - State
     
+    @State private var searchedText = ""
     @State private var showingTemplateCreation = false
     
     // MARK: - Body
     
     var body: some View {
         List {
-            ForEach(workoutTemplateList.templateWorkouts, id:\.objectID) { templateWorkout in
+            ForEach(templates, id:\.objectID) { templateWorkout in
                 ZStack {
                     WorkoutTemplateCell(workoutTemplate: templateWorkout)
-                    NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplateDetail: WorkoutTemplateDetail(workoutTemplateID: templateWorkout.objectID))) {
+                    NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplate: templateWorkout)) {
                         EmptyView()
                     }.opacity(0)
                 }
             }.onDelete { indexSet in
-                workoutTemplateList.templateWorkouts
+                templates
                     .elements(for: indexSet)
-                    .forEach { workoutTemplateList.delete($0) }
+                    .forEach { database.delete($0, saveContext: true) }
             }
             .listRowSeparator(.hidden)
         }.listStyle(.plain)
-            .searchable(text: $workoutTemplateList.searchedText)
+            .searchable(text: $searchedText)
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(NSLocalizedString("templates", comment: ""))
             .toolbar {
@@ -51,6 +52,13 @@ struct WorkoutTemplateListView: View {
                 TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
             }
     }
+    
+    // MARK: - Supporting Methods
+    
+    private var templates: [TemplateWorkout] {
+        database.getTemplateWorkouts(withNameIncluding: searchedText)
+    }
+    
 }
 
 struct WorkoutTemplateListView_Previews: PreviewProvider {

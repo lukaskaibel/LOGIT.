@@ -9,19 +9,38 @@ import SwiftUI
 
 struct EditExerciseView: View {
     
+    // MARK: - Environment
+    
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var database: Database
     
-    @ObservedObject var editExercise: EditExercise
+    // MARK: - State
     
+    @State private var exerciseName: String
+    @State private var muscleGroup: MuscleGroup
     @State private var showingExerciseExistsAlert: Bool = false
     @State private var showingExerciseNameEmptyAlert: Bool = false
+    
+    // MARK: - Variables
+    
+    private let exerciseToEdit: Exercise?
+    
+    // MARK: - Init
+    
+    init(exerciseToEdit: Exercise? = nil) {
+        self.exerciseToEdit = exerciseToEdit
+        _exerciseName = State(initialValue: exerciseToEdit?.name ?? "")
+        _muscleGroup = State(initialValue: exerciseToEdit?.muscleGroup ?? .chest)
+    }
+    
+    // MARK: - Body
         
     var body: some View {
         NavigationView {
             List {
                 Section(content: {
                     TextField(NSLocalizedString("exerciseName", comment: ""),
-                              text: $editExercise.exerciseName)
+                              text: $exerciseName)
                         .font(.body.weight(.semibold))
                         .padding(.vertical, 3)
                 }, footer: {
@@ -29,14 +48,14 @@ struct EditExerciseView: View {
                 })
                 Section(content: {
                     Picker(NSLocalizedString("muscleGroup", comment: ""),
-                           selection: $editExercise.muscleGroup) {
+                           selection: $muscleGroup) {
                         ForEach(MuscleGroup.allCases) { muscleGroup in
                             Text(muscleGroup.description).tag(muscleGroup)
                         }
                     }
                 })
             }.listStyle(.insetGrouped)
-                .navigationTitle(editExercise.isEditingExistingExercise ? "\(NSLocalizedString("edit", comment: "")) \(editExercise.exerciseName)" : NSLocalizedString("newExercise", comment: ""))
+                .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(exerciseName)" : NSLocalizedString("newExercise", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -46,18 +65,18 @@ struct EditExerciseView: View {
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(NSLocalizedString("done", comment: "")) {
-                            if editExercise.nameIsEmpty() {
+                            if exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
                                 showingExerciseNameEmptyAlert = true
-                            } else if editExercise.exerciseAlreadyExists() && !editExercise.isEditingExistingExercise {
+                            } else if exerciseToEdit == nil && !database.getExercises(withNameIncluding: exerciseName).isEmpty {
                                 showingExerciseExistsAlert = true
                             } else {
-                                editExercise.save()
+                                saveExercise()
                                 dismiss()
                             }
                         }.font(.body.weight(.semibold))
                     }
                 }
-                .alert("\(editExercise.exerciseName.trimmingCharacters(in: .whitespaces)) \(NSLocalizedString("alreadyExists", comment: ""))", isPresented: $showingExerciseExistsAlert) {
+                .alert("\(exerciseName.trimmingCharacters(in: .whitespaces)) \(NSLocalizedString("alreadyExists", comment: ""))", isPresented: $showingExerciseExistsAlert) {
                     Button(NSLocalizedString("ok", comment: "")) {
                         showingExerciseExistsAlert = false
                     }
@@ -69,10 +88,23 @@ struct EditExerciseView: View {
                 }
         }
     }
+    
+    // MARK: - Supporting Methods
+    
+    private func saveExercise() {
+        if let exerciseToEdit = exerciseToEdit {
+            exerciseToEdit.name = exerciseName
+            exerciseToEdit.muscleGroup = muscleGroup
+        } else {
+            database.newExercise(name: exerciseName, muscleGroup: muscleGroup)
+        }
+        database.save()
+    }
+    
 }
 
 struct EditExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        EditExerciseView(editExercise: EditExercise())
+        EditExerciseView()
     }
 }

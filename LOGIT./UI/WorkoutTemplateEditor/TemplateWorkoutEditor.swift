@@ -101,7 +101,7 @@ final class TemplateWorkoutEditor: ViewModel {
         database.delete(templateWorkout, saveContext: true)
     }
     
-    //MARK: TemplateDropSet Functions
+    // MARK: TemplateDropSet Functions
     
     func addDrop(to templateDropSet: TemplateDropSet) {
         templateDropSet.addDrop()
@@ -114,7 +114,7 @@ final class TemplateWorkoutEditor: ViewModel {
         updateView()
     }
     
-    //MARK: WorkoutSet convert functions
+    // MARK: WorkoutSet convert functions
     
     public func convertSetGroupToStandardSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
         templateSetGroup.sets

@@ -66,7 +66,7 @@ struct SetGroupDetailView: View {
             HStack {
                 if let exercise = setGroup.exercise {
                     Text("\(indexInWorkout + 1).")
-                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: exercise.objectID))) {
+                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
                         HStack(spacing: 3) {
                             Text("\(exercise.name ?? "")")
                                 .lineLimit(1)
@@ -84,7 +84,7 @@ struct SetGroupDetailView: View {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
                         .font(.caption)
-                    NavigationLink(destination: ExerciseDetailView(exerciseDetail: ExerciseDetail(exerciseID: secondaryExercise.objectID))) {
+                    NavigationLink(destination: ExerciseDetailView(exercise: secondaryExercise)) {
                         HStack(spacing: 3) {
                             Text("\(secondaryExercise.name ?? "")")
                                 .lineLimit(1)

@@ -15,12 +15,11 @@ struct WorkoutRecorderView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @EnvironmentObject var database: Database
     
     // MARK: - State Objects
     
     @StateObject internal var workoutRecorder = WorkoutRecorder()
-    @StateObject private var exerciseSelection = ExerciseSelection()
-    @StateObject private var exerciseDetail = ExerciseDetail(exerciseID: NSManagedObjectID())
     
     // MARK: - State
     
@@ -76,8 +75,7 @@ struct WorkoutRecorderView: View {
             }
             .sheet(isPresented: $showingExerciseSelection, onDismiss: { workoutRecorder.setGroupWithSelectedExercise = nil; workoutRecorder.isSelectingSecondaryExercise = false }) {
                 NavigationView {
-                    ExerciseSelectionView(exerciseSelection: exerciseSelection,
-                                          selectedExercise: Binding(get: {
+                    ExerciseSelectionView(selectedExercise: Binding(get: {
                         guard let setGroup = workoutRecorder.setGroupWithSelectedExercise else { return nil }
                         return workoutRecorder.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
                     }, set: {
@@ -100,7 +98,7 @@ struct WorkoutRecorderView: View {
             }
             .sheet(isPresented: workoutRecorder.showingExerciseDetail) {
                 NavigationView {
-                    ExerciseDetailView(exerciseDetail: exerciseDetail.with(exercise: workoutRecorder.exerciseForExerciseDetail!))
+                    ExerciseDetailView(exercise: workoutRecorder.exerciseForExerciseDetail!)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button(NSLocalizedString("dismiss", comment: "")) { workoutRecorder.showingExerciseDetail.wrappedValue = false }
@@ -195,13 +193,11 @@ struct WorkoutRecorderView: View {
             .onAppear {
                 UIScrollView.appearance().keyboardDismissMode = .interactive
             }
-            
     }
         
     private func ReorderSetGroupCell(for setGroup: WorkoutSetGroup) -> some View {
         ExerciseHeader(setGroup: setGroup)
     }
-    
     
     private var AddExerciseButton: some View {
         Button(action: {

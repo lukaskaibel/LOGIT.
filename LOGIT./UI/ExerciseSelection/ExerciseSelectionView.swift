@@ -10,29 +10,35 @@ import CoreData
 
 struct ExerciseSelectionView: View {
     
-    @Environment(\.dismiss) var dismiss
-    @ObservedObject private var exerciseSelection: ExerciseSelection
+    // MARK: - Environment
     
-    @Binding var selectedExercise: Exercise?
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var database: Database
+    
+    // MARK: - State
+    
+    @State private var searchedText: String = ""
+    @State private var selectedMuscleGroup: MuscleGroup?
     @State private var isAddingExercise: Bool = false
     
-    init(exerciseSelection: ExerciseSelection, selectedExercise: Binding<Exercise?>) {
-        self.exerciseSelection = exerciseSelection
-        self._selectedExercise = selectedExercise
-    }
+    // MARK: - Binding
+    
+    @Binding var selectedExercise: Exercise?
+    
+    // MARK: - Body
     
     var body: some View {
         List {
-            MuscleGroupSelector(selectedMuscleGroup: $exerciseSelection.selectedMuscleGroup)
+            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
-            ForEach(exerciseSelection.groupedExercises) { group in
-                ExerciseSection(for: group)
+            ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
+                exerciseSection(for: group)
             }
         }.listStyle(.plain)
             .navigationTitle(selectedExercise == nil  ? NSLocalizedString("addExercise", comment: "") : NSLocalizedString("selectExercise", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $exerciseSelection.searchedText,
+            .searchable(text: $searchedText,
                         placement: .navigationBarDrawer(displayMode: .always),
                         prompt: NSLocalizedString("searchExercises", comment: ""))
             .toolbar {
@@ -44,13 +50,15 @@ struct ExerciseSelectionView: View {
                     })
                 }
             }
-            .sheet(isPresented: $isAddingExercise, onDismiss: { exerciseSelection.updateView() }) {
-                EditExerciseView(editExercise: EditExercise())
+            .sheet(isPresented: $isAddingExercise) {
+                EditExerciseView()
             }
     }
     
+    // MARK: - Supporting Views
+    
     @ViewBuilder
-    private func ExerciseSection(for group: [Exercise]) -> some View {
+    private func exerciseSection(for group: [Exercise]) -> some View {
         Section(content: {
             ForEach(group, id:\.objectID) { exercise in
                 HStack {
@@ -72,7 +80,7 @@ struct ExerciseSelectionView: View {
                     }
                     Menu(content: {
                         Button(role: .destructive, action: {
-                            exerciseSelection.delete(exercise: exercise)
+                            database.delete(exercise, saveContext: true)
                         }) {
                             Label("\(NSLocalizedString("delete", comment: "")) \(exercise.name ?? "")", systemImage: "trash")
                         }
@@ -84,7 +92,7 @@ struct ExerciseSelectionView: View {
                 }.padding(.vertical, 8)
             }
         }, header: {
-            Text(exerciseSelection.getLetter(for: group).uppercased())
+            Text((group.first?.name?.first ?? Character(" ")).uppercased())
                 .sectionHeaderStyle()
         })
     }
@@ -94,7 +102,7 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(exerciseSelection: ExerciseSelection(), selectedExercise: .constant(Exercise()))
+            ExerciseSelectionView(selectedExercise: .constant(Exercise()))
         }
     }
 }

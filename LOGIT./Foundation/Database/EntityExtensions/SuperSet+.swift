@@ -13,7 +13,7 @@ extension SuperSet {
         setGroup?.secondaryExercise
     }
     
-    //MARK: Overrides from WorkoutSet
+    // MARK: Overrides from WorkoutSet
     
     public override var maxRepetitions: Int {
         return Int(max(repetitionsFirstExercise, repetitionsSecondExercise))

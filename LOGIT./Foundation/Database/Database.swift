@@ -9,15 +9,15 @@ import CoreData
 import OSLog
 
 
-struct Database {
+class Database: ObservableObject {
     
-    //MARK: - Constants
+    // MARK: - Constants
     
     static let shared = Database()
     
     private let container: NSPersistentContainer
     
-    //MARK: - Init
+    // MARK: - Init
     
     init(isPreview: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "LOGIT")
@@ -31,18 +31,19 @@ struct Database {
         })
     }
     
-    //MARK: - Computed Properties
+    // MARK: - Computed Properties
     
     var context: NSManagedObjectContext {
         container.viewContext
     }
     
-    //MARK: - Public Methods
+    // MARK: - Public Methods
     
     func save() {
         if context.hasChanges {
             do {
                 try context.save()
+                objectWillChange.send()
                 NotificationCenter.default.post(name: .databaseDidChange, object: nil, userInfo: nil)
             } catch {
                 os_log("Database: Failed to save context: \(String(describing: error))")
@@ -70,7 +71,8 @@ struct Database {
         }
     }
 
-    func delete(_ object: NSManagedObject, saveContext: Bool = false) {
+    func delete(_ object: NSManagedObject?, saveContext: Bool = false) {
+        guard let object = object else { return }
         if let workoutSet = object as? WorkoutSet, let setGroup = workoutSet.setGroup, setGroup.numberOfSets <= 1 {
             delete(setGroup)
         }

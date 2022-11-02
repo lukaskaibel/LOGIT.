@@ -10,7 +10,7 @@ import Foundation
 
 extension StandardSet {
     
-    //MARK: Overrides from WorkoutSet
+    // MARK: Overrides from WorkoutSet
             
     public override var maxRepetitions: Int {
         return Int(repetitions)
