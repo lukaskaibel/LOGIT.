@@ -42,7 +42,7 @@ struct StartWorkoutView: View {
         }.listStyle(.plain)
             .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
             .fullScreenCover(item: $selectedTemplate) { templateSelection in
-                WorkoutRecorderView(template: templateSelection.value)
+                WorkoutRecorderView(workout: database.newWorkout(), template: templateSelection.value)
             }
     }
     

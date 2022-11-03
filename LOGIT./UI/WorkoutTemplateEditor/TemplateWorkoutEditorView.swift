@@ -9,6 +9,12 @@ import SwiftUI
 
 struct TemplateWorkoutEditorView: View {
     
+    enum SheetStyle {
+        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
+    }
+    
+    // MARK: -
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
@@ -87,6 +93,8 @@ struct TemplateWorkoutEditorView: View {
                 .sheet(isPresented: $showingExerciseSelection,
                        onDismiss: { templateWorkoutEditor.setGroupWithSelectedExercise = nil; templateWorkoutEditor.isSelectingSecondaryExercise = false }) {
                     NavigationView {
+                        /*
+                        ExerciseSelectionView(selectedExercise: <#T##Exercise?#>, setExercise: <#T##(Exercise) -> Void#>)
                         ExerciseSelectionView(selectedExercise: Binding(get: {
                             guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { return nil }
                             return templateWorkoutEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
@@ -106,6 +114,7 @@ struct TemplateWorkoutEditorView: View {
                                 }
                             }
                         }
+                         */
                     }
                 }
                 .onAppear {

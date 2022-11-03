@@ -29,7 +29,7 @@ extension Database {
         return database
     }
     
-    static func getTestWorkout() -> Workout {
+    var testWorkout: Workout {
         let database = Database(isPreview: true)
         let exampleExerciseNames = ["Pushup", "Deadlift", "Squats", "Pushup", "Bar-Bell Curl", "Standing Row", "Overhead Press", "Inclined Dumbell Benchpress"]
         let workoutNames = ["Monday Morning Workout", "Thursday Afternoon Workout", "Pushday", "Pullday", "Leg-Day", "Full-Body Workout"]

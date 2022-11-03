@@ -12,7 +12,7 @@ extension WorkoutRecorderView {
     @ViewBuilder
     internal func WorkoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
-            Text(String((workoutRecorder.indexInSetGroup(for: workoutSet) ?? 0) + 1))
+            Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -26,16 +26,17 @@ extension WorkoutRecorderView {
                 SuperSetCell(for: superSet)
                     .padding(.vertical, 8)
             }
-            if let templateSet = workoutRecorder.templateSet(for: workoutSet),
+            if let templateSet = workoutSetTemplateSetDictionary[workoutSet],
                templateSet.hasEntry {
                 Button(action: {
                     UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                     if workoutSet.hasEntry {
                         workoutSet.clearEntries()
+                        database.refreshObjects()
                     } else {
                         workoutSet.match(templateSet)
+                        database.refreshObjects()
                     }
-                    workoutRecorder.updateView()
                 }) {
                     Image(systemName: "checkmark")
                         .font(.body.weight(.semibold))

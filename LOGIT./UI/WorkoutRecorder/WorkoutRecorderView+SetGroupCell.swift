@@ -16,10 +16,11 @@ extension WorkoutRecorderView {
             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                 WorkoutSetCell(workoutSet: workoutSet)
             }.onDelete { indexSet in
-                workoutRecorder.delete(setsWithIndices: indexSet, in: setGroup)
+                setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
+                database.refreshObjects()
             }
             Button(action: {
-                workoutRecorder.addSet(to: setGroup)
+                database.addSet(to: setGroup)
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }) {
                 Label(NSLocalizedString("addSet", comment: ""), systemImage: "plus.circle.fill")

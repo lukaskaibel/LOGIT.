@@ -75,6 +75,14 @@ extension Workout {
         setGroups.firstIndex(of: setGroup)
     }
     
+    var hasEntries: Bool {
+        sets.filter({ !$0.hasEntry }).count != numberOfSets
+    }
+    
+    var allSetsHaveEntries: Bool {
+        sets.filter({ !$0.hasEntry }).isEmpty
+    }
+    
     static func getStandardName(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"

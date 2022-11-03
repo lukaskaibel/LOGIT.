@@ -17,8 +17,11 @@ extension WorkoutRecorderView {
             VStack(spacing: 5) {
                 HStack {
                     Button(action: {
-                        workoutRecorder.setGroupWithSelectedExercise = setGroup
-                        showingExerciseSelection = true
+                        sheetType = .exerciseSelection(exercise: setGroup.exercise, setExercise: { exercise in
+                            setGroup.exercise = exercise
+                            database.refreshObjects()
+                        })
+                        isShowingSheet = true
                     }) {
                         HStack(spacing: 3) {
                             if setGroup.setType == .superSet {
@@ -40,19 +43,19 @@ extension WorkoutRecorderView {
                         Menu(content: {
                             Section {
                                 Button(action: {
-                                    workoutRecorder.convertSetGroupToStandardSets(setGroup)
+                                    database.convertSetGroupToStandardSets(setGroup)
                                 }) {
                                     Label(NSLocalizedString("normalset", comment: ""),
                                           systemImage: setGroup.setType == .standard ? "checkmark" : "")
                                 }
                                 Button(action: {
-                                    workoutRecorder.convertSetGroupToSuperSets(setGroup)
+                                    database.convertSetGroupToSuperSets(setGroup)
                                 }) {
                                     Label(NSLocalizedString("superset", comment: ""),
                                           systemImage: setGroup.setType == .superSet ? "checkmark" : "")
                                 }
                                 Button(action: {
-                                    workoutRecorder.convertSetGroupToDropSets(setGroup)
+                                    database.convertSetGroupToDropSets(setGroup)
                                 }) {
                                     Label(NSLocalizedString("dropset", comment: ""),
                                           systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
@@ -60,13 +63,16 @@ extension WorkoutRecorderView {
                             }
                             Section {
                                 Button(action: {
-                                    workoutRecorder.exerciseForExerciseDetail = setGroup.exercise
+                                    // TODO: Add Detail for Secondary Exercise in case of SuperSet
+                                    guard let exercise = setGroup.exercise else { return }
+                                    sheetType = .exerciseDetail(exercise: exercise)
+                                    isShowingSheet = true
                                 }) {
                                     Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
                                 }
                                 Button(role: .destructive, action: {
                                     withAnimation {
-                                        workoutRecorder.delete(setGroup: setGroup)
+                                        database.delete(setGroup)
                                     }
                                 }) {
                                     Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
@@ -84,9 +90,10 @@ extension WorkoutRecorderView {
                         Image(systemName: "arrow.turn.down.right")
                             .padding(.leading)
                         Button(action: {
-                            workoutRecorder.setGroupWithSelectedExercise = setGroup
-                            workoutRecorder.isSelectingSecondaryExercise = true
-                            showingExerciseSelection = true
+                            sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise, setExercise: { exercise in
+                                setGroup.secondaryExercise = exercise
+                            })
+                            isShowingSheet = true
                         }) {
                             HStack(spacing: 3) {
                                 Image(systemName: "2.circle")

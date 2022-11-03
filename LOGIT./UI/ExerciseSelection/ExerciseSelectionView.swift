@@ -23,7 +23,8 @@ struct ExerciseSelectionView: View {
     
     // MARK: - Binding
     
-    @Binding var selectedExercise: Exercise?
+    let selectedExercise: Exercise?
+    let setExercise: (Exercise) -> Void
     
     // MARK: - Body
     
@@ -69,7 +70,7 @@ struct ExerciseSelectionView: View {
                         .multilineTextAlignment(.leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            selectedExercise = exercise
+                            setExercise(exercise)
                             dismiss()
                         }
                     Spacer()
@@ -102,7 +103,7 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(selectedExercise: .constant(Exercise()))
+            ExerciseSelectionView(selectedExercise: Exercise(), setExercise: { _ in })
         }
     }
 }

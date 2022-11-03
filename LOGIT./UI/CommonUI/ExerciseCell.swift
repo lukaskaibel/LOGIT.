@@ -23,7 +23,7 @@ struct ExerciseCell: View {
                     .font(.headline)
             }
             Spacer()
-        }.cellTileStyle()
+        }.padding(CELL_PADDING)
     }
 }
 

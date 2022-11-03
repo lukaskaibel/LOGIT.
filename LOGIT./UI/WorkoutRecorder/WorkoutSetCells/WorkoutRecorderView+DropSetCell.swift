@@ -16,12 +16,12 @@ extension WorkoutRecorderView {
                                                          set: { dropSet.repetitions?.replaceValue(at: index, with: $0) }),
                                     weight: Binding(get: { dropSet.weights?.value(at: index) ?? 0 },
                                                     set: { dropSet.weights?.replaceValue(at: index, with: $0) }),
-                                    repetitionsPlaceholder: workoutRecorder.repetitionsPlaceholder(for: dropSet).value(at: index),
-                                    weightPlaceholder: workoutRecorder.weightsPlaceholder(for: dropSet).value(at: index))
+                                    repetitionsPlaceholder: repetitionsPlaceholder(for: dropSet).value(at: index),
+                                    weightPlaceholder: weightsPlaceholder(for: dropSet).value(at: index))
             }
             Stepper("Drop count",
-                    onIncrement: { workoutRecorder.addDrop(to: dropSet) },
-                    onDecrement: { workoutRecorder.removeLastDrop(from: dropSet) })
+                    onIncrement: { dropSet.addDrop(); database.refreshObjects() },
+                    onDecrement: { dropSet.removeLastDrop(); database.refreshObjects() })
         }
     }
 

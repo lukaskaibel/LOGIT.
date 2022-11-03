@@ -15,8 +15,8 @@ extension WorkoutRecorderView {
                                                      set: {standardSet.repetitions = $0}),
                                 weight: Binding(get: {standardSet.weight},
                                                 set: {standardSet.weight = $0}),
-                                repetitionsPlaceholder: workoutRecorder.repetitionsPlaceholder(for: standardSet),
-                                weightPlaceholder: workoutRecorder.weightPlaceholder(for: standardSet))
+                                repetitionsPlaceholder: repetitionsPlaceholder(for: standardSet),
+                                weightPlaceholder: weightPlaceholder(for: standardSet))
         }
     }
     

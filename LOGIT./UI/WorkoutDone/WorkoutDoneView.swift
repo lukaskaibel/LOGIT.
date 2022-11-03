@@ -72,6 +72,6 @@ struct WorkoutDoneView: View {
 
 struct WorkoutDoneView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDoneView(workout: Database.getTestWorkout())
+        WorkoutDoneView(workout: Database.preview.testWorkout)
     }
 }

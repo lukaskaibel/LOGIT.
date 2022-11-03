@@ -117,6 +117,6 @@ struct SetGroupDetailView: View {
 
 struct SetGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        SetGroupDetailView(setGroup: Database.getTestWorkout().setGroups.first!, indexInWorkout: 1)
+        SetGroupDetailView(setGroup: Database.preview.testWorkout.setGroups.first!, indexInWorkout: 1)
     }
 }

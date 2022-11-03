@@ -13,7 +13,7 @@ extension WorkoutRecorderView {
     internal struct WorkoutSetEntryView: View {
         
         @Environment(\.colorScheme) var colorScheme
-        @EnvironmentObject var workoutRecorder: WorkoutRecorder
+        @EnvironmentObject var database: Database
         
         @Binding var repetitions: Int64
         @Binding var weight: Int64
@@ -64,7 +64,7 @@ extension WorkoutRecorderView {
                 get: { repetitions == 0 ? "" : String(repetitions) },
                 set: { value in
                     repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
-                    workoutRecorder.updateView()
+                    database.refreshObjects()
                 }
             )
         }
@@ -74,8 +74,7 @@ extension WorkoutRecorderView {
                 get: { weight == 0 ? "" : String(convertWeightForDisplaying(weight)) },
                 set: { value in
                     weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
-                    workoutRecorder.updateView()
-                }
+                    database.refreshObjects()                }
             )
         }
 

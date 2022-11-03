@@ -26,6 +26,7 @@ struct AllExercisesView: View {
             MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
             ForEach(database.getGroupedExercises(withNameIncluding: searchedText,
                                                  for: selectedMuscleGroup)) { group in
                 Section(content: {
@@ -41,13 +42,13 @@ struct AllExercisesView: View {
                                 EmptyView()
                             }.opacity(0)
                         }
-                    }.listRowSeparator(.hidden)
+                    }
                 }, header: {
                     Text(getLetter(for: group))
                         .sectionHeaderStyle()
                 })
-            }
-        }.listStyle(.plain)
+            }.listRowInsets(EdgeInsets())
+        }.listStyle(.insetGrouped)
             .searchable(text: $searchedText )
             .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
             .navigationBarTitleDisplayMode(.large)

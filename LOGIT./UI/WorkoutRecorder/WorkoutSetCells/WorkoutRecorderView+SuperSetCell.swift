@@ -18,8 +18,8 @@ extension WorkoutRecorderView {
                                                          set: { superSet.repetitionsFirstExercise = $0 }),
                                     weight: Binding(get: { superSet.weightFirstExercise },
                                                     set: { superSet.weightFirstExercise = $0 }),
-                                    repetitionsPlaceholder: workoutRecorder.repetitionsPlaceholder(for: superSet).first!,
-                                    weightPlaceholder: workoutRecorder.weightsPlaceholder(for: superSet).first!)
+                                    repetitionsPlaceholder: repetitionsPlaceholder(for: superSet).first!,
+                                    weightPlaceholder: weightsPlaceholder(for: superSet).first!)
             }
             HStack {
                 Image(systemName: "2.circle")
@@ -28,8 +28,8 @@ extension WorkoutRecorderView {
                                                          set: { superSet.repetitionsSecondExercise = $0 }),
                                     weight: Binding(get: { superSet.weightSecondExercise },
                                                     set: { superSet.weightSecondExercise = $0 }),
-                                    repetitionsPlaceholder: workoutRecorder.repetitionsPlaceholder(for: superSet).second!,
-                                    weightPlaceholder: workoutRecorder.weightsPlaceholder(for: superSet).second!)
+                                    repetitionsPlaceholder: repetitionsPlaceholder(for: superSet).second!,
+                                    weightPlaceholder: weightsPlaceholder(for: superSet).second!)
             }
         }
     }
