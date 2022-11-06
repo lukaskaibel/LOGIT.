@@ -1,5 +1,5 @@
 //
-//  TemplateWorkoutEditorView+TemplateSuperSetCell.swift
+//  TemplateEditorView+TemplateSuperSetCell.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 28.05.22.

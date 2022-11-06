@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateListView.swift
+//  TemplateListView.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 06.04.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WorkoutTemplateListView: View {
+struct TemplateListView: View {
     
     // MARK: - Environment
     
@@ -22,10 +22,10 @@ struct WorkoutTemplateListView: View {
     
     var body: some View {
         List {
-            ForEach(templates, id:\.objectID) { templateWorkout in
+            ForEach(templates, id:\.objectID) { template in
                 ZStack {
-                    WorkoutTemplateCell(workoutTemplate: templateWorkout)
-                    NavigationLink(destination: TemplateDetailView(workoutTemplate: templateWorkout)) {
+                    TemplateCell(template: template)
+                    NavigationLink(destination: TemplateDetailView(template: template)) {
                         EmptyView()
                     }.opacity(0)
                 }.padding(CELL_PADDING)
@@ -49,20 +49,20 @@ struct WorkoutTemplateListView: View {
                 }
             }
             .popover(isPresented: $showingTemplateCreation) {
-                TemplateEditorView(templateWorkoutEditor: TemplateEditor())
+                TemplateEditorView(templateEditor: TemplateEditor())
             }
     }
     
     // MARK: - Supporting Methods
     
-    private var templates: [TemplateWorkout] {
-        database.getTemplateWorkouts(withNameIncluding: searchedText)
+    private var templates: [Template] {
+        database.getTemplates(withNameIncluding: searchedText)
     }
     
 }
 
-struct WorkoutTemplateListView_Previews: PreviewProvider {
+struct TemplateListView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutTemplateListView()
+        TemplateListView()
     }
 }

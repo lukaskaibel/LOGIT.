@@ -13,7 +13,7 @@ extension TemplateEditorView {
     internal struct TemplateSetEntryView: View {
         
         @Environment(\.colorScheme) var colorScheme
-        @EnvironmentObject var templateWorkoutEditor: TemplateEditor
+        @EnvironmentObject var templateEditor: TemplateEditor
         
         @Binding var repetitions: Int64
         @Binding var weight: Int64
@@ -62,7 +62,7 @@ extension TemplateEditorView {
                 get: { repetitions == 0 ? "" : String(repetitions) },
                 set: { value in
                     repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
-                    templateWorkoutEditor.updateView()
+                    templateEditor.updateView()
                 }
             )
         }
@@ -72,7 +72,7 @@ extension TemplateEditorView {
                 get: { weight == 0 ? "" : String(convertWeightForDisplaying(weight)) },
                 set: { value in
                     weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
-                    templateWorkoutEditor.updateView()
+                    templateEditor.updateView()
                 }
             )
         }

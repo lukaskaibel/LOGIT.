@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateDetailView.swift
+//  TemplateDetailView.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 08.04.22.
@@ -23,7 +23,7 @@ struct TemplateDetailView: View {
     
     // MARK: - Variables
     
-    let workoutTemplate: TemplateWorkout
+    let template: Template
     
     // MARK: - Body
     
@@ -33,9 +33,9 @@ struct TemplateDetailView: View {
                 templateHeader
             }.listRowSeparator(.hidden)
             Section {
-                ForEach(workoutTemplate.setGroups) { templateSetGroup in
+                ForEach(template.setGroups) { templateSetGroup in
                     TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
-                                               indexInWorkout: workoutTemplate.index(of: templateSetGroup) ?? 0)
+                                               indexInWorkout: template.index(of: templateSetGroup) ?? 0)
                 }
             } header: {
                 Text("Summary")
@@ -44,12 +44,12 @@ struct TemplateDetailView: View {
             Section(content: {
                 workoutList
             }, header: {
-                Text("\(NSLocalizedString("performed", comment: "")) \(workoutTemplate.workouts.count) \(NSLocalizedString("time\(workoutTemplate.workouts.count == 1 ? "" : "s")", comment: ""))")
+                Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
                     .sectionHeaderStyle()
             })
         }.listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (workoutTemplate.date?.description(.short) ?? ""))
+            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (template.date?.description(.short) ?? ""))
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Menu(content: {
@@ -63,18 +63,18 @@ struct TemplateDetailView: View {
 
                 }
             }
-            .alert(NSLocalizedString("workoutTemplates", comment: ""),
+            .alert(NSLocalizedString("templates", comment: ""),
                    isPresented: $showingTemplateInfoAlert,
                    actions: {  },
                    message: { Text(NSLocalizedString("templateExplanation", comment: "")) })
             .confirmationDialog(NSLocalizedString("deleteTemplateMsg", comment: ""), isPresented: $showingDeletionAlert) {
                 Button(NSLocalizedString("deleteTemplate", comment: ""), role: .destructive) {
-                    database.delete(workoutTemplate, saveContext: true)
+                    database.delete(template, saveContext: true)
                     dismiss()
                 }
             }
             .sheet(isPresented: $showingTemplateEditor) {
-                TemplateEditorView(templateWorkoutEditor: TemplateEditor(templateWorkout: workoutTemplate))
+                TemplateEditorView(templateEditor: TemplateEditor(template: template))
             }
     }
     
@@ -82,7 +82,7 @@ struct TemplateDetailView: View {
     
     private var templateHeader: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(workoutTemplate.name ?? "")
+            Text(template.name ?? "")
                 .font(.largeTitle.weight(.bold))
                 .lineLimit(2)
             HStack {
@@ -94,7 +94,7 @@ struct TemplateDetailView: View {
     }
     
     private var workoutList: some View {
-        ForEach(workoutTemplate.workouts, id:\.objectID) { workout in
+        ForEach(template.workouts, id:\.objectID) { workout in
             ZStack {
                 WorkoutCell(workout: workout)
                 NavigationLink(destination: WorkoutDetailView(workout: workout,
@@ -113,7 +113,7 @@ struct TemplateDetailView: View {
     // MARK: - Supporting Methods
     
     private var lastUsedDateString: String {
-        workoutTemplate.workouts.first?.date?.description(.medium) ?? NSLocalizedString("never", comment: "")
+        template.workouts.first?.date?.description(.medium) ?? NSLocalizedString("never", comment: "")
     }
     
 }

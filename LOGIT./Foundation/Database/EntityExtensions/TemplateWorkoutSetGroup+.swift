@@ -1,5 +1,5 @@
 //
-//  TemplateWorkoutSetGroup+.swift
+//  TemplateSetGroup+.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 02.04.22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension TemplateWorkoutSetGroup {
+extension TemplateSetGroup {
     
     @objc enum SetType: Int {
         case standard, superSet, dropSet

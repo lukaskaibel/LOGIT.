@@ -26,10 +26,10 @@ extension Exercise {
         }
     }
     
-    var templateSetGroups: [TemplateWorkoutSetGroup] {
+    var templateSetGroups: [TemplateSetGroup] {
         get {
             return (templateSetGroupOrder ?? .emptyList)
-                .compactMap { id in (templateSetGroups_?.allObjects as? [TemplateWorkoutSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
+                .compactMap { id in (templateSetGroups_?.allObjects as? [TemplateSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
         }
         set {
             templateSetGroupOrder = newValue.map { $0.id! }

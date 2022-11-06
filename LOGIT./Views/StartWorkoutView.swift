@@ -17,7 +17,7 @@ struct StartWorkoutView: View {
     
     private struct TemplateSelection: Identifiable {
         let id = UUID()
-        let value: TemplateWorkout?
+        let value: Template?
     }
     
     @State private var selectedTemplate: TemplateSelection? = nil
@@ -78,11 +78,11 @@ struct StartWorkoutView: View {
     }
     
     private var templateList: some View {
-        ForEach(database.getTemplateWorkouts(), id:\.objectID) { template in
+        ForEach(database.getTemplates(), id:\.objectID) { template in
             Button(action: {
                 selectedTemplate = TemplateSelection(value: template)
             }) {
-                WorkoutTemplateCell(workoutTemplate: template)
+                TemplateCell(template: template)
                     .foregroundColor(.label)
             }.padding(CELL_PADDING)
         }.listRowInsets(EdgeInsets())

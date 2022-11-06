@@ -99,13 +99,13 @@ extension Database {
         return result
     }
     
-    // MARK: - TemplateWorkout Fetch
+    // MARK: - Template Fetch
     
-    func getTemplateWorkouts(withNameIncluding filterText: String = "") -> [TemplateWorkout] {
-        fetch(TemplateWorkout.self,
+    func getTemplates(withNameIncluding filterText: String = "") -> [Template] {
+        fetch(Template.self,
               sortingKey: "creationDate",
               predicate: filterText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@",
-                                                                filterText)) as! [TemplateWorkout]
+                                                                filterText)) as! [Template]
     }
     
 }

@@ -1,5 +1,5 @@
 //
-//  TemplateWorkoutSet+.swift
+//  TemplateSet+.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 10.04.22.

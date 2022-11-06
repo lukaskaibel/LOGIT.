@@ -1,5 +1,5 @@
 //
-//  TemplateWorkoutEditor.swift
+//  TemplateEditor.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 02.04.22.
@@ -10,45 +10,45 @@ import Foundation
 
 final class TemplateEditor: ViewModel {
     
-    @Published var templateWorkout = TemplateWorkout()
-    @Published var setGroupWithSelectedExercise: TemplateWorkoutSetGroup? = nil
+    @Published var template = Template()
+    @Published var setGroupWithSelectedExercise: TemplateSetGroup? = nil
     @Published var isEditingExistingTemplate: Bool = false
     
     public var isSelectingSecondaryExercise = false
         
-    init(templateWorkout: TemplateWorkout? = nil, from workout: Workout? = nil) {
+    init(template: Template? = nil, from workout: Workout? = nil) {
         super.init()
-        if let templateWorkout = templateWorkout {
-            self.templateWorkout = templateWorkout
+        if let template = template {
+            self.template = template
             self.isEditingExistingTemplate = true
         } else if let workout = workout {
-            self.templateWorkout = database.newTemplateWorkout(from: workout)
+            self.template = database.newTemplate(from: workout)
             self.isEditingExistingTemplate = false
         } else {
-            self.templateWorkout = database.newTemplateWorkout()
+            self.template = database.newTemplate()
             self.isEditingExistingTemplate = false
         }
     }
     
-    var templateWorkoutName: String {
+    var templateName: String {
         get {
-            templateWorkout.name ?? ""
+            template.name ?? ""
         }
         set {
-            templateWorkout.name = newValue
+            template.name = newValue
             updateView()
         }
     }
     
     public var canSaveTemplate: Bool {
-        !(templateWorkout.name?.isEmpty ?? true)
+        !(template.name?.isEmpty ?? true)
     }
     
-    public var setGroups: [TemplateWorkoutSetGroup] {
-        templateWorkout.setGroups
+    public var setGroups: [TemplateSetGroup] {
+        template.setGroups
     }
     
-    public func addSet(to templateSetGroup: TemplateWorkoutSetGroup) {
+    public func addSet(to templateSetGroup: TemplateSetGroup) {
         let lastSet = templateSetGroup.sets.last
         if let _ = lastSet as? TemplateDropSet {
             database.newTemplateDropSet(templateSetGroup: templateSetGroup)
@@ -61,7 +61,7 @@ final class TemplateEditor: ViewModel {
     }
     
     public func addSetGroup(for exercise: Exercise) {
-        database.newTemplateWorkoutSetGroup(exercise: exercise, templateWorkout: templateWorkout)
+        database.newTemplateSetGroup(exercise: exercise, template: template)
     }
         
     public func delete(setGroupWithIndexes indexSet: IndexSet) {
@@ -71,7 +71,7 @@ final class TemplateEditor: ViewModel {
         updateView()
     }
     
-    public func delete(setsWithIndices indexSet: IndexSet, in setGroup: TemplateWorkoutSetGroup) {
+    public func delete(setsWithIndices indexSet: IndexSet, in setGroup: TemplateSetGroup) {
         for index in indexSet {
             database.delete(setGroup.sets[index])
         }
@@ -88,17 +88,17 @@ final class TemplateEditor: ViewModel {
     }
     
     public func moveSetGroups(from source: IndexSet, to destination: Int) {
-        templateWorkout.setGroups.move(fromOffsets: source, toOffset: destination)
+        template.setGroups.move(fromOffsets: source, toOffset: destination)
         database.refreshObjects()
         updateView()
     }
 
-    public func saveTemplateWorkout() {
+    public func saveTemplate() {
         database.save()
     }
     
-    public func deleteTemplateWorkout() {
-        database.delete(templateWorkout, saveContext: true)
+    public func deleteTemplate() {
+        database.delete(template, saveContext: true)
     }
     
     // MARK: TemplateDropSet Functions
@@ -116,7 +116,7 @@ final class TemplateEditor: ViewModel {
     
     // MARK: WorkoutSet convert functions
     
-    public func convertSetGroupToStandardSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
+    public func convertSetGroupToStandardSets(_ templateSetGroup: TemplateSetGroup) {
         templateSetGroup.sets
             .forEach { convertToStandardSet($0) }
         updateView()
@@ -136,7 +136,7 @@ final class TemplateEditor: ViewModel {
         }
     }
     
-    public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateWorkoutSetGroup) {
+    public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateSetGroup) {
         templateSetGroup.sets
             .forEach { convertToTemplateDropSet($0) }
         updateView()
@@ -156,7 +156,7 @@ final class TemplateEditor: ViewModel {
         }
     }
     
-    public func convertSetGroupToTemplateSuperSet(_ templateSetGroup: TemplateWorkoutSetGroup) {
+    public func convertSetGroupToTemplateSuperSet(_ templateSetGroup: TemplateSetGroup) {
         templateSetGroup.sets
             .forEach { convertToTemplateSuperSet($0) }
         updateView()

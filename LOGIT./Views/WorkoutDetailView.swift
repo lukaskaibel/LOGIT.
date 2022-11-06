@@ -92,12 +92,12 @@ struct WorkoutDetailView: View {
                 }
             }
                                 .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateEditorView(templateWorkoutEditor: TemplateEditor(templateWorkout: workout.template,
+                                    TemplateEditorView(templateEditor: TemplateEditor(template: workout.template,
                                                                                                            from: workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
                                     NavigationView {
-                                        TemplateDetailView(workoutTemplate: workout.template!)
+                                        TemplateDetailView(template: workout.template!)
                                             .toolbar {
                                                 ToolbarItem(placement: .navigationBarLeading) {
                                                     Button(NSLocalizedString("navBack", comment: "")) { isShowingTemplateDetail = false }

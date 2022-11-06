@@ -16,7 +16,7 @@ struct TemplateSetGroupDetailView: View {
     
     // MARK: - Parameters
     
-    let templateSetGroup: TemplateWorkoutSetGroup
+    let templateSetGroup: TemplateSetGroup
     let indexInWorkout: Int
     
     // MARK: - Body
@@ -50,7 +50,7 @@ struct TemplateSetGroupDetailView: View {
     // MARK: - Supporting Views
     
     @ViewBuilder
-    private func header(for templateSetGroup: TemplateWorkoutSetGroup) -> some View {
+    private func header(for templateSetGroup: TemplateSetGroup) -> some View {
         VStack(spacing: 3) {
             HStack {
                 if let exercise = templateSetGroup.exercise {

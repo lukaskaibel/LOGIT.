@@ -1,5 +1,5 @@
 //
-//  TemplateWorkout+.swift
+//  Template+.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 02.04.22.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension TemplateWorkout {
+extension Template {
     
     var workouts: [Workout] {
         get {
@@ -30,10 +30,10 @@ extension TemplateWorkout {
         return result
     }
     
-    var setGroups: [TemplateWorkoutSetGroup] {
+    var setGroups: [TemplateSetGroup] {
         get {
             return (templateSetGroupOrder ?? .emptyList)
-                .compactMap { id in (setGroups_?.allObjects as? [TemplateWorkoutSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
+                .compactMap { id in (setGroups_?.allObjects as? [TemplateSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
         }
         set {
             templateSetGroupOrder = newValue.map { $0.id! }
@@ -55,7 +55,7 @@ extension TemplateWorkout {
         return result
     }
     
-    func index(of templateSetGroup: TemplateWorkoutSetGroup) -> Int? {
+    func index(of templateSetGroup: TemplateSetGroup) -> Int? {
         setGroups.firstIndex(of: templateSetGroup)
     }
     

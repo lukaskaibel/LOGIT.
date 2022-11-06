@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateCell.swift
+//  TemplateCell.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 06.04.22.
@@ -7,23 +7,23 @@
 
 import SwiftUI
 
-struct WorkoutTemplateCell: View {
+struct TemplateCell: View {
     
     // MARK: - Variables
     
-    @ObservedObject var workoutTemplate: TemplateWorkout
+    @ObservedObject var template: Template
     
     // MARK: - Body
     
     var body: some View {
         HStack {
             HStack(alignment: .top) {
-                VerticalMuscleGroupIndicator(muscleGroupAmounts: workoutTemplate.muscleGroupOccurances)
+                VerticalMuscleGroupIndicator(muscleGroupAmounts: template.muscleGroupOccurances)
                 VStack(alignment: .leading) {
                     Text(lastUsedDate)
                         .font(.footnote.weight(.medium))
                         .foregroundColor(.secondaryLabel)
-                    Text(workoutTemplate.name ?? "No name")
+                    Text(template.name ?? "No name")
                         .font(.headline)
                         .lineLimit(1)
                     Text(exercisesString)
@@ -40,7 +40,7 @@ struct WorkoutTemplateCell: View {
     // MARK: - Computed UI Properties
     
     private var lastUsedDate: String {
-        if let date = workoutTemplate.date {
+        if let date = template.date {
             return "\(NSLocalizedString("lastUsed", comment: "")) \(date.description(.short))"
         } else {
             return NSLocalizedString("unused", comment: "")
@@ -49,7 +49,7 @@ struct WorkoutTemplateCell: View {
     
     private var exercisesString: String {
         var result = ""
-        for exercise in workoutTemplate.exercises {
+        for exercise in template.exercises {
             if let name = exercise.name {
                 result += (!result.isEmpty ? ", " : "") + name
             }
@@ -59,8 +59,8 @@ struct WorkoutTemplateCell: View {
     
 }
 
-struct WorkoutTemplateCell_Previews: PreviewProvider {
+struct TemplateCell_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutTemplateCell(workoutTemplate: Database.preview.newTemplateWorkout(name: "Pushday"))
+        TemplateCell(template: Database.preview.newTemplate(name: "Pushday"))
     }
 }

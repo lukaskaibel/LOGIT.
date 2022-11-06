@@ -37,7 +37,7 @@ struct LOGIT: App {
                     HomeView()
                         .tabItem { Label("Home", systemImage: "house.fill") }
                     NavigationView {
-                        WorkoutTemplateListView()
+                        TemplateListView()
                     }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
                     NavigationView {
                         StartWorkoutView()

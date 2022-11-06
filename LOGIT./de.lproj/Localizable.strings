@@ -106,12 +106,12 @@
 "createTemplate" = "Vorlage erstellen";
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
 "startEmpty" = "Leeres Workout starten";
-"workoutTemplates" = "Workout Vorlagen";
+"templates" = "Workout Vorlagen";
 "templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
 "deleteTemplate" = "Vorlage löschen";
 "deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";
-"editWorkoutTemplate" = "Vorlagen bearbeiten";
-"newWorkoutTemplate" = "Vorlage erstellen";
+"editTemplate" = "Vorlagen bearbeiten";
+"newTemplate" = "Vorlage erstellen";
 "newTemplateFromWorkout" = "Neue Vorlage aus Workout";
 
 "welcomeTo" = "Willkommen bei";

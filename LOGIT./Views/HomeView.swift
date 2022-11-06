@@ -76,10 +76,10 @@ struct HomeView: View {
                 .navigationTitle(NSLocalizedString("home", comment: ""))
         } .navigationViewStyle(.stack)
         .sheet(isPresented: $isShowingTemplateEditor) {
-            TemplateEditorView(templateWorkoutEditor: TemplateEditor())
+            TemplateEditorView(templateEditor: TemplateEditor())
         }
         .sheet(isPresented: $isShowingNewTemplate) {
-            TemplateEditorView(templateWorkoutEditor: TemplateEditor())
+            TemplateEditorView(templateEditor: TemplateEditor())
         }
     }
     

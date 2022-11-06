@@ -1,5 +1,5 @@
 //
-//  WorkoutTemplateEditorView.swift
+//  TemplateEditorView.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 02.04.22.
@@ -18,7 +18,7 @@ struct TemplateEditorView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
-    @StateObject var templateWorkoutEditor: TemplateEditor
+    @StateObject var templateEditor: TemplateEditor
     
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
@@ -29,19 +29,19 @@ struct TemplateEditorView: View {
             List {
                 if !isEditing {
                     Section {
-                        TextField(NSLocalizedString("title", comment: ""), text: $templateWorkoutEditor.templateWorkoutName)
+                        TextField(NSLocalizedString("title", comment: ""), text: $templateEditor.templateName)
                             .font(.body.weight(.bold))
                             .padding(.vertical, 8)
                     }
                 }
-                ForEach(templateWorkoutEditor.templateWorkout.setGroups, id:\.objectID) { setGroup in
+                ForEach(templateEditor.template.setGroups, id:\.objectID) { setGroup in
                     if isEditing {
                         SetGroupCellForEditing(for: setGroup)
                     } else {
                         SetGroupCellWithSets(for: setGroup)
                     }
-                }.onMove(perform: templateWorkoutEditor.moveSetGroups)
-                    .onDelete { indexSet in templateWorkoutEditor.delete(setGroupWithIndexes: indexSet) }
+                }.onMove(perform: templateEditor.moveSetGroups)
+                    .onDelete { indexSet in templateEditor.delete(setGroupWithIndexes: indexSet) }
                 if !isEditing {
                     Section {
                         Button(action: { showingExerciseSelection = true }) {
@@ -54,21 +54,21 @@ struct TemplateEditorView: View {
                 }
             }.listStyle(.insetGrouped)
                 .interactiveDismissDisabled()
-                .navigationTitle(templateWorkoutEditor.isEditingExistingTemplate ? NSLocalizedString("editWorkoutTemplate", comment: "") : NSLocalizedString("newWorkoutTemplate", comment: ""))
+                .navigationTitle(templateEditor.isEditingExistingTemplate ? NSLocalizedString("editTemplate", comment: "") : NSLocalizedString("newTemplate", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .environment(\.editMode, $editMode)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(NSLocalizedString("save", comment: "")) {
-                            templateWorkoutEditor.saveTemplateWorkout()
+                            templateEditor.saveTemplate()
                             dismiss()
                         }.font(.body.weight(.bold))
-                            .disabled(!templateWorkoutEditor.canSaveTemplate)
+                            .disabled(!templateEditor.canSaveTemplate)
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(NSLocalizedString("cancel", comment: "")) {
-                            if !templateWorkoutEditor.isEditingExistingTemplate {
-                                templateWorkoutEditor.deleteTemplateWorkout()
+                            if !templateEditor.isEditingExistingTemplate {
+                                templateEditor.deleteTemplate()
                             }
                             dismiss()
                         }
@@ -85,23 +85,23 @@ struct TemplateEditorView: View {
                             Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
                                 isEditing.toggle()
                                 editMode = isEditing ? .active : .inactive
-                            }.disabled(templateWorkoutEditor.templateWorkout.numberOfSetGroups == 0)
+                            }.disabled(templateEditor.template.numberOfSetGroups == 0)
                                 .font(.body.weight(.medium))
                         }
                     }
                 }
                 .sheet(isPresented: $showingExerciseSelection,
-                       onDismiss: { templateWorkoutEditor.setGroupWithSelectedExercise = nil; templateWorkoutEditor.isSelectingSecondaryExercise = false }) {
+                       onDismiss: { templateEditor.setGroupWithSelectedExercise = nil; templateEditor.isSelectingSecondaryExercise = false }) {
                     NavigationView {
                         /*
                         ExerciseSelectionView(selectedExercise: <#T##Exercise?#>, setExercise: <#T##(Exercise) -> Void#>)
                         ExerciseSelectionView(selectedExercise: Binding(get: {
-                            guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { return nil }
-                            return templateWorkoutEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
+                            guard let setGroup = templateEditor.setGroupWithSelectedExercise else { return nil }
+                            return templateEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
                         }, set: {
                             guard let exercise = $0 else { return }
-                            guard let setGroup = templateWorkoutEditor.setGroupWithSelectedExercise else { templateWorkoutEditor.addSetGroup(for: exercise); return }
-                            if templateWorkoutEditor.isSelectingSecondaryExercise {
+                            guard let setGroup = templateEditor.setGroupWithSelectedExercise else { templateEditor.addSetGroup(for: exercise); return }
+                            if templateEditor.isSelectingSecondaryExercise {
                                 setGroup.secondaryExercise = exercise
                             } else {
                                 setGroup.exercise = exercise
@@ -120,24 +120,24 @@ struct TemplateEditorView: View {
                 .onAppear {
                     UIScrollView.appearance().keyboardDismissMode = .interactive
                 }
-        }.environmentObject(templateWorkoutEditor)
+        }.environmentObject(templateEditor)
     }
     
-    private func SetGroupCellForEditing(for setGroup: TemplateWorkoutSetGroup) -> some View {
+    private func SetGroupCellForEditing(for setGroup: TemplateSetGroup) -> some View {
         SetGroupHeader(for: setGroup)
     }
     
-    private func SetGroupCellWithSets(for setGroup: TemplateWorkoutSetGroup) -> some View {
+    private func SetGroupCellWithSets(for setGroup: TemplateSetGroup) -> some View {
         Section {
             SetGroupHeader(for: setGroup)
             ForEach(setGroup.sets, id:\.objectID) { templateSet in
-                TemplateWorkoutSetCell(for: templateSet)
+                TemplateSetCell(for: templateSet)
                     .listRowSeparator(.hidden, edges: .bottom)
             }.onDelete { indexSet in
-                templateWorkoutEditor.delete(setsWithIndices: indexSet, in: setGroup)
+                templateEditor.delete(setsWithIndices: indexSet, in: setGroup)
             }
             Button(action: {
-                templateWorkoutEditor.addSet(to: setGroup)
+                templateEditor.addSet(to: setGroup)
             }) {
                 HStack {
                     Image(systemName: "plus")
@@ -148,11 +148,11 @@ struct TemplateEditorView: View {
         }
     }
     
-    private func SetGroupHeader(for setGroup: TemplateWorkoutSetGroup) -> some View {
+    private func SetGroupHeader(for setGroup: TemplateSetGroup) -> some View {
         VStack(spacing: 5) {
             HStack {
                 Button(action: {
-                    templateWorkoutEditor.setGroupWithSelectedExercise = setGroup
+                    templateEditor.setGroupWithSelectedExercise = setGroup
                     showingExerciseSelection = true
                 }) {
                     HStack {
@@ -174,19 +174,19 @@ struct TemplateEditorView: View {
                 Menu(content: {
                     Section {
                         Button(action: {
-                            templateWorkoutEditor.convertSetGroupToStandardSets(setGroup)
+                            templateEditor.convertSetGroupToStandardSets(setGroup)
                         }) {
                             Label(NSLocalizedString("normalset", comment: ""),
                                   systemImage: setGroup.setType == .standard ? "checkmark" : "")
                         }
                         Button(action: {
-                            templateWorkoutEditor.convertSetGroupToTemplateSuperSet(setGroup)
+                            templateEditor.convertSetGroupToTemplateSuperSet(setGroup)
                         }) {
                             Label(NSLocalizedString("superset", comment: ""),
                                   systemImage: setGroup.setType == .superSet ? "checkmark" : "")
                         }
                         Button(action: {
-                            templateWorkoutEditor.convertSetGroupToTemplateDropSets(setGroup)
+                            templateEditor.convertSetGroupToTemplateDropSets(setGroup)
                         }) {
                             Label(NSLocalizedString("dropset", comment: ""),
                                   systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
@@ -203,8 +203,8 @@ struct TemplateEditorView: View {
                     Image(systemName: "arrow.turn.down.right")
                         .padding(.leading)
                     Button(action: {
-                        templateWorkoutEditor.setGroupWithSelectedExercise = setGroup
-                        templateWorkoutEditor.isSelectingSecondaryExercise = true
+                        templateEditor.setGroupWithSelectedExercise = setGroup
+                        templateEditor.isSelectingSecondaryExercise = true
                         showingExerciseSelection = true
                     }) {
                         HStack {
@@ -229,9 +229,9 @@ struct TemplateEditorView: View {
     }
     
     @ViewBuilder
-    private func TemplateWorkoutSetCell(for templateSet: TemplateSet) -> some View {
+    private func TemplateSetCell(for templateSet: TemplateSet) -> some View {
         HStack {
-            Text(String((templateWorkoutEditor.indexInSetGroup(for: templateSet) ?? 0) + 1))
+            Text(String((templateEditor.indexInSetGroup(for: templateSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -250,8 +250,8 @@ struct TemplateEditorView: View {
     
 }
 
-struct WorkoutTemplateEditorView_Previews: PreviewProvider {
+struct TemplateEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateEditorView(templateWorkoutEditor: TemplateEditor())
+        TemplateEditorView(templateEditor: TemplateEditor())
     }
 }

@@ -1,5 +1,5 @@
 //
-//  TemplateWorkoutEditor+TemplateDropSetCell.swift
+//  TemplateEditor+TemplateDropSetCell.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 20.05.22.
@@ -18,8 +18,8 @@ extension TemplateEditorView {
                                                     set: { templateDropSet.weights?.replaceValue(at: index, with: $0) }))
             }
             Stepper("Drop count",
-                    onIncrement: { templateWorkoutEditor.addDrop(to: templateDropSet) },
-                    onDecrement: { templateWorkoutEditor.removeLastDrop(from: templateDropSet) })
+                    onIncrement: { templateEditor.addDrop(to: templateDropSet) },
+                    onDecrement: { templateEditor.removeLastDrop(from: templateDropSet) })
         }
     }
     

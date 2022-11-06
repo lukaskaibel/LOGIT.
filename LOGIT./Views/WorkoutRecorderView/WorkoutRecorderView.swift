@@ -40,7 +40,7 @@ struct WorkoutRecorderView: View {
     
     // MARK: - Variables
     
-    let template: TemplateWorkout?
+    let template: Template?
     
     // MARK: - Body
         
@@ -205,7 +205,7 @@ struct WorkoutRecorderView: View {
         return nil
     }
     
-    private func updateWorkout(with template: TemplateWorkout){
+    private func updateWorkout(with template: Template){
         template.workouts.append(workout)
         workout.name = template.name
         for templateSetGroup in template.setGroups {
