@@ -9,12 +9,12 @@ import SwiftUI
 
 extension WorkoutRecorderView {
     
-    internal func SetGroupCell(for setGroup: WorkoutSetGroup) -> some View {
+    internal func setGroupCell(for setGroup: WorkoutSetGroup) -> some View {
         Section {
-            ExerciseHeader(setGroup: setGroup)
+            exerciseHeader(setGroup: setGroup)
                 .deleteDisabled(true)
             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                WorkoutSetCell(workoutSet: workoutSet)
+                workoutSetCell(workoutSet: workoutSet)
             }.onDelete { indexSet in
                 setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
                 database.refreshObjects()
@@ -24,7 +24,7 @@ extension WorkoutRecorderView {
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }) {
                 Label(NSLocalizedString("addSet", comment: ""), systemImage: "plus.circle.fill")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(setGroup.exercise?.muscleGroup?.color)
                     .font(.body.weight(.bold))
             }.padding(15)
                 .frame(maxWidth: .infinity)

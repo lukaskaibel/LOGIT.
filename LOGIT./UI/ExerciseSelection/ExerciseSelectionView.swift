@@ -10,6 +10,11 @@ import CoreData
 
 struct ExerciseSelectionView: View {
     
+    enum SheetType: Identifiable {
+        case addExercise, exerciseDetail(exercise: Exercise)
+        var id: UUID { UUID() }
+    }
+    
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
@@ -19,7 +24,7 @@ struct ExerciseSelectionView: View {
     
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup?
-    @State private var isAddingExercise: Bool = false
+    @State private var sheetType: SheetType?
     
     // MARK: - Binding
     
@@ -32,11 +37,11 @@ struct ExerciseSelectionView: View {
         List {
             MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
                 .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
             ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
                 exerciseSection(for: group)
-            }
-        }.listStyle(.plain)
+            }.listRowInsets(EdgeInsets())
+        }.listStyle(.insetGrouped)
             .navigationTitle(selectedExercise == nil  ? NSLocalizedString("addExercise", comment: "") : NSLocalizedString("selectExercise", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchedText,
@@ -45,14 +50,25 @@ struct ExerciseSelectionView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isAddingExercise = true
+                        sheetType = .addExercise
                     }, label: {
                         Image(systemName: "plus")
                     })
                 }
             }
-            .sheet(isPresented: $isAddingExercise) {
-                EditExerciseView()
+            .sheet(item: $sheetType) { type in
+                switch type {
+                case .addExercise: EditExerciseView()
+                case let .exerciseDetail(exercise):
+                    NavigationView {
+                        ExerciseDetailView(exercise: exercise)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
+                                }
+                            }
+                    }
+                }
             }
     }
     
@@ -63,34 +79,27 @@ struct ExerciseSelectionView: View {
         Section(content: {
             ForEach(group, id:\.objectID) { exercise in
                 HStack {
-                    Text(exercise.name ?? "No Name")
-                        .font(.body.weight(.semibold))
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            setExercise(exercise)
-                            dismiss()
-                        }
+                    ExerciseCell(exercise: exercise)
                     Spacer()
-                    if selectedExercise == exercise {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.accentColor)
-                            .font(.title3.weight(.semibold))
+                    if exercise == selectedExercise {
+                        Image(systemName: "checkmark")
+                            .fontWeight(.semibold)
+                            .foregroundColor(exercise.muscleGroup?.color)
                     }
-                    Menu(content: {
-                        Button(role: .destructive, action: {
-                            database.delete(exercise, saveContext: true)
-                        }) {
-                            Label("\(NSLocalizedString("delete", comment: "")) \(exercise.name ?? "")", systemImage: "trash")
-                        }
-                    }) {
-                        Image(systemName: "ellipsis")
-                            .padding(8)
-                            .contentShape(Rectangle())
-                    }.foregroundColor(.label)
-                }.padding(.vertical, 8)
+                    Button {
+                        sheetType = .exerciseDetail(exercise: exercise)
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                    }.buttonStyle(.plain)
+                        .foregroundColor(exercise.muscleGroup?.color)
+                }
+                .padding(.trailing)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    setExercise(exercise)
+                    dismiss()
+                }
             }
         }, header: {
             Text((group.first?.name?.first ?? Character(" ")).uppercased())
@@ -103,7 +112,8 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(selectedExercise: Exercise(), setExercise: { _ in })
+            ExerciseSelectionView(selectedExercise: nil, setExercise: { _ in })
+                .environmentObject(Database.preview)
         }
     }
 }

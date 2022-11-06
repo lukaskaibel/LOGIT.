@@ -54,7 +54,7 @@ struct SetGroupDetailView: View {
                     }
                 }
             }
-        }.tileStyle()
+        }
             
     }
     
@@ -67,14 +67,9 @@ struct SetGroupDetailView: View {
                 if let exercise = setGroup.exercise {
                     Text("\(indexInWorkout + 1).")
                     NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
-                        HStack(spacing: 3) {
-                            Text("\(exercise.name ?? "")")
-                                .lineLimit(1)
-                                .multilineTextAlignment(.leading)
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
-                        }
+                        Text("\(exercise.name ?? "")")
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
                     }
                     Spacer()
                 }
@@ -109,6 +104,7 @@ struct SetGroupDetailView: View {
                     .frame(maxWidth: SetGroupDetailView.columnWidth)
             }.padding(.horizontal)
                 .padding(.top, 5)
+                .padding(.bottom, 5)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)
     }

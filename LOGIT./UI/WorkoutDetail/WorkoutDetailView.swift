@@ -32,36 +32,46 @@ struct WorkoutDetailView: View {
         List {
             Section {
                 workoutHeader
-            }.padding(.bottom)
-                .listRowSeparator(.hidden, edges: .top)
+            }.listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             Section {
                 workoutInfo
-            }
+            }.listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             Section {
                 setsPerMuscleGroup
             } header: {
                 Text(NSLocalizedString("muscleGroups", comment: ""))
                     .sectionHeaderStyle()
-            }.listRowSeparator(.hidden)
+            }.listRowInsets(EdgeInsets())
             Section {
                 ForEach(workout.setGroups) { setGroup in
                     SetGroupDetailView(setGroup: setGroup,
                                        indexInWorkout: workout.index(of: setGroup) ?? 1)
-                }
+                }.padding(CELL_PADDING)
+                    .listRowSeparator(.hidden)
             } header: {
                 Text(NSLocalizedString("summary", comment: ""))
                     .sectionHeaderStyle()
-            }.listRowSeparator(.hidden)
+            }.listRowInsets(EdgeInsets())
             if canNavigateToTemplate {
                 Section {
-                    templateView
+                    templateButton
                         .buttonStyle(PlainButtonStyle())
                 } header: {
                     Text(NSLocalizedString("template", comment: ""))
                         .sectionHeaderStyle()
-                }
+                } footer: {
+                    Text(NSLocalizedString("templateExplanation", comment: ""))
+                        .font(.footnote)
+                        .foregroundColor(.secondaryLabel)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal)
+                }.listRowInsets(EdgeInsets())
             }
-        }.listStyle(.plain)
+            Spacer(minLength: 50)
+                .listRowBackground(Color.clear)
+        }.listStyle(.insetGrouped)
             .navigationTitle(workout.date?.description(.medium) ?? "")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -146,8 +156,7 @@ struct WorkoutDetailView: View {
         ).tileStyle()
     }
     
-    private var templateView: some View {
-        Section(content: {
+    private var templateButton: some View {
             Button(action: {
                 if workout.template == nil {
                     isShowingNewTemplate = true
@@ -177,13 +186,6 @@ struct WorkoutDetailView: View {
                     .background(Color.secondaryBackground)
                     .cornerRadius(10)
             }
-        }, footer: {
-            Text(NSLocalizedString("templateExplanation", comment: ""))
-                .font(.footnote)
-                .foregroundColor(.secondaryLabel)
-                .padding(.horizontal)
-        }).listRowSeparator(.hidden)
-        
     }
     
     // MARK: - Supporting Methods
@@ -199,6 +201,7 @@ struct WorkoutDetailView: View {
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(workout: Workout(), canNavigateToTemplate: false)
+        WorkoutDetailView(workout: Database.preview.testWorkout, canNavigateToTemplate: false)
+            .environmentObject(Database.preview)
     }
 }

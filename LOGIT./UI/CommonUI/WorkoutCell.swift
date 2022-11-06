@@ -36,7 +36,7 @@ struct WorkoutCell: View {
                     .font(.body.weight(.medium))
                     .foregroundColor(.separator)
             }
-        }.cellTileStyle()
+        }
     }
     
     // MARK: - Computed UI Properties

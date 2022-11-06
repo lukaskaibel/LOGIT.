@@ -27,15 +27,15 @@ extension WorkoutRecorderView {
                     .foregroundColor(.accentColor)
                     .font(.body.weight(.semibold))
                     .multilineTextAlignment(.trailing)
-                    .padding(7)
-                    .background(repetitions == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColorBackground)
+                    .padding(10)
+                    .background(repetitions == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColor.translucentBackground)
                     .cornerRadius(5)
                     .overlay {
                         HStack {
                             Image(systemName: "arrow.counterclockwise")
                                 .foregroundColor(repetitions == 0 ? .secondaryLabel : .accentColor)
                                 .font(.caption.weight(.bold))
-                                .padding(7)
+                                .padding(10)
                             Spacer()
                         }
                     }
@@ -44,15 +44,15 @@ extension WorkoutRecorderView {
                     .foregroundColor(.accentColor)
                     .font(.body.weight(.semibold))
                     .multilineTextAlignment(.trailing)
-                    .padding(7)
-                    .background(weight == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColorBackground)
+                    .padding(10)
+                    .background(weight == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColor.translucentBackground)
                     .cornerRadius(5)
                     .overlay {
                         HStack {
                             Image(systemName: "scalemass")
                                 .foregroundColor(weight == 0 ? .secondaryLabel : .accentColor)
                                 .font(.caption.weight(.bold))
-                                .padding(7)
+                                .padding(10)
                             Spacer()
                         }
                     }

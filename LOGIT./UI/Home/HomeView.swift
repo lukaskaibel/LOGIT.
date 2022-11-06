@@ -33,13 +33,13 @@ struct HomeView: View {
                 } header: {
                     Text("Workout Target")
                         .sectionHeaderStyle()
-                }.listRowSeparator(.hidden)
+                }.listRowInsets(EdgeInsets())
                 Section {
                     muscleGroupPercentageView
                 } header: {
                     Text("Sets per Muscle Group")
                         .sectionHeaderStyle()
-                }.listRowSeparator(.hidden)
+                }.listRowInsets(EdgeInsets())
                 Section(content: {
                     ForEach(recentWorkouts, id:\.objectID) { workout in
                         ZStack {
@@ -48,10 +48,7 @@ struct HomeView: View {
                                 EmptyView()
                             }.opacity(0)
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical, 3)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
+                        .padding(CELL_PADDING)
                     }.onDelete { indexSet in
                         for index in indexSet {
                             database.delete(recentWorkouts.value(at: index), saveContext: true)
@@ -60,8 +57,7 @@ struct HomeView: View {
                 }, header: {
                     HStack {
                         Text(NSLocalizedString("recentWorkouts", comment: ""))
-                            .foregroundColor(.label)
-                            .font(.title2.weight(.bold))
+                            .sectionHeaderStyle()
                             .fixedSize()
                         Spacer()
                         NavigationLink(destination: AllWorkoutsView()) {
@@ -69,12 +65,14 @@ struct HomeView: View {
                                 .font(.body)
                                 .foregroundColor(.accentColor)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
+                                .textCase(.none)
                         }
                     }.listRowSeparator(.hidden, edges: .top)
-                })
+                }).listRowInsets(EdgeInsets())
                 Spacer(minLength: 50)
+                    .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
-            }.listStyle(.plain)
+            }.listStyle(.insetGrouped)
                 .navigationTitle(NSLocalizedString("home", comment: ""))
         } .navigationViewStyle(.stack)
         .sheet(isPresented: $isShowingTemplateEditor) {
@@ -91,7 +89,7 @@ struct HomeView: View {
                                                      amount: $0.1,
                                                      color: $0.0.color) },
                  showZeroValuesInLegend: true)
-            .tileStyle()
+            .padding(CELL_PADDING)
     }
     
     private var targetWorkoutsView: some View {
@@ -134,7 +132,7 @@ struct HomeView: View {
                             .foregroundColor(.secondaryLabel)
                     }
                 }
-        }.tileStyle()
+        }.padding(CELL_PADDING)
     }
     
     // MARK: - Supportings Methods
@@ -144,7 +142,7 @@ struct HomeView: View {
     }
     
     var recentWorkouts: [Workout] {
-        Array(database.getWorkouts(sortedBy: .date).prefix(8))
+        Array(database.getWorkouts(sortedBy: .date).prefix(3))
     }
     
     func workoutsPerWeek(for numberOfWeeks: Int) -> [Int] {

@@ -28,14 +28,14 @@ struct WorkoutTemplateListView: View {
                     NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplate: templateWorkout)) {
                         EmptyView()
                     }.opacity(0)
-                }
+                }.padding(CELL_PADDING)
             }.onDelete { indexSet in
                 templates
                     .elements(for: indexSet)
                     .forEach { database.delete($0, saveContext: true) }
             }
-            .listRowSeparator(.hidden)
-        }.listStyle(.plain)
+            .listRowInsets(EdgeInsets())
+        }.listStyle(.insetGrouped)
             .searchable(text: $searchedText)
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(NSLocalizedString("templates", comment: ""))

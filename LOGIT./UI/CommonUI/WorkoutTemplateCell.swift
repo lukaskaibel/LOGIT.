@@ -34,7 +34,7 @@ struct WorkoutTemplateCell: View {
             Image(systemName: "chevron.right")
                 .font(.body.weight(.medium))
                 .foregroundColor(.secondaryLabel)
-        }.cellTileStyle()
+        }
     }
     
     // MARK: - Computed UI Properties

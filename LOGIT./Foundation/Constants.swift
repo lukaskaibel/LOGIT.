@@ -8,4 +8,4 @@
 import Foundation
 
 
-var CELL_PADDING: CGFloat = 10
+let CELL_PADDING: CGFloat = 14

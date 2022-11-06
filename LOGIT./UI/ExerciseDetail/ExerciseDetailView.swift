@@ -33,35 +33,33 @@ struct ExerciseDetailView: View {
         List {
             Section {
                 header
-            }.padding(.bottom)
-                .listRowSeparator(.hidden, edges: .top)
+            }.listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             Section {
                 exerciseInfo
-            }
+            }.listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             Section {
                 weightGraph
             } header: {
                 Text(NSLocalizedString("weight", comment: ""))
                     .sectionHeaderStyle()
-            }.listRowSeparator(.hidden)
+            }.listRowInsets(EdgeInsets())
             Section(content: {
                 ForEach(setsForExercise) { workoutSet in
                     if workoutSet.hasEntry {
                         HStack {
                             Text(dateString(for: workoutSet))
-                                .frame(maxHeight: .infinity, alignment: .top)
-                                .padding(.vertical, 5)
                             Spacer()
                             WorkoutSetCell(workoutSet: workoutSet)
                         }
                     }
                 }
             }, header: {
-                VStack {
+                VStack(spacing: 0) {
                     HStack {
                         Text(NSLocalizedString("sets", comment: ""))
-                            .foregroundColor(.label)
-                            .font(.title2.weight(.bold))
+                            .sectionHeaderStyle()
                             .fixedSize()
                         Spacer()
                         Menu {
@@ -84,7 +82,7 @@ struct ExerciseDetailView: View {
                             Label(NSLocalizedString(sortingKey == .date ? "date" : sortingKey == .maxRepetitions ? "repetitions" : "weight", comment: ""),
                                   systemImage: "arrow.up.arrow.down")
                             .font(.body)
-                        }
+                        }.textCase(.none)
                     }
                     HStack(spacing: SetGroupDetailView.columnSpace) {
                         Text(NSLocalizedString("date", comment: ""))
@@ -100,8 +98,9 @@ struct ExerciseDetailView: View {
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
                             .frame(maxWidth: SetGroupDetailView.columnWidth)
-                    }
-                }.listRowSeparator(.hidden, edges: .top)
+                    }.padding(.vertical, 5)
+                    Divider()
+                }
             }, footer: {
                 Text("\(setsForExercise.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(setsForExercise.count == 1 ? "" : "s")", comment: ""))")
                     .foregroundColor(.secondaryLabel)
@@ -109,8 +108,9 @@ struct ExerciseDetailView: View {
                     .padding(.top, 5)
                     .padding(.bottom, 50)
                     .listRowSeparator(.hidden, edges: .bottom)
-            })
-        }.listStyle(.plain)
+            }).listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+        }.listStyle(.insetGrouped)
         .navigationBarTitleDisplayMode(.inline)
         .tint(muscleGroupColor)
         .toolbar {

@@ -10,10 +10,15 @@ import SwiftUI
 extension WorkoutRecorderView {
     
     @ViewBuilder
-    internal func ExerciseHeader(setGroup: WorkoutSetGroup) -> some View {
-        VStack(spacing: 0) {
-            EmptyView()
-                .frame(height: 1)
+    internal func exerciseHeader(setGroup: WorkoutSetGroup) -> some View {
+        HStack {
+            if let muscleGroup = setGroup.exercise?.muscleGroup {
+                if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
+                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1), (secondaryMuscleGroup, 1)])
+                } else {
+                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1)])
+                }
+            }
             VStack(spacing: 5) {
                 HStack {
                     Button(action: {
@@ -21,22 +26,17 @@ extension WorkoutRecorderView {
                             setGroup.exercise = exercise
                             database.refreshObjects()
                         })
-                        isShowingSheet = true
                     }) {
                         HStack(spacing: 3) {
                             if setGroup.setType == .superSet {
                                 Image(systemName: "1.circle")
                             }
                             Text(setGroup.exercise?.name ?? "No Name")
-                                .font(.title3.weight(.medium))
+                                .font(.title3.weight(.semibold))
+                                .lineLimit(1)
                             Image(systemName: "chevron.right")
-                                .font(.caption)
-                        }.foregroundColor(setGroup.exercise == nil ? .secondaryAccentColor : .accentColor)
-                            .lineLimit(1)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 5)
-                            .background(Color.accentColorBackground)
-                            .cornerRadius(5)
+                                .fontWeight(.semibold)
+                        }.foregroundColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
                     }
                     Spacer()
                     if !isEditing {
@@ -66,7 +66,6 @@ extension WorkoutRecorderView {
                                     // TODO: Add Detail for Secondary Exercise in case of SuperSet
                                     guard let exercise = setGroup.exercise else { return }
                                     sheetType = .exerciseDetail(exercise: exercise)
-                                    isShowingSheet = true
                                 }) {
                                     Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
                                 }
@@ -92,33 +91,23 @@ extension WorkoutRecorderView {
                         Button(action: {
                             sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise, setExercise: { exercise in
                                 setGroup.secondaryExercise = exercise
+                                database.refreshObjects()
                             })
-                            isShowingSheet = true
                         }) {
                             HStack(spacing: 3) {
                                 Image(systemName: "2.circle")
                                 Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
-                                    .font(.title3.weight(.medium))
+                                    .font(.title3.weight(.semibold))
                                 Image(systemName: "chevron.right")
-                                    .font(.caption)
-                            }.foregroundColor(setGroup.secondaryExercise == nil ? .secondaryAccentColor : .accentColor)
+                                    .fontWeight(.semibold)
+                            }.foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color ?? .secondaryLabel)
                                 .lineLimit(1)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 5)
-                                .background(Color.accentColorBackground)
-                                .cornerRadius(5)
                         }
                         Spacer()
                     }
                 }
-            }.padding(.horizontal)
-                .padding(.vertical, 10)
-            if !isEditing {
-                Divider()
-                    .padding(.leading)
-                    .padding(.bottom, 5)
-            }
-        }
+            }.padding(.vertical, 5)
+        }.padding(CELL_PADDING)
     }
 
     

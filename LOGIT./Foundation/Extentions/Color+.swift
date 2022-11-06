@@ -32,5 +32,7 @@ extension Color {
     static var grouped: Color { Color(UIColor.systemGroupedBackground) }
     static var secondaryGrouped: Color { Color(UIColor.secondarySystemGroupedBackground) }
     static var tertiaryGrouped: Color { Color(UIColor.tertiarySystemGroupedBackground) }
+    
+    var translucentBackground: Color { self.opacity(0.1) }
 
 }

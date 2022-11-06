@@ -11,9 +11,10 @@ import CoreData
 
 struct WorkoutRecorderView: View {
 
-    enum SheetType {
+    enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
+        var id: UUID { UUID() }
     }
     
     // MARK: - Environment
@@ -29,8 +30,7 @@ struct WorkoutRecorderView: View {
     @State internal var isEditing: Bool = false
     @State private var editMode: EditMode = .inactive
     
-    @State internal var isShowingSheet = false
-    @State internal var sheetType: SheetType? = nil
+    @State internal var sheetType: SheetType?
     
     @State internal var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
     
@@ -63,33 +63,24 @@ struct WorkoutRecorderView: View {
                             editMode = isEditing ? .active : .inactive
                         }.disabled(workout.numberOfSetGroups == 0)
                     }
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(NSLocalizedString("done", comment: "")) {
-                                hideKeyboard()
-                            }.font(.body.weight(.semibold))
-                        }
-                    }
                 }
-                .sheet(isPresented: $isShowingSheet) {
+                .sheet(item: $sheetType) { type in
                     NavigationView {
-                        switch sheetType {
+                        switch type {
                         case let .exerciseDetail(exercise):
                             ExerciseDetailView(exercise: exercise)
                                 .toolbar {
                                     ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(NSLocalizedString("dismiss", comment: "")) { isShowingSheet = false; sheetType = nil }
+                                        Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
                                     }
                                 }
                         case let .exerciseSelection(exercise, setExercise):
                             ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
                                 .toolbar {
                                     ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { isShowingSheet = false; sheetType = nil }
+                                        Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
                                     }
                                 }
-                        default: EmptyView()
                         }
                     }
                 }
@@ -114,6 +105,7 @@ struct WorkoutRecorderView: View {
                 updateWorkout(with: template)
             }
         }
+        .scrollDismissesKeyboard(.immediately)
     }
     
     private var header: some View {
@@ -146,8 +138,10 @@ struct WorkoutRecorderView: View {
                 // Neccessary because onMode crashes with Sections
                 if isEditing {
                     ReorderSetGroupCell(for: setGroup)
+                        .tint(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
                 } else {
-                    SetGroupCell(for: setGroup)
+                    setGroupCell(for: setGroup)
+                        .accentColor(setGroup.exercise?.muscleGroup?.color)
                 }
             }.onMove(perform: moveSetGroups)
                 .onDelete { workout.setGroups.elements(for: $0).forEach { database.delete($0) } }
@@ -169,7 +163,7 @@ struct WorkoutRecorderView: View {
     }
         
     private func ReorderSetGroupCell(for setGroup: WorkoutSetGroup) -> some View {
-        ExerciseHeader(setGroup: setGroup)
+        exerciseHeader(setGroup: setGroup)
     }
     
     private var AddExerciseButton: some View {
@@ -181,7 +175,6 @@ struct WorkoutRecorderView: View {
                                             workout: workout)
                 database.refreshObjects()
             })
-            isShowingSheet = true
         }) {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                 .foregroundColor(.accentColor)

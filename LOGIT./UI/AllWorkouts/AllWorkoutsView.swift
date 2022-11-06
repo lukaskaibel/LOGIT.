@@ -32,16 +32,13 @@ struct AllWorkoutsView: View {
                                 EmptyView()
                             }.opacity(0).buttonStyle(PlainButtonStyle())
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical, 3)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
+                        .padding(CELL_PADDING)
                     }.onDelete { indexSet in
                         for i in indexSet {
                             guard let workout = groupedWorkouts.value(at: index)?.value(at: i) else { return }
                             database.delete(workout, saveContext: true)
                         }
-                    }
+                    }.listRowInsets(EdgeInsets())
                 }, header: {
                     Text(header(for: index))
                         .sectionHeaderStyle()
@@ -49,7 +46,8 @@ struct AllWorkoutsView: View {
             }
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden)
-        }.listStyle(.plain)
+                .listRowBackground(Color.clear)
+        }.listStyle(.insetGrouped)
             .searchable(text: $searchedText,
                         prompt: NSLocalizedString("searchWorkouts", comment: ""))
             .navigationTitle(NSLocalizedString("workouts", comment: ""))

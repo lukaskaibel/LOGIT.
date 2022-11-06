@@ -10,7 +10,7 @@ import SwiftUI
 extension WorkoutRecorderView {
     
     @ViewBuilder
-    internal func WorkoutSetCell(workoutSet: WorkoutSet) -> some View {
+    internal func workoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
             Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
@@ -41,9 +41,9 @@ extension WorkoutRecorderView {
                     Image(systemName: "checkmark")
                         .font(.body.weight(.semibold))
                         .foregroundColor(workoutSet.hasEntry ? .accentColor : .secondaryLabel)
-                        .padding(7)
+                        .padding(10)
                         .frame(maxHeight: .infinity)
-                        .background(workoutSet.hasEntry ? Color.accentColorBackground : .tertiaryFill)
+                        .background(workoutSet.hasEntry ? Color.accentColor.translucentBackground : .tertiaryFill)
                         .cornerRadius(5)
                         .padding(.vertical, 8)
                 }

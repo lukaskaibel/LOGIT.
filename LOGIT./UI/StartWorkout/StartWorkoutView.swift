@@ -28,18 +28,18 @@ struct StartWorkoutView: View {
         List {
             Section {
                 chooseTemplateText
-            }.listRowSeparator(.hidden)
-                .padding(.bottom)
+            }.listRowBackground(Color.clear)
             Section {
                 withoutTemplateButton
-            }.listRowSeparator(.hidden)
+            }.listRowInsets(EdgeInsets())
             Section {
                 templateList
             } header: {
                 Text(NSLocalizedString("myTemplates", comment: ""))
                     .sectionHeaderStyle()
-            }.listRowSeparator(.hidden)
-        }.listStyle(.plain)
+                    .listRowInsets(EdgeInsets())
+            }
+        }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
             .fullScreenCover(item: $selectedTemplate) { templateSelection in
                 WorkoutRecorderView(workout: database.newWorkout(), template: templateSelection.value)
@@ -54,7 +54,6 @@ struct StartWorkoutView: View {
             .font(.subheadline)
             .padding(.top)
             .frame(maxWidth: .infinity, alignment: .center)
-            .listRowBackground(Color.clear)
     }
     
     private var withoutTemplateButton: some View {
@@ -72,13 +71,10 @@ struct StartWorkoutView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.body.weight(.medium))
-                    .foregroundColor(.secondaryLabel)
-            }.font(.body.weight(.medium))
+            }.font(.body.weight(.semibold))
                 .foregroundColor(.accentColor)
                 .frame(height: 60)
-        }.padding(10)
-            .background(Color.secondaryBackground)
-            .cornerRadius(12)
+        }.padding(CELL_PADDING)
     }
     
     private var templateList: some View {
@@ -88,8 +84,8 @@ struct StartWorkoutView: View {
             }) {
                 WorkoutTemplateCell(workoutTemplate: template)
                     .foregroundColor(.label)
-            }
-        }
+            }.padding(CELL_PADDING)
+        }.listRowInsets(EdgeInsets())
     }
     
 }
@@ -97,5 +93,6 @@ struct StartWorkoutView: View {
 struct WorkoutRecorderStartScreen_Previews: PreviewProvider {
     static var previews: some View {
         StartWorkoutView()
+            .environmentObject(Database.preview)
     }
 }

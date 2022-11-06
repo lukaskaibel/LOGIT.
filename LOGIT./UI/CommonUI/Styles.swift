@@ -30,7 +30,8 @@ struct SectionHeaderModifier: ViewModifier {
         content
             .font(.title2.weight(.bold))
             .foregroundColor(.label)
-            .padding(.vertical, 8)
+            .padding(.vertical, 10)
+            .textCase(.none)
     }
 }
 

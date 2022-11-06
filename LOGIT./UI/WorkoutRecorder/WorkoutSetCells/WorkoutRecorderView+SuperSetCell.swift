@@ -30,7 +30,7 @@ extension WorkoutRecorderView {
                                                     set: { superSet.weightSecondExercise = $0 }),
                                     repetitionsPlaceholder: repetitionsPlaceholder(for: superSet).second!,
                                     weightPlaceholder: weightsPlaceholder(for: superSet).second!)
-            }
+            }.accentColor(superSet.secondaryExercise?.muscleGroup?.color)
         }
     }
     

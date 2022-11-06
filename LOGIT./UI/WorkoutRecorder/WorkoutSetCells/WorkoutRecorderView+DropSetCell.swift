@@ -22,6 +22,7 @@ extension WorkoutRecorderView {
             Stepper("Drop count",
                     onIncrement: { dropSet.addDrop(); database.refreshObjects() },
                     onDecrement: { dropSet.removeLastDrop(); database.refreshObjects() })
+                .accentColor(dropSet.exercise?.muscleGroup?.color)
         }
     }
 
