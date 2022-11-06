@@ -26,7 +26,7 @@ struct HomeView: View {
     // MARK: - Body
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     targetWorkoutsView

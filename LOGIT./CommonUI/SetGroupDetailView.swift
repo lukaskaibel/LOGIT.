@@ -9,10 +9,19 @@ import SwiftUI
 
 struct SetGroupDetailView: View {
     
+    enum NavigationDestination {
+        case exerciseDetail, secondaryExerciseDetail
+    }
+    
     // MARK: - Graphical Constants
     
     static let columnWidth: CGFloat = 70
     static let columnSpace: CGFloat = 20
+    
+    // MARK: - State
+    
+    @State private var navigateToDetail = false
+    @State private var exerciseForDetail: Exercise? = nil
     
     // MARK: - Parameters
     
@@ -55,7 +64,11 @@ struct SetGroupDetailView: View {
                 }
             }
         }
-            
+        .navigationDestination(isPresented: $navigateToDetail) {
+            if let exercise = exerciseForDetail {
+                ExerciseDetailView(exercise: exercise)
+            }
+        }
     }
     
     // MARK: - Supporting Views
@@ -66,29 +79,37 @@ struct SetGroupDetailView: View {
             HStack {
                 if let exercise = setGroup.exercise {
                     Text("\(indexInWorkout + 1).")
-                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                    Button {
+                        exerciseForDetail = exercise
+                        navigateToDetail = true
+                    } label: {
                         Text("\(exercise.name ?? "")")
                             .lineLimit(1)
                             .multilineTextAlignment(.leading)
-                    }
+                        Image(systemName: "chevron.right")
+                            .font(.body.weight(.semibold))
+                    }.buttonStyle(.plain)
                     Spacer()
                 }
-            }.font(.body.weight(.semibold))
-                .foregroundColor(.label)
+            }.font(.title3.weight(.semibold))
+                .foregroundColor(setGroup.exercise?.muscleGroup?.color)
             if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
                         .font(.caption)
-                    NavigationLink(destination: ExerciseDetailView(exercise: secondaryExercise)) {
+                    Button {
+                        exerciseForDetail = secondaryExercise
+                        navigateToDetail = true
+                    } label: {
                         HStack(spacing: 3) {
                             Text("\(secondaryExercise.name ?? "")")
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
                             Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
-                        }.buttonStyle(.plain)
-                    }
+                                .font(.body.weight(.semibold))
+                        }.font(.title3.weight(.semibold))
+                            .foregroundColor(secondaryExercise.muscleGroup?.color)
+                    }.buttonStyle(.plain)
                     Spacer()
                 }.padding(.leading, 30)
             }
@@ -114,5 +135,6 @@ struct SetGroupDetailView: View {
 struct SetGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
         SetGroupDetailView(setGroup: Database.preview.testWorkout.setGroups.first!, indexInWorkout: 1)
+            .environmentObject(Database.preview)
     }
 }
