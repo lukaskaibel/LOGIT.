@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TemplateWorkoutEditorView: View {
+struct TemplateEditorView: View {
     
     enum SheetStyle {
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
@@ -18,7 +18,7 @@ struct TemplateWorkoutEditorView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
     
-    @StateObject var templateWorkoutEditor: TemplateWorkoutEditor
+    @StateObject var templateWorkoutEditor: TemplateEditor
     
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
@@ -252,6 +252,6 @@ struct TemplateWorkoutEditorView: View {
 
 struct WorkoutTemplateEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
+        TemplateEditorView(templateWorkoutEditor: TemplateEditor())
     }
 }

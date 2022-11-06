@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension TemplateWorkoutEditorView {
+extension TemplateEditorView {
     
     internal func TemplateStandardSetCell(for templateStandardSet: TemplateStandardSet) -> some View {
         TemplateSetEntryView(repetitions: Binding(get: { templateStandardSet.repetitions },

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension TemplateWorkoutEditorView {
+extension TemplateEditorView {
     
     internal func TemplateDropSetCell(for templateDropSet: TemplateDropSet) -> some View {
         VStack {

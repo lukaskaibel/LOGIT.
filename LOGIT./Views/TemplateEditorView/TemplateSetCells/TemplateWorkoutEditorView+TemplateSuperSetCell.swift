@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension TemplateWorkoutEditorView {
+extension TemplateEditorView {
     
     internal func TemplateSuperSetCell(for templateSuperSet: TemplateSuperSet) -> some View {
         VStack {

@@ -25,7 +25,7 @@ struct WorkoutTemplateListView: View {
             ForEach(templates, id:\.objectID) { templateWorkout in
                 ZStack {
                     WorkoutTemplateCell(workoutTemplate: templateWorkout)
-                    NavigationLink(destination: WorkoutTemplateDetailView(workoutTemplate: templateWorkout)) {
+                    NavigationLink(destination: TemplateDetailView(workoutTemplate: templateWorkout)) {
                         EmptyView()
                     }.opacity(0)
                 }.padding(CELL_PADDING)
@@ -49,7 +49,7 @@ struct WorkoutTemplateListView: View {
                 }
             }
             .popover(isPresented: $showingTemplateCreation) {
-                TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor())
+                TemplateEditorView(templateWorkoutEditor: TemplateEditor())
             }
     }
     

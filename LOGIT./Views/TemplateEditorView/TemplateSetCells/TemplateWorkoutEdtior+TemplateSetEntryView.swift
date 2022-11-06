@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-extension TemplateWorkoutEditorView {
+extension TemplateEditorView {
     
     // View with Textfields for entry of repetitions and weight
     internal struct TemplateSetEntryView: View {
         
         @Environment(\.colorScheme) var colorScheme
-        @EnvironmentObject var templateWorkoutEditor: TemplateWorkoutEditor
+        @EnvironmentObject var templateWorkoutEditor: TemplateEditor
         
         @Binding var repetitions: Int64
         @Binding var weight: Int64

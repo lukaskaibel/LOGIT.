@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct WorkoutTemplateDetailView: View {
+struct TemplateDetailView: View {
     
     // MARK: - Environment
     
@@ -74,7 +74,7 @@ struct WorkoutTemplateDetailView: View {
                 }
             }
             .sheet(isPresented: $showingTemplateEditor) {
-                TemplateWorkoutEditorView(templateWorkoutEditor: TemplateWorkoutEditor(templateWorkout: workoutTemplate))
+                TemplateEditorView(templateWorkoutEditor: TemplateEditor(templateWorkout: workoutTemplate))
             }
     }
     

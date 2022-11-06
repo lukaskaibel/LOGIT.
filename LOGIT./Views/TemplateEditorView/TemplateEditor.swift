@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class TemplateWorkoutEditor: ViewModel {
+final class TemplateEditor: ViewModel {
     
     @Published var templateWorkout = TemplateWorkout()
     @Published var setGroupWithSelectedExercise: TemplateWorkoutSetGroup? = nil
