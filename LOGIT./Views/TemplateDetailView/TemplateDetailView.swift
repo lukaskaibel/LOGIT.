@@ -31,23 +31,25 @@ struct TemplateDetailView: View {
         List {
             Section {
                 templateHeader
-            }.listRowSeparator(.hidden)
+            }.listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
             Section {
                 ForEach(template.setGroups) { templateSetGroup in
                     TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
                                                indexInWorkout: template.index(of: templateSetGroup) ?? 0)
-                }
+                }.padding(CELL_PADDING)
+                    .listRowSeparator(.hidden)
             } header: {
                 Text("Summary")
                     .sectionHeaderStyle()
-            }.listRowSeparator(.hidden)
+            }.listRowInsets(EdgeInsets())
             Section(content: {
                 workoutList
             }, header: {
                 Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
                     .sectionHeaderStyle()
-            })
-        }.listStyle(.plain)
+            }).listRowInsets(EdgeInsets())
+        }.listStyle(.insetGrouped)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (template.date?.description(.short) ?? ""))
             .toolbar {
@@ -102,12 +104,7 @@ struct TemplateDetailView: View {
                     EmptyView()
                 }.opacity(0)
             }
-            .padding(.horizontal)
-            .padding(.vertical, 2)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-
-        }
+        }.padding(CELL_PADDING)
     }
     
     // MARK: - Supporting Methods

@@ -106,7 +106,6 @@
 "createTemplate" = "Vorlage erstellen";
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
 "startEmpty" = "Leeres Workout starten";
-"templates" = "Workout Vorlagen";
 "templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
 "deleteTemplate" = "Vorlage löschen";
 "deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";

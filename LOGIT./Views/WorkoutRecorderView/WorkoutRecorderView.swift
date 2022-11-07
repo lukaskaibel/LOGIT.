@@ -45,7 +45,7 @@ struct WorkoutRecorderView: View {
     // MARK: - Body
         
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 header
                 Divider()
@@ -65,7 +65,7 @@ struct WorkoutRecorderView: View {
                     }
                 }
                 .sheet(item: $sheetType) { type in
-                    NavigationView {
+                    NavigationStack {
                         switch type {
                         case let .exerciseDetail(exercise):
                             ExerciseDetailView(exercise: exercise)
@@ -85,13 +85,13 @@ struct WorkoutRecorderView: View {
                     }
                 }
                 .confirmationDialog(Text(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
-                                            !workout.hasEntries ? NSLocalizedString("deleteSetsWithoutEntries", comment: "") :
-                                            NSLocalizedString("noEntriesConfirmation", comment: "")),
+                                            !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                                            NSLocalizedString("deleteSetsWithoutEntries", comment: "")),
                                     isPresented: $isShowingFinishConfirmation,
                                     titleVisibility: .visible) {
                     Button(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
-                            !workout.hasEntries ? NSLocalizedString("deleteSets", comment: "") :
-                            NSLocalizedString("noEntriesConfirmation", comment: ""),
+                            !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                            NSLocalizedString("deleteSets", comment: ""),
                            role: workout.allSetsHaveEntries ? nil : .destructive) {
                         workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
                         if workout.isEmpty { database.delete(workout, saveContext: true) }

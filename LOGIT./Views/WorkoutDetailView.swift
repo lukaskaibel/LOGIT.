@@ -96,7 +96,7 @@ struct WorkoutDetailView: View {
                                                                                                            from: workout))
                                 }
                                 .sheet(isPresented: $isShowingTemplateDetail) {
-                                    NavigationView {
+                                    NavigationStack {
                                         TemplateDetailView(template: workout.template!)
                                             .toolbar {
                                                 ToolbarItem(placement: .navigationBarLeading) {

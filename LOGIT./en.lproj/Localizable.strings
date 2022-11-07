@@ -25,7 +25,7 @@
 "finishWorkoutConfimation" = "Do you want to finish the workout?";
 "deleteSetsWithoutEntries" = "Delete all sets without entries and finish workout?";
 "deleteSets" = "Delete Sets and Finish Workout";
-"noEntriesConfirmation" = "This workout has to entries. Discard it?";
+"noEntriesConfirmation" = "This workout has no entries. Discard it?";
 "discardWorkout" = "Discard Workout";
 "deleteWorkout" = "Delete Workout";
 "deleteWorkoutDescription" = "Delete Workout? This action cannot be undone.";
@@ -104,7 +104,6 @@
 "createTemplate" = "Create Template";
 "chooseTemplateText" = "Choose a template or start an empty workout";
 "startEmpty" = "Start Empty Workout";
-"templates" = "Workout Templates";
 "templateExplanation" = "Use Templates to plan and reuse workouts. You can select a Template when starting a workout.";
 "deleteTemplate" = "Delete Template";
 "deleteTemplateMsg" = "Do you want to delete this Template? This cannot be undone.";

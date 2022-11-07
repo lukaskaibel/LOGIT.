@@ -36,7 +36,7 @@ struct EditExerciseView: View {
     // MARK: - Body
         
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(content: {
                     TextField(NSLocalizedString("exerciseName", comment: ""),

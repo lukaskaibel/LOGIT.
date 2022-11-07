@@ -35,7 +35,7 @@ extension Database {
         let workoutNames = ["Monday Morning Workout", "Thursday Afternoon Workout", "Pushday", "Pullday", "Leg-Day", "Full-Body Workout"]
         let workout = database.newWorkout(name: workoutNames.randomElement()!)
         for _ in 1..<Int.random(in: 4...10) {
-            let exercise = database.newExercise(name: exampleExerciseNames.randomElement()!)
+            let exercise = database.newExercise(name: exampleExerciseNames.randomElement()!, muscleGroup: MuscleGroup.allCases.randomElement()!)
             let setGroup = database.newWorkoutSetGroup(exercise: exercise, workout: workout)
             for _ in 1..<Int.random(in: 5...8) {
                 let _ = database.newStandardSet(repetitions: Int.random(in: 0...10),

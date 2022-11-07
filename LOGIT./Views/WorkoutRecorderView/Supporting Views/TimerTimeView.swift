@@ -24,7 +24,7 @@ struct TimerTimeView: View {
         }
             .sheet(isPresented: $showingTimerView) {
                 ZStack(alignment: .top) {
-                    NavigationView {
+                    NavigationStack {
                         TimerView(selectableSeconds: [15, 30, 45, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600])
                             .environmentObject(timer)
                             .navigationBarTitle(NSLocalizedString("setTimer", comment: ""))

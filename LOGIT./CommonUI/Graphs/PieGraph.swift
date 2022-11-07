@@ -17,17 +17,19 @@ struct PieGraph: View {
     let circleLineWidth: CGFloat
     let configuration: Configuration
     let showZeroValuesInLegend: Bool
+    let hideLegend: Bool
     
-    init(items: [Item], configuration: Configuration = .normal, showZeroValuesInLegend: Bool = false) {
+    init(items: [Item], configuration: Configuration = .normal, showZeroValuesInLegend: Bool = false, hideLegend: Bool = false) {
         self.items = items.filter { showZeroValuesInLegend ? true : $0.amount > 0 }
         self.circleLineWidth = configuration == .small ? 10 : 15
         self.configuration = configuration
         self.showZeroValuesInLegend = showZeroValuesInLegend
+        self.hideLegend = hideLegend
     }
     
     var body: some View {
         HStack {
-            if configuration == .normal {
+            if configuration == .normal && !hideLegend {
                 HStack {
                     Grid(verticalSpacing: 5) {
                         ForEach(0..<((items.count+1)/2), id:\.self) { index in

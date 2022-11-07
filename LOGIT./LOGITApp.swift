@@ -36,16 +36,16 @@ struct LOGIT: App {
                 TabView {
                     HomeView()
                         .tabItem { Label("Home", systemImage: "house.fill") }
-                    NavigationView {
+                    NavigationStack {
                         TemplateListView()
                     }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
-                    NavigationView {
+                    NavigationStack {
                         StartWorkoutView()
                     }.tabItem { Label(NSLocalizedString("startWorkout", comment: ""), systemImage: "plus") }
-                    NavigationView {
+                    NavigationStack {
                         AllExercisesView()
                     }.tabItem { Label(NSLocalizedString("exercises", comment: ""), image: "LOGIT") }
-                    NavigationView {
+                    NavigationStack {
                         ProfileView()
                     }.tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
                 }.environment(\.managedObjectContext, database.context)

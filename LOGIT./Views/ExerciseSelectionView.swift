@@ -60,7 +60,7 @@ struct ExerciseSelectionView: View {
                 switch type {
                 case .addExercise: EditExerciseView()
                 case let .exerciseDetail(exercise):
-                    NavigationView {
+                    NavigationStack {
                         ExerciseDetailView(exercise: exercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {

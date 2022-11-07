@@ -124,8 +124,7 @@ struct SetGroupDetailView: View {
                     .foregroundColor(.secondaryLabel)
                     .frame(maxWidth: SetGroupDetailView.columnWidth)
             }.padding(.horizontal)
-                .padding(.top, 5)
-                .padding(.bottom, 5)
+                .padding(.vertical, 5)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)
     }

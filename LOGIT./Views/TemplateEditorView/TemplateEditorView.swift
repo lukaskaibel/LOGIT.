@@ -25,7 +25,7 @@ struct TemplateEditorView: View {
     @State private var showingExerciseSelection = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 if !isEditing {
                     Section {

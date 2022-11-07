@@ -14,6 +14,11 @@ struct TemplateSetGroupDetailView: View {
     static let columnWidth: CGFloat = 70
     static let columnSpace: CGFloat = 20
     
+    // MARK: - State
+    
+    @State private var navigateToDetail = false
+    @State private var exerciseForDetail: Exercise? = nil
+    
     // MARK: - Parameters
     
     let templateSetGroup: TemplateSetGroup
@@ -22,7 +27,8 @@ struct TemplateSetGroupDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        Section {
+        VStack(spacing: 0) {
+            header(for: templateSetGroup)
             VStack(spacing: 0) {
                 Divider()
                     .padding(.leading)
@@ -41,10 +47,12 @@ struct TemplateSetGroupDetailView: View {
                     }.padding(.leading)
                 }
             }.listRowSeparator(.hidden)
-        } header: {
-            header(for: templateSetGroup)
-                .listRowInsets(EdgeInsets())
-        }.padding(.leading)
+        }
+        .navigationDestination(isPresented: $navigateToDetail) {
+            if let exercise = exerciseForDetail {
+                ExerciseDetailView(exercise: exercise)
+            }
+        }
     }
     
     // MARK: - Supporting Views
@@ -55,34 +63,39 @@ struct TemplateSetGroupDetailView: View {
             HStack {
                 if let exercise = templateSetGroup.exercise {
                     Text("\(indexInWorkout + 1).")
-                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                    Button {
+                        exerciseForDetail = exercise
+                        navigateToDetail = true
+                    } label: {
                         HStack(spacing: 3) {
                             Text("\(exercise.name ?? "")")
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
                             Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
+                                .fontWeight(.semibold)
                         }
-                    }
+                    }.buttonStyle(.plain)
                     Spacer()
                 }
-            }.font(.body.weight(.semibold))
-                .foregroundColor(.label)
+            }.font(.title3.weight(.semibold))
+                .foregroundColor(templateSetGroup.exercise?.muscleGroup?.color)
             if templateSetGroup.setType == .superSet, let secondaryExercise = templateSetGroup.secondaryExercise {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
                         .font(.caption)
-                    NavigationLink(destination: ExerciseDetailView(exercise: secondaryExercise)) {
+                    Button {
+                        exerciseForDetail = secondaryExercise
+                        navigateToDetail = true
+                    } label: {
                         HStack(spacing: 3) {
                             Text("\(secondaryExercise.name ?? "")")
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
                             Image(systemName: "chevron.right")
-                                .foregroundColor(.separator)
-                                .font(.caption)
-                        }
-                    }
+                                .fontWeight(.semibold)
+                        }.font(.title3.weight(.semibold))
+                            .foregroundColor(templateSetGroup.secondaryExercise?.muscleGroup?.color)
+                    }.buttonStyle(.plain)
                     Spacer()
                 }.padding(.leading, 30)
             }
@@ -97,10 +110,9 @@ struct TemplateSetGroupDetailView: View {
                     .foregroundColor(.secondaryLabel)
                     .frame(maxWidth: SetGroupDetailView.columnWidth)
             }.padding(.horizontal)
+                .padding(.vertical, 5)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)
-            .padding(.top)
-            .padding(.bottom, 5)
     }
     
 }
