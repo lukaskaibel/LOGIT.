@@ -61,7 +61,6 @@ extension Database {
             }
         }
         self.save()
-        self.refreshObjects()
         return template
     }
     

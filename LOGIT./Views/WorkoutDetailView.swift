@@ -10,6 +10,11 @@ import CoreData
 
 struct WorkoutDetailView: View {
     
+    enum SheetType: Identifiable {
+        case newTemplateFromWorkout, templateDetail
+        var id: UUID { UUID() }
+    }
+    
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
@@ -18,8 +23,7 @@ struct WorkoutDetailView: View {
     // MARK: - State
     
     @State private var isShowingDeleteWorkoutAlert: Bool = false
-    @State private var isShowingNewTemplate: Bool = false
-    @State private var isShowingTemplateDetail: Bool = false
+    @State private var sheetType: SheetType? = nil
     
     // MARK: - Variables
     
@@ -71,40 +75,40 @@ struct WorkoutDetailView: View {
             }
             Spacer(minLength: 50)
                 .listRowBackground(Color.clear)
-        }.listStyle(.insetGrouped)
-            .navigationTitle(workout.date?.description(.medium) ?? "")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(role: .destructive, action: {
-                        isShowingDeleteWorkoutAlert = true
-                    }) {
-                        Image(systemName: "trash")
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(workout.date?.description(.medium) ?? "")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(role: .destructive, action: {
+                    isShowingDeleteWorkoutAlert = true
+                }) {
+                    Image(systemName: "trash")
+                }
+            }
+        }
+        .confirmationDialog(NSLocalizedString("deleteWorkoutDescription", comment: ""),
+                            isPresented: $isShowingDeleteWorkoutAlert,
+                            titleVisibility: .visible) {
+            Button(NSLocalizedString("deleteWorkout", comment: ""), role: .destructive) {
+                database.delete(workout, saveContext: true)
+                dismiss()
+            }
+        }
+        .sheet(item: $sheetType) { type in
+            switch type {
+            case .newTemplateFromWorkout: TemplateEditorView(template: database.newTemplate(from: workout),
+                                                             isEditingExistingTemplate: true)
+            case .templateDetail:
+                TemplateDetailView(template: workout.template!)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(NSLocalizedString("navBack", comment: "")) { sheetType = nil }
+                        }
                     }
-                }
             }
-            .confirmationDialog(NSLocalizedString("deleteWorkoutDescription", comment: ""),
-                                isPresented: $isShowingDeleteWorkoutAlert,
-                                titleVisibility: .visible) {
-                Button(NSLocalizedString("deleteWorkout", comment: ""), role: .destructive) {
-                    database.delete(workout, saveContext: true)
-                    dismiss()
-                }
-            }
-                                .sheet(isPresented: $isShowingNewTemplate) {
-                                    TemplateEditorView(templateEditor: TemplateEditor(template: workout.template,
-                                                                                                           from: workout))
-                                }
-                                .sheet(isPresented: $isShowingTemplateDetail) {
-                                    NavigationStack {
-                                        TemplateDetailView(template: workout.template!)
-                                            .toolbar {
-                                                ToolbarItem(placement: .navigationBarLeading) {
-                                                    Button(NSLocalizedString("navBack", comment: "")) { isShowingTemplateDetail = false }
-                                                }
-                                            }
-                                    }
-                                }
+        }
     }
         
     // MARK: - Supporting Views
@@ -157,35 +161,31 @@ struct WorkoutDetailView: View {
     }
     
     private var templateButton: some View {
-            Button(action: {
+        Button {
+                sheetType = workout.template != nil ? .templateDetail : .newTemplateFromWorkout
+        } label: {
+            HStack {
                 if workout.template == nil {
-                    isShowingNewTemplate = true
-                } else {
-                    isShowingTemplateDetail = true
-                }
-            }) {
-                HStack {
-                    if workout.template == nil {
-                        Image(systemName: "plus")
-                            .foregroundColor(.accentColor)
-                            .font(.body.weight(.medium))
-                    }
-                    Text(workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
-                        .fontWeight(.medium)
-                        .lineLimit(1)
+                    Image(systemName: "plus")
                         .foregroundColor(.accentColor)
-                    if workout.template != nil {
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.accentColor)
-                            .font(.body.weight(.medium))
-                    } else {
-                        Spacer()
-                    }
-                }.padding()
-                    .background(Color.secondaryBackground)
-                    .cornerRadius(10)
-            }
+                        .font(.body.weight(.medium))
+                }
+                Text(workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                    .foregroundColor(.accentColor)
+                if workout.template != nil {
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.accentColor)
+                        .font(.body.weight(.medium))
+                } else {
+                    Spacer()
+                }
+            }.padding()
+                .background(Color.secondaryBackground)
+                .cornerRadius(10)
+        }
     }
     
     // MARK: - Supporting Methods

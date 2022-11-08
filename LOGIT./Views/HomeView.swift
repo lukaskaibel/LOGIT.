@@ -18,11 +18,6 @@ struct HomeView: View {
     
     @EnvironmentObject var database: Database
     
-    // MARK: - State
-
-    @State private var isShowingTemplateEditor = false
-    @State private var isShowingNewTemplate = false
-    
     // MARK: - Body
     
     var body: some View {
@@ -75,12 +70,6 @@ struct HomeView: View {
             }.listStyle(.insetGrouped)
                 .navigationTitle(NSLocalizedString("home", comment: ""))
         } .navigationViewStyle(.stack)
-        .sheet(isPresented: $isShowingTemplateEditor) {
-            TemplateEditorView(templateEditor: TemplateEditor())
-        }
-        .sheet(isPresented: $isShowingNewTemplate) {
-            TemplateEditorView(templateEditor: TemplateEditor())
-        }
     }
     
     private var muscleGroupPercentageView: some View {

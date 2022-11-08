@@ -9,229 +9,266 @@ import SwiftUI
 
 struct TemplateEditorView: View {
     
-    enum SheetStyle {
+    enum SheetType: Identifiable {
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
+        case exerciseDetail(exercise: Exercise)
+        var id: UUID { UUID() }
     }
     
-    // MARK: -
+    // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var database: Database
     
-    @StateObject var templateEditor: TemplateEditor
+    // MARK: - State
+    
+    @StateObject var template: Template
     
     @State private var editMode: EditMode = .inactive
     @State private var isEditing: Bool = false
-    @State private var showingExerciseSelection = false
+    @State private var sheetType: SheetType? = nil
+    
+    // MARK: - Parameters
+    
+    let isEditingExistingTemplate: Bool
+    
+    // MARK: - Body
     
     var body: some View {
         NavigationStack {
             List {
                 if !isEditing {
                     Section {
-                        TextField(NSLocalizedString("title", comment: ""), text: $templateEditor.templateName)
-                            .font(.body.weight(.bold))
-                            .padding(.vertical, 8)
-                    }
+                        TextField(NSLocalizedString("title", comment: ""), text: templateName, axis: .vertical)
+                            .font(.largeTitle.weight(.bold))
+                            .lineLimit(2)
+                    }.listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
                 }
-                ForEach(templateEditor.template.setGroups, id:\.objectID) { setGroup in
+                ForEach(template.setGroups, id:\.objectID) { setGroup in
                     if isEditing {
                         SetGroupCellForEditing(for: setGroup)
+                            .listRowInsets(EdgeInsets())
                     } else {
                         SetGroupCellWithSets(for: setGroup)
+                            .listRowInsets(EdgeInsets())
                     }
-                }.onMove(perform: templateEditor.moveSetGroups)
-                    .onDelete { indexSet in templateEditor.delete(setGroupWithIndexes: indexSet) }
+                }.onMove(perform: moveSetGroups)
+                    .onDelete { template.setGroups.elements(for: $0).forEach { database.delete($0) } }
                 if !isEditing {
                     Section {
-                        Button(action: { showingExerciseSelection = true }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text(NSLocalizedString("addExercise", comment: ""))
-                            }.padding(.vertical, 8)
+                        Button {
+                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                            sheetType = .exerciseSelection(exercise: nil,
+                                                           setExercise: { database.newTemplateSetGroup(createFirstSetAutomatically: true,
+                                                                                                       exercise: $0,
+                                                                                                       template: template)
+                                database.refreshObjects()
+                            })
+                        } label: {
+                            Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                         }
+                        .listButton()
                     }
                 }
-            }.listStyle(.insetGrouped)
-                .interactiveDismissDisabled()
-                .navigationTitle(templateEditor.isEditingExistingTemplate ? NSLocalizedString("editTemplate", comment: "") : NSLocalizedString("newTemplate", comment: ""))
-                .navigationBarTitleDisplayMode(.inline)
-                .environment(\.editMode, $editMode)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(NSLocalizedString("save", comment: "")) {
-                            templateEditor.saveTemplate()
-                            dismiss()
-                        }.font(.body.weight(.bold))
-                            .disabled(!templateEditor.canSaveTemplate)
-                    }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(NSLocalizedString("cancel", comment: "")) {
-                            if !templateEditor.isEditingExistingTemplate {
-                                templateEditor.deleteTemplate()
-                            }
-                            dismiss()
+            }
+            .listStyle(.insetGrouped)
+            .interactiveDismissDisabled()
+            .navigationTitle(isEditingExistingTemplate ? NSLocalizedString("editTemplate", comment: "") : NSLocalizedString("newTemplate", comment: ""))
+            .navigationBarTitleDisplayMode(.inline)
+            .environment(\.editMode, $editMode)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(NSLocalizedString("save", comment: "")) {
+                        database.save()
+                        dismiss()
+                    }.font(.body.weight(.bold))
+                        .disabled(template.name?.isEmpty ?? true)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(NSLocalizedString("cancel", comment: "")) {
+                        if !isEditingExistingTemplate {
+                            template.sets.forEach { database.delete($0) }
+                            database.delete(template, saveContext: true)
                         }
-                    }
-                    ToolbarItem(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button(NSLocalizedString("done", comment: "")) { hideKeyboard() }
-                        }
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        HStack {
-                            Spacer()
-                            Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
-                                isEditing.toggle()
-                                editMode = isEditing ? .active : .inactive
-                            }.disabled(templateEditor.template.numberOfSetGroups == 0)
-                                .font(.body.weight(.medium))
-                        }
+                        dismiss()
                     }
                 }
-                .sheet(isPresented: $showingExerciseSelection,
-                       onDismiss: { templateEditor.setGroupWithSelectedExercise = nil; templateEditor.isSelectingSecondaryExercise = false }) {
-                    NavigationView {
-                        /*
-                        ExerciseSelectionView(selectedExercise: <#T##Exercise?#>, setExercise: <#T##(Exercise) -> Void#>)
-                        ExerciseSelectionView(selectedExercise: Binding(get: {
-                            guard let setGroup = templateEditor.setGroupWithSelectedExercise else { return nil }
-                            return templateEditor.isSelectingSecondaryExercise ? setGroup.secondaryExercise : setGroup.exercise
-                        }, set: {
-                            guard let exercise = $0 else { return }
-                            guard let setGroup = templateEditor.setGroupWithSelectedExercise else { templateEditor.addSetGroup(for: exercise); return }
-                            if templateEditor.isSelectingSecondaryExercise {
-                                setGroup.secondaryExercise = exercise
-                            } else {
-                                setGroup.exercise = exercise
-                            }
-                        }))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
-                                    showingExerciseSelection = false
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button(NSLocalizedString("done", comment: "")) { hideKeyboard() }
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    HStack {
+                        Spacer()
+                        Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                            isEditing.toggle()
+                            editMode = isEditing ? .active : .inactive
+                        }.disabled(template.numberOfSetGroups == 0)
+                            .font(.body.weight(.medium))
+                    }
+                }
+            }
+            .sheet(item: $sheetType) { style in
+                switch style {
+                case let .exerciseSelection(exercise, setExercise):
+                    NavigationStack {
+                        ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
+                                        sheetType = nil
+                                    }
                                 }
                             }
-                        }
-                         */
                     }
+                case let .exerciseDetail(exercise):
+                    ExerciseDetailView(exercise: exercise)
                 }
-                .onAppear {
-                    UIScrollView.appearance().keyboardDismissMode = .interactive
-                }
-        }.environmentObject(templateEditor)
+            }
+            .scrollDismissesKeyboard(.immediately)
+        }
     }
+    
+    // MARK: - Supporting Views
     
     private func SetGroupCellForEditing(for setGroup: TemplateSetGroup) -> some View {
         SetGroupHeader(for: setGroup)
+            .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
+    @ViewBuilder
     private func SetGroupCellWithSets(for setGroup: TemplateSetGroup) -> some View {
         Section {
             SetGroupHeader(for: setGroup)
             ForEach(setGroup.sets, id:\.objectID) { templateSet in
                 TemplateSetCell(for: templateSet)
                     .listRowSeparator(.hidden, edges: .bottom)
-            }.onDelete { indexSet in
-                templateEditor.delete(setsWithIndices: indexSet, in: setGroup)
             }
-            Button(action: {
-                templateEditor.addSet(to: setGroup)
-            }) {
-                HStack {
-                    Image(systemName: "plus")
-                    Text(NSLocalizedString("addSet", comment: ""))
-                    Spacer()
-                }
-            }.padding(.vertical, 8)
+            .onDelete { indexSet in
+                setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
+            }
+            Button {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                database.addSet(to: setGroup)
+            } label: {
+                Label(NSLocalizedString("addSet", comment: ""), systemImage: "plus.circle.fill")
+                    .foregroundColor(setGroup.exercise?.muscleGroup?.color)
+                    .font(.body.weight(.bold))
+            }
+            .padding(15)
+            .frame(maxWidth: .infinity)
+            .deleteDisabled(true)
         }
+        .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
     private func SetGroupHeader(for setGroup: TemplateSetGroup) -> some View {
-        VStack(spacing: 5) {
-            HStack {
-                Button(action: {
-                    templateEditor.setGroupWithSelectedExercise = setGroup
-                    showingExerciseSelection = true
-                }) {
-                    HStack {
-                        if setGroup.setType == .superSet {
-                            Image(systemName: "1.circle")
-                        }
-                        Text(setGroup.exercise?.name ?? "")
-                            .fontWeight(.medium)
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                    }.foregroundColor(setGroup.exercise == nil ? .secondaryLabel : .label)
-                        .lineLimit(1)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 5)
-                        .background(Color.tertiaryFill)
-                        .cornerRadius(5)
-                }
-                Spacer()
-                Menu(content: {
-                    Section {
-                        Button(action: {
-                            templateEditor.convertSetGroupToStandardSets(setGroup)
-                        }) {
-                            Label(NSLocalizedString("normalset", comment: ""),
-                                  systemImage: setGroup.setType == .standard ? "checkmark" : "")
-                        }
-                        Button(action: {
-                            templateEditor.convertSetGroupToTemplateSuperSet(setGroup)
-                        }) {
-                            Label(NSLocalizedString("superset", comment: ""),
-                                  systemImage: setGroup.setType == .superSet ? "checkmark" : "")
-                        }
-                        Button(action: {
-                            templateEditor.convertSetGroupToTemplateDropSets(setGroup)
-                        }) {
-                            Label(NSLocalizedString("dropset", comment: ""),
-                                  systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
-                        }
-                    }
-                }) {
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.label)
-                        .padding(7)
+        HStack {
+            if let muscleGroup = setGroup.exercise?.muscleGroup {
+                if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
+                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1), (secondaryMuscleGroup, 1)])
+                } else {
+                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1)])
                 }
             }
-            if setGroup.setType == .superSet {
+            VStack(spacing: 5) {
                 HStack {
-                    Image(systemName: "arrow.turn.down.right")
-                        .padding(.leading)
-                    Button(action: {
-                        templateEditor.setGroupWithSelectedExercise = setGroup
-                        templateEditor.isSelectingSecondaryExercise = true
-                        showingExerciseSelection = true
-                    }) {
+                    Button {
+                        sheetType = .exerciseSelection(exercise: setGroup.exercise,
+                                                        setExercise: { setGroup.exercise = $0; database.refreshObjects() })
+                    } label: {
                         HStack {
-                            Image(systemName: "2.circle")
-                            Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
-                                .fontWeight(.medium)
+                            if setGroup.setType == .superSet {
+                                Image(systemName: "1.circle")
+                            }
+                            Text(setGroup.exercise?.name ?? "")
+                                .lineLimit(1)
+                                .font(.title3.weight(.semibold))
                             Image(systemName: "chevron.right")
-                                .font(.caption)
-                        }.foregroundColor(setGroup.secondaryExercise == nil ? .secondaryLabel : .label)
-                            .lineLimit(1)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 5)
-                            .background(Color.tertiaryFill)
-                            .cornerRadius(5)
+                                .font(.body.weight(.semibold))
+                        }
+                        .foregroundColor(setGroup.exercise?.muscleGroup?.color)
                     }
                     Spacer()
+                    Menu(content: {
+                        Section {
+                            Button(action: {
+                                database.convertSetGroupToStandardSets(setGroup)
+                            }) {
+                                Label(NSLocalizedString("normalset", comment: ""),
+                                      systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                            }
+                            Button(action: {
+                                database.convertSetGroupToTemplateSuperSet(setGroup)
+                            }) {
+                                Label(NSLocalizedString("superset", comment: ""),
+                                      systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                            }
+                            Button(action: {
+                                database.convertSetGroupToTemplateDropSets(setGroup)
+                            }) {
+                                Label(NSLocalizedString("dropset", comment: ""),
+                                      systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                            }
+                        }
+                        Section {
+                            Button(action: {
+                                // TODO: Add Detail for Secondary Exercise in case of SuperSet
+                                guard let exercise = setGroup.exercise else { return }
+                                sheetType = .exerciseDetail(exercise: exercise)
+                            }) {
+                                Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
+                            }
+                            Button(role: .destructive, action: {
+                                withAnimation {
+                                    database.delete(setGroup)
+                                }
+                            }) {
+                                Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
+                            }
+                        }
+                    }) {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.label)
+                            .padding(7)
+                    }
                 }
+                if setGroup.setType == .superSet {
+                    HStack {
+                        Image(systemName: "arrow.turn.down.right")
+                            .padding(.leading)
+                        Button {
+                            sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
+                                                            setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() })
+                        } label: {
+                            HStack {
+                                Image(systemName: "2.circle")
+                                Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
+                                    .font(.title3.weight(.semibold))
+                                    .lineLimit(1)
+                                Image(systemName: "chevron.right")
+                                    .font(.body.weight(.semibold))
+                            }
+                            .foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color)
+                        }
+                        Spacer()
+                    }
+                }
+                
             }
-
-        }.padding(.vertical, 8)
-            .buttonStyle(PlainButtonStyle())
+            .padding(.vertical, 5)
+        }
+        .padding(CELL_PADDING)
     }
     
     @ViewBuilder
     private func TemplateSetCell(for templateSet: TemplateSet) -> some View {
         HStack {
-            Text(String((templateEditor.indexInSetGroup(for: templateSet) ?? 0) + 1))
+            Text(String((templateSet.setGroup?.sets.firstIndex(of: templateSet) ?? 0) + 1))
                 .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
                 .frame(maxHeight: .infinity, alignment: .top)
@@ -245,13 +282,27 @@ struct TemplateEditorView: View {
                 TemplateSuperSetCell(for: templateSuperSet)
                     .padding(.top, 8)
             }
-        }
+        }.padding(.trailing)
     }
+    
+    // MARK: - Supporting Methods
+    
+    private var templateName: Binding<String> {
+        Binding(get: { template.name ?? "" }, set: { template.name = $0 })
+    }
+    
+    public func moveSetGroups(from source: IndexSet, to destination: Int) {
+        template.setGroups.move(fromOffsets: source, toOffset: destination)
+        database.refreshObjects()
+    }
+    
+    
     
 }
 
 struct TemplateEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateEditorView(templateEditor: TemplateEditor())
+        TemplateEditorView(template: Database.preview.testTemplate, isEditingExistingTemplate: true)
+            .environmentObject(Database.preview)
     }
 }

@@ -35,6 +35,17 @@ struct SectionHeaderModifier: ViewModifier {
     }
 }
 
+struct ListButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+            .font(.body.weight(.bold))
+            .foregroundColor(.accentColor)
+            .padding(10)
+            .listRowBackground(Color.accentColor.translucentBackground)
+    }
+}
+
 extension View {
     func tileStyle() -> some View {
         modifier(TileModifier())
@@ -46,5 +57,9 @@ extension View {
     
     func sectionHeaderStyle() -> some View {
         modifier(SectionHeaderModifier())
+    }
+    
+    func listButton() -> some View {
+        modifier(ListButtonModifier())
     }
 }

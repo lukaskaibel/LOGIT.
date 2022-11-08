@@ -18,8 +18,8 @@ extension TemplateEditorView {
                                                     set: { templateDropSet.weights?.replaceValue(at: index, with: $0) }))
             }
             Stepper("Drop count",
-                    onIncrement: { templateEditor.addDrop(to: templateDropSet) },
-                    onDecrement: { templateEditor.removeLastDrop(from: templateDropSet) })
+                    onIncrement: { templateDropSet.addDrop(); database.refreshObjects() },
+                    onDecrement: { templateDropSet.removeLastDrop(); database.refreshObjects() })
         }
     }
     

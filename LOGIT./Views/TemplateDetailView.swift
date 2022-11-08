@@ -76,7 +76,7 @@ struct TemplateDetailView: View {
                 }
             }
             .sheet(isPresented: $showingTemplateEditor) {
-                TemplateEditorView(templateEditor: TemplateEditor(template: template))
+                TemplateEditorView(template: template, isEditingExistingTemplate: true)
             }
     }
     

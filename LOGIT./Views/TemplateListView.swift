@@ -49,7 +49,7 @@ struct TemplateListView: View {
                 }
             }
             .popover(isPresented: $showingTemplateCreation) {
-                TemplateEditorView(templateEditor: TemplateEditor())
+                TemplateEditorView(template: database.newTemplate(), isEditingExistingTemplate: false)
             }
     }
     

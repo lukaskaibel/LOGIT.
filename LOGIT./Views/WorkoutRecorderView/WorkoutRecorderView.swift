@@ -177,12 +177,8 @@ struct WorkoutRecorderView: View {
             })
         }) {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
-                .foregroundColor(.accentColor)
-                .font(.body.weight(.bold))
-        }.frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.accentColorBackground)
-            .cornerRadius(15)
+        }
+        .listButton()
     }
     
     // MARK: - Supporting Methods

@@ -21,4 +21,16 @@ extension Database {
         refreshObjects()
     }
     
+    public func addSet(to templateSetGroup: TemplateSetGroup) {
+        let lastSet = templateSetGroup.sets.last
+        if let _ = lastSet as? TemplateDropSet {
+            newTemplateDropSet(templateSetGroup: templateSetGroup)
+        } else if let _ = lastSet as? TemplateSuperSet {
+            newTemplateSuperSet(setGroup: templateSetGroup)
+        } else {
+            newTemplateStandardSet(setGroup: templateSetGroup)
+        }
+        refreshObjects()
+    }
+    
 }
