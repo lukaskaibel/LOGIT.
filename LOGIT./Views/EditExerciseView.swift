@@ -89,7 +89,7 @@ struct EditExerciseView: View {
         }
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private func saveExercise() {
         if let exerciseToEdit = exerciseToEdit {

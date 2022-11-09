@@ -50,56 +50,56 @@ struct WorkoutRecorderView: View {
                 header
                 Divider()
                 exerciseList
-            }.environment(\.editMode, $editMode)
-                .navigationBarHidden(true)
-                .toolbar {
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Button(action: { showingTimerView.toggle() }) {
-                            TimerTimeView(showingTimerView: $showingTimerView)
-                        }.font(.body.monospacedDigit())
-                        Spacer()
-                        Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
-                            isEditing.toggle()
-                            editMode = isEditing ? .active : .inactive
-                        }.disabled(workout.numberOfSetGroups == 0)
+            }
+            .environment(\.editMode, $editMode)
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Button(action: { showingTimerView.toggle() }) {
+                        TimerTimeView(showingTimerView: $showingTimerView)
+                    }.font(.body.monospacedDigit())
+                    Spacer()
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                        isEditing.toggle()
+                        editMode = isEditing ? .active : .inactive
+                    }.disabled(workout.numberOfSetGroups == 0)
+                }
+            }
+            .sheet(item: $sheetType) { type in
+                NavigationStack {
+                    switch type {
+                    case let .exerciseDetail(exercise):
+                        ExerciseDetailView(exercise: exercise)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
+                                }
+                            }
+                    case let .exerciseSelection(exercise, setExercise):
+                        ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
+                                }
+                            }
                     }
                 }
-                .sheet(item: $sheetType) { type in
-                    NavigationStack {
-                        switch type {
-                        case let .exerciseDetail(exercise):
-                            ExerciseDetailView(exercise: exercise)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
-                                    }
-                                }
-                        case let .exerciseSelection(exercise, setExercise):
-                            ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
-                                .toolbar {
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
-                                    }
-                                }
-                        }
-                    }
-                }
-                .confirmationDialog(Text(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
-                                            !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                                            NSLocalizedString("deleteSetsWithoutEntries", comment: "")),
-                                    isPresented: $isShowingFinishConfirmation,
-                                    titleVisibility: .visible) {
-                    Button(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
-                            !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                            NSLocalizedString("deleteSets", comment: ""),
-                           role: workout.allSetsHaveEntries ? nil : .destructive) {
-                        workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
-                        if workout.isEmpty { database.delete(workout, saveContext: true) }
-                        else { saveWorkout() }
-                        dismiss()
-                    }.font(.body.weight(.semibold))
-                    Button("Continue Workout", role: .cancel) {}
-                }
+            }
+            .confirmationDialog(Text(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
+                                        !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                                        NSLocalizedString("deleteSetsWithoutEntries", comment: "")),
+                                isPresented: $isShowingFinishConfirmation,
+                                titleVisibility: .visible) {
+                Button(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
+                        !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                        NSLocalizedString("deleteSets", comment: ""),
+                       role: workout.allSetsHaveEntries ? nil : .destructive) {
+                    workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
+                    if workout.isEmpty { database.delete(workout, saveContext: true) }
+                    else { saveWorkout() }
+                    dismiss()
+                }.font(.body.weight(.semibold))
+                Button("Continue Workout", role: .cancel) {}
+            }
         }.onAppear {
             if let template = template {
                 updateWorkout(with: template)
@@ -125,13 +125,12 @@ struct WorkoutRecorderView: View {
                         .font(.title)
                 }
             }
-        }.padding(.horizontal)
-            .padding(.bottom)
-            .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+        .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
-    
-    @State private var animationValue = 1.0
-    
+        
     private var exerciseList: some View {
         List {
             ForEach(workout.setGroups, id:\.objectID) { setGroup in
@@ -150,13 +149,10 @@ struct WorkoutRecorderView: View {
                 AddExerciseButton
             }
         }.listStyle(.insetGrouped)
-            .onAppear {
-                UIScrollView.appearance().keyboardDismissMode = .interactive
-            }
     }
     
     private var AddExerciseButton: some View {
-        Button(action: {
+        Button {
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             sheetType = .exerciseSelection(exercise: nil, setExercise: { exercise in
                 database.newWorkoutSetGroup(createFirstSetAutomatically: true,
@@ -164,13 +160,13 @@ struct WorkoutRecorderView: View {
                                             workout: workout)
                 database.refreshObjects()
             })
-        }) {
+        } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
         }
         .listButton()
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var workoutName: Binding<String> {
         Binding(get: { workout.name ?? "" }, set: { workout.name = $0 })

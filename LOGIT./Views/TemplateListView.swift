@@ -72,7 +72,7 @@ struct TemplateListView: View {
             }
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var groupedTemplates: [[Template]] {
         database.getGroupedTemplates(withNameIncluding: searchedText, groupedBy: sortingKey)

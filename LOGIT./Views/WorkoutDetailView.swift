@@ -195,7 +195,7 @@ struct WorkoutDetailView: View {
         }
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var workoutDurationString: String {
         guard let start = workout.date, let end = workout.endDate else { return "0:00" }

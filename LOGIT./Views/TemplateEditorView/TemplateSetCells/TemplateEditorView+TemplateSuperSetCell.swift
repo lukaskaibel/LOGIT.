@@ -14,7 +14,7 @@ extension TemplateEditorView {
             HStack {
                 Image(systemName: "1.circle")
                     .foregroundColor(.accentColor)
-                TemplateSetEntryView(repetitions: Binding(get: { templateSuperSet.repetitionsFirstExercise },
+                SetEntryView(repetitions: Binding(get: { templateSuperSet.repetitionsFirstExercise },
                                                           set: { templateSuperSet.repetitionsFirstExercise = $0 }),
                                      weight: Binding(get: { templateSuperSet.weightFirstExercise },
                                                      set: { templateSuperSet.weightFirstExercise = $0 }))
@@ -22,7 +22,7 @@ extension TemplateEditorView {
             HStack {
                 Image(systemName: "2.circle")
                     .foregroundColor(.accentColor)
-                TemplateSetEntryView(repetitions: Binding(get: { templateSuperSet.repetitionsSecondExercise },
+                SetEntryView(repetitions: Binding(get: { templateSuperSet.repetitionsSecondExercise },
                                                           set: { templateSuperSet.repetitionsSecondExercise = $0 }),
                                      weight: Binding(get: { templateSuperSet.weightSecondExercise },
                                                      set: { templateSuperSet.weightSecondExercise = $0 }))

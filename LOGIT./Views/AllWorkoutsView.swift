@@ -70,7 +70,7 @@ struct AllWorkoutsView: View {
             }
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var groupedWorkouts: [[Workout]] {
         database.getGroupedWorkouts(withNameIncluding: searchedText, groupedBy: sortingKey)

@@ -13,7 +13,6 @@ extension WorkoutRecorderView {
     internal func workoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
             Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
-                .foregroundColor(.secondaryLabel)
                 .font(.body.monospacedDigit())
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding()

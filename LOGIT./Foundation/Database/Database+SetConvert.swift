@@ -14,7 +14,7 @@ extension Database {
     public func convertSetGroupToStandardSets(_ setGroup: WorkoutSetGroup) {
         setGroup.sets
             .forEach { convertToStandardSet($0) }
-        objectWillChange.send()
+        refreshObjects()
     }
     
     private func convertToStandardSet(_ workoutSet: WorkoutSet) {
@@ -34,7 +34,7 @@ extension Database {
     public func convertSetGroupToDropSets(_ setGroup: WorkoutSetGroup) {
         setGroup.sets
             .forEach { convertToDropSet($0) }
-        objectWillChange.send()
+        refreshObjects()
     }
     
     private func convertToDropSet(_ workoutSet: WorkoutSet)  {
@@ -54,7 +54,7 @@ extension Database {
     public func convertSetGroupToSuperSets(_ setGroup: WorkoutSetGroup) {
         setGroup.sets
             .forEach { convertToSuperSet($0) }
-        objectWillChange.send()
+        refreshObjects()
     }
     
     private func convertToSuperSet(_ workoutSet: WorkoutSet) {

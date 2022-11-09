@@ -42,7 +42,8 @@ extension WorkoutRecorderView {
         HStack {
             if let muscleGroup = setGroup.exercise?.muscleGroup {
                 if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
-                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1), ColorMeter.Item(color: secondaryMuscleGroup.color, amount: 1)])
+                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1),
+                                       ColorMeter.Item(color: secondaryMuscleGroup.color, amount: 1)])
                 } else {
                     ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1)])
                 }

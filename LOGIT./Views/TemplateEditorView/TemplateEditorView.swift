@@ -274,7 +274,7 @@ struct TemplateEditorView: View {
         }.padding(.trailing)
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var templateName: Binding<String> {
         Binding(get: { template.name ?? "" }, set: { template.name = $0 })

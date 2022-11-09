@@ -199,7 +199,7 @@ struct ExerciseDetailView: View {
             .frame(width: 4, height: 4)
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
         database.getWorkoutSets(with: exercise)

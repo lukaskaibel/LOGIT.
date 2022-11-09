@@ -34,7 +34,7 @@ struct ColorMeter: View {
             .clipShape(Capsule())
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private func overallAmount() -> Int {
         items.reduce(0, { $0 + $1.amount })

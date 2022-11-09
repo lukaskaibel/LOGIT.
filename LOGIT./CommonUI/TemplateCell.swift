@@ -38,7 +38,7 @@ struct TemplateCell: View {
         }
     }
     
-    // MARK: - Computed UI Properties
+    // MARK: - Computed Properties
     
     private var lastUsedDate: String {
         if let date = template.lastUsed {

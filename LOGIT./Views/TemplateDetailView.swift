@@ -112,7 +112,7 @@ struct TemplateDetailView: View {
         }.padding(CELL_PADDING)
     }
     
-    // MARK: - Supporting Methods
+    // MARK: - Computed Properties
     
     private var lastUsedDateString: String {
         template.workouts.first?.date?.description(.medium) ?? NSLocalizedString("never", comment: "")
