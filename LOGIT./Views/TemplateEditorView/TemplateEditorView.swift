@@ -72,8 +72,12 @@ struct TemplateEditorView: View {
                         .listButton()
                     }
                 }
+                Spacer(minLength: 50)
+                    .listRowBackground(Color.clear)
             }
             .listStyle(.insetGrouped)
+            .offset(x: 0, y: -30)
+            .edgesIgnoringSafeArea(.bottom)
             .interactiveDismissDisabled()
             .navigationTitle(isEditingExistingTemplate ? NSLocalizedString("editTemplate", comment: "") : NSLocalizedString("newTemplate", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
@@ -95,21 +99,14 @@ struct TemplateEditorView: View {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Spacer()
-                        Button(NSLocalizedString("done", comment: "")) { hideKeyboard() }
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                        isEditing.toggle()
+                        editMode = isEditing ? .active : .inactive
                     }
-                }
-                ToolbarItem(placement: .bottomBar) {
-                    HStack {
-                        Spacer()
-                        Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
-                            isEditing.toggle()
-                            editMode = isEditing ? .active : .inactive
-                        }.disabled(template.numberOfSetGroups == 0)
-                            .font(.body.weight(.medium))
-                    }
+                    .disabled(template.numberOfSetGroups == 0)
+                    .font(.body.weight(.medium))
                 }
             }
             .sheet(item: $sheetType) { style in

@@ -41,7 +41,6 @@ struct TemplateSetGroupDetailView: View {
                                 .font(.body.monospacedDigit())
                             TemplateSetCell(templateSet: templateSet)
                                 .padding(.vertical, 8)
-                                .padding(.horizontal)
                         }
                         Divider()
                     }.padding(.leading)
@@ -109,7 +108,7 @@ struct TemplateSetGroupDetailView: View {
                     .font(.footnote)
                     .foregroundColor(.secondaryLabel)
                     .frame(maxWidth: SetGroupDetailView.columnWidth)
-            }.padding(.horizontal)
+            }
                 .padding(.vertical, 5)
         }.font(.body.weight(.semibold))
             .foregroundColor(.label)

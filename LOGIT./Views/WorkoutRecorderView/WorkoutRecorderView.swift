@@ -150,11 +150,6 @@ struct WorkoutRecorderView: View {
                 .listRowInsets(EdgeInsets())
             if !isEditing {
                 AddExerciseButton
-                    .padding(.vertical)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
-                    .padding(.bottom, 20 )
             }
         }.listStyle(.insetGrouped)
             .onAppear {

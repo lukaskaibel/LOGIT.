@@ -31,8 +31,9 @@ struct TemplateDetailView: View {
         List {
             Section {
                 templateHeader
-            }.listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
             Section {
                 ForEach(template.setGroups) { templateSetGroup in
                     TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
@@ -49,9 +50,13 @@ struct TemplateDetailView: View {
                 Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
                     .sectionHeaderStyle()
             }).listRowInsets(EdgeInsets())
+            Spacer(minLength: 50)
+                .listRowBackground(Color.clear)
         }.listStyle(.insetGrouped)
+            .offset(x: 0, y: -30)
+            .edgesIgnoringSafeArea(.bottom)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (template.date?.description(.short) ?? ""))
+            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? ""))
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Menu(content: {

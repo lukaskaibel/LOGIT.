@@ -40,8 +40,12 @@ struct WorkoutDetailView: View {
                 .listRowBackground(Color.clear)
             Section {
                 workoutInfo
-            }.listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+                    .padding(CELL_PADDING)
+            } header: {
+                Text("Overview")
+                    .sectionHeaderStyle()
+            }
+            .listRowInsets(EdgeInsets())
             Section {
                 setsPerMuscleGroup
             } header: {
@@ -77,6 +81,8 @@ struct WorkoutDetailView: View {
                 .listRowBackground(Color.clear)
         }
         .listStyle(.insetGrouped)
+        .offset(x: 0, y: -30)
+        .edgesIgnoringSafeArea(.bottom)
         .navigationTitle(workout.date?.description(.medium) ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -101,12 +107,14 @@ struct WorkoutDetailView: View {
             case .newTemplateFromWorkout: TemplateEditorView(template: database.newTemplate(from: workout),
                                                              isEditingExistingTemplate: true)
             case .templateDetail:
-                TemplateDetailView(template: workout.template!)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(NSLocalizedString("navBack", comment: "")) { sheetType = nil }
+                NavigationStack {
+                    TemplateDetailView(template: workout.template!)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(NSLocalizedString("navBack", comment: "")) { sheetType = nil }
+                            }
                         }
-                    }
+                }
             }
         }
     }
@@ -157,7 +165,7 @@ struct WorkoutDetailView: View {
             .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
                                  amount: $0.1,
                                  color: $0.0.color) }
-        ).tileStyle()
+        ).padding(CELL_PADDING)
     }
     
     private var templateButton: some View {
@@ -182,9 +190,8 @@ struct WorkoutDetailView: View {
                 } else {
                     Spacer()
                 }
-            }.padding()
-                .background(Color.secondaryBackground)
-                .cornerRadius(10)
+            }
+            .padding()
         }
     }
     

@@ -19,10 +19,13 @@ struct TemplateCell: View {
         HStack {
             HStack(alignment: .top) {
                 VerticalMuscleGroupIndicator(muscleGroupAmounts: template.muscleGroupOccurances)
-                VStack(alignment: .leading) {
-                    Text(lastUsedDate)
-                        .font(.footnote.weight(.medium))
-                        .foregroundColor(.secondaryLabel)
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "list.bullet.rectangle.portrait")
+                        Text(lastUsedDate)
+                    }
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
                     Text(template.name ?? "No name")
                         .font(.headline)
                         .lineLimit(1)
@@ -40,7 +43,7 @@ struct TemplateCell: View {
     // MARK: - Computed UI Properties
     
     private var lastUsedDate: String {
-        if let date = template.date {
+        if let date = template.lastUsed {
             return "\(NSLocalizedString("lastUsed", comment: "")) \(date.description(.short))"
         } else {
             return NSLocalizedString("unused", comment: "")

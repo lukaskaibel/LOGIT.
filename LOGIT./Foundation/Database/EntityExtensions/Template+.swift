@@ -18,7 +18,7 @@ extension Template {
         }
     }
     
-    var date: Date? {
+    var lastUsed: Date? {
         return workouts.last?.date
     }
     

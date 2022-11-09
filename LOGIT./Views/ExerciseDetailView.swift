@@ -33,12 +33,17 @@ struct ExerciseDetailView: View {
         List {
             Section {
                 header
-            }.listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+            }
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
             Section {
                 exerciseInfo
-            }.listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+                    .padding(CELL_PADDING)
+            } header: {
+                Text("Personal Best")
+                    .sectionHeaderStyle()
+            }
+            .listRowInsets(EdgeInsets())
             Section {
                 weightGraph
             } header: {
@@ -110,7 +115,12 @@ struct ExerciseDetailView: View {
                     .listRowSeparator(.hidden, edges: .bottom)
             }).listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
-        }.listStyle(.insetGrouped)
+            Spacer(minLength: 50)
+                .listRowBackground(Color.clear)
+        }
+        .listStyle(.insetGrouped)
+        .offset(x: 0, y: -30)
+        .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .tint(muscleGroupColor)
         .toolbar {
@@ -180,7 +190,7 @@ struct ExerciseDetailView: View {
                 Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
             }.pickerStyle(.segmented)
                 .padding(.top)
-        }.tileStyle()
+        }.padding(CELL_PADDING)
     }
     
     private var dividerCircle: some View {

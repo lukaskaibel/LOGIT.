@@ -102,10 +102,12 @@ extension Database {
     // MARK: - Template Fetch
     
     func getTemplates(withNameIncluding filterText: String = "") -> [Template] {
-        fetch(Template.self,
+        (fetch(Template.self,
               sortingKey: "creationDate",
+              ascending: false,
               predicate: filterText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@",
-                                                                filterText)) as! [Template]
+                                                                filterText)) as! [Template])
+        .sorted { $0.lastUsed ?? .now > $1.lastUsed ?? .now }
     }
     
 }
