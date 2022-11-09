@@ -11,7 +11,7 @@ extension WorkoutRecorderView {
     
     internal func StandardSetCell(for standardSet: StandardSet) -> some View {
         return HStack {
-            SetEntryView(repetitions: Binding(get: {standardSet.repetitions},
+            SetEntryEditor(repetitions: Binding(get: {standardSet.repetitions},
                                                      set: {standardSet.repetitions = $0}),
                                 weight: Binding(get: {standardSet.weight},
                                                 set: {standardSet.weight = $0}),

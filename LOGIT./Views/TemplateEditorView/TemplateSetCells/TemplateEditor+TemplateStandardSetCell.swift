@@ -10,7 +10,7 @@ import SwiftUI
 extension TemplateEditorView {
     
     internal func TemplateStandardSetCell(for templateStandardSet: TemplateStandardSet) -> some View {
-        SetEntryView(repetitions: Binding(get: { templateStandardSet.repetitions },
+        SetEntryEditor(repetitions: Binding(get: { templateStandardSet.repetitions },
                                                       set: { templateStandardSet.repetitions = $0 }),
                                  weight: Binding(get: { templateStandardSet.weight },
                                                  set: { templateStandardSet.weight = $0 }))

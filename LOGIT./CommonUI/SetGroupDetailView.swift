@@ -34,9 +34,9 @@ struct SetGroupDetailView: View {
         VStack(alignment: .leading, spacing: 0) {
             header(for: setGroup)
             HStack {
-                Capsule()
-                    .foregroundColor(setGroup.exercise?.muscleGroup?.color ?? .separator)
-                    .frame(width: 7)
+                ColorMeter(items: [setGroup.exercise?.muscleGroup?.color,
+                                   setGroup.secondaryExercise?.muscleGroup?.color]
+                    .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
                 VStack(spacing: 0) {
                     Divider()
                         .padding(.leading)

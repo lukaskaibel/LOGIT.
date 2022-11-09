@@ -11,7 +11,7 @@
 		7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A4280B73E7003E5515 /* Database+Preview.swift */; };
 		7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7907FDE9289E99B1006AF271 /* CloudKit.framework */; };
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
-		792DAA94291C4769007DD395 /* SetEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAA93291C4769007DD395 /* SetEntryView.swift */; };
+		792DAA94291C4769007DD395 /* SetEntryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAA93291C4769007DD395 /* SetEntryEditor.swift */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
@@ -109,7 +109,7 @@
 		7907FDE9289E99B1006AF271 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		792DAA93291C4769007DD395 /* SetEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEntryView.swift; sourceTree = "<group>"; };
+		792DAA93291C4769007DD395 /* SetEntryEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEntryEditor.swift; sourceTree = "<group>"; };
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		792F9740280AC65D0032761C /* Database+EntityCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityCreation.swift"; sourceTree = "<group>"; };
@@ -357,7 +357,7 @@
 				794E64FD28EE3A69003AACDD /* ColorMeter.swift */,
 				794E64FB28EE38F3003AACDD /* ExerciseCell.swift */,
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
-				792DAA93291C4769007DD395 /* SetEntryView.swift */,
+				792DAA93291C4769007DD395 /* SetEntryEditor.swift */,
 				7944663728E8875300487092 /* SetGroupDetailView.swift */,
 				79F2D1232800D54300197E0A /* Styles.swift */,
 				7955EEB127FDC5680010693C /* TemplateCell.swift */,
@@ -567,7 +567,7 @@
 				79457C3C283AF35D00411F03 /* WorkoutRecorderView+WorkoutSetCell.swift in Sources */,
 				79A934E127C7F16100ED9321 /* WorkoutRecorderView.swift in Sources */,
 				79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */,
-				792DAA94291C4769007DD395 /* SetEntryView.swift in Sources */,
+				792DAA94291C4769007DD395 /* SetEntryEditor.swift in Sources */,
 				79F2D1242800D54300197E0A /* Styles.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,

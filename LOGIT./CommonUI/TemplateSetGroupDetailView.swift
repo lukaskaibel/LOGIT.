@@ -29,23 +29,28 @@ struct TemplateSetGroupDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             header(for: templateSetGroup)
-            VStack(spacing: 0) {
-                Divider()
-                    .padding(.leading)
-                ForEach(templateSetGroup.sets, id:\.objectID) { templateSet in
-                    VStack(alignment: .trailing, spacing: 0) {
-                        EmptyView()
-                            .frame(height: 1)
-                        HStack {
-                            Text("\(NSLocalizedString("set", comment: "")) \((templateSetGroup.index(of: templateSet) ?? 0) + 1)")
-                                .font(.body.monospacedDigit())
-                            TemplateSetCell(templateSet: templateSet)
-                                .padding(.vertical, 8)
-                        }
-                        Divider()
-                    }.padding(.leading)
+            HStack {
+                ColorMeter(items: [templateSetGroup.exercise?.muscleGroup?.color,
+                                   templateSetGroup.secondaryExercise?.muscleGroup?.color]
+                    .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
+                VStack(spacing: 0) {
+                    Divider()
+                        .padding(.leading)
+                    ForEach(templateSetGroup.sets, id:\.objectID) { templateSet in
+                        VStack(alignment: .trailing, spacing: 0) {
+                            EmptyView()
+                                .frame(height: 1)
+                            HStack {
+                                Text("\(NSLocalizedString("set", comment: "")) \((templateSetGroup.index(of: templateSet) ?? 0) + 1)")
+                                    .font(.body.monospacedDigit())
+                                TemplateSetCell(templateSet: templateSet)
+                                    .padding(.vertical, 8)
+                            }
+                            Divider()
+                        }.padding(.leading)
+                    }
                 }
-            }.listRowSeparator(.hidden)
+            }
         }
         .navigationDestination(isPresented: $navigateToDetail) {
             if let exercise = exerciseForDetail {
@@ -150,14 +155,14 @@ struct TemplateSetCell: View {
     private func TemplateSuperSetCell(for templateSuperSet: TemplateSuperSet) -> some View {
         VStack(alignment: .trailing) {
             HStack {
-                Text(templateSuperSet.exercise?.name ?? "")
+                Text("1")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                 TemplateSetEntry(repetitions: Int(templateSuperSet.repetitionsFirstExercise),
                                 weight: Int(templateSuperSet.weightFirstExercise))
             }
             HStack {
-                Text(templateSuperSet.secondaryExercise?.name ?? "")
+                Text("2")
                     .foregroundColor(.secondaryLabel)
                     .font(.caption)
                 TemplateSetEntry(repetitions: Int(templateSuperSet.repetitionsSecondExercise),

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SetEntryView: View {
+struct SetEntryEditor: View {
     
     // MARK: - Environment
     
@@ -87,6 +87,6 @@ struct SetEntryView: View {
 
 struct SetEntryView_Previews: PreviewProvider {
     static var previews: some View {
-        SetEntryView(repetitions: .constant(12), weight: .constant(80))
+        SetEntryEditor(repetitions: .constant(12), weight: .constant(80))
     }
 }

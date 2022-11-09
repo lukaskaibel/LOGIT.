@@ -12,7 +12,7 @@ extension WorkoutRecorderView {
     internal func DropSetCell(for dropSet: DropSet) -> some View {
         VStack {
             ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
-                SetEntryView(repetitions: Binding(get: { dropSet.repetitions?.value(at: index) ?? 0 },
+                SetEntryEditor(repetitions: Binding(get: { dropSet.repetitions?.value(at: index) ?? 0 },
                                                          set: { dropSet.repetitions?.replaceValue(at: index, with: $0) }),
                                     weight: Binding(get: { dropSet.weights?.value(at: index) ?? 0 },
                                                     set: { dropSet.weights?.replaceValue(at: index, with: $0) }),

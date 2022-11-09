@@ -48,10 +48,11 @@ struct LOGIT: App {
                     NavigationStack {
                         ProfileView()
                     }.tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
-                }.environment(\.managedObjectContext, database.context)
-                    .environmentObject(database)
+                }
+                .environmentObject(database)
             } else {
                 FirstStartView()
+                    .environmentObject(database)
             }
         }
     }
