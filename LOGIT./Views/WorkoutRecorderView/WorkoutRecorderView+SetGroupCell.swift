@@ -12,25 +12,29 @@ extension WorkoutRecorderView {
     internal func setGroupCell(for setGroup: WorkoutSetGroup) -> some View {
         Section {
             exerciseHeader(setGroup: setGroup)
-                .deleteDisabled(true)
-            ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                workoutSetCell(workoutSet: workoutSet)
-            }.onDelete { indexSet in
-                setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
-                database.refreshObjects()
-            }
-            Button(action: {
-                database.addSet(to: setGroup)
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            }) {
-                Label(NSLocalizedString("addSet", comment: ""), systemImage: "plus.circle.fill")
-                    .foregroundColor(setGroup.exercise?.muscleGroup?.color)
-                    .font(.body.weight(.bold))
-            }.padding(15)
+            if !isEditing {
+                ForEach(setGroup.sets, id:\.objectID) { workoutSet in
+                    workoutSetCell(workoutSet: workoutSet)
+                }
+                .onDelete { indexSet in
+                    setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
+                    database.refreshObjects()
+                }
+                Button {
+                    database.addSet(to: setGroup)
+                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                } label: {
+                    Label(NSLocalizedString("addSet", comment: ""),
+                          systemImage: "plus.circle.fill")
+                        .foregroundColor(setGroup.exercise?.muscleGroup?.color)
+                        .font(.body.weight(.bold))
+                }
+                .padding(15)
                 .frame(maxWidth: .infinity)
-                .deleteDisabled(true)
-        }.transition(.slide)
-            .buttonStyle(.plain)
+            }
+        }
+        .buttonStyle(.plain)
+        .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
     @ViewBuilder
@@ -67,31 +71,25 @@ extension WorkoutRecorderView {
                     if !isEditing {
                         Menu(content: {
                             Section {
-                                Button(action: {
-                                    database.convertSetGroupToStandardSets(setGroup)
-                                }) {
+                                Button { database.convertSetGroupToStandardSets(setGroup) } label: {
                                     Label(NSLocalizedString("normalset", comment: ""),
                                           systemImage: setGroup.setType == .standard ? "checkmark" : "")
                                 }
-                                Button(action: {
-                                    database.convertSetGroupToSuperSets(setGroup)
-                                }) {
+                                Button { database.convertSetGroupToSuperSets(setGroup) } label: {
                                     Label(NSLocalizedString("superset", comment: ""),
                                           systemImage: setGroup.setType == .superSet ? "checkmark" : "")
                                 }
-                                Button(action: {
-                                    database.convertSetGroupToDropSets(setGroup)
-                                }) {
+                                Button { database.convertSetGroupToDropSets(setGroup) } label: {
                                     Label(NSLocalizedString("dropset", comment: ""),
                                           systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
                                 }
                             }
                             Section {
-                                Button(action: {
+                                Button {
                                     // TODO: Add Detail for Secondary Exercise in case of SuperSet
                                     guard let exercise = setGroup.exercise else { return }
                                     sheetType = .exerciseDetail(exercise: exercise)
-                                }) {
+                                } label: {
                                     Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
                                 }
                                 Button(role: .destructive, action: {
@@ -104,6 +102,7 @@ extension WorkoutRecorderView {
                             }
                         }) {
                             Image(systemName: "ellipsis")
+                                .font(.title3.weight(.semibold))
                                 .foregroundColor(.label)
                                 .padding(7)
                         }

@@ -135,19 +135,17 @@ struct WorkoutRecorderView: View {
     private var exerciseList: some View {
         List {
             ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                // Neccessary because onMode crashes with Sections
                 if isEditing {
-                    ReorderSetGroupCell(for: setGroup)
-                        .tint(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
+                    exerciseHeader(setGroup: setGroup)
+                        .deleteDisabled(true)
                 } else {
                     setGroupCell(for: setGroup)
-                        .accentColor(setGroup.exercise?.muscleGroup?.color)
                 }
-            }.onMove(perform: moveSetGroups)
-                .onDelete { workout.setGroups.elements(for: $0).forEach { database.delete($0) } }
-                .listRowSeparator(.hidden)
-                .listRowBackground(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
-                .listRowInsets(EdgeInsets())
+            }
+            .onMove(perform: moveSetGroups)
+            .onDelete { workout.setGroups.elements(for: $0).forEach { database.delete($0) } }
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
             if !isEditing {
                 AddExerciseButton
             }
@@ -155,10 +153,6 @@ struct WorkoutRecorderView: View {
             .onAppear {
                 UIScrollView.appearance().keyboardDismissMode = .interactive
             }
-    }
-        
-    private func ReorderSetGroupCell(for setGroup: WorkoutSetGroup) -> some View {
-        exerciseHeader(setGroup: setGroup)
     }
     
     private var AddExerciseButton: some View {
