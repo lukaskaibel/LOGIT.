@@ -20,8 +20,6 @@ struct SingleSetView: View {
                     .fontWeight(.bold)
             }.frame(maxWidth: .infinity, alignment: .leading)
             HStack {
-                VerticalMuscleGroupIndicator(muscleGroupAmounts: [(workoutSet.exercise?.muscleGroup ?? .chest, 1)])
-                    .frame(maxHeight: 60)
                 repetitionsView
                 weightView
             }

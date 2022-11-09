@@ -19,7 +19,9 @@ struct WorkoutCell: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 HStack(alignment: .top) {
-                    VerticalMuscleGroupIndicator(muscleGroupAmounts: workout.muscleGroupOccurances)
+                    ColorMeter(items: workout.muscleGroupOccurances.map {
+                        ColorMeter.Item(color: $0.color, amount: $1)
+                    })
                     VStack(alignment: .leading) {
                         Text(workout.date?.description(.short) ?? "")
                             .font(.footnote.weight(.medium))

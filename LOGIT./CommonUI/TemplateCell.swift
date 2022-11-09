@@ -18,7 +18,8 @@ struct TemplateCell: View {
     var body: some View {
         HStack {
             HStack(alignment: .top) {
-                VerticalMuscleGroupIndicator(muscleGroupAmounts: template.muscleGroupOccurances)
+                ColorMeter(items: template.muscleGroupOccurances
+                    .map { ColorMeter.Item(color: $0.color, amount: $1) })
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 5) {
                         Image(systemName: "list.bullet.rectangle.portrait")

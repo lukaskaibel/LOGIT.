@@ -134,12 +134,13 @@ struct TemplateEditorView: View {
     
     private func SetGroupCellForEditing(for setGroup: TemplateSetGroup) -> some View {
         SetGroupHeader(for: setGroup)
+            .buttonStyle(.plain)
             .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
     @ViewBuilder
     private func SetGroupCellWithSets(for setGroup: TemplateSetGroup) -> some View {
-        Section {
+        VStack(alignment: .leading, spacing: 0) {
             SetGroupHeader(for: setGroup)
             ForEach(setGroup.sets, id:\.objectID) { templateSet in
                 TemplateSetCell(for: templateSet)
@@ -156,10 +157,8 @@ struct TemplateEditorView: View {
                     .foregroundColor(setGroup.exercise?.muscleGroup?.color)
                     .font(.body.weight(.bold))
             }
-            .padding(15)
-            .frame(maxWidth: .infinity)
-            .deleteDisabled(true)
         }
+        .buttonStyle(.plain)
         .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
@@ -167,9 +166,10 @@ struct TemplateEditorView: View {
         HStack {
             if let muscleGroup = setGroup.exercise?.muscleGroup {
                 if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
-                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1), (secondaryMuscleGroup, 1)])
+                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1),
+                                       ColorMeter.Item(color: secondaryMuscleGroup.color, amount: 1)])
                 } else {
-                    VerticalMuscleGroupIndicator(muscleGroupAmounts: [(muscleGroup, 1)])
+                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1)])
                 }
             }
             VStack(spacing: 5) {

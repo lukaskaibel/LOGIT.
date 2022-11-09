@@ -13,7 +13,7 @@ struct ExerciseCell: View {
     
     var body: some View {
         HStack {
-            VerticalMuscleGroupIndicator(muscleGroupAmounts: [(exercise.muscleGroup ?? .chest, 1)])
+            ColorMeter(items: exercise.muscleGroup?.color != nil ? [ColorMeter.Item(color: exercise.muscleGroup!.color, amount: 1)] : [])
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("lastUsed", comment: "") + ": " + (exercise.sets.last?.workout?.date?.description(.short) ?? NSLocalizedString("never", comment: "")))
                     .font(.footnote.weight(.medium))
