@@ -101,13 +101,51 @@ extension Database {
     
     // MARK: - Template Fetch
     
-    func getTemplates(withNameIncluding filterText: String = "") -> [Template] {
+    enum TemplateSortingKey {
+        case lastUsed, name
+    }
+    
+    func getTemplates(withNameIncluding filterText: String = "", sortedBy sortingKey: TemplateSortingKey = .name) -> [Template] {
         (fetch(Template.self,
               sortingKey: "creationDate",
               ascending: false,
               predicate: filterText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@",
                                                                 filterText)) as! [Template])
-        .sorted { $0.lastUsed ?? .now > $1.lastUsed ?? .now }
+        .sorted {
+            switch sortingKey {
+            case .name: return $0.name ?? "" < $1.name ?? ""
+            case .lastUsed: return $0.lastUsed ?? .now > $1.lastUsed ?? .now
+            }
+        }
+    }
+    
+    func getGroupedTemplates(withNameIncluding filteredText: String = "",
+                             groupedBy sortingKey: TemplateSortingKey = .name) -> [[Template]] {
+        var result = [[Template]]()
+        getTemplates(withNameIncluding: filteredText, sortedBy: sortingKey)
+            .forEach { template in
+                switch sortingKey {
+                case .name:
+                    if let firstLetterOfLastTemplateName = result.last?.last?.name?.first,
+                       let templateFirstLetter = template.name?.first,
+                       firstLetterOfLastTemplateName == templateFirstLetter {
+                        result[result.count - 1].append(template)
+                    } else {
+                        result.append([template])
+                    }
+                case .lastUsed:
+                    if let lastLastUsed = result.last?.last?.lastUsed,
+                       let templateLastUsed = template.lastUsed,
+                       Calendar.current.isDate(templateLastUsed, equalTo: lastLastUsed, toGranularity: .month) {
+                        result[result.count - 1].append(template)
+                    } else if !result.isEmpty && result.last?.last?.lastUsed == nil && template.lastUsed == nil {
+                        result[result.count - 1].append(template)
+                    } else {
+                        result.append([template])
+                    }
+                }
+            }
+        return result
     }
     
 }

@@ -34,9 +34,6 @@ struct TemplateCell: View {
                 }
             }
             Spacer()
-            Image(systemName: "chevron.right")
-                .font(.body.weight(.medium))
-                .foregroundColor(.secondaryLabel)
         }
     }
     

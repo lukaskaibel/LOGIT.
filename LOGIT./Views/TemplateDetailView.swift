@@ -56,7 +56,7 @@ struct TemplateDetailView: View {
             .offset(x: 0, y: -30)
             .edgesIgnoringSafeArea(.bottom)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? ""))
+            .navigationTitle(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? "")) : NSLocalizedString("unused", comment: ""))
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Menu(content: {

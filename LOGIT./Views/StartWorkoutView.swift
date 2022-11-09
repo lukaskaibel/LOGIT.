@@ -9,6 +9,16 @@ import SwiftUI
 
 struct StartWorkoutView: View {
     
+    enum FullScreenCoverType: Identifiable {
+        case workoutRecorder(template: Template?)
+        var id: UUID { UUID() }
+    }
+    
+    enum SheetType: Identifiable {
+        case templateDetail(template: Template)
+        var id: UUID { UUID() }
+    }
+    
     // MARK: - Environment
     
     @EnvironmentObject var database: Database
@@ -20,7 +30,8 @@ struct StartWorkoutView: View {
         let value: Template?
     }
     
-    @State private var selectedTemplate: TemplateSelection? = nil
+    @State private var sheetType: SheetType? = nil
+    @State private var fullScreenCoverType: FullScreenCoverType? = nil
     
     // MARK: - Body
     
@@ -41,8 +52,25 @@ struct StartWorkoutView: View {
             }
         }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
-            .fullScreenCover(item: $selectedTemplate) { templateSelection in
-                WorkoutRecorderView(workout: database.newWorkout(), template: templateSelection.value)
+            .fullScreenCover(item: $fullScreenCoverType) { type in
+                switch type {
+                case let .workoutRecorder(template): WorkoutRecorderView(workout: database.newWorkout(), template: template)
+                }
+            }
+            .sheet(item: $sheetType) { type in
+                switch type {
+                case let .templateDetail(template):
+                    NavigationStack {
+                        TemplateDetailView(template: template)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("back", comment: "")) {
+                                        sheetType = nil
+                                    }
+                                }
+                            }
+                    }
+                }
             }
     }
     
@@ -57,7 +85,9 @@ struct StartWorkoutView: View {
     }
     
     private var withoutTemplateButton: some View {
-        Button(action: { selectedTemplate = TemplateSelection(value: nil) }) {
+        Button {
+            fullScreenCoverType = .workoutRecorder(template: nil)
+        } label: {
             HStack(spacing: 15) {
                 Image(systemName: "square.dashed")
                     .resizable()
@@ -70,7 +100,7 @@ struct StartWorkoutView: View {
                     .font(.body.weight(.semibold))
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.body.weight(.medium))
+                    .font(.body.weight(.semibold))
             }.font(.body.weight(.semibold))
                 .foregroundColor(.accentColor)
                 .frame(height: 60)
@@ -79,11 +109,22 @@ struct StartWorkoutView: View {
     
     private var templateList: some View {
         ForEach(database.getTemplates(), id:\.objectID) { template in
-            Button(action: {
-                selectedTemplate = TemplateSelection(value: template)
-            }) {
-                TemplateCell(template: template)
-                    .foregroundColor(.label)
+            Button {
+                fullScreenCoverType = .workoutRecorder(template: template)
+            } label: {
+                HStack {
+                    TemplateCell(template: template)
+                        .foregroundColor(.label)
+                    Spacer()
+                    Button {
+                        sheetType = .templateDetail(template: template)
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                    }
+                    Image(systemName: "chevron.right")
+                        .font(.body.weight(.semibold))
+                }
             }.padding(CELL_PADDING)
         }.listRowInsets(EdgeInsets())
     }

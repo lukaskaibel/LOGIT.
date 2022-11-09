@@ -16,31 +16,50 @@ struct TemplateListView: View {
     // MARK: - State
     
     @State private var searchedText = ""
+    @State private var sortingKey: Database.TemplateSortingKey = .name
     @State private var showingTemplateCreation = false
     
     // MARK: - Body
     
     var body: some View {
         List {
-            ForEach(templates, id:\.objectID) { template in
-                ZStack {
-                    TemplateCell(template: template)
-                    NavigationLink(destination: TemplateDetailView(template: template)) {
-                        EmptyView()
-                    }.opacity(0)
-                }.padding(CELL_PADDING)
-            }.onDelete { indexSet in
-                templates
-                    .elements(for: indexSet)
-                    .forEach { database.delete($0, saveContext: true) }
+            ForEach(groupedTemplates.indices, id:\.self) { index in
+                Section {
+                    ForEach(groupedTemplates.value(at: index) ?? [], id:\.objectID) { template in
+                        ZStack {
+                            TemplateCell(template: template)
+                            NavigationLink(destination: TemplateDetailView(template: template)) {
+                                EmptyView()
+                            }.opacity(0)
+                        }.padding(CELL_PADDING)
+                    }
+                } header: {
+                    Text(header(for: index))
+                        .sectionHeaderStyle()
+                }
+                .listRowInsets(EdgeInsets())
             }
-            .listRowInsets(EdgeInsets())
         }.listStyle(.insetGrouped)
             .searchable(text: $searchedText)
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle(NSLocalizedString("templates", comment: ""))
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button(action: {
+                            sortingKey = .name
+                        }) {
+                            Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
+                        }
+                        Button(action: {
+                            sortingKey = .lastUsed
+                        }) {
+                            Label(NSLocalizedString("lastUsed", comment: ""), systemImage: "calendar")
+                        }
+                    } label: {
+                        Label(NSLocalizedString(sortingKey == .name ? "name" : "lastUsed", comment: ""), 
+                              systemImage: "arrow.up.arrow.down")
+                    }
                     Button(action: {
                         showingTemplateCreation = true
                     }) {
@@ -55,8 +74,22 @@ struct TemplateListView: View {
     
     // MARK: - Supporting Methods
     
-    private var templates: [Template] {
-        database.getTemplates(withNameIncluding: searchedText)
+    private var groupedTemplates: [[Template]] {
+        database.getGroupedTemplates(withNameIncluding: searchedText, groupedBy: sortingKey)
+    }
+    
+    private func header(for index: Int) -> String {
+        switch sortingKey {
+        case .name:
+            return String(groupedTemplates.value(at: index)?.first?.name?.first ?? " ").capitalized
+        case .lastUsed:
+            guard let date = groupedTemplates.value(at: index)?.first?.lastUsed else { return NSLocalizedString("unused", comment: "") }
+            let formatter = DateFormatter()
+            formatter.locale = Locale.current
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: date)
+        
+        }
     }
     
 }

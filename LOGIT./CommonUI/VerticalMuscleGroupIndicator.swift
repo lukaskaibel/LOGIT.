@@ -13,11 +13,17 @@ struct VerticalMuscleGroupIndicator: View {
     
     var body: some View {
         GeometryReader { geometry in
-            VStack(spacing: 0) {
-                ForEach(muscleGroupAmounts, id:\.self.0.rawValue) { muscleGroupAmount in
-                    Rectangle()
-                        .foregroundColor(muscleGroupAmount.0.color)
-                        .frame(maxHeight: geometry.size.height * CGFloat(muscleGroupAmount.1)/CGFloat(muscleGroupAmounts.reduce(0, { $0 + $1.1 })))
+            if muscleGroupAmounts.reduce(0, { $0 + $1.1 }) == 0 {
+                Rectangle()
+                    .foregroundColor(.secondaryLabel)
+                    .frame(maxHeight: geometry.size.height)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(muscleGroupAmounts, id:\.self.0.rawValue) { muscleGroupAmount in
+                        Rectangle()
+                            .foregroundColor(muscleGroupAmount.0.color)
+                            .frame(maxHeight: geometry.size.height * CGFloat(muscleGroupAmount.1)/CGFloat(muscleGroupAmounts.reduce(0, { $0 + $1.1 })))
+                    }
                 }
             }
         }.frame(width: 7)

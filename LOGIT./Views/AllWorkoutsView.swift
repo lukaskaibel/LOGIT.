@@ -23,7 +23,7 @@ struct AllWorkoutsView: View {
     var body: some View {
         List {
             ForEach(groupedWorkouts.indices, id:\.self) { index in
-                Section(content: {
+                Section {
                     ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
                         ZStack {
                             WorkoutCell(workout: workout)
@@ -38,11 +38,12 @@ struct AllWorkoutsView: View {
                             guard let workout = groupedWorkouts.value(at: index)?.value(at: i) else { return }
                             database.delete(workout, saveContext: true)
                         }
-                    }.listRowInsets(EdgeInsets())
-                }, header: {
+                    }
+                } header: {
                     Text(header(for: index))
                         .sectionHeaderStyle()
-                })
+                }
+                .listRowInsets(EdgeInsets())
             }
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden)

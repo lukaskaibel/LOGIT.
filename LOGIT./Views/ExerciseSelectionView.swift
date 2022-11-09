@@ -41,7 +41,11 @@ struct ExerciseSelectionView: View {
             ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
                 exerciseSection(for: group)
             }.listRowInsets(EdgeInsets())
+            Spacer(minLength: 30)
+                .listRowBackground(Color.clear)
         }.listStyle(.insetGrouped)
+            .offset(x: 0, y: -30)
+            .edgesIgnoringSafeArea(.bottom)
             .navigationTitle(selectedExercise == nil  ? NSLocalizedString("addExercise", comment: "") : NSLocalizedString("selectExercise", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchedText,

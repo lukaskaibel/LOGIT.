@@ -30,7 +30,7 @@ struct MuscleGroupSelector: View {
                         .background(muscleGroup.color.opacity(selectedMuscleGroup == muscleGroup ? 1 : 0.1))
                         .clipShape(Capsule())
                 }
-            }.padding(.horizontal)
+            }
         }
     }
 }
