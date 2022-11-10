@@ -10,6 +10,10 @@ import SwiftUI
 @main
 struct LOGIT: App {
     
+    enum TabType: Hashable {
+        case home, templates, startWorkout, exercises, settings
+    }
+    
     @AppStorage("setupDone") var setupDone: Bool = false
         
     init() {
@@ -29,25 +33,35 @@ struct LOGIT: App {
     }
     
     @StateObject private var database = Database.shared
+    @State private var selectedTab: TabType = .home
 
     var body: some Scene {
         WindowGroup {
             if setupDone {
-                TabView {
+                TabView(selection: $selectedTab) {
                     HomeView()
                         .tabItem { Label("Home", systemImage: "house.fill") }
+                        .tag(TabType.home)
                     NavigationStack {
                         TemplateListView()
-                    }.tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
+                    }
+                    .tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
+                    .tag(TabType.templates)
                     NavigationStack {
                         StartWorkoutView()
-                    }.tabItem { Label(NSLocalizedString("startWorkout", comment: ""), systemImage: "plus") }
+                    }
+                    .tabItem { Label(NSLocalizedString("startWorkout", comment: ""), systemImage: "plus") }
+                    .tag(TabType.startWorkout)
                     NavigationStack {
                         AllExercisesView()
-                    }.tabItem { Label(NSLocalizedString("exercises", comment: ""), image: "LOGIT") }
+                    }
+                    .tabItem { Label(NSLocalizedString("exercises", comment: ""), image: "LOGIT") }
+                    .tag(TabType.exercises)
                     NavigationStack {
                         ProfileView()
-                    }.tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
+                    }
+                    .tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
+                    .tag(TabType.settings)
                 }
                 .environmentObject(database)
             } else {
