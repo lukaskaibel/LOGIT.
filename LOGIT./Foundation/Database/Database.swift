@@ -43,8 +43,8 @@ class Database: ObservableObject {
         if context.hasChanges {
             do {
                 try context.save()
+                refreshObjects()
                 objectWillChange.send()
-                NotificationCenter.default.post(name: .databaseDidChange, object: nil, userInfo: nil)
             } catch {
                 os_log("Database: Failed to save context: \(String(describing: error))")
             }
@@ -86,12 +86,5 @@ class Database: ObservableObject {
     func refreshObjects() {
         context.refreshAllObjects()
     }
-    
-}
-
-
-extension Notification.Name {
-    
-    static let databaseDidChange = Notification.Name("changesInDatabase")
     
 }
