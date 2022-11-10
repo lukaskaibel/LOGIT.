@@ -23,7 +23,6 @@ struct FirstStartView: View {
     
     @State private var setupStage: SetupStage = .start
     @State private var useStandardExercises: Bool = true
-    @State private var setupFinished = false
     
     // MARK: - Body
     
@@ -102,7 +101,6 @@ struct FirstStartView: View {
                 case .weeklyTarget:
                     withAnimation {
                         setupDone = true
-                        setupFinished = true
                     }
                 }
             }) {
@@ -116,10 +114,8 @@ struct FirstStartView: View {
                 .background(Color.accentColor.opacity(0.2))
                 .cornerRadius(15)
                 .padding(.bottom, 50)
-        }.padding()
-            .fullScreenCover(isPresented: $setupFinished) {
-                HomeView()
-            }
+        }
+        .padding()
     }
 
 }
