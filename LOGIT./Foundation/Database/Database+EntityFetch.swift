@@ -24,6 +24,17 @@ extension Database {
                                                                   filteredText)) as! [Workout]
     }
     
+    func getWorkouts(withNameIncluding filteredText: String = "",
+                     sortedBy sortingKey: WorkoutSortingKey = .date,
+                     for calendarComponent: Calendar.Component,
+                     including date: Date) -> [Workout] {
+        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey)
+            .filter {
+                guard let workoutDate = $0.date else { return false }
+                return Calendar.current.component(calendarComponent, from: workoutDate) == Calendar.current.component(calendarComponent, from: date)
+            }
+    }
+    
     func getGroupedWorkouts(withNameIncluding filteredText: String = "",
                             groupedBy sortingKey: WorkoutSortingKey = .date) -> [[Workout]] {
         var result = [[Workout]]()

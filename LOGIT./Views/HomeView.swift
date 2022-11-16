@@ -110,9 +110,10 @@ struct HomeView: View {
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
-            TargetPerWeekGraph(xValues: getWeeksString().reversed(),
-                              yValues: workoutsPerWeek(for: numberOfWeeksInAnalysis).reversed(),
-                              target: targetPerWeek)
+            SegmentedBarChart(items: workoutsPerWeekChartItems(),
+                              hLines: [SegmentedBarChart.HLine(title: NSLocalizedString("target", comment: ""),
+                                                               y: targetPerWeek,
+                                                               color: .accentColor)])
                 .frame(height: 170)
                 .overlay {
                     if workouts.isEmpty {
@@ -134,31 +135,17 @@ struct HomeView: View {
         Array(database.getWorkouts(sortedBy: .date).prefix(3))
     }
     
-    func workoutsPerWeek(for numberOfWeeks: Int) -> [Int] {
-        var result = [Int](repeating: 0, count: numberOfWeeks)
+    func workoutsPerWeekChartItems(numberOfWeeks: Int = 5) -> [SegmentedBarChart.Item] {
+        var result = [SegmentedBarChart.Item]()
         for i in 0..<numberOfWeeks {
             if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date()) {
-                for workout in workouts {
-                    if let workoutDate = workout.date {
-                        if Calendar.current.isDate(workoutDate, equalTo: iteratedDay, toGranularity: .weekOfYear) {
-                            result[i] += 1
-                        }
-                    }
-                }
-            }
-        }
-        return result
-    }
-    
-    func barColorsForWeeks() -> [Color] {
-        workoutsPerWeek(for: numberOfWeeksInAnalysis).map { $0 >= targetPerWeek ? .accentColor : .accentColor }
-    }
-    
-    func getWeeksString() -> [String] {
-        var result = [String]()
-        for i in 0..<numberOfWeeksInAnalysis {
-            if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date()) {
-                result.append(getFirstDayOfWeekString(for: iteratedDay))
+                let numberOfWorkoutsInWeek = database.getWorkouts(for: .weekOfYear,
+                                                                  including: iteratedDay).count
+                result.append(SegmentedBarChart.Item(x: getFirstDayOfWeekString(for: iteratedDay),
+                                                     y: numberOfWorkoutsInWeek,
+                                                     barColor: numberOfWorkoutsInWeek >= targetPerWeek ? .accentColor : .accentColor.translucentBackground,
+                                                     isSelected: i == numberOfWeeks - 1))
+                
             }
         }
         return result
@@ -178,10 +165,6 @@ struct HomeView: View {
             })
         ).sorted { $0.key.rawValue < $1.key.rawValue }
     }
-    
-    // MARK: Constants
-    
-    let numberOfWeeksInAnalysis = 5
     
 }
 

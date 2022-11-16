@@ -40,6 +40,7 @@
 		79746709277136FE006518F0 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailView.swift */; };
 		7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */; };
 		7975E3B327CED8E5000BA25B /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975E3B227CED8E5000BA25B /* Array+.swift */; };
+		797E5DB1291E9B9D00932E9F /* TargetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797E5DB0291E9B9D00932E9F /* TargetDetailView.swift */; };
 		797F40BD28300AB2002D8807 /* WorkoutSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */; };
 		79881EC62831675000BD06CF /* TemplateDropSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79881EC52831675000BD06CF /* TemplateDropSet+.swift */; };
 		79898A7A27F71BAA00935E05 /* TimerTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79898A7927F71BAA00935E05 /* TimerTimeView.swift */; };
@@ -138,6 +139,7 @@
 		79746708277136FE006518F0 /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
 		7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutSetGroup+.swift"; sourceTree = "<group>"; };
 		7975E3B227CED8E5000BA25B /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
+		797E5DB0291E9B9D00932E9F /* TargetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetDetailView.swift; sourceTree = "<group>"; };
 		797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetCell.swift; sourceTree = "<group>"; };
 		79881EC52831675000BD06CF /* TemplateDropSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateDropSet+.swift"; sourceTree = "<group>"; };
 		79898A7927F71BAA00935E05 /* TimerTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTimeView.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				80E9FAEE26FE152100C670D5 /* HomeView.swift */,
 				8033F98D27072B0600EC707A /* ProfileView.swift */,
 				7955EEB327FDD8820010693C /* StartWorkoutView.swift */,
+				797E5DB0291E9B9D00932E9F /* TargetDetailView.swift */,
 				79F2D1212800CD0C00197E0A /* TemplateDetailView.swift */,
 				79898A7E27F7B00400935E05 /* TemplateEditorView */,
 				7955EEAD27FDC2F30010693C /* TemplateListView.swift */,
@@ -503,6 +506,7 @@
 			files = (
 				79A4E33627E9ED730089001F /* HomeView.swift in Sources */,
 				79A304C928FCBA1100C78596 /* SingleSetView.swift in Sources */,
+				797E5DB1291E9B9D00932E9F /* TargetDetailView.swift in Sources */,
 				7975E3B327CED8E5000BA25B /* Array+.swift in Sources */,
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
 				795920F028421D8A0057369A /* WorkoutRecorderView+SuperSetCell.swift in Sources */,
