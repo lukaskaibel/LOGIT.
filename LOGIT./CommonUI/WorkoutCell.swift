@@ -34,9 +34,8 @@ struct WorkoutCell: View {
                     }
                 }
                 Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.body.weight(.medium))
-                    .foregroundColor(.separator)
+                NavigationChevron()
+                    .foregroundColor(workout.primaryMuscleGroup?.color ?? .separator)
             }
         }
     }

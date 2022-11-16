@@ -33,8 +33,7 @@ struct AllExercisesView: View {
                     ForEach(group, id: \.objectID) { exercise in
                         ZStack {
                             ExerciseCell(exercise: exercise)
-                            Image(systemName: "chevron.right")
-                                .font(.body.weight(.medium))
+                            NavigationChevron()
                                 .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
                                 .padding(.trailing)
                                 .frame(maxWidth: .infinity, alignment: .trailing)

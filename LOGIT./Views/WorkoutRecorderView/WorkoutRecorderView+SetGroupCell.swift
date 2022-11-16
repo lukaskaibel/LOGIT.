@@ -63,8 +63,7 @@ extension WorkoutRecorderView {
                             Text(setGroup.exercise?.name ?? "No Name")
                                 .font(.title3.weight(.semibold))
                                 .lineLimit(1)
-                            Image(systemName: "chevron.right")
-                                .fontWeight(.semibold)
+                            NavigationChevron()
                         }
                         .foregroundColor(setGroup.exercise?.muscleGroup?.color)
                     }
@@ -121,8 +120,7 @@ extension WorkoutRecorderView {
                                 Image(systemName: "2.circle")
                                 Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
                                     .font(.title3.weight(.semibold))
-                                Image(systemName: "chevron.right")
-                                    .fontWeight(.semibold)
+                                NavigationChevron()
                             }.foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color ?? .secondaryLabel)
                                 .lineLimit(1)
                         }

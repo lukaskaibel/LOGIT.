@@ -16,8 +16,7 @@ struct SingleSetView: View {
             HStack {
                 Text(workoutSet.exercise?.name ?? "Select Exercise")
                     .font(.title.weight(.bold))
-                Image(systemName: "chevron.right")
-                    .fontWeight(.bold)
+                NavigationChevron()
             }.frame(maxWidth: .infinity, alignment: .leading)
             HStack {
                 repetitionsView

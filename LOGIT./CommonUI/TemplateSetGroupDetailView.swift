@@ -75,8 +75,7 @@ struct TemplateSetGroupDetailView: View {
                             Text("\(exercise.name ?? "")")
                                 .lineLimit(1)
                                 .multilineTextAlignment(.leading)
-                            Image(systemName: "chevron.right")
-                                .fontWeight(.semibold)
+                            NavigationChevron()
                         }
                     }.buttonStyle(.plain)
                     Spacer()

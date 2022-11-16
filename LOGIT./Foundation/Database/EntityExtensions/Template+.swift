@@ -64,6 +64,10 @@ extension Template {
             .compactMap { $0.muscleGroup }
     }
     
+    var primaryMuscleGroup: MuscleGroup? {
+        (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
+    }
+    
     var muscleGroupOccurances: [(MuscleGroup, Int)] {
         Array(sets
             .compactMap({ $0.exercise?.muscleGroup })

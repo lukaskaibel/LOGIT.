@@ -184,9 +184,8 @@ struct WorkoutDetailView: View {
                     .foregroundColor(.accentColor)
                 if workout.template != nil {
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    NavigationChevron()
                         .foregroundColor(.accentColor)
-                        .font(.body.weight(.medium))
                 } else {
                     Spacer()
                 }

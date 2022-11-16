@@ -99,8 +99,7 @@ struct StartWorkoutView: View {
                 Text(NSLocalizedString("startEmpty", comment: ""))
                     .font(.body.weight(.semibold))
                 Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.body.weight(.semibold))
+                NavigationChevron()
             }.font(.body.weight(.semibold))
                 .foregroundColor(.accentColor)
                 .frame(height: 60)
@@ -122,8 +121,7 @@ struct StartWorkoutView: View {
                         Image(systemName: "info.circle")
                             .font(.title3)
                     }
-                    Image(systemName: "chevron.right")
-                        .font(.body.weight(.semibold))
+                    NavigationChevron()
                 }
             }.padding(CELL_PADDING)
         }.listRowInsets(EdgeInsets())

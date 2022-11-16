@@ -180,8 +180,7 @@ struct TemplateEditorView: View {
                             Text(setGroup.exercise?.name ?? "")
                                 .lineLimit(1)
                                 .font(.title3.weight(.semibold))
-                            Image(systemName: "chevron.right")
-                                .font(.body.weight(.semibold))
+                            NavigationChevron()
                         }
                         .foregroundColor(setGroup.exercise?.muscleGroup?.color)
                     }
@@ -239,8 +238,7 @@ struct TemplateEditorView: View {
                                 Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
                                     .font(.title3.weight(.semibold))
                                     .lineLimit(1)
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.semibold))
+                                NavigationChevron()
                             }
                             .foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color)
                         }
