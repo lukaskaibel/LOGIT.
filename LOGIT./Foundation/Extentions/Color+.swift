@@ -15,6 +15,7 @@ extension Color {
     static var tertiaryLabel: Color { Color(UIColor.tertiaryLabel) }
     
     static var separator: Color { Color(UIColor.separator) }
+    static var placeholder: Color { Color(UIColor.placeholderText) }
     
     static var background: Color { Color(UIColor.systemBackground) }
     static var secondaryBackground: Color { Color(UIColor.secondarySystemBackground) }
@@ -33,6 +34,7 @@ extension Color {
     static var secondaryGrouped: Color { Color(UIColor.secondarySystemGroupedBackground) }
     static var tertiaryGrouped: Color { Color(UIColor.tertiarySystemGroupedBackground) }
     
-    var translucentBackground: Color { self.opacity(0.1) }
+    var translucentBackground: Color { self.opacity(0.7)}
+    var secondaryTranslucentBackground: Color { self.opacity(0.2) }
 
 }

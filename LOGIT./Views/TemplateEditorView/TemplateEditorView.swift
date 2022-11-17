@@ -137,9 +137,6 @@ struct TemplateEditorView: View {
                     TemplateSetCell(for: templateSet)
                         .listRowSeparator(.hidden, edges: .bottom)
                 }
-                .onDelete { indexSet in
-                    setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
-                }
                 Button {
                     UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                     database.addSet(to: setGroup)

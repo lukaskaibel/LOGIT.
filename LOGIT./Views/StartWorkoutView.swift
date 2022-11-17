@@ -122,7 +122,7 @@ struct StartWorkoutView: View {
                             .font(.title3)
                     }
                     NavigationChevron()
-                }
+                }.foregroundColor(template.primaryMuscleGroup?.color ?? .accentColor)
             }.padding(CELL_PADDING)
         }.listRowInsets(EdgeInsets())
     }

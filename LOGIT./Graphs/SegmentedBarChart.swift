@@ -11,6 +11,7 @@ struct SegmentedBarChart: View {
     
     let items: [Item]
     let hLines: [HLine]
+    @Binding var selectedItemIndex: Int
     
     var body: some View {
         VStack(spacing: 20) {
@@ -18,6 +19,11 @@ struct SegmentedBarChart: View {
                 HStack(spacing: 20) {
                     ForEach(items) { item in
                         bar(for: item, chartHeight: geometry.size.height)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                selectedItemIndex = items.firstIndex(of: item)!
+                                print("#####: \(selectedItemIndex)")
+                            }
                     }
                 }.frame(maxWidth: .infinity)
                     .padding(.horizontal, 10)
@@ -44,14 +50,18 @@ struct SegmentedBarChart: View {
                 }
             }
             
-            HStack(spacing: 20) {
+            HStack {
                 ForEach(items) { item in
                     Text(item.x)
-                        .foregroundColor(item.isSelected ? .accentColor : .secondaryLabel)
-                        .font(.footnote.weight(item.isSelected ? .semibold : .regular))
+                        .foregroundColor(selectedItemIndex == items.firstIndex(of: item)! ? .white : .secondaryLabel)
+                        .font(.footnote.weight(selectedItemIndex == items.firstIndex(of: item)! ? .bold : .regular))
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 5)
+                        .background(selectedItemIndex == items.firstIndex(of: item)! ? Color.accentColor : .clear)
+                        .clipShape(Capsule())
                         .frame(maxWidth: .infinity)
                 }
-            }.padding(.horizontal, 10)
+            }.padding(.horizontal, 3)
              
         }
     }
@@ -83,11 +93,10 @@ struct SegmentedBarChart: View {
         ((items.map{ $0.y }) + (hLines.map{ $0.y })).max() ?? 1
     }
     
-    struct Item: Identifiable {
+    struct Item: Identifiable, Equatable {
         let x: String
         let y: Int
         let barColor: Color
-        let isSelected: Bool
         var id: UUID { UUID() }
     }
     

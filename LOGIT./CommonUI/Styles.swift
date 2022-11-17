@@ -42,7 +42,20 @@ struct ListButtonModifier: ViewModifier {
             .font(.body.weight(.bold))
             .foregroundColor(.accentColor)
             .padding(10)
-            .listRowBackground(Color.accentColor.translucentBackground)
+            .listRowBackground(Color.accentColor.secondaryTranslucentBackground)
+    }
+}
+
+struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
+    let items: Items
+    let placeholder: AnyView
+
+    @ViewBuilder func body(content: Content) -> some View {
+        if !items.isEmpty {
+            content
+        } else {
+            placeholder
+        }
     }
 }
 
@@ -61,5 +74,9 @@ extension View {
     
     func listButton() -> some View {
         modifier(ListButtonModifier())
+    }
+    
+    func emptyPlaceholder<Items: Collection, PlaceholderView: View>(_ items: Items, _ placeholder: @escaping () -> PlaceholderView) -> some View {
+        modifier(EmptyPlaceholderModifier(items: items, placeholder: AnyView(placeholder())))
     }
 }

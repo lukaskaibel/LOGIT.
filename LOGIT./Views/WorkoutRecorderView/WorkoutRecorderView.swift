@@ -91,11 +91,11 @@ struct WorkoutRecorderView: View {
                                 titleVisibility: .visible) {
                 Button(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
                         !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                        NSLocalizedString("deleteSets", comment: ""),
-                       role: workout.allSetsHaveEntries ? nil : .destructive) {
+                        NSLocalizedString("deleteSets", comment: "")) {
                     workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
                     if workout.isEmpty { database.delete(workout, saveContext: true) }
                     else { saveWorkout() }
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     dismiss()
                 }.font(.body.weight(.semibold))
                 Button("Continue Workout", role: .cancel) {}
@@ -112,13 +112,18 @@ struct WorkoutRecorderView: View {
         VStack(spacing: 5) {
             WorkoutDurationView()
             HStack {
-                TextField(Workout.getStandardName(for: Date()), text: workoutName)
+                TextField(Workout.getStandardName(for: Date()), text: workoutName, axis: .vertical)
+                    .lineLimit(2)
                     .foregroundColor(.label)
                     .font(.title2.weight(.bold))
                 Spacer()
                 Button(action: {
-                    isShowingFinishConfirmation = true
-                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    if !workout.hasEntries {
+                        deleteWorkout()
+                        dismiss()
+                    } else {
+                        isShowingFinishConfirmation = true
+                    }
                 }) {
                     Image(systemName: !workout.hasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
                         .foregroundColor(!workout.hasEntries ? .separator : .accentColor)
@@ -142,7 +147,6 @@ struct WorkoutRecorderView: View {
                 }
             }
             .onMove(perform: moveSetGroups)
-            .onDelete { workout.setGroups.elements(for: $0).forEach { database.delete($0) } }
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             if !isEditing {
@@ -216,6 +220,11 @@ struct WorkoutRecorderView: View {
         }
         workout.endDate = .now
         database.save()
+    }
+    
+    private func deleteWorkout() {
+        workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
+        database.delete(workout, saveContext: true)
     }
     
     // MARK: Placeholder Methods

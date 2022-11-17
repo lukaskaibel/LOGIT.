@@ -27,7 +27,11 @@ struct TemplateListView: View {
                 Section {
                     ForEach(groupedTemplates.value(at: index) ?? [], id:\.objectID) { template in
                         ZStack {
-                            TemplateCell(template: template)
+                            HStack {
+                                TemplateCell(template: template)
+                                NavigationChevron()
+                                    .foregroundColor(template.primaryMuscleGroup?.color ?? .separator)
+                            }
                             NavigationLink(destination: TemplateDetailView(template: template)) {
                                 EmptyView()
                             }.opacity(0)

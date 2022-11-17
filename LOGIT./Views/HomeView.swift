@@ -18,6 +18,10 @@ struct HomeView: View {
     
     @EnvironmentObject var database: Database
     
+    // MARK: - State
+    
+    @State private var navigateToTarget: Bool = false
+    
     // MARK: - Body
     
     var body: some View {
@@ -25,6 +29,13 @@ struct HomeView: View {
             List {
                 Section {
                     targetWorkoutsView
+                        .contentShape(Rectangle())
+                        .highPriorityGesture(
+                            TapGesture()
+                                .onEnded {
+                                    navigateToTarget = true
+                                }
+                        )
                 } header: {
                     Text("Workout Target")
                         .sectionHeaderStyle()
@@ -67,9 +78,13 @@ struct HomeView: View {
                 Spacer(minLength: 50)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
-            }.listStyle(.insetGrouped)
-                .navigationTitle(NSLocalizedString("home", comment: ""))
-        } .navigationViewStyle(.stack)
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle(NSLocalizedString("home", comment: ""))
+            .navigationDestination(isPresented: $navigateToTarget) {
+                TargetWorkoutsDetailView()
+            }
+        }
     }
     
     private var muscleGroupPercentageView: some View {
@@ -92,28 +107,24 @@ struct HomeView: View {
                     UnitView(value: "\(targetPerWeek)", unit: "/"+NSLocalizedString("week", comment: ""))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
-                VStack(alignment: .leading) {
-                    HStack(spacing: 2) {
-                        Image(systemName: "flame.fill")
-                        Text(NSLocalizedString("Streak", comment: ""))
-                    }
-                    UnitView(value: "\(targetPerWeek)", unit: NSLocalizedString("weeks", comment: ""))
-                        .foregroundColor(.accentColor)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
                 VStack(alignment: .leading) {
                     HStack(spacing: 2) {
                         Image(systemName: "calendar")
                         Text(NSLocalizedString("Last", comment: ""))
                     }
-                    Text("\(workouts.last?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
+                    Text("\(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
+                NavigationChevron()
+                    .foregroundColor(.secondaryLabel)
             }
             SegmentedBarChart(items: workoutsPerWeekChartItems(),
                               hLines: [SegmentedBarChart.HLine(title: NSLocalizedString("target", comment: ""),
                                                                y: targetPerWeek,
-                                                               color: .accentColor)])
+                                                               color: .accentColor)],
+                              selectedItemIndex: .constant(4))
                 .frame(height: 170)
                 .overlay {
                     if workouts.isEmpty {
@@ -143,12 +154,11 @@ struct HomeView: View {
                                                                   including: iteratedDay).count
                 result.append(SegmentedBarChart.Item(x: getFirstDayOfWeekString(for: iteratedDay),
                                                      y: numberOfWorkoutsInWeek,
-                                                     barColor: numberOfWorkoutsInWeek >= targetPerWeek ? .accentColor : .accentColor.translucentBackground,
-                                                     isSelected: i == numberOfWeeks - 1))
+                                                     barColor: numberOfWorkoutsInWeek >= targetPerWeek ? .accentColor.translucentBackground : .accentColor.secondaryTranslucentBackground))
                 
             }
         }
-        return result
+        return result.reversed()
     }
     
     func getFirstDayOfWeekString(for date: Date) -> String {

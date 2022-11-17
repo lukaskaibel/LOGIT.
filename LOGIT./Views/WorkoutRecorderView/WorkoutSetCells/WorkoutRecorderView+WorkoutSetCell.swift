@@ -42,7 +42,7 @@ extension WorkoutRecorderView {
                         .foregroundColor(workoutSet.hasEntry ? .accentColor : .secondaryLabel)
                         .padding(10)
                         .frame(maxHeight: .infinity)
-                        .background(workoutSet.hasEntry ? Color.accentColor.translucentBackground : .tertiaryFill)
+                        .background(workoutSet.hasEntry ? Color.accentColor.secondaryTranslucentBackground : .tertiaryFill)
                         .cornerRadius(5)
                         .padding(.vertical, 8)
                 }

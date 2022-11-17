@@ -9,10 +9,6 @@ import SwiftUI
 
 struct SetGroupDetailView: View {
     
-    enum NavigationDestination {
-        case exerciseDetail, secondaryExerciseDetail
-    }
-    
     // MARK: - Graphical Constants
     
     static let columnWidth: CGFloat = 70
