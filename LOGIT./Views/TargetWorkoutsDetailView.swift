@@ -61,7 +61,7 @@ struct TargetWorkoutsDetailView: View {
                 Text("Workouts")
                     .sectionHeaderStyle()
                 Spacer()
-                Text("In selected week")
+                Text("In Selected Week")
                     .foregroundColor(.secondaryLabel)
                     .textCase(.none)
             }

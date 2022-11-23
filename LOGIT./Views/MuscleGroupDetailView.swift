@@ -25,7 +25,7 @@ struct MuscleGroupDetailView: View {
                 VStack(alignment: .leading) {
                     Text("Muscle Groups")
                         .font(.largeTitle.weight(.bold))
-                    Text("In Last 10 Workouts")
+                    Text("Last 10 Workouts")
                         .font(.system(.title2, design: .rounded, weight: .semibold))
                         .foregroundColor(.secondaryLabel)
                 }

@@ -37,8 +37,15 @@ struct HomeView: View {
                                 }
                         )
                 } header: {
-                    Text("Workout Target")
-                        .sectionHeaderStyle()
+                    HStack(alignment: .lastTextBaseline) {
+                        Text("Workout Target")
+                            .sectionHeaderStyle()
+                        Spacer()
+                        Text("Per Week")
+                            .font(.body)
+                            .textCase(nil)
+                            .foregroundColor(.secondaryLabel)
+                    }
                 }.listRowInsets(EdgeInsets())
                 Section {
                     muscleGroupPercentageView
@@ -47,8 +54,15 @@ struct HomeView: View {
                             navigateToMuscleGroupDetail = true
                         }
                 } header: {
-                    Text("Muscle Groups")
-                        .sectionHeaderStyle()
+                    HStack(alignment: .lastTextBaseline) {
+                        Text("Muscle Groups")
+                            .sectionHeaderStyle()
+                        Spacer()
+                        Text("Last 10 Workouts")
+                            .font(.body)
+                            .textCase(nil)
+                            .foregroundColor(.secondaryLabel)
+                    }
                 }.listRowInsets(EdgeInsets())
                 Section(content: {
                     ForEach(recentWorkouts, id:\.objectID) { workout in
@@ -89,7 +103,7 @@ struct HomeView: View {
                 TargetWorkoutsDetailView()
             }
             .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
-                MuscleGroupDetailView(setGroups: (workouts.map { $0.setGroups }).reduce([], +))
+                MuscleGroupDetailView(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
             }
         }
     }
@@ -180,8 +194,12 @@ struct HomeView: View {
         return formatter.string(from: firstDayOfWeek)
     }
     
+    var lastTenWorkouts: [Workout] {
+        Array(workouts.prefix(10))
+    }
+    
     func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
-        Array(workouts
+        Array(lastTenWorkouts
             .reduce([:], { current, workout in
                 current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
             })

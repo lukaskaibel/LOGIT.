@@ -23,7 +23,7 @@ struct WorkoutCell: View {
                         ColorMeter.Item(color: $0.color, amount: $1)
                     })
                     VStack(alignment: .leading) {
-                        Text(workout.date?.description(.short) ?? "")
+                        Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
                             .font(.footnote.weight(.medium))
                             .foregroundColor(.secondaryLabel)
                         Text(workout.name ?? "No name")
