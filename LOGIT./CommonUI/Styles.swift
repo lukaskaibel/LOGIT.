@@ -55,6 +55,10 @@ struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
             content
         } else {
             placeholder
+                .font(.title3)
+                .foregroundColor(.placeholder)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
         }
     }
 }

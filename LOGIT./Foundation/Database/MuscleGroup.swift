@@ -19,12 +19,12 @@ enum MuscleGroup: String, Identifiable, CaseIterable {
     
     var color: Color {
         switch self {
-        case .chest: return .mint
-        case .back: return .green
-        case .arms: return .orange
-        case .shoulders: return .purple
-        case .abdominals: return .yellow
-        case .legs: return .blue
+        case .chest: return .green
+        case .back: return .mint
+        case .arms: return .purple
+        case .shoulders: return .orange
+        case .abdominals: return .indigo
+        case .legs: return .pink
         }
     }
     

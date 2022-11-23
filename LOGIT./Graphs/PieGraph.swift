@@ -45,8 +45,8 @@ struct PieGraph: View {
                         
                     }
                 }
+                Spacer()
             }
-            Spacer()
             ZStack {
                 ForEach(items) { item in
                     Circle()
@@ -60,7 +60,8 @@ struct PieGraph: View {
                     .stroke(lineWidth: circleLineWidth)
                     .foregroundColor(.white)
                     .shadow(radius: 4)
-            }.frame(width: configuration == .small ? 0 : 100, height: configuration == .small ? 0 : 100)
+            }
+            .frame(minHeight: 100, alignment: .trailing)
                 .padding(configuration == .small ? 5 : 15)
         }
     }

@@ -22,7 +22,6 @@ struct SegmentedBarChart: View {
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 selectedItemIndex = items.firstIndex(of: item)!
-                                print("#####: \(selectedItemIndex)")
                             }
                     }
                 }.frame(maxWidth: .infinity)

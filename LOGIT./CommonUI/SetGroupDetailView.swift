@@ -22,7 +22,7 @@ struct SetGroupDetailView: View {
     // MARK: - Parameters
     
     let setGroup: WorkoutSetGroup
-    let indexInWorkout: Int
+    let indexInWorkout: Int?
     
     // MARK: - Body
     
@@ -74,7 +74,9 @@ struct SetGroupDetailView: View {
         VStack(spacing: 3) {
             HStack {
                 if let exercise = setGroup.exercise {
-                    Text("\(indexInWorkout + 1).")
+                    if let indexInWorkout = indexInWorkout {
+                        Text("\(indexInWorkout + 1).")
+                    }
                     Button {
                         exerciseForDetail = exercise
                         navigateToDetail = true

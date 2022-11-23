@@ -39,20 +39,27 @@ struct EditExerciseView: View {
         NavigationStack {
             List {
                 Section(content: {
-                    TextField(NSLocalizedString("exerciseName", comment: ""),
-                              text: $exerciseName)
-                        .font(.body.weight(.semibold))
-                        .padding(.vertical, 3)
+                    HStack {
+                        ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color,
+                                                           amount: 1)])
+                        TextField(NSLocalizedString("exerciseName", comment: ""),
+                                  text: $exerciseName)
+                            .font(.body.weight(.semibold))
+                            .padding(.vertical, 5)
+                    }
+                    .padding(CELL_PADDING)
                 }, footer: {
                     Text(NSLocalizedString("exerciseNameDescription", comment: ""))
-                })
+                }).listRowInsets(EdgeInsets())
                 Section(content: {
                     Picker(NSLocalizedString("muscleGroup", comment: ""),
                            selection: $muscleGroup) {
                         ForEach(MuscleGroup.allCases) { muscleGroup in
                             Text(muscleGroup.description).tag(muscleGroup)
+                                .foregroundColor(muscleGroup.color)
                         }
                     }
+                    .accentColor(muscleGroup.color)
                 })
             }.listStyle(.insetGrouped)
                 .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(exerciseName)" : NSLocalizedString("newExercise", comment: ""))

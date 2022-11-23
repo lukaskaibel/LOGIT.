@@ -85,8 +85,6 @@ struct TargetWorkoutsDetailView: View {
                     }
                     .emptyPlaceholder(workouts(forWeekIndex: i)) {
                         Text("No Workouts in Week")
-                            .font(.title3)
-                            .foregroundColor(.placeholder)
                     }
                 }
             }

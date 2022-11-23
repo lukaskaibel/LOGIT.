@@ -21,7 +21,7 @@ struct HomeView: View {
     // MARK: - State
     
     @State private var navigateToTarget: Bool = false
-    
+    @State private var navigateToMuscleGroupDetail: Bool = false
     // MARK: - Body
     
     var body: some View {
@@ -42,8 +42,12 @@ struct HomeView: View {
                 }.listRowInsets(EdgeInsets())
                 Section {
                     muscleGroupPercentageView
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            navigateToMuscleGroupDetail = true
+                        }
                 } header: {
-                    Text("Sets per Muscle Group")
+                    Text("Muscle Groups")
                         .sectionHeaderStyle()
                 }.listRowInsets(EdgeInsets())
                 Section(content: {
@@ -84,16 +88,24 @@ struct HomeView: View {
             .navigationDestination(isPresented: $navigateToTarget) {
                 TargetWorkoutsDetailView()
             }
+            .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
+                MuscleGroupDetailView(setGroups: (workouts.map { $0.setGroups }).reduce([], +))
+            }
         }
     }
     
     private var muscleGroupPercentageView: some View {
-        PieGraph(items: getOverallMuscleGroupOccurances()
-                                .map { PieGraph.Item(title: $0.0.description.capitalized,
-                                                     amount: $0.1,
-                                                     color: $0.0.color) },
-                 showZeroValuesInLegend: true)
-            .padding(CELL_PADDING)
+        HStack {
+            PieGraph(items: getOverallMuscleGroupOccurances()
+                                    .map { PieGraph.Item(title: $0.0.description.capitalized,
+                                                         amount: $0.1,
+                                                         color: $0.0.color) },
+                     showZeroValuesInLegend: true)
+            Spacer()
+            NavigationChevron()
+                .foregroundColor(.secondaryLabel)
+        }
+        .padding(CELL_PADDING)
     }
     
     private var targetWorkoutsView: some View {
