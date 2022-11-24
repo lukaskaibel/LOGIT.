@@ -20,6 +20,7 @@ struct WorkoutRecorderView: View {
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.goHome) var goHome
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var database: Database
     
@@ -99,6 +100,7 @@ struct WorkoutRecorderView: View {
                     else { saveWorkout() }
                     UINotificationFeedbackGenerator().notificationOccurred(.success)
                     dismiss()
+                    goHome()
                 }.font(.body.weight(.semibold))
                 Button("Continue Workout", role: .cancel) {}
             }

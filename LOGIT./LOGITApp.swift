@@ -14,7 +14,16 @@ struct LOGIT: App {
         case home, templates, startWorkout, exercises, settings
     }
     
+    // MARK: - AppStorage
+    
     @AppStorage("setupDone") var setupDone: Bool = false
+    
+    // MARK: - State
+    
+    @StateObject private var database = Database.shared
+    @State private var selectedTab: TabType = .home
+    
+    // MARK: - Init
         
     init() {
         UserDefaults.standard.register(defaults: [
@@ -22,18 +31,15 @@ struct LOGIT: App {
             "workoutPerWeekTarget" : 3,
             "setupDone" : false
         ])
-        //Start App in other language
-//        UserDefaults.standard.set(["eng"], forKey: "AppleLanguages")
-//        UserDefaults.standard.synchronize()
-        //FirstStartView Test
-//        UserDefaults.standard.set(false, forKey: "setupDone")
-        
         //Fixes issue with wrong Accent Color in Alerts
         UIView.appearance().tintColor = UIColor(named: "AccentColor")
+        
+        // MARK: - Test Methods
+        // testLanguage()
+        // testFirstStart()
     }
     
-    @StateObject private var database = Database.shared
-    @State private var selectedTab: TabType = .home
+    // MARK: - Body
 
     var body: some Scene {
         WindowGroup {
@@ -64,11 +70,37 @@ struct LOGIT: App {
                     .tag(TabType.settings)
                 }
                 .environmentObject(database)
+                .environment(\.goHome, { selectedTab = .home })
             } else {
                 FirstStartView()
                     .environmentObject(database)
             }
         }
     }
+    
+    // MARK: - Methods / Computed Properties
+    
+    func testLanguage() {
+        UserDefaults.standard.set(["eng"], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
+    }
+    
+    func testFirstStart() {
+        UserDefaults.standard.set(false, forKey: "setupDone")
+    }
+    
 }
 
+
+// MARK: - EnvironmentValues/Keys
+
+struct GoHomeKey: EnvironmentKey {
+    static let defaultValue: () -> Void = {}
+}
+
+extension EnvironmentValues {
+    var goHome: () -> Void {
+        get { self[GoHomeKey.self] }
+        set { self[GoHomeKey.self] = newValue }
+    }
+}
