@@ -14,7 +14,7 @@ struct WorkoutRecorderView: View {
     enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
-        var id: UUID { UUID() }
+        var id: Int { switch self { case .exerciseDetail: return 0; case .exerciseSelection: return 1 } }
     }
     
     // MARK: - Environment
@@ -74,6 +74,7 @@ struct WorkoutRecorderView: View {
                                     Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
                                 }
                             }
+                            .tag("detail")
                     case let .exerciseSelection(exercise, setExercise):
                         ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
                             .toolbar {
@@ -81,6 +82,7 @@ struct WorkoutRecorderView: View {
                                     Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
                                 }
                             }
+                            .tag("selection")
                     }
                 }
             }

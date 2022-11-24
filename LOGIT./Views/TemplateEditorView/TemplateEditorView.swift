@@ -12,7 +12,7 @@ struct TemplateEditorView: View {
     enum SheetType: Identifiable {
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
         case exerciseDetail(exercise: Exercise)
-        var id: UUID { UUID() }
+        var id: Int { switch self { case .exerciseSelection: return 0; case .exerciseDetail: return 1 } }
     }
     
     // MARK: - Environment

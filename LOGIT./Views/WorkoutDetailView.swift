@@ -10,9 +10,9 @@ import CoreData
 
 struct WorkoutDetailView: View {
     
-    enum SheetType: Identifiable {
+    enum SheetType: Int, Identifiable {
         case newTemplateFromWorkout, templateDetail
-        var id: UUID { UUID() }
+        var id: Int { self.rawValue }
     }
     
     // MARK: - Environment

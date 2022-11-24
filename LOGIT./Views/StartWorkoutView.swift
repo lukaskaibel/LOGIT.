@@ -11,7 +11,7 @@ struct StartWorkoutView: View {
     
     enum FullScreenCoverType: Identifiable {
         case workoutRecorder(template: Template?)
-        var id: UUID { UUID() }
+        var id: Int { switch self { case .workoutRecorder: return 0 } }
     }
     
     enum SheetType: Identifiable {

@@ -22,6 +22,7 @@ struct HomeView: View {
     
     @State private var navigateToTarget: Bool = false
     @State private var navigateToMuscleGroupDetail: Bool = false
+    
     // MARK: - Body
     
     var body: some View {

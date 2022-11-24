@@ -12,7 +12,7 @@ struct ExerciseSelectionView: View {
     
     enum SheetType: Identifiable {
         case addExercise, exerciseDetail(exercise: Exercise)
-        var id: UUID { UUID() }
+        var id: Int { switch self { case .addExercise: return 0; case .exerciseDetail: return 1 } }
     }
     
     // MARK: - Environment
