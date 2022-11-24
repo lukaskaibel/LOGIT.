@@ -63,6 +63,17 @@ struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
     }
 }
 
+struct RoundedCorner: Shape {
+
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
 extension View {
     func tileStyle() -> some View {
         modifier(TileModifier())
@@ -82,5 +93,9 @@ extension View {
     
     func emptyPlaceholder<Items: Collection, PlaceholderView: View>(_ items: Items, _ placeholder: @escaping () -> PlaceholderView) -> some View {
         modifier(EmptyPlaceholderModifier(items: items, placeholder: AnyView(placeholder())))
+    }
+    
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
 }

@@ -12,10 +12,22 @@ extension WorkoutRecorderView {
     @ViewBuilder
     internal func workoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
-            Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
-                .font(.body.monospacedDigit())
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding()
+            ZStack {
+                ColorMeter(items: [ColorMeter.Item(color: workoutSet.setGroup?.exercise?.muscleGroup?.color.translucentBackground ?? .placeholder,
+                                                   amount: 1)],
+                           roundedEdges: workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
+                                            workoutSetIsFirst(workoutSet: workoutSet) ? .top :
+                                            workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
+                                            .none)
+                Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
+                    .font(.system(.body, design: .rounded, weight: .medium).monospacedDigit())
+                    .foregroundColor(.white)
+                    .padding(6)
+                    .background(workoutSet.setGroup?.exercise?.muscleGroup?.color ?? .placeholder)
+                    .clipShape(Circle())
+            }
+            
+            
             if let standardSet = workoutSet as? StandardSet {
                 StandardSetCell(for: standardSet)
             } else if let dropSet = workoutSet as? DropSet {
@@ -47,8 +59,16 @@ extension WorkoutRecorderView {
                         .padding(.vertical, 8)
                 }
             }
-        }.padding(.trailing)
+        }
+        .padding(.horizontal, CELL_PADDING)
     }
 
+    private func workoutSetIsFirst(workoutSet: WorkoutSet) -> Bool {
+        workoutSet.setGroup!.sets.firstIndex(of: workoutSet)! == 0
+    }
+    
+    private func workoutSetIsLast(workoutSet: WorkoutSet) -> Bool {
+        workoutSet.setGroup!.sets.firstIndex(of: workoutSet)! == workoutSet.setGroup!.numberOfSets - 1
+    }
     
 }

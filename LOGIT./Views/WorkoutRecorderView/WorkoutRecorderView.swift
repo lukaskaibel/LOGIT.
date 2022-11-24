@@ -46,13 +46,56 @@ struct WorkoutRecorderView: View {
         
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                header
-                Divider()
-                exerciseList
+            List {
+                Section {
+                    TextField(NSLocalizedString("title", comment: ""), text: workoutName, axis: .vertical)
+                        .font(.largeTitle.weight(.bold))
+                        .lineLimit(2)
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+                ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                    if isEditing {
+                        exerciseHeader(setGroup: setGroup)
+                            .deleteDisabled(true)
+                    } else {
+                        setGroupCell(for: setGroup)
+                    }
+                }
+                .onMove(perform: moveSetGroups)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                Section {
+                    if !isEditing {
+                        AddExerciseButton
+                    }
+                }
+                Spacer(minLength: 30)
+                    .listRowBackground(Color.clear)
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .offset(y: -30)
+            .edgesIgnoringSafeArea(.bottom)
             .environment(\.editMode, $editMode)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        
+                    } label: {
+                        Text("Cancel")
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    WorkoutDurationView()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        
+                    } label: {
+                        Text("Save")
+                            .fontWeight(.bold)
+                    }
+                }
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { showingTimerView.toggle() }) {
                         TimerTimeView(showingTimerView: $showingTimerView)
@@ -134,25 +177,6 @@ struct WorkoutRecorderView: View {
         .padding(.horizontal)
         .padding(.bottom)
         .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
-    }
-        
-    private var exerciseList: some View {
-        List {
-            ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                if isEditing {
-                    exerciseHeader(setGroup: setGroup)
-                        .deleteDisabled(true)
-                } else {
-                    setGroupCell(for: setGroup)
-                }
-            }
-            .onMove(perform: moveSetGroups)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            if !isEditing {
-                AddExerciseButton
-            }
-        }.listStyle(.insetGrouped)
     }
     
     private var AddExerciseButton: some View {
