@@ -79,6 +79,10 @@ struct HomeView: View {
                             database.delete(recentWorkouts.value(at: index), saveContext: true)
                         }
                     }
+                    .emptyPlaceholder(recentWorkouts) {
+                        Text("No Workouts")
+                            .frame(maxWidth: .infinity, minHeight: 150)
+                    }
                 }, header: {
                     HStack {
                         Text(NSLocalizedString("recentWorkouts", comment: ""))
@@ -156,8 +160,8 @@ struct HomeView: View {
                 .overlay {
                     if workouts.isEmpty {
                         Text("No Data")
-                            .fontWeight(.bold)
-                            .foregroundColor(.secondaryLabel)
+                            .font(.title3.weight(.medium))
+                            .foregroundColor(.placeholder)
                     }
                 }
         }.padding(CELL_PADDING)
@@ -200,11 +204,15 @@ struct HomeView: View {
     }
     
     func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
-        Array(lastTenWorkouts
-            .reduce([:], { current, workout in
-                current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
-            })
-        ).sorted { $0.key.rawValue < $1.key.rawValue }
+        if lastTenWorkouts.isEmpty {
+            return Array(MuscleGroup.allCases.reduce(into: [MuscleGroup:Int](), { $0[$1, default: 0] = 0 })).sorted { $0.key.rawValue < $1.key.rawValue }
+        } else {
+            return Array(lastTenWorkouts
+                .reduce([:], { current, workout in
+                    current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
+                })
+            ).sorted { $0.key.rawValue < $1.key.rawValue }
+        }
     }
     
 }

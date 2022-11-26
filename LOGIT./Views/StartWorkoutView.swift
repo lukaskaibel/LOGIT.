@@ -124,7 +124,13 @@ struct StartWorkoutView: View {
                     NavigationChevron()
                 }.foregroundColor(template.primaryMuscleGroup?.color ?? .accentColor)
             }.padding(CELL_PADDING)
-        }.listRowInsets(EdgeInsets())
+        }
+        .listRowInsets(EdgeInsets())
+        .emptyPlaceholder(database.getTemplates()) {
+            Text("No Templates")
+                .frame(maxWidth: .infinity)
+                .frame(height: 200)
+        }
     }
     
 }

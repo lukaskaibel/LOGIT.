@@ -38,7 +38,6 @@ struct SectionHeaderModifier: ViewModifier {
 struct ListButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .frame(maxWidth: .infinity)
             .font(.body.weight(.bold))
             .foregroundColor(.accentColor)
             .padding(10)

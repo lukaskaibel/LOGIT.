@@ -76,7 +76,7 @@ struct MuscleGroupDetailView: View {
             }
             .emptyPlaceholder(filteredSetGroups) {
                 Text("No Exercises")
-                    .frame(maxWidth: .infinity, minHeight: 100)
+                    .frame(maxWidth: .infinity, minHeight: 150)
             }
             Spacer(minLength: 30)
                 .listRowBackground(Color.clear)

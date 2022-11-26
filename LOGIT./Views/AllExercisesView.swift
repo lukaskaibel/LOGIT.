@@ -27,8 +27,7 @@ struct AllExercisesView: View {
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
-            ForEach(database.getGroupedExercises(withNameIncluding: searchedText,
-                                                 for: selectedMuscleGroup)) { group in
+            ForEach(groupedExercises) { group in
                 Section(content: {
                     ForEach(group, id: \.objectID) { exercise in
                         ZStack {
@@ -47,23 +46,32 @@ struct AllExercisesView: View {
                         .sectionHeaderStyle()
                 })
             }.listRowInsets(EdgeInsets())
-        }.listStyle(.insetGrouped)
-            .searchable(text: $searchedText )
-            .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showingAddExercise.toggle() }) {
-                        Image(systemName: "plus")
-                    }
+        }
+        .listStyle(.insetGrouped)
+        .emptyPlaceholder(groupedExercises) {
+            Text("No Exercises")
+        }
+        .searchable(text: $searchedText )
+        .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { showingAddExercise.toggle() }) {
+                    Image(systemName: "plus")
                 }
             }
-            .sheet(isPresented: $showingAddExercise) {
-                EditExerciseView()
-            }
+        }
+        .sheet(isPresented: $showingAddExercise) {
+            EditExerciseView()
+        }
     }
     
-    // MARK: - Supporting Functions
+    // MARK: - Methods / Computed Properties
+    
+    var groupedExercises: [[Exercise]] {
+        database.getGroupedExercises(withNameIncluding: searchedText,
+                                     for: selectedMuscleGroup)
+    }
     
     func getLetter(for group: [Exercise]) -> String {
         String(group.first?.name?.first ?? Character(" "))

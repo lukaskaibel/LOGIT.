@@ -58,8 +58,7 @@ struct PieGraph: View {
             }.background {
                 Circle()
                     .stroke(lineWidth: circleLineWidth)
-                    .foregroundColor(.white)
-                    .shadow(radius: 4)
+                    .foregroundColor(.placeholder)
             }
             .frame(minHeight: 100, alignment: .trailing)
                 .padding(configuration == .small ? 5 : 15)
@@ -71,27 +70,32 @@ struct PieGraph: View {
         VStack(alignment: .leading) {
             Text(item.title)
             UnitView(value: "\(percentage(for: item))", unit: "%  (\(item.amount))")
-                .foregroundColor(item.amount > 0 ? item.color : .secondaryLabel)
+                .foregroundColor(item.amount > 0 ? item.color : .placeholder)
         }.frame(minWidth: 80, alignment: .leading)
     }
     
+    private var overallAmount: Int {
+        items.map(\.amount).reduce(0, +)
+    }
+    
     private func percentage(for item: Item) -> Int {
-        Int(round(Float(item.amount)/Float(items.map(\.amount).reduce(0, +))*100))
+        guard overallAmount > 0 else { return 0 }
+        return Int(round(Float(item.amount)/Float(overallAmount)*100))
     }
         
     private func trimFrom(for item: Item) -> CGFloat {
-        let summedAmounts = items.map(\.amount).reduce(0, +)
+        guard overallAmount > 0 else { return 0.0 }
         return items
             .prefix(items.firstIndex { $0 == item } ?? 0)
-            .map { CGFloat($0.amount) / CGFloat(summedAmounts) }
+            .map { CGFloat($0.amount) / CGFloat(overallAmount) }
             .reduce(0, +)
     }
     
     private func trimTo(for item: Item) -> CGFloat {
-        let summedAmounts = items.map(\.amount).reduce(0, +)
+        guard overallAmount > 0 else { return 0.0 }
         return items
             .prefix((items.firstIndex { $0 == item } ?? 0) + 1)
-            .map { CGFloat($0.amount) / CGFloat(summedAmounts) }
+            .map { CGFloat($0.amount) / CGFloat(overallAmount) }
             .reduce(0, +)
     }
     

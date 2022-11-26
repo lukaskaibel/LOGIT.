@@ -43,37 +43,43 @@ struct TemplateListView: View {
                 }
                 .listRowInsets(EdgeInsets())
             }
-        }.listStyle(.insetGrouped)
-            .searchable(text: $searchedText)
-            .navigationBarTitleDisplayMode(.large)
-            .navigationTitle(NSLocalizedString("templates", comment: ""))
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button(action: {
-                            sortingKey = .name
-                        }) {
-                            Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
-                        }
-                        Button(action: {
-                            sortingKey = .lastUsed
-                        }) {
-                            Label(NSLocalizedString("lastUsed", comment: ""), systemImage: "calendar")
-                        }
-                    } label: {
-                        Label(NSLocalizedString(sortingKey == .name ? "name" : "lastUsed", comment: ""), 
-                              systemImage: "arrow.up.arrow.down")
+            
+        }
+        .listStyle(.insetGrouped)
+        .emptyPlaceholder(groupedTemplates) {
+            Text("No Templates")
+        }
+        .searchable(text: $searchedText)
+        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle(NSLocalizedString("templates", comment: ""))
+        
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Menu {
+                    Button(action: {
+                        sortingKey = .name
+                    }) {
+                        Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
                     }
                     Button(action: {
-                        showingTemplateCreation = true
+                        sortingKey = .lastUsed
                     }) {
-                        Image(systemName: "plus")
+                        Label(NSLocalizedString("lastUsed", comment: ""), systemImage: "calendar")
                     }
+                } label: {
+                    Label(NSLocalizedString(sortingKey == .name ? "name" : "lastUsed", comment: ""),
+                          systemImage: "arrow.up.arrow.down")
+                }
+                Button(action: {
+                    showingTemplateCreation = true
+                }) {
+                    Image(systemName: "plus")
                 }
             }
-            .popover(isPresented: $showingTemplateCreation) {
-                TemplateEditorView(template: database.newTemplate(), isEditingExistingTemplate: false)
-            }
+        }
+        .popover(isPresented: $showingTemplateCreation) {
+            TemplateEditorView(template: database.newTemplate(), isEditingExistingTemplate: false)
+        }
     }
     
     // MARK: - Computed Properties

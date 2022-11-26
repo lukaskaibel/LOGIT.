@@ -48,26 +48,30 @@ struct AllWorkoutsView: View {
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
-        }.listStyle(.insetGrouped)
-            .searchable(text: $searchedText,
-                        prompt: NSLocalizedString("searchWorkouts", comment: ""))
-            .navigationTitle(NSLocalizedString("workouts", comment: ""))
-            .toolbar  {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Section {
-                            Button(action: { sortingKey = .name }) {
-                                Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
-                            }
-                            Button(action: { sortingKey = .date }) {
-                                Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
-                            }
+        }
+        .listStyle(.insetGrouped)
+        .emptyPlaceholder(groupedWorkouts) {
+            Text("No Workouts")
+        }
+        .searchable(text: $searchedText,
+                    prompt: NSLocalizedString("searchWorkouts", comment: ""))
+        .navigationTitle(NSLocalizedString("workouts", comment: ""))
+        .toolbar  {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Section {
+                        Button(action: { sortingKey = .name }) {
+                            Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
                         }
-                    } label: {
-                        Label(NSLocalizedString(sortingKey == .name ? "name" : "date", comment: ""), systemImage: "arrow.up.arrow.down")
+                        Button(action: { sortingKey = .date }) {
+                            Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
+                        }
                     }
+                } label: {
+                    Label(NSLocalizedString(sortingKey == .name ? "name" : "date", comment: ""), systemImage: "arrow.up.arrow.down")
                 }
             }
+        }
     }
     
     // MARK: - Computed Properties
