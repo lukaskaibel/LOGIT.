@@ -50,8 +50,26 @@ struct WorkoutRecorderView: View {
             VStack(spacing: 0) {
                 header
                 Divider()
-                exerciseList
+                List {
+                    ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                        if isEditing {
+                            exerciseHeader(setGroup: setGroup)
+                                .deleteDisabled(true)
+                        } else {
+                            setGroupCell(for: setGroup)
+                        }
+                    }
+                    .onMove(perform: moveSetGroups)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets())
+                    Section {
+                        if !isEditing {
+                            AddExerciseButton
+                        }
+                    }
+                }
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(\.editMode, $editMode)
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -59,7 +77,10 @@ struct WorkoutRecorderView: View {
                         TimerTimeView(showingTimerView: $showingTimerView)
                     }.font(.body.monospacedDigit())
                     Spacer()
-                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                    Text("\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))")
+                        .font(.caption)
+                    Spacer()
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }.disabled(workout.numberOfSetGroups == 0)
@@ -121,42 +142,20 @@ struct WorkoutRecorderView: View {
                     .foregroundColor(.label)
                     .font(.title2.weight(.bold))
                 Spacer()
-                Button(action: {
+                ProgressCircleButton(progress: progressInWorkout) {
                     if !workout.hasEntries {
                         deleteWorkout()
                         dismiss()
                     } else {
                         isShowingFinishConfirmation = true
                     }
-                }) {
-                    Image(systemName: !workout.hasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
-                        .foregroundColor(!workout.hasEntries ? .separator : .accentColor)
-                        .font(.title)
                 }
+                .offset(y: -2)
             }
         }
         .padding(.horizontal)
-        .padding(.bottom)
+        .padding(.bottom, 10)
         .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
-    }
-        
-    private var exerciseList: some View {
-        List {
-            ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                if isEditing {
-                    exerciseHeader(setGroup: setGroup)
-                        .deleteDisabled(true)
-                } else {
-                    setGroupCell(for: setGroup)
-                }
-            }
-            .onMove(perform: moveSetGroups)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            if !isEditing {
-                AddExerciseButton
-            }
-        }.listStyle(.insetGrouped)
     }
     
     private var AddExerciseButton: some View {
@@ -183,6 +182,10 @@ struct WorkoutRecorderView: View {
     private func moveSetGroups(from source: IndexSet, to destination: Int) {
         workout.setGroups.move(fromOffsets: source, toOffset: destination)
         database.refreshObjects()
+    }
+    
+    private var progressInWorkout: Float {
+        Float((workout.sets.filter { $0.hasEntry }).count) / Float(workout.sets.count)
     }
     
     internal func indexInSetGroup(for workoutSet: WorkoutSet) -> Int? {

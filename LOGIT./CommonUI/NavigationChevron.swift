@@ -10,7 +10,7 @@ import SwiftUI
 struct NavigationChevron: View {
     var body: some View {
         Image(systemName: "chevron.right")
-            .font(.body.weight(.semibold))
+            .font(.body.weight(.bold))
     }
 }
 

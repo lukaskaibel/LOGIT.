@@ -28,37 +28,29 @@ struct SetEntryEditor: View {
             TextField(repetitionsPlaceholder ?? "0", text: repetitionsString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
+                .font(.system(.body, design: .rounded, weight: .bold))
+                .multilineTextAlignment(.center)
                 .padding(10)
-                .background(repetitions == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColor.secondaryTranslucentBackground)
-                .cornerRadius(5)
-                .overlay {
-                    HStack {
-                        Image(systemName: "arrow.counterclockwise")
-                            .foregroundColor(repetitions == 0 ? .placeholder : .accentColor)
-                            .font(.caption.weight(.bold))
-                            .padding(10)
-                        Spacer()
+                .background(
+                    ZStack {
+                        Color.background
+                        repetitions == 0 ? Color.fill : .accentColor.secondaryTranslucentBackground
                     }
-                }
+                )
+                .cornerRadius(5)
             TextField(weightPlaceholder ?? "0", text: weightString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
-                .font(.body.weight(.semibold))
-                .multilineTextAlignment(.trailing)
+                .font(.system(.body, design: .rounded, weight: .bold))
+                .multilineTextAlignment(.center)
                 .padding(10)
-                .background(weight == 0 ? (colorScheme == .light ? Color.tertiaryFill : .background) : .accentColor.secondaryTranslucentBackground)
-                .cornerRadius(5)
-                .overlay {
-                    HStack {
-                        Image(systemName: "scalemass")
-                            .foregroundColor(weight == 0 ? .placeholder : .accentColor)
-                            .font(.caption.weight(.bold))
-                            .padding(10)
-                        Spacer()
+                .background(
+                    ZStack {
+                        Color.background
+                        weight == 0 ? Color.fill : .accentColor.secondaryTranslucentBackground
                     }
-                }
+                )
+                .cornerRadius(5)
         }
     }
     

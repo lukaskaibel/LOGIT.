@@ -71,11 +71,9 @@ struct LOGIT: App {
                 }
                 .environmentObject(database)
                 .environment(\.goHome, { selectedTab = .home })
-                .preferredColorScheme(.dark)
             } else {
                 FirstStartView()
                     .environmentObject(database)
-                    .preferredColorScheme(.dark)
             }
         }
     }

@@ -36,6 +36,7 @@
 		795D9B85282EAD3A00866C06 /* WorkoutRecorderView+StandardSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D9B84282EAD3A00866C06 /* WorkoutRecorderView+StandardSetCell.swift */; };
 		795D9B87282EADCF00866C06 /* WorkoutRecorderView+DropSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D9B86282EADCF00866C06 /* WorkoutRecorderView+DropSetCell.swift */; };
 		795D9B8B282EC34B00866C06 /* DropSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D9B8A282EC34B00866C06 /* DropSet+.swift */; };
+		7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */; };
 		7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */; };
 		796D611927E53AB400E15F01 /* EditExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611827E53AB400E15F01 /* EditExerciseView.swift */; };
 		79746709277136FE006518F0 /* WorkoutDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailView.swift */; };
@@ -137,6 +138,7 @@
 		795D9B84282EAD3A00866C06 /* WorkoutRecorderView+StandardSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderView+StandardSetCell.swift"; sourceTree = "<group>"; };
 		795D9B86282EADCF00866C06 /* WorkoutRecorderView+DropSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderView+DropSetCell.swift"; sourceTree = "<group>"; };
 		795D9B8A282EC34B00866C06 /* DropSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DropSet+.swift"; sourceTree = "<group>"; };
+		7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircleButton.swift; sourceTree = "<group>"; };
 		7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupSelector.swift; sourceTree = "<group>"; };
 		796D611827E53AB400E15F01 /* EditExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExerciseView.swift; sourceTree = "<group>"; };
 		79746708277136FE006518F0 /* WorkoutDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailView.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				80D9A7DA28860BB1000BF05E /* WorkoutCell.swift */,
 				797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */,
+				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				797F40BD28300AB2002D8807 /* WorkoutSetCell.swift in Sources */,
 				80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */,
+				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				795D9B87282EADCF00866C06 /* WorkoutRecorderView+DropSetCell.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,

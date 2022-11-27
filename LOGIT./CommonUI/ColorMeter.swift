@@ -9,9 +9,19 @@ import SwiftUI
 
 struct ColorMeter: View {
     
+    enum Edges {
+        case top, bottom, all, none
+    }
+    
     // MARK: - Parameters
     
     let items: [Item]
+    let roundedEdges: Edges
+    
+    init(items: [Item], roundedEdges: Edges = .all) {
+        self.items = items
+        self.roundedEdges = roundedEdges
+    }
     
     // MARK: - Body
     
@@ -30,8 +40,12 @@ struct ColorMeter: View {
                     }
                 }
             }
-        }.frame(width: 7)
-            .clipShape(Capsule())
+        }
+        .frame(width: 7)
+        .cornerRadius(3.5, corners: roundedEdges == .top ? [.topLeft, .topRight] :
+                        roundedEdges == .bottom ? [.bottomLeft, .bottomRight] :
+                        roundedEdges == .all ? [.allCorners] :
+                        [])
     }
     
     // MARK: - Computed Properties

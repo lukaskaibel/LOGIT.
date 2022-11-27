@@ -16,8 +16,7 @@ struct WorkoutDurationView: View {
     var body: some View {
         if updater || !updater {
             Text(workoutDurationString)
-                .foregroundColor(.secondaryLabel)
-                .font(.body.monospacedDigit())
+                .font(.body.weight(.bold).monospacedDigit())
                 .onReceive(timer) { input in
                     updater.toggle()
                 }
