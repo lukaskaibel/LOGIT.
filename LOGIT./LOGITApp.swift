@@ -64,9 +64,11 @@ struct LOGIT: App {
                     .tag(TabType.settings)
                 }
                 .environmentObject(database)
+                .preferredColorScheme(.dark)
             } else {
                 FirstStartView()
                     .environmentObject(database)
+                    .preferredColorScheme(.dark)
             }
         }
     }

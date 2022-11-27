@@ -12,8 +12,9 @@ extension WorkoutRecorderView {
     internal func SuperSetCell(for superSet: SuperSet) -> some View {
         VStack {
             HStack {
-                Image(systemName: "1.circle")
-                    .foregroundColor(.accentColor)
+                Text("1")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.footnote)
                 SetEntryEditor(repetitions: Binding(get: { superSet.repetitionsFirstExercise },
                                                          set: { superSet.repetitionsFirstExercise = $0 }),
                                     weight: Binding(get: { superSet.weightFirstExercise },
@@ -22,8 +23,9 @@ extension WorkoutRecorderView {
                                     weightPlaceholder: weightsPlaceholder(for: superSet).first!)
             }
             HStack {
-                Image(systemName: "2.circle")
-                    .foregroundColor(.accentColor)
+                Text("2")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.footnote)
                 SetEntryEditor(repetitions: Binding(get: { superSet.repetitionsSecondExercise },
                                                          set: { superSet.repetitionsSecondExercise = $0 }),
                                     weight: Binding(get: { superSet.weightSecondExercise },

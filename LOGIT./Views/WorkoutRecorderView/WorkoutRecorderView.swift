@@ -46,62 +46,40 @@ struct WorkoutRecorderView: View {
         
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    TextField(NSLocalizedString("title", comment: ""), text: workoutName, axis: .vertical)
-                        .font(.largeTitle.weight(.bold))
-                        .lineLimit(2)
-                }
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-                ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                    if isEditing {
-                        exerciseHeader(setGroup: setGroup)
-                            .deleteDisabled(true)
-                    } else {
-                        setGroupCell(for: setGroup)
+            VStack(spacing: 0) {
+                header
+                Divider()
+                List {
+                    ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                        if isEditing {
+                            exerciseHeader(setGroup: setGroup)
+                                .deleteDisabled(true)
+                        } else {
+                            setGroupCell(for: setGroup)
+                        }
+                    }
+                    .onMove(perform: moveSetGroups)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets())
+                    Section {
+                        if !isEditing {
+                            AddExerciseButton
+                        }
                     }
                 }
-                .onMove(perform: moveSetGroups)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                Section {
-                    if !isEditing {
-                        AddExerciseButton
-                    }
-                }
-                Spacer(minLength: 30)
-                    .listRowBackground(Color.clear)
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .offset(y: -30)
-            .edgesIgnoringSafeArea(.bottom)
+            .toolbar(.hidden, for: .navigationBar)
             .environment(\.editMode, $editMode)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        
-                    } label: {
-                        Text("Cancel")
-                    }
-                }
-                ToolbarItem(placement: .principal) {
-                    WorkoutDurationView()
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        
-                    } label: {
-                        Text("Save")
-                            .fontWeight(.bold)
-                    }
-                }
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: { showingTimerView.toggle() }) {
                         TimerTimeView(showingTimerView: $showingTimerView)
                     }.font(.body.monospacedDigit())
                     Spacer()
-                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                    Text("\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))")
+                        .font(.caption)
+                    Spacer()
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }.disabled(workout.numberOfSetGroups == 0)
@@ -160,22 +138,19 @@ struct WorkoutRecorderView: View {
                     .foregroundColor(.label)
                     .font(.title2.weight(.bold))
                 Spacer()
-                Button(action: {
+                ProgressCircleButton(progress: progressInWorkout) {
                     if !workout.hasEntries {
                         deleteWorkout()
                         dismiss()
                     } else {
                         isShowingFinishConfirmation = true
                     }
-                }) {
-                    Image(systemName: !workout.hasEntries ? "xmark.circle.fill" : "checkmark.circle.fill")
-                        .foregroundColor(!workout.hasEntries ? .separator : .accentColor)
-                        .font(.title)
                 }
+                .offset(y: -2)
             }
         }
         .padding(.horizontal)
-        .padding(.bottom)
+        .padding(.bottom, 10)
         .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
     
@@ -203,6 +178,10 @@ struct WorkoutRecorderView: View {
     private func moveSetGroups(from source: IndexSet, to destination: Int) {
         workout.setGroups.move(fromOffsets: source, toOffset: destination)
         database.refreshObjects()
+    }
+    
+    private var progressInWorkout: Float {
+        Float((workout.sets.filter { $0.hasEntry }).count) / Float(workout.sets.count)
     }
     
     internal func indexInSetGroup(for workoutSet: WorkoutSet) -> Int? {

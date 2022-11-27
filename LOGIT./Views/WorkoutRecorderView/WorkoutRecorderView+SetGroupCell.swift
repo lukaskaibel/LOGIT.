@@ -11,28 +11,59 @@ extension WorkoutRecorderView {
     
     internal func setGroupCell(for setGroup: WorkoutSetGroup) -> some View {
         Section {
-            exerciseHeader(setGroup: setGroup)
-            if !isEditing {
-                ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                    workoutSetCell(workoutSet: workoutSet)
-                }
-                .onDelete { indexSet in
-                    setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
-                    database.refreshObjects()
-                }
-                Button {
-                    database.addSet(to: setGroup)
-                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                } label: {
-                    Label(NSLocalizedString("addSet", comment: ""),
-                          systemImage: "plus.circle.fill")
-                        .foregroundColor(setGroup.exercise?.muscleGroup?.color)
-                        .font(.body.weight(.bold))
-                }
-                .padding(15)
-                .frame(maxWidth: .infinity)
+            HStack {
+                Text(setGroup.setType == .superSet ? "SUPERSET" : setGroup.setType == .dropSet ? "DROPSET" : "SET")
+                    .frame(maxWidth: 80)
+                Text("REPS")
+                    .frame(maxWidth: .infinity)
+                Text(WeightUnit.used.rawValue.uppercased())
+                    .frame(maxWidth: .infinity)
             }
+            .font(.caption)
+            .foregroundColor(.secondaryLabel)
+            .padding(.horizontal, CELL_PADDING)
+            .listRowBackground(Color.fill)
+            .listRowInsets(EdgeInsets())
+            ForEach(setGroup.sets, id:\.objectID) { workoutSet in
+                workoutSetCell(workoutSet: workoutSet)
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        if let templateSet = workoutSetTemplateSetDictionary[workoutSet] {
+                            Button {
+                                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                                if workoutSet.hasEntry {
+                                    workoutSet.clearEntries()
+                                    database.refreshObjects()
+                                } else {
+                                    workoutSet.match(templateSet)
+                                    database.refreshObjects()
+                                }
+                            } label: {
+                                Image(systemName: "checkmark")
+                            }
+                            .tint(.green)
+                        }
+                    }
+            }
+            .onDelete { indexSet in
+                setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
+                database.refreshObjects()
+            }
+            Button {
+                database.addSet(to: setGroup)
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            } label: {
+                Label(NSLocalizedString("addSet", comment: ""),
+                      systemImage: "plus.circle.fill")
+                    .foregroundColor(setGroup.exercise?.muscleGroup?.color)
+                    .font(.body.weight(.bold))
+            }
+            .padding(15)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.fill)
+        } header: {
+            exerciseHeader(setGroup: setGroup)
         }
+        .listRowInsets(EdgeInsets())
         .buttonStyle(.plain)
         .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
@@ -40,97 +71,98 @@ extension WorkoutRecorderView {
     @ViewBuilder
     internal func exerciseHeader(setGroup: WorkoutSetGroup) -> some View {
         HStack {
-            if let muscleGroup = setGroup.exercise?.muscleGroup {
-                if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
-                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1),
-                                       ColorMeter.Item(color: secondaryMuscleGroup.color, amount: 1)])
-                } else {
-                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1)])
-                }
-            }
-            VStack(spacing: 5) {
-                HStack {
-                    Button {
-                        sheetType = .exerciseSelection(exercise: setGroup.exercise, setExercise: { exercise in
-                            setGroup.exercise = exercise
-                            database.refreshObjects()
-                        })
-                    } label: {
-                        HStack(spacing: 3) {
-                            if setGroup.setType == .superSet {
-                                Image(systemName: "1.circle")
-                            }
-                            Text(setGroup.exercise?.name ?? "No Name")
-                                .font(.title3.weight(.semibold))
-                                .lineLimit(1)
-                            NavigationChevron()
-                        }
-                        .foregroundColor(setGroup.exercise?.muscleGroup?.color)
-                    }
-                    Spacer()
-                    if !isEditing {
-                        Menu(content: {
-                            Section {
-                                Button { database.convertSetGroupToStandardSets(setGroup) } label: {
-                                    Label(NSLocalizedString("normalset", comment: ""),
-                                          systemImage: setGroup.setType == .standard ? "checkmark" : "")
-                                }
-                                Button { database.convertSetGroupToSuperSets(setGroup) } label: {
-                                    Label(NSLocalizedString("superset", comment: ""),
-                                          systemImage: setGroup.setType == .superSet ? "checkmark" : "")
-                                }
-                                Button { database.convertSetGroupToDropSets(setGroup) } label: {
-                                    Label(NSLocalizedString("dropset", comment: ""),
-                                          systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
-                                }
-                            }
-                            Section {
-                                Button {
-                                    // TODO: Add Detail for Secondary Exercise in case of SuperSet
-                                    guard let exercise = setGroup.exercise else { return }
-                                    sheetType = .exerciseDetail(exercise: exercise)
-                                } label: {
-                                    Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
-                                }
-                                Button(role: .destructive, action: {
-                                    withAnimation {
-                                        database.delete(setGroup)
-                                    }
-                                }) {
-                                    Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
-                                }
-                            }
-                        }) {
-                            Image(systemName: "ellipsis")
-                                .font(.title3.weight(.semibold))
-                                .foregroundColor(.label)
-                                .padding(7)
-                        }
-                    }
-                }
-                if setGroup.setType == .superSet {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
+                VStack(alignment: .leading) {
                     HStack {
-                        Image(systemName: "arrow.turn.down.right")
-                            .padding(.leading)
                         Button {
-                            sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
-                                                           setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() })
+                            sheetType = .exerciseSelection(exercise: setGroup.exercise, setExercise: { exercise in
+                                setGroup.exercise = exercise
+                                database.refreshObjects()
+                            })
                         } label: {
                             HStack(spacing: 3) {
-                                Image(systemName: "2.circle")
-                                Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
-                                    .font(.title3.weight(.semibold))
+                                Text(setGroup.exercise?.name ?? "No Name")
                                 NavigationChevron()
-                            }.foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color ?? .secondaryLabel)
-                                .lineLimit(1)
+                                    .foregroundColor(.secondaryLabel)
+                            }
                         }
-                        Spacer()
+                    }
+                    if setGroup.setType == .superSet {
+                        HStack {
+                            Image(systemName: "arrow.turn.down.right")
+                                .font(.body.weight(.medium))
+                                .padding(.leading)
+                            Button {
+                                sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
+                                                               setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() })
+                            } label: {
+                                HStack(spacing: 3) {
+                                    Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
+                                    NavigationChevron()
+                                        .foregroundColor(setGroup.secondaryExercise == nil ? .placeholder : .secondaryLabel)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .foregroundColor(setGroup.secondaryExercise == nil ? .placeholder : .label)
                     }
                 }
             }
-            .padding(.vertical, 5)
+            Spacer()
+            if !isEditing {
+                Menu(content: {
+                    Section {
+                        Button { database.convertSetGroupToStandardSets(setGroup) } label: {
+                            Label(NSLocalizedString("normalset", comment: ""),
+                                  systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                        }
+                        Button { database.convertSetGroupToSuperSets(setGroup) } label: {
+                            Label(NSLocalizedString("superset", comment: ""),
+                                  systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                        }
+                        Button { database.convertSetGroupToDropSets(setGroup) } label: {
+                            Label(NSLocalizedString("dropset", comment: ""),
+                                  systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                        }
+                    }
+                    Section {
+                        if let exercise = setGroup.exercise {
+                            Button {
+                                sheetType = .exerciseDetail(exercise: exercise)
+                            } label: {
+                                Label(exercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
+                            }
+                        }
+                        if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
+                            Button {
+                                sheetType = .exerciseDetail(exercise: secondaryExercise)
+                            } label: {
+                                Label(secondaryExercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
+                            }
+                        }
+                        Button(role: .destructive, action: {
+                            withAnimation {
+                                database.delete(setGroup)
+                            }
+                        }) {
+                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
+                        }
+                    }
+                }) {
+                    Image(systemName: "ellipsis")
+                        .padding([.vertical, .trailing])
+                }
+            }
         }
-        .padding(CELL_PADDING)
+        .textCase(nil)
+        .font(.title3.weight(.bold))
+        .foregroundColor(.label)
+        .lineLimit(1)
+        .padding(.vertical, 10)
+        .padding(.horizontal, isEditing ? 15 : 0)
     }
     
 }

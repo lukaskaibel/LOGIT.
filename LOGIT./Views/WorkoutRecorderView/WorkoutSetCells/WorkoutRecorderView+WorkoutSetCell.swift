@@ -12,52 +12,37 @@ extension WorkoutRecorderView {
     @ViewBuilder
     internal func workoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
-            ZStack {
+            HStack {
                 ColorMeter(items: [ColorMeter.Item(color: workoutSet.setGroup?.exercise?.muscleGroup?.color.translucentBackground ?? .placeholder,
                                                    amount: 1)],
                            roundedEdges: workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
                                             workoutSetIsFirst(workoutSet: workoutSet) ? .top :
                                             workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
                                             .none)
-                Text(String((indexInSetGroup(for: workoutSet) ?? 0) + 1))
-                    .font(.system(.body, design: .rounded, weight: .medium).monospacedDigit())
-                    .foregroundColor(.white)
-                    .padding(6)
-                    .background(workoutSet.setGroup?.exercise?.muscleGroup?.color ?? .placeholder)
-                    .clipShape(Circle())
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : 0)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : 0)
+                Spacer()
+                Text("\(indexInSetGroup(for: workoutSet)! + 1)")
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                Spacer()
             }
-            
-            
+            .frame(maxWidth: 80)
             if let standardSet = workoutSet as? StandardSet {
                 StandardSetCell(for: standardSet)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .frame(maxWidth: .infinity)
             } else if let dropSet = workoutSet as? DropSet {
                 DropSetCell(for: dropSet)
-                    .padding(.vertical, 8)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .frame(maxWidth: .infinity)
             } else if let superSet = workoutSet as? SuperSet {
                 SuperSetCell(for: superSet)
-                    .padding(.vertical, 8)
-            }
-            if let templateSet = workoutSetTemplateSetDictionary[workoutSet],
-               templateSet.hasEntry {
-                Button(action: {
-                    UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-                    if workoutSet.hasEntry {
-                        workoutSet.clearEntries()
-                        database.refreshObjects()
-                    } else {
-                        workoutSet.match(templateSet)
-                        database.refreshObjects()
-                    }
-                }) {
-                    Image(systemName: "checkmark")
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(workoutSet.hasEntry ? .accentColor : .secondaryLabel)
-                        .padding(10)
-                        .frame(maxHeight: .infinity)
-                        .background(workoutSet.hasEntry ? Color.accentColor.secondaryTranslucentBackground : .tertiaryFill)
-                        .cornerRadius(5)
-                        .padding(.vertical, 8)
-                }
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .frame(maxWidth: .infinity)
             }
         }
         .padding(.horizontal, CELL_PADDING)
