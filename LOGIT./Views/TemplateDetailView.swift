@@ -34,16 +34,12 @@ struct TemplateDetailView: View {
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
-            Section {
-                ForEach(template.setGroups) { templateSetGroup in
-                    TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
-                                               indexInWorkout: template.index(of: templateSetGroup) ?? 0)
-                }.padding(CELL_PADDING)
-                    .listRowSeparator(.hidden)
-            } header: {
-                Text("Summary")
-                    .sectionHeaderStyle()
-            }.listRowInsets(EdgeInsets())
+            ForEach(template.setGroups) { templateSetGroup in
+                TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
+                                           supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.sets.count) \(NSLocalizedString("set" + (templateSetGroup.sets.count == 1 ? "" : "s"), comment: ""))")
+            }
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
             Section(content: {
                 workoutList
             }, header: {

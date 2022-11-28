@@ -89,20 +89,20 @@ struct ExerciseDetailView: View {
                             .font(.body)
                         }.textCase(.none)
                     }
-                    HStack(spacing: SetGroupDetailView.columnSpace) {
+                    HStack(spacing: 0) {
                         Text(NSLocalizedString("date", comment: ""))
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: SetGroupDetailView.columnWidth, alignment: .leading)
+                            .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
                         Spacer()
                         Text(NSLocalizedString("reps", comment: "").uppercased())
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: SetGroupDetailView.columnWidth)
+                            .frame(maxWidth: .infinity)
                         Text(WeightUnit.used.rawValue.uppercased())
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: SetGroupDetailView.columnWidth)
+                            .frame(maxWidth: .infinity)
                     }.padding(.vertical, 5)
                     Divider()
                 }

@@ -60,16 +60,8 @@ struct MuscleGroupDetailView: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             ForEach(filteredSetGroups, id:\.objectID) { setGroup in
-                Section {
-                    VStack(alignment: .leading) {
-                        if let workoutName = setGroup.workout?.name, let dateDescription = setGroup.workout?.date?.description(.short) {
-                            Text("\(dateDescription)  ·  \(workoutName)")
-                                .font(.footnote.weight(.medium))
-                                .foregroundColor(.secondaryLabel)
-                        }
-                        SetGroupDetailView(setGroup: setGroup, indexInWorkout: nil)
-                    }
-                }
+                SetGroupDetailView(setGroup: setGroup,
+                                   supplementaryText: "\(setGroup.workout!.date!.description(.short))  ·  \(setGroup.workout!.name!)")
                 .padding(CELL_PADDING)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)

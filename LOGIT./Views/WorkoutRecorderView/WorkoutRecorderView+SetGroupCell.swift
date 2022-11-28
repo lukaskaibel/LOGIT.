@@ -75,41 +75,15 @@ extension WorkoutRecorderView {
                 Text("\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
-                VStack(alignment: .leading) {
-                    HStack {
-                        Button {
-                            sheetType = .exerciseSelection(exercise: setGroup.exercise, setExercise: { exercise in
-                                setGroup.exercise = exercise
-                                database.refreshObjects()
-                            })
-                        } label: {
-                            HStack(spacing: 3) {
-                                Text(setGroup.exercise?.name ?? "No Name")
-                                NavigationChevron()
-                                    .foregroundColor(.secondaryLabel)
-                            }
-                        }
-                    }
-                    if setGroup.setType == .superSet {
-                        HStack {
-                            Image(systemName: "arrow.turn.down.right")
-                                .font(.body.weight(.medium))
-                                .padding(.leading)
-                            Button {
-                                sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
-                                                               setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() })
-                            } label: {
-                                HStack(spacing: 3) {
-                                    Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
-                                    NavigationChevron()
-                                        .foregroundColor(setGroup.secondaryExercise == nil ? .placeholder : .secondaryLabel)
-                                }
-                            }
-                            Spacer()
-                        }
-                        .foregroundColor(setGroup.secondaryExercise == nil ? .placeholder : .label)
-                    }
-                }
+                ExerciseHeader(exercise: setGroup.exercise,
+                               secondaryExercise: setGroup.secondaryExercise,
+                               exerciseAction: {
+                    sheetType = .exerciseSelection(exercise: setGroup.exercise,
+                                                   setExercise: { setGroup.exercise = $0; database.refreshObjects()}) },
+                               secondaryExerciseAction: {
+                    sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
+                                                   setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }) },
+                               isSuperSet: setGroup.setType == .superSet)
             }
             Spacer()
             if !isEditing {
@@ -157,10 +131,8 @@ extension WorkoutRecorderView {
                 }
             }
         }
-        .textCase(nil)
         .font(.title3.weight(.bold))
         .foregroundColor(.label)
-        .lineLimit(1)
         .padding(.vertical, 10)
         .padding(.horizontal, isEditing ? 15 : 0)
     }

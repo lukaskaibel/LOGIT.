@@ -51,17 +51,14 @@ struct WorkoutDetailView: View {
             } header: {
                 Text(NSLocalizedString("muscleGroups", comment: ""))
                     .sectionHeaderStyle()
-            }.listRowInsets(EdgeInsets())
-            Section {
-                ForEach(workout.setGroups) { setGroup in
-                    SetGroupDetailView(setGroup: setGroup,
-                                       indexInWorkout: workout.index(of: setGroup) ?? 1)
-                }.padding(CELL_PADDING)
-                    .listRowSeparator(.hidden)
-            } header: {
-                Text(NSLocalizedString("summary", comment: ""))
-                    .sectionHeaderStyle()
-            }.listRowInsets(EdgeInsets())
+            }
+            .listRowInsets(EdgeInsets())
+            ForEach(workout.setGroups) { setGroup in
+                SetGroupDetailView(setGroup: setGroup,
+                                   supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
+            }
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
             if canNavigateToTemplate {
                 Section {
                     templateButton

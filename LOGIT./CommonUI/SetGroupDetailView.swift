@@ -8,12 +8,7 @@
 import SwiftUI
 
 struct SetGroupDetailView: View {
-    
-    // MARK: - Graphical Constants
-    
-    static let columnWidth: CGFloat = 70
-    static let columnSpace: CGFloat = 20
-    
+            
     // MARK: - State
     
     @State private var navigateToDetail = false
@@ -22,43 +17,64 @@ struct SetGroupDetailView: View {
     // MARK: - Parameters
     
     let setGroup: WorkoutSetGroup
-    let indexInWorkout: Int?
+    let supplementaryText: String
     
     // MARK: - Body
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            header(for: setGroup)
-            HStack {
+        Section {
+            HStack(spacing: 0) {
+                Text(setGroup.setType == .superSet ? "SUPERSET" : setGroup.setType == .dropSet ? "DROPSET" : "SET")
+                    .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
+                Text("REPS")
+                    .frame(maxWidth: .infinity)
+                Text(WeightUnit.used.rawValue.uppercased())
+                    .frame(maxWidth: .infinity)
+            }
+            .font(.caption)
+            .foregroundColor(.secondaryLabel)
+            .padding(.horizontal, CELL_PADDING)
+            .listRowBackground(Color.fill)
+            .listRowInsets(EdgeInsets())
+            ZStack {
                 ColorMeter(items: [setGroup.exercise?.muscleGroup?.color,
                                    setGroup.secondaryExercise?.muscleGroup?.color]
-                    .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
+                                .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
+                    .padding( .vertical, CELL_PADDING)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
-                    Divider()
-                        .padding(.leading)
                     ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                        VStack(alignment: .trailing, spacing: 0) {
-                            EmptyView()
-                                .frame(height: 1)
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("\(NSLocalizedString("set", comment: "")) \((setGroup.index(of: workoutSet) ?? 0) + 1)")
-                                        .font(.body.monospacedDigit())
-                                    if workoutSet.isDropSet || workoutSet.isSuperSet {
-                                        Text(workoutSet.isDropSet ? "Dropset" : "Superset")
-                                            .font(.caption)
-                                            .foregroundColor(.secondaryLabel)
-                                    }
-                                }
+                        HStack(spacing: 0) {
+                            Text("\((setGroup.index(of: workoutSet) ?? 0) + 1)")
+                                .font(.body.monospacedDigit())
+                                .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
+                            VStack(spacing: 0) {
+                                EmptyView()
+                                    .frame(height: 1)
                                 WorkoutSetCell(workoutSet: workoutSet)
-                                    .padding(.vertical, 8)
-                                    .padding(.horizontal)
+                                    .padding(.vertical, 15)
+                                Divider()
+                                    .padding(.leading)
                             }
-                            Divider()
-                        }.padding(.leading)
+                            .frame(maxWidth: .infinity)
+                        }
                     }
                 }
             }
+            .padding(.horizontal, CELL_PADDING)
+            .listRowInsets(EdgeInsets())
+        } header: {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(supplementaryText)
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
+                ExerciseHeader(exercise: setGroup.exercise,
+                               secondaryExercise: setGroup.secondaryExercise,
+                               exerciseAction: { exerciseForDetail = setGroup.exercise; navigateToDetail = true },
+                               secondaryExerciseAction: { exerciseForDetail = setGroup.secondaryExercise },
+                               isSuperSet: setGroup.setType == .superSet)
+            }
+            .padding(.vertical, 10)
         }
         .navigationDestination(isPresented: $navigateToDetail) {
             if let exercise = exerciseForDetail {
@@ -67,69 +83,11 @@ struct SetGroupDetailView: View {
         }
     }
     
-    // MARK: - Supporting Views
-    
-    @ViewBuilder
-    private func header(for setGroup: WorkoutSetGroup) -> some View {
-        VStack(spacing: 3) {
-            HStack {
-                if let exercise = setGroup.exercise {
-                    if let indexInWorkout = indexInWorkout {
-                        Text("\(indexInWorkout + 1).")
-                    }
-                    Button {
-                        exerciseForDetail = exercise
-                        navigateToDetail = true
-                    } label: {
-                        Text("\(exercise.name ?? "")")
-                            .lineLimit(1)
-                            .multilineTextAlignment(.leading)
-                        NavigationChevron()
-                    }.buttonStyle(.plain)
-                    Spacer()
-                }
-            }.font(.title3.weight(.semibold))
-                .foregroundColor(setGroup.exercise?.muscleGroup?.color)
-            if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
-                HStack {
-                    Image(systemName: "arrow.turn.down.right")
-                        .font(.caption)
-                    Button {
-                        exerciseForDetail = secondaryExercise
-                        navigateToDetail = true
-                    } label: {
-                        HStack(spacing: 3) {
-                            Text("\(secondaryExercise.name ?? "")")
-                                .lineLimit(1)
-                                .multilineTextAlignment(.leading)
-                            NavigationChevron()
-                        }.font(.title3.weight(.semibold))
-                            .foregroundColor(secondaryExercise.muscleGroup?.color)
-                    }.buttonStyle(.plain)
-                    Spacer()
-                }.padding(.leading, 30)
-            }
-            HStack(spacing: SetGroupDetailView.columnSpace) {
-                Spacer()
-                Text(NSLocalizedString("reps", comment: "").uppercased())
-                    .font(.footnote)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(maxWidth: SetGroupDetailView.columnWidth)
-                Text(WeightUnit.used.rawValue.uppercased())
-                    .font(.footnote)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(maxWidth: SetGroupDetailView.columnWidth)
-            }.padding(.horizontal)
-                .padding(.vertical, 5)
-        }.font(.body.weight(.semibold))
-            .foregroundColor(.label)
-    }
-    
 }
 
 struct SetGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        SetGroupDetailView(setGroup: Database.preview.testWorkout.setGroups.first!, indexInWorkout: 1)
+        SetGroupDetailView(setGroup: Database.preview.testWorkout.setGroups.first!, supplementaryText: "")
             .environmentObject(Database.preview)
     }
 }
