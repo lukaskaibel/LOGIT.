@@ -142,7 +142,7 @@ struct WorkoutRecorderView: View {
                     .foregroundColor(.label)
                     .font(.title2.weight(.bold))
                 Spacer()
-                ProgressCircleButton(progress: progressInWorkout) {
+                ProgressCircleButton(progress: workout.setGroups.count > 0 ? progressInWorkout : 0.0) {
                     if !workout.hasEntries {
                         deleteWorkout()
                         dismiss()

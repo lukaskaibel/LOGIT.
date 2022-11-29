@@ -129,6 +129,7 @@ extension WorkoutRecorderView {
                     Image(systemName: "ellipsis")
                         .padding([.vertical, .trailing])
                 }
+                .textCase(.none)
             }
         }
         .font(.title3.weight(.bold))

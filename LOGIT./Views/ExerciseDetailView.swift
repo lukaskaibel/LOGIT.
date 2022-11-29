@@ -50,10 +50,6 @@ struct ExerciseDetailView: View {
                 Text(NSLocalizedString("weight", comment: ""))
                     .sectionHeaderStyle()
             }.listRowInsets(EdgeInsets())
-            Text("History")
-                .sectionHeaderStyle()
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
             ForEach(setGroupsForExercise) { setGroup in
                 SetGroupDetailView(setGroup: setGroup,
                                    supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")")
