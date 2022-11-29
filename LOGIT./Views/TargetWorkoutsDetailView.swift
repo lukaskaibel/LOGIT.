@@ -26,69 +26,68 @@ struct TargetWorkoutsDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                HStack(alignment: .lastTextBaseline, spacing: 0) {
-                    Text(NSLocalizedString("target", comment: ""))
-                        .font(.largeTitle.weight(.bold))
-                    Text("/" + NSLocalizedString("week", comment: ""))
-                        .fontWeight(.bold)
-                }
-                .padding([.horizontal, .bottom])
-                Spacer()
-                Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $targetPerWeek) {
-                    ForEach(1..<10, id:\.self) { i in
-                        Text(String(i)).tag(i)
-                            .font(.title)
+        List {
+            Section {
+                HStack {
+                    HStack(alignment: .lastTextBaseline, spacing: 0) {
+                        Text(NSLocalizedString("target", comment: ""))
+                            .font(.largeTitle.weight(.bold))
+                        Text("/" + NSLocalizedString("week", comment: ""))
+                            .fontWeight(.bold)
                     }
-                }
-            }
-            SegmentedBarChart(items: workoutsPerWeekChartItems(),
-                              hLines: [SegmentedBarChart.HLine(title: NSLocalizedString("target", comment: ""),
-                                                               y: targetPerWeek,
-                                                               color: .accentColor)],
-                              selectedItemIndex: $selectedIndexInWeekGroup)
-            .frame(height: 200)
-            .overlay {
-                if workouts.isEmpty {
-                    Text("No Data")
-                        .fontWeight(.bold)
-                        .foregroundColor(.secondaryLabel)
-                }
-            }
-            .padding()
-            HStack(alignment: .lastTextBaseline) {
-                Text("Workouts")
-                    .sectionHeaderStyle()
-                Spacer()
-                Text("In Selected Week")
-                    .foregroundColor(.secondaryLabel)
-                    .textCase(.none)
-            }
-            .padding(.horizontal)
-            TabView(selection: $selectedIndexInWeekGroup) {
-                ForEach(0..<5, id:\.self) { i in
-                    List {
-                        Section {
-                            ForEach(workouts(forWeekIndex: i), id:\.objectID) { workout in
-                                WorkoutCell(workout: workout)
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        selectedWorkout = workout
-                                        isShowingWorkoutDetail = true
-                                    }
-                            }
-                            .padding(CELL_PADDING)
-                            .tag(i)
+                    .padding(.bottom)
+                    Spacer()
+                    Picker("", selection: $targetPerWeek) {
+                        ForEach(1..<10, id:\.self) { i in
+                            Text(String(i)).tag(i)
+                                .font(.title)
                         }
-                        .listRowInsets(EdgeInsets())
                     }
-                    .emptyPlaceholder(workouts(forWeekIndex: i)) {
-                        Text("No Workouts in Week")
+                }
+                SegmentedBarChart(items: workoutsPerWeekChartItems(),
+                                  hLines: [SegmentedBarChart.HLine(title: NSLocalizedString("target", comment: ""),
+                                                                   y: targetPerWeek,
+                                                                   color: .accentColor)],
+                                  selectedItemIndex: $selectedIndexInWeekGroup)
+                .frame(height: 200)
+                .overlay {
+                    if workouts.isEmpty {
+                        Text("No Data")
+                            .fontWeight(.bold)
+                            .foregroundColor(.secondaryLabel)
                     }
                 }
             }
-            .tabViewStyle(.page)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets())
+            Section {
+                ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup), id:\.objectID) { workout in
+                    WorkoutCell(workout: workout)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedWorkout = workout
+                            isShowingWorkoutDetail = true
+                        }
+                }
+                .padding(CELL_PADDING)
+                .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup)) {
+                    Text("No Workouts in Week")
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 150)
+                }
+            } header: {
+                HStack(alignment: .lastTextBaseline) {
+                    Text("Workouts")
+                        .sectionHeaderStyle()
+                    Spacer()
+                    Text("In Selected Week")
+                        .foregroundColor(.secondaryLabel)
+                        .textCase(.none)
+                }
+            }
+            .listRowInsets(EdgeInsets())
+            Spacer(minLength: 30)
+                .listRowBackground(Color.clear)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $isShowingWorkoutDetail) {
@@ -96,6 +95,8 @@ struct TargetWorkoutsDetailView: View {
                 WorkoutDetailView(workout: workout, canNavigateToTemplate: true)
             }
         }
+        .offset(y: -30)
+        .edgesIgnoringSafeArea(.bottom)
     }
     
     // MARK: - Supporting Methods

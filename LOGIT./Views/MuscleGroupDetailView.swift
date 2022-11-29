@@ -62,7 +62,6 @@ struct MuscleGroupDetailView: View {
             ForEach(filteredSetGroups, id:\.objectID) { setGroup in
                 SetGroupDetailView(setGroup: setGroup,
                                    supplementaryText: "\(setGroup.workout!.date!.description(.short))  ·  \(setGroup.workout!.name!)")
-                .padding(CELL_PADDING)
                 .listRowInsets(EdgeInsets())
                 .listRowSeparator(.hidden)
             }
