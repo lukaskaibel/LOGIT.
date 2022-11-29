@@ -47,10 +47,14 @@ struct TemplateEditorView: View {
                         .listRowBackground(Color.clear)
                 }
                 ForEach(template.setGroups, id:\.objectID) { setGroup in
-                    setGroupCellWithSets(for: setGroup)
+                    if isEditing {
+                        setGroupHeader(for: setGroup)
+                            .deleteDisabled(true)
+                    } else {
+                        setGroupCellWithSets(for: setGroup)
+                    }
                 }
                 .onMove(perform: moveSetGroups)
-                .onDelete { template.setGroups.elements(for: $0).forEach { database.delete($0) } }
                 .listRowInsets(EdgeInsets())
                 if !isEditing {
                     Section {
@@ -97,7 +101,10 @@ struct TemplateEditorView: View {
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
-                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("reorderExercises", comment: "")) {
+                    Text("\(template.setGroups.count) \(NSLocalizedString("exercise\(template.setGroups.count == 1 ? "" : "s")", comment: ""))")
+                        .font(.caption)
+                    Spacer()
+                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }
@@ -106,9 +113,9 @@ struct TemplateEditorView: View {
                 }
             }
             .sheet(item: $sheetType) { style in
-                switch style {
-                case let .exerciseSelection(exercise, setExercise):
-                    NavigationStack {
+                NavigationStack {
+                    switch style {
+                    case let .exerciseSelection(exercise, setExercise):
                         ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
@@ -117,9 +124,16 @@ struct TemplateEditorView: View {
                                     }
                                 }
                             }
+                    case let .exerciseDetail(exercise):
+                        ExerciseDetailView(exercise: exercise)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(NSLocalizedString("dismiss", comment: ""), role: .cancel) {
+                                        sheetType = nil
+                                    }
+                                }
+                            }
                     }
-                case let .exerciseDetail(exercise):
-                    ExerciseDetailView(exercise: exercise)
                 }
             }
             .scrollDismissesKeyboard(.immediately)
@@ -131,11 +145,27 @@ struct TemplateEditorView: View {
     @ViewBuilder
     private func setGroupCellWithSets(for setGroup: TemplateSetGroup) -> some View {
         Section {
-            setGroupHeader(for: setGroup)
             if !isEditing {
+                HStack {
+                    Text(setGroup.setType == .superSet ? "SUPERSET" : setGroup.setType == .dropSet ? "DROPSET" : "SET")
+                        .frame(maxWidth: 80)
+                    Text("REPS")
+                        .frame(maxWidth: .infinity)
+                    Text(WeightUnit.used.rawValue.uppercased())
+                        .frame(maxWidth: .infinity)
+                }
+                .font(.caption)
+                .foregroundColor(.secondaryLabel)
+                .padding(.horizontal, CELL_PADDING)
+                .listRowBackground(Color.fill)
+                .listRowInsets(EdgeInsets())
                 ForEach(setGroup.sets, id:\.objectID) { templateSet in
-                    TemplateSetCell(for: templateSet)
+                    templateSetCell(templateSet: templateSet)
                         .listRowSeparator(.hidden, edges: .bottom)
+                }
+                .onDelete { indexSet in
+                    setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
+                    database.refreshObjects()
                 }
                 Button {
                     UIImpactFeedbackGenerator(style: .soft).impactOccurred()
@@ -148,125 +178,83 @@ struct TemplateEditorView: View {
                 }
                 .padding(15)
                 .frame(maxWidth: .infinity)
+                .listRowBackground(Color.fill)
             }
+        } header: {
+            setGroupHeader(for: setGroup)
         }
+        .listRowInsets(EdgeInsets())
         .buttonStyle(.plain)
         .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
     
     private func setGroupHeader(for setGroup: TemplateSetGroup) -> some View {
         HStack {
-            if let muscleGroup = setGroup.exercise?.muscleGroup {
-                if setGroup.setType == .superSet, let secondaryMuscleGroup = setGroup.secondaryExercise?.muscleGroup {
-                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1),
-                                       ColorMeter.Item(color: secondaryMuscleGroup.color, amount: 1)])
-                } else {
-                    ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color, amount: 1)])
-                }
+            VStack(alignment: .leading, spacing: 0) {
+                Text("\(template.setGroups.firstIndex(of: setGroup)! + 1) / \(template.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
+                ExerciseHeader(exercise: setGroup.exercise,
+                               secondaryExercise: setGroup.secondaryExercise,
+                               exerciseAction: {
+                    sheetType = .exerciseSelection(exercise: setGroup.exercise,
+                                                   setExercise: { setGroup.exercise = $0; database.refreshObjects()}) },
+                               secondaryExerciseAction: {
+                    sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
+                                                   setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }) },
+                               isSuperSet: setGroup.setType == .superSet)
             }
-            VStack(spacing: 5) {
-                HStack {
-                    Button {
-                        sheetType = .exerciseSelection(exercise: setGroup.exercise,
-                                                        setExercise: { setGroup.exercise = $0; database.refreshObjects() })
-                    } label: {
-                        HStack {
-                            if setGroup.setType == .superSet {
-                                Image(systemName: "1.circle")
-                            }
-                            Text(setGroup.exercise?.name ?? "")
-                                .lineLimit(1)
-                                .font(.title3.weight(.semibold))
-                            NavigationChevron()
+            Spacer()
+            if !isEditing {
+                Menu(content: {
+                    Section {
+                        Button { database.convertSetGroupToStandardSets(setGroup) } label: {
+                            Label(NSLocalizedString("normalset", comment: ""),
+                                  systemImage: setGroup.setType == .standard ? "checkmark" : "")
                         }
-                        .foregroundColor(setGroup.exercise?.muscleGroup?.color)
+                        Button { database.convertSetGroupToSuperSet(setGroup) } label: {
+                            Label(NSLocalizedString("superset", comment: ""),
+                                  systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                        }
+                        Button { database.convertSetGroupToDropSets(setGroup) } label: {
+                            Label(NSLocalizedString("dropset", comment: ""),
+                                  systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                        }
                     }
-                    Spacer()
-                    if !isEditing {
-                        Menu(content: {
-                            Section {
-                                Button { database.convertSetGroupToStandardSets(setGroup) } label: {
-                                    Label(NSLocalizedString("normalset", comment: ""),
-                                          systemImage: setGroup.setType == .standard ? "checkmark" : "")
-                                }
-                                Button { database.convertSetGroupToTemplateSuperSet(setGroup) } label: {
-                                    Label(NSLocalizedString("superset", comment: ""),
-                                          systemImage: setGroup.setType == .superSet ? "checkmark" : "")
-                                }
-                                Button { database.convertSetGroupToTemplateDropSets(setGroup) } label: {
-                                    Label(NSLocalizedString("dropset", comment: ""),
-                                          systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
-                                }
+                    Section {
+                        if let exercise = setGroup.exercise {
+                            Button {
+                                sheetType = .exerciseDetail(exercise: exercise)
+                            } label: {
+                                Label(exercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
                             }
-                            Section {
-                                Button {
-                                    // TODO: Add Detail for Secondary Exercise in case of SuperSet
-                                    guard let exercise = setGroup.exercise else { return }
-                                    sheetType = .exerciseDetail(exercise: exercise)
-                                } label: {
-                                    Label(NSLocalizedString("showDetails", comment: ""), systemImage: "info.circle")
-                                }
-                                Button(role: .destructive, action: {
-                                    withAnimation {
-                                        database.delete(setGroup)
-                                    }
-                                }) {
-                                    Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
-                                }
+                        }
+                        if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
+                            Button {
+                                sheetType = .exerciseDetail(exercise: secondaryExercise)
+                            } label: {
+                                Label(secondaryExercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
+                            }
+                        }
+                        Button(role: .destructive, action: {
+                            withAnimation {
+                                database.delete(setGroup)
                             }
                         }) {
-                            Image(systemName: "ellipsis")
-                                .font(.title3.weight(.semibold))
-                                .foregroundColor(.label)
-                                .padding(7)
+                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                         }
                     }
+                }) {
+                    Image(systemName: "ellipsis")
+                        .padding([.vertical, .trailing])
                 }
-                if setGroup.setType == .superSet {
-                    HStack {
-                        Image(systemName: "arrow.turn.down.right")
-                            .padding(.leading)
-                        Button {
-                            sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
-                                                            setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() })
-                        } label: {
-                            HStack {
-                                Image(systemName: "2.circle")
-                                Text(setGroup.secondaryExercise?.name ?? "Select second exercise")
-                                    .font(.title3.weight(.semibold))
-                                    .lineLimit(1)
-                                NavigationChevron()
-                            }
-                            .foregroundColor(setGroup.secondaryExercise?.muscleGroup?.color)
-                        }
-                        Spacer()
-                    }
-                }
-                
             }
-            .padding(.vertical, 5)
         }
-        .padding(CELL_PADDING)
-    }
-    
-    @ViewBuilder
-    private func TemplateSetCell(for templateSet: TemplateSet) -> some View {
-        HStack {
-            Text(String((templateSet.setGroup?.sets.firstIndex(of: templateSet) ?? 0) + 1))
-                .foregroundColor(.secondaryLabel)
-                .font(.body.monospacedDigit())
-                .frame(maxHeight: .infinity, alignment: .top)
-                .padding()
-            if let templateStandardSet = templateSet as? TemplateStandardSet {
-                TemplateStandardSetCell(for: templateStandardSet)
-            } else if let templateDropSet = templateSet as? TemplateDropSet {
-                TemplateDropSetCell(for: templateDropSet)
-                    .padding(.top, 8)
-            } else if let templateSuperSet = templateSet as? TemplateSuperSet {
-                TemplateSuperSetCell(for: templateSuperSet)
-                    .padding(.top, 8)
-            }
-        }.padding(.trailing)
+        .font(.title3.weight(.bold))
+        .foregroundColor(.label)
+        .padding(.vertical, 10)
+        .padding(.horizontal, isEditing ? 15 : 0)
+
     }
     
     // MARK: - Computed Properties

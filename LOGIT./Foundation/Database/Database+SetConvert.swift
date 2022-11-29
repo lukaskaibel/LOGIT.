@@ -93,7 +93,7 @@ extension Database {
         }
     }
     
-    public func convertSetGroupToTemplateDropSets(_ templateSetGroup: TemplateSetGroup) {
+    public func convertSetGroupToDropSets(_ templateSetGroup: TemplateSetGroup) {
         templateSetGroup.sets
             .forEach { convertToTemplateDropSet($0) }
         refreshObjects()
@@ -113,7 +113,7 @@ extension Database {
         }
     }
     
-    public func convertSetGroupToTemplateSuperSet(_ templateSetGroup: TemplateSetGroup) {
+    public func convertSetGroupToSuperSet(_ templateSetGroup: TemplateSetGroup) {
         templateSetGroup.sets
             .forEach { convertToTemplateSuperSet($0) }
         refreshObjects()

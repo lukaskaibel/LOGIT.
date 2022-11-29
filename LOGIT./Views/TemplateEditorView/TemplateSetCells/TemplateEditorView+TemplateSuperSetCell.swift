@@ -12,16 +12,18 @@ extension TemplateEditorView {
     internal func TemplateSuperSetCell(for templateSuperSet: TemplateSuperSet) -> some View {
         VStack {
             HStack {
-                Image(systemName: "1.circle")
-                    .foregroundColor(.accentColor)
+                Text("1")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.footnote)
                 SetEntryEditor(repetitions: Binding(get: { templateSuperSet.repetitionsFirstExercise },
                                                           set: { templateSuperSet.repetitionsFirstExercise = $0 }),
                                      weight: Binding(get: { templateSuperSet.weightFirstExercise },
                                                      set: { templateSuperSet.weightFirstExercise = $0 }))
             }
             HStack {
-                Image(systemName: "2.circle")
-                    .foregroundColor(.accentColor)
+                Text("2")
+                    .foregroundColor(.secondaryLabel)
+                    .font(.footnote)
                 SetEntryEditor(repetitions: Binding(get: { templateSuperSet.repetitionsSecondExercise },
                                                           set: { templateSuperSet.repetitionsSecondExercise = $0 }),
                                      weight: Binding(get: { templateSuperSet.weightSecondExercise },

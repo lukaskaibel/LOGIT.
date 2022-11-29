@@ -10,6 +10,7 @@
 		790130A9291C4B9B00EF8955 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 790130A8291C4B9B00EF8955 /* Launch Screen.storyboard */; };
 		7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A4280B73E7003E5515 /* Database+Preview.swift */; };
 		7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7907FDE9289E99B1006AF271 /* CloudKit.framework */; };
+		790A9F612936A29200E73FE5 /* TemplateEditor+TemplateSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790A9F602936A29200E73FE5 /* TemplateEditor+TemplateSetCell.swift */; };
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
 		792DAA94291C4769007DD395 /* SetEntryEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAA93291C4769007DD395 /* SetEntryEditor.swift */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
@@ -110,6 +111,7 @@
 		7907B5A4280B73E7003E5515 /* Database+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Preview.swift"; sourceTree = "<group>"; };
 		7907FDE8289E99A5006AF271 /* LOGIT..entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LOGIT..entitlements; sourceTree = "<group>"; };
 		7907FDE9289E99B1006AF271 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		790A9F602936A29200E73FE5 /* TemplateEditor+TemplateSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateEditor+TemplateSetCell.swift"; sourceTree = "<group>"; };
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		792DAA93291C4769007DD395 /* SetEntryEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEntryEditor.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				795BFA2A28379B49005E59FE /* TemplatorEditor+TemplateDropSetCell.swift */,
 				795BFA2828379A35005E59FE /* TemplateEditor+TemplateStandardSetCell.swift */,
 				795920F12842246D0057369A /* TemplateEditorView+TemplateSuperSetCell.swift */,
+				790A9F602936A29200E73FE5 /* TemplateEditor+TemplateSetCell.swift */,
 			);
 			path = TemplateSetCells;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				8084604B276662A000E0D0D0 /* AllWorkoutsView.swift in Sources */,
 				7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */,
 				8065AA7B2686668100F53A5A /* LOGIT.xcdatamodeld in Sources */,
+				790A9F612936A29200E73FE5 /* TemplateEditor+TemplateSetCell.swift in Sources */,
 				797F40BD28300AB2002D8807 /* WorkoutSetCell.swift in Sources */,
 				80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */,
