@@ -50,71 +50,20 @@ struct ExerciseDetailView: View {
                 Text(NSLocalizedString("weight", comment: ""))
                     .sectionHeaderStyle()
             }.listRowInsets(EdgeInsets())
-            Section(content: {
-                ForEach(setsForExercise) { workoutSet in
-                    if workoutSet.hasEntry {
-                        HStack {
-                            Text(dateString(for: workoutSet))
-                            Spacer()
-                            WorkoutSetCell(workoutSet: workoutSet)
-                        }
-                    }
-                }
-            }, header: {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(NSLocalizedString("sets", comment: ""))
-                            .sectionHeaderStyle()
-                            .fixedSize()
-                        Spacer()
-                        Menu {
-                            Button(action: {
-                                sortingKey = .date
-                            }) {
-                                Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
-                            }
-                            Button(action: {
-                                sortingKey = .maxRepetitions
-                            }) {
-                                Label(NSLocalizedString("repetitions", comment: ""), systemImage: "arrow.counterclockwise")
-                            }
-                            Button(action: {
-                                sortingKey = .maxWeight
-                            }) {
-                                Label(NSLocalizedString("weight", comment: ""), systemImage: "scalemass")
-                            }
-                        } label: {
-                            Label(NSLocalizedString(sortingKey == .date ? "date" : sortingKey == .maxRepetitions ? "repetitions" : "weight", comment: ""),
-                                  systemImage: "arrow.up.arrow.down")
-                            .font(.body)
-                        }.textCase(.none)
-                    }
-                    HStack(spacing: 0) {
-                        Text(NSLocalizedString("date", comment: ""))
-                            .font(.footnote)
-                            .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
-                        Spacer()
-                        Text(NSLocalizedString("reps", comment: "").uppercased())
-                            .font(.footnote)
-                            .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: .infinity)
-                        Text(WeightUnit.used.rawValue.uppercased())
-                            .font(.footnote)
-                            .foregroundColor(.secondaryLabel)
-                            .frame(maxWidth: .infinity)
-                    }.padding(.vertical, 5)
-                    Divider()
-                }
-            }, footer: {
-                Text("\(setsForExercise.filter { $0.hasEntry }.count) \(NSLocalizedString("set\(setsForExercise.count == 1 ? "" : "s")", comment: ""))")
-                    .foregroundColor(.secondaryLabel)
-                    .font(.footnote)
-                    .padding(.top, 5)
-                    .padding(.bottom, 50)
-                    .listRowSeparator(.hidden, edges: .bottom)
-            }).listRowInsets(EdgeInsets())
+            Text("History")
+                .sectionHeaderStyle()
                 .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+            ForEach(setGroupsForExercise) { setGroup in
+                SetGroupDetailView(setGroup: setGroup,
+                                   supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")")
+            }
+            .listRowInsets(EdgeInsets())
+            .emptyPlaceholder(setGroupsForExercise) {
+                Text("No History")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 150)
+            }
             Spacer(minLength: 50)
                 .listRowBackground(Color.clear)
         }
@@ -245,8 +194,8 @@ struct ExerciseDetailView: View {
         return formatter.string(from: firstDayOfWeek)
     }
     
-    private var setsForExercise: [WorkoutSet] {
-        database.getWorkoutSets(with: exercise, sortedBy: sortingKey)
+    private var setGroupsForExercise: [WorkoutSetGroup] {
+        database.getWorkoutSetGroups(with: exercise)
     }
     
     private func dateString(for workoutSet: WorkoutSet) -> String {

@@ -64,6 +64,15 @@ extension Database {
     
     // MARK: - WorkoutSet Fetch
     
+    func getWorkoutSetGroups(with exercise: Exercise? = nil) -> [WorkoutSetGroup] {
+        (fetch(WorkoutSetGroup.self,
+              sortingKey: "workout.date",
+              ascending: false) as! [WorkoutSetGroup])
+            .filter { exercise == nil || $0.exercise == exercise || $0.secondaryExercise == exercise }
+    }
+    
+    // MARK: - WorkoutSet Fetch
+    
     enum WorkoutSetSortingKey {
         case date, maxRepetitions, maxWeight
     }
