@@ -68,6 +68,7 @@ struct SetGroupDetailView: View {
                 Text(supplementaryText)
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
+                    .textCase(.none)
                 ExerciseHeader(exercise: setGroup.exercise,
                                secondaryExercise: setGroup.secondaryExercise,
                                exerciseAction: { exerciseForDetail = setGroup.exercise; navigateToDetail = true },

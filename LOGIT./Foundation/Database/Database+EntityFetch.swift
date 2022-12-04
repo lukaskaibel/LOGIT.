@@ -16,12 +16,14 @@ extension Database {
     }
     
     func getWorkouts(withNameIncluding filteredText: String = "",
-                     sortedBy sortingKey: WorkoutSortingKey = .date) -> [Workout] {
-        fetch(Workout.self,
+                     sortedBy sortingKey: WorkoutSortingKey = .date,
+                     usingMuscleGroup muscleGroup: MuscleGroup? = nil) -> [Workout] {
+        (fetch(Workout.self,
               sortingKey: sortingKey.rawValue,
               ascending: sortingKey == .name,
               predicate: filteredText.isEmpty ? nil : NSPredicate(format: "name CONTAINS[c] %@",
-                                                                  filteredText)) as! [Workout]
+                                                                  filteredText)) as! [Workout])
+            .filter { muscleGroup == nil || ($0.exercises.map { $0.muscleGroup }).contains(muscleGroup) }
     }
     
     func getWorkouts(withNameIncluding filteredText: String = "",
@@ -36,9 +38,10 @@ extension Database {
     }
     
     func getGroupedWorkouts(withNameIncluding filteredText: String = "",
-                            groupedBy sortingKey: WorkoutSortingKey = .date) -> [[Workout]] {
+                            groupedBy sortingKey: WorkoutSortingKey = .date,
+                            usingMuscleGroup muscleGroup: MuscleGroup? = nil) -> [[Workout]] {
         var result = [[Workout]]()
-        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey)
+        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey, usingMuscleGroup: muscleGroup)
             .forEach { workout in
                 switch sortingKey {
                 case .date:
@@ -125,7 +128,9 @@ extension Database {
         case lastUsed, name
     }
     
-    func getTemplates(withNameIncluding filterText: String = "", sortedBy sortingKey: TemplateSortingKey = .name) -> [Template] {
+    func getTemplates(withNameIncluding filterText: String = "",
+                      sortedBy sortingKey: TemplateSortingKey = .name,
+                      usingMuscleGroup muscleGroup: MuscleGroup? = nil) -> [Template] {
         (fetch(Template.self,
               sortingKey: "creationDate",
               ascending: false,
@@ -137,12 +142,14 @@ extension Database {
             case .lastUsed: return $0.lastUsed ?? .now > $1.lastUsed ?? .now
             }
         }
+        .filter { muscleGroup == nil || ($0.exercises.map { $0.muscleGroup }).contains(muscleGroup) }
     }
     
     func getGroupedTemplates(withNameIncluding filteredText: String = "",
-                             groupedBy sortingKey: TemplateSortingKey = .name) -> [[Template]] {
+                             groupedBy sortingKey: TemplateSortingKey = .name,
+                             usingMuscleGroup muscleGroup: MuscleGroup? = nil) -> [[Template]] {
         var result = [[Template]]()
-        getTemplates(withNameIncluding: filteredText, sortedBy: sortingKey)
+        getTemplates(withNameIncluding: filteredText, sortedBy: sortingKey, usingMuscleGroup: muscleGroup)
             .forEach { template in
                 switch sortingKey {
                 case .name:

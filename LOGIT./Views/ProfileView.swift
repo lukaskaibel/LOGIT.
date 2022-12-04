@@ -13,6 +13,7 @@ struct ProfileView: View {
     
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
     @AppStorage("workoutPerWeekTarget") var workoutPerWeekTarget: Int = 3
+    @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
     
     // MARK: - Body
     
@@ -24,16 +25,15 @@ struct ProfileView: View {
                         Text(String(i)).tag(i)
                     }
                 }
-            } footer: {
-                Text(NSLocalizedString("targetPerWeekDescription", comment: ""))
-            }
-            Section {
                 Picker(NSLocalizedString("unit", comment: ""), selection: $weightUnit, content: {
                     Text("kg").tag(WeightUnit.kg)
                     Text("lbs").tag(WeightUnit.lbs)
                 })
+            }
+            Section {
+                Toggle("Prevent Auto-Lock", isOn: $preventAutoLock)
             } footer: {
-                Text(NSLocalizedString("unitDescription", comment: ""))
+                Text("Keeps screen active during workout.")
             }
         }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("settings", comment: ""))

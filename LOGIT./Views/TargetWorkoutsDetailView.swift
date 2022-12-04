@@ -60,6 +60,7 @@ struct TargetWorkoutsDetailView: View {
             }
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
             Section {
                 ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup), id:\.objectID) { workout in
                     WorkoutCell(workout: workout)
@@ -73,7 +74,6 @@ struct TargetWorkoutsDetailView: View {
                 .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup)) {
                     Text("No Workouts in Week")
                         .frame(maxWidth: .infinity)
-                        .frame(height: 150)
                 }
             } header: {
                 HStack(alignment: .lastTextBaseline) {

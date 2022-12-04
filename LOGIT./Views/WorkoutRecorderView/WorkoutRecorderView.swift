@@ -17,6 +17,10 @@ struct WorkoutRecorderView: View {
         var id: Int { switch self { case .exerciseDetail: return 0; case .exerciseSelection: return 1 } }
     }
     
+    // MARK: - AppStorage
+    
+    @AppStorage("preventAutoLock") var preventAutoLock: Bool = false
+    
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
@@ -131,6 +135,14 @@ struct WorkoutRecorderView: View {
             }
         }
         .scrollDismissesKeyboard(.immediately)
+        .onAppear {
+            if !preventAutoLock {
+                UIApplication.shared.isIdleTimerDisabled = true
+            }
+        }
+        .onDisappear {
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
     }
     
     private var header: some View {

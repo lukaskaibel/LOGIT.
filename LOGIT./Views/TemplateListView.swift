@@ -17,12 +17,16 @@ struct TemplateListView: View {
     
     @State private var searchedText = ""
     @State private var sortingKey: Database.TemplateSortingKey = .name
+    @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingTemplateCreation = false
     
     // MARK: - Body
     
     var body: some View {
         List {
+            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             ForEach(groupedTemplates.indices, id:\.self) { index in
                 Section {
                     ForEach(groupedTemplates.value(at: index) ?? [], id:\.objectID) { template in
@@ -43,12 +47,11 @@ struct TemplateListView: View {
                 }
                 .listRowInsets(EdgeInsets())
             }
-            
+            .emptyPlaceholder(groupedTemplates) {
+                Text("No Templates")
+            }
         }
         .listStyle(.insetGrouped)
-        .emptyPlaceholder(groupedTemplates) {
-            Text("No Templates")
-        }
         .searchable(text: $searchedText)
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(NSLocalizedString("templates", comment: ""))
@@ -85,7 +88,9 @@ struct TemplateListView: View {
     // MARK: - Computed Properties
     
     private var groupedTemplates: [[Template]] {
-        database.getGroupedTemplates(withNameIncluding: searchedText, groupedBy: sortingKey)
+        database.getGroupedTemplates(withNameIncluding: searchedText,
+                                     groupedBy: sortingKey,
+                                     usingMuscleGroup: selectedMuscleGroup)
     }
     
     private func header(for index: Int) -> String {

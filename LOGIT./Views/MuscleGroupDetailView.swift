@@ -67,7 +67,6 @@ struct MuscleGroupDetailView: View {
             }
             .emptyPlaceholder(filteredSetGroups) {
                 Text("No Exercises")
-                    .frame(maxWidth: .infinity, minHeight: 150)
             }
             Spacer(minLength: 30)
                 .listRowBackground(Color.clear)
@@ -111,8 +110,14 @@ struct MuscleGroupDetailView: View {
     
     private var muscleGroupOccurances: [(MuscleGroup, Int)] {
         Array(sets
-            .compactMap({ $0.exercise?.muscleGroup })
-            .reduce(into: [MuscleGroup:Int]()) { $0[$1, default: 0] += 1 }
+            .reduce(into: [MuscleGroup:Int]()) {
+                if let muscleGroup = $1.setGroup?.exercise?.muscleGroup {
+                    $0[muscleGroup, default: 0] += 1
+                }
+                if let muscleGroup = $1.setGroup?.secondaryExercise?.muscleGroup {
+                    $0[muscleGroup, default: 0] += 1
+                }
+            }
             .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
         ).sorted { $0.key.rawValue < $1.key.rawValue }
     }

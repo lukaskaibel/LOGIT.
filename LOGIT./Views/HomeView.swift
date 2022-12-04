@@ -81,7 +81,6 @@ struct HomeView: View {
                     }
                     .emptyPlaceholder(recentWorkouts) {
                         Text("No Workouts")
-                            .frame(maxWidth: .infinity, minHeight: 150)
                     }
                 }, header: {
                     HStack {
@@ -103,7 +102,7 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
             }
             .listStyle(.insetGrouped)
-            .navigationTitle(NSLocalizedString("home", comment: ""))
+            .navigationTitle("LOGIT.")
             .navigationDestination(isPresented: $navigateToTarget) {
                 TargetWorkoutsDetailView()
             }

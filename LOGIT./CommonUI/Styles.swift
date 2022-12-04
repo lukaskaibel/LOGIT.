@@ -42,6 +42,7 @@ struct ListButtonModifier: ViewModifier {
             .foregroundColor(.accentColor)
             .padding(10)
             .listRowBackground(Color.accentColor.secondaryTranslucentBackground)
+            .frame(maxWidth: .infinity)
     }
 }
 
@@ -54,8 +55,10 @@ struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
             content
         } else {
             placeholder
-                .font(.title3)
+                .font(.title2)
                 .foregroundColor(.placeholder)
+                .frame(maxWidth: .infinity)
+                .frame(height: 200)
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
         }

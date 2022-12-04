@@ -34,7 +34,7 @@ struct SetEntryEditor: View {
                 .background(
                     ZStack {
                         Color.background
-                        repetitions == 0 ? Color.fill : .accentColor.secondaryTranslucentBackground
+                        Color.fill
                     }
                 )
                 .cornerRadius(5)
@@ -47,7 +47,7 @@ struct SetEntryEditor: View {
                 .background(
                     ZStack {
                         Color.background
-                        weight == 0 ? Color.fill : .accentColor.secondaryTranslucentBackground
+                        Color.fill
                     }
                 )
                 .cornerRadius(5)

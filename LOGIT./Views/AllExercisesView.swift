@@ -45,12 +45,13 @@ struct AllExercisesView: View {
                     Text(getLetter(for: group))
                         .sectionHeaderStyle()
                 })
-            }.listRowInsets(EdgeInsets())
+            }
+            .listRowInsets(EdgeInsets())
+            .emptyPlaceholder(groupedExercises) {
+                Text("No Exercises")
+            }
         }
         .listStyle(.insetGrouped)
-        .emptyPlaceholder(groupedExercises) {
-            Text("No Exercises")
-        }
         .searchable(text: $searchedText )
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)

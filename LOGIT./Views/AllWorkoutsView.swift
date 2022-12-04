@@ -17,11 +17,15 @@ struct AllWorkoutsView: View {
     
     @State private var sortingKey: Database.WorkoutSortingKey = .date
     @State private var searchedText: String = ""
+    @State private var selectedMuscleGroup: MuscleGroup? = nil
     
     // MARK: - Body
     
     var body: some View {
         List {
+            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             ForEach(groupedWorkouts.indices, id:\.self) { index in
                 Section {
                     ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
@@ -45,14 +49,14 @@ struct AllWorkoutsView: View {
                 }
                 .listRowInsets(EdgeInsets())
             }
+            .emptyPlaceholder(groupedWorkouts) {
+                Text("No Workouts")
+            }
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color.clear)
         }
         .listStyle(.insetGrouped)
-        .emptyPlaceholder(groupedWorkouts) {
-            Text("No Workouts")
-        }
         .searchable(text: $searchedText,
                     prompt: NSLocalizedString("searchWorkouts", comment: ""))
         .navigationTitle(NSLocalizedString("workouts", comment: ""))
@@ -77,7 +81,9 @@ struct AllWorkoutsView: View {
     // MARK: - Computed Properties
     
     private var groupedWorkouts: [[Workout]] {
-        database.getGroupedWorkouts(withNameIncluding: searchedText, groupedBy: sortingKey)
+        database.getGroupedWorkouts(withNameIncluding: searchedText,
+                                    groupedBy: sortingKey,
+                                    usingMuscleGroup: selectedMuscleGroup)
     }
     
     private func header(for index: Int) -> String {

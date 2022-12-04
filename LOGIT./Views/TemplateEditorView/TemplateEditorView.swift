@@ -194,6 +194,7 @@ struct TemplateEditorView: View {
                 Text("\(template.setGroups.firstIndex(of: setGroup)! + 1) / \(template.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
+                    .textCase(.none)
                 ExerciseHeader(exercise: setGroup.exercise,
                                secondaryExercise: setGroup.secondaryExercise,
                                exerciseAction: {

@@ -72,6 +72,7 @@ struct TemplateSetGroupDetailView: View {
                 Text(supplementaryText)
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
+                    .textCase(.none)
                 ExerciseHeader(exercise: templateSetGroup.exercise,
                                secondaryExercise: templateSetGroup.secondaryExercise,
                                exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },

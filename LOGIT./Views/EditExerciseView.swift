@@ -100,10 +100,11 @@ struct EditExerciseView: View {
     
     private func saveExercise() {
         if let exerciseToEdit = exerciseToEdit {
-            exerciseToEdit.name = exerciseName
+            exerciseToEdit.name = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
             exerciseToEdit.muscleGroup = muscleGroup
         } else {
-            database.newExercise(name: exerciseName, muscleGroup: muscleGroup)
+            database.newExercise(name: exerciseName.trimmingCharacters(in: .whitespacesAndNewlines),
+                                 muscleGroup: muscleGroup)
         }
         database.save()
     }

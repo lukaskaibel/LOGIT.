@@ -366,8 +366,10 @@
 			children = (
 				794E64FD28EE3A69003AACDD /* ColorMeter.swift */,
 				794E64FB28EE38F3003AACDD /* ExerciseCell.swift */,
+				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
+				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
 				792DAA93291C4769007DD395 /* SetEntryEditor.swift */,
 				7944663728E8875300487092 /* SetGroupDetailView.swift */,
 				79F2D1232800D54300197E0A /* Styles.swift */,
@@ -377,8 +379,6 @@
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				80D9A7DA28860BB1000BF05E /* WorkoutCell.swift */,
 				797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */,
-				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
-				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -741,19 +741,25 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S2F6F7JZ8C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LOGIT;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = .com.lukaskbl.LOGIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -765,18 +771,24 @@
 				CODE_SIGN_ENTITLEMENTS = LOGIT./LOGIT..entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S2F6F7JZ8C;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = LOGIT;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = .com.lukaskbl.LOGIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
