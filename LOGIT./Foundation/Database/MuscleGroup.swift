@@ -9,7 +9,7 @@ import SwiftUI
 
 enum MuscleGroup: String, Identifiable, CaseIterable {
     
-    case chest, back, arms, shoulders, abdominals = "abs", legs
+    case chest, back, arms, shoulders, abdominals, legs
     
     var id: String { self.rawValue }
     

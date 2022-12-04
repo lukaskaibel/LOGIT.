@@ -38,7 +38,7 @@ struct EditExerciseView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section(content: {
+                Section {
                     HStack {
                         ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color,
                                                            amount: 1)])
@@ -48,18 +48,29 @@ struct EditExerciseView: View {
                             .padding(.vertical, 5)
                     }
                     .padding(CELL_PADDING)
-                }, footer: {
+                    .listRowInsets(EdgeInsets())
+                } footer: {
                     Text(NSLocalizedString("exerciseNameDescription", comment: ""))
-                }).listRowInsets(EdgeInsets())
+                }
                 Section(content: {
-                    Picker(NSLocalizedString("muscleGroup", comment: ""),
-                           selection: $muscleGroup) {
-                        ForEach(MuscleGroup.allCases) { muscleGroup in
-                            Text(muscleGroup.description).tag(muscleGroup)
+                    HStack {
+                        Text(NSLocalizedString("muscleGroup", comment: ""))
+                        Spacer()
+                        Menu {
+                            Picker(NSLocalizedString("muscleGroup", comment: ""),
+                                   selection: $muscleGroup) {
+                                ForEach(MuscleGroup.allCases) { muscleGroup in
+                                    Text(muscleGroup.description).tag(muscleGroup)
+                                        .foregroundColor(muscleGroup.color)
+                                }
+                            }
+                            .labelsHidden()
+                        } label: {	
+                            Text(muscleGroup.description)
+                                .font(.system(.body, design: .rounded, weight: .bold))
                                 .foregroundColor(muscleGroup.color)
                         }
                     }
-                    .accentColor(muscleGroup.color)
                 })
             }.listStyle(.insetGrouped)
                 .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(exerciseName)" : NSLocalizedString("newExercise", comment: ""))
