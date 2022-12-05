@@ -23,9 +23,9 @@ struct MuscleGroupDetailView: View {
         List {
             Section {
                 VStack(alignment: .leading) {
-                    Text("Muscle Groups")
+                    Text(NSLocalizedString("muscleGroups", comment: ""))
                         .font(.largeTitle.weight(.bold))
-                    Text("Last 10 Workouts")
+                    Text(NSLocalizedString("lastTenWorkouts", comment: ""))
                         .font(.system(.title2, design: .rounded, weight: .semibold))
                         .foregroundColor(.secondaryLabel)
                 }
@@ -66,7 +66,7 @@ struct MuscleGroupDetailView: View {
                 .listRowSeparator(.hidden)
             }
             .emptyPlaceholder(filteredSetGroups) {
-                Text("No Exercises")
+                Text(NSLocalizedString("noExercises", comment: ""))
             }
             Spacer(minLength: 30)
                 .listRowBackground(Color.clear)

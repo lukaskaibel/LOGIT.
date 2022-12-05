@@ -26,7 +26,7 @@ struct WorkoutCell: View {
                         Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
                             .font(.footnote.weight(.medium))
                             .foregroundColor(.secondaryLabel)
-                        Text(workout.name ?? "No name")
+                        Text(workout.name ?? NSLocalizedString("noName", comment: ""))
                             .font(.headline)
                             .lineLimit(1)
                         Text(exercisesString)

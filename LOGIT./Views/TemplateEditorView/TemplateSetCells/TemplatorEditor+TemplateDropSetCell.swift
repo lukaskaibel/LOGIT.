@@ -17,7 +17,7 @@ extension TemplateEditorView {
                                     weight: Binding(get: { templateDropSet.weights?.value(at: index) ?? 0 },
                                                     set: { templateDropSet.weights?.replaceValue(at: index, with: $0) }))
             }
-            Stepper("Drop count",
+            Stepper(NSLocalizedString("dropCount", comment: ""),
                     onIncrement: { templateDropSet.addDrop(); database.refreshObjects() },
                     onDecrement: { templateDropSet.removeLastDrop(); database.refreshObjects() })
         }

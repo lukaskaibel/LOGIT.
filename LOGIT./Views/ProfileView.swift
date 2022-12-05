@@ -31,9 +31,9 @@ struct ProfileView: View {
                 })
             }
             Section {
-                Toggle("Prevent Auto-Lock", isOn: $preventAutoLock)
+                Toggle(NSLocalizedString("preventAutoLock", comment: ""), isOn: $preventAutoLock)
             } footer: {
-                Text("Keeps screen active during workout.")
+                Text(NSLocalizedString("preventAutoLockDescription", comment: ""))
             }
         }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("settings", comment: ""))

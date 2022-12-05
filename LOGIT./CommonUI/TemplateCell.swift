@@ -27,7 +27,7 @@ struct TemplateCell: View {
                     }
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
-                    Text(template.name ?? "No name")
+                    Text(template.name ?? NSLocalizedString("noName", comment: ""))
                         .font(.headline)
                         .lineLimit(1)
                     Text(exercisesString)

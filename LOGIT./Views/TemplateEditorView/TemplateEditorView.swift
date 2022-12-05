@@ -147,9 +147,11 @@ struct TemplateEditorView: View {
         Section {
             if !isEditing {
                 HStack {
-                    Text(setGroup.setType == .superSet ? "SUPERSET" : setGroup.setType == .dropSet ? "DROPSET" : "SET")
+                    Text(setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
+                            setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
+                            NSLocalizedString("set", comment: "").uppercased())
                         .frame(maxWidth: 80)
-                    Text("REPS")
+                    Text(NSLocalizedString("reps", comment: "").uppercased())
                         .frame(maxWidth: .infinity)
                     Text(WeightUnit.used.rawValue.uppercased())
                         .frame(maxWidth: .infinity)

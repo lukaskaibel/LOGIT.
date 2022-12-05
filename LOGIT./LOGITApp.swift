@@ -46,7 +46,7 @@ struct LOGIT: App {
             if setupDone {
                 TabView(selection: $selectedTab) {
                     HomeView()
-                        .tabItem { Label("Home", systemImage: "house.fill") }
+                        .tabItem { Label(NSLocalizedString("home", comment: ""), systemImage: "house.fill") }
                         .tag(TabType.home)
                     NavigationStack {
                         TemplateListView()

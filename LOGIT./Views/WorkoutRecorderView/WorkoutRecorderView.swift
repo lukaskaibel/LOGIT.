@@ -127,7 +127,7 @@ struct WorkoutRecorderView: View {
                     dismiss()
                     goHome()
                 }.font(.body.weight(.semibold))
-                Button("Continue Workout", role: .cancel) {}
+                Button(NSLocalizedString("continueWorkout", comment: ""), role: .cancel) {}
             }
         }.onAppear {
             if let template = template {

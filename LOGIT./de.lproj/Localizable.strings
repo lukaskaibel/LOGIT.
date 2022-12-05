@@ -7,162 +7,217 @@
 */
 
 
-"exercise" = "Übung";
-"exercises" = "Übungen";
-"newExercise" = "Neue Übung";
-"addExercise" = "Übung hinzufügen";
-"selectExercise" = "Übung auswählen";
-"searchExercises" = "In Übungen suchen";
-"defaultExercises" = "Standard Übungen";
-"exerciseName" = "Übungsname";
-"exerciseNameDescription" = "Gib den Namen der Übung ein.";
-"reorderExercises" = "Übungen umsortieren";
+// MARK: - A
 
-"searchWorkouts" = "In Workouts suchen";
-"workouts" = "Workouts";
-"startWorkout" = "Workout starten";
-"recentWorkouts" = "Letzte Workouts";
-"finishWorkout" = "Workout beenden";
-"finishWorkoutConfimation" = "Möchtest du das Workout beenden?";
-"deleteSetsWithoutEntries" = "Alle Sätze ohne Einträge löschen und Workout beenden?";
+"abdominals" = "Bauch";
+"addExercise" = "Übung hinzufügen";
+"addSet" = "Satz hinzufügen";
+"afternoon" = "Nachmittag";
+"all" = "Alle";
+"alreadyExists" = "existiert schon.";
+"arms" = "Arme";
+"ascending" = "Aufsteigend";
+
+// MARK: - B
+
+"back" = "Rücken";
+
+// MARK: - C
+
+"cancel" = "Abbrechen";
+"chest" = "Brust";
+"chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
+"completed" = "Geschafft";
+"continue" = "Weiter";
+"continueWorkout" = "Workout fortführen";
+"create" = "Create";
+"createTemplate" = "Vorlage erstellen";
+
+// MARK: - D
+
+"date" = "Datum";
+"defaultExercises" = "Standard Übungen";
+"defaultExercisesDescription" = "Möchtest du die standard Übungen benutzen?";
+"delete" = "Löschen";
+"deleteExerciseConfirmation" = "Möchtest du die Übung unwiderruflich löschen?";
 "deleteSets" = "Sätze löschen und Workout beenden";
-"noEntriesConfirmation" = "Das Workout hat kein Einträge. Workout verwerfen?";
-"discardWorkout" = "Workout verwerfen";
+"deleteSetsWithoutEntries" = "Alle Sätze ohne Einträge löschen und Workout beenden?";
+"deleteTemplate" = "Vorlage löschen";
+"deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";
 "deleteWorkout" = "Workout löschen";
 "deleteWorkoutDescription" = "Workout unwiderruflich löschen?";
+"descending" = "Absteigend";
+"discardWorkout" = "Workout verwerfen";
+"dismiss" = "Verwerfen";
+"done" = "Fertig";
+"dropCount" = "Anzahl Drops";
+"dropset" = "Dropsatz";
+"duration" = "Dauer";
 
-"showAll" = "Alle anzeigen";
-"sortBy" = "Sortieren nach";
+// MARK: - E
+
+"edit" = "Bearbeiten";
+"edit" = "Bearbeiten";
+"editTemplate" = "Vorlagen bearbeiten";
+"eight" = "Acht";
+"evening" = "Abend";
+"exercise" = "Übung";
+"exerciseName" = "Übungsname";
+"exerciseNameDescription" = "Gib den Namen der Übung ein.";
+"exercises" = "Übungen";
+
+// MARK: - F
+
+"finishSetup" = "Set-Up beenden";
+"finishWorkout" = "Workout beenden";
+"finishWorkoutConfimation" = "Möchtest du das Workout beenden?";
+"five" = "Fünf";
+"four" = "Vier";
+"fromLastWeek" = "zu letzter Woche";
+
+// MARK: - H
+
 "home" = "Home";
+
+// MARK: - I
+
+"inSelectedWeek" = "In Ausgewählter Woche";
+
+// MARK: - L
+
+"lastTenWorkouts" = "Letzte 10 Workouts"
+"lastUsed" = "Zuletzt benutzt";
+"legs" = "Beine";
+"letsGetStarted" = "Los gehts";
+"letsGetStartedDescription" = "Bevor du trainieren kannst müssen wir ein kurzen Set-Up machen.";
+
+// MARK: - M
+
+"maxReps" = "Max Wdh";
+"maxWeight" = "Max Gewicht";
+"monthly" = "Monatlich";
+"morning" = "Morgen";
+"muscleGroup" = "Muskelgruppe";
+"muscleGroups" = "Muskelgruppen";
+"myTemplates" = "Meine Vorlagen";
+
+// MARK: - N
+
 "name" = "Name";
-"workoutTarget" = "Workout Ziel";
+"nameCantBeEmpty" = "Name kann nicht leer sein.";
+"navBack" = "Zurück";
+"never" = "Nie";
+"newestFirst" = "Neueste zuerst";
+"newExercise" = "Neue Übung";
+"newTemplate" = "Vorlage erstellen";
+"newTemplateFromWorkout" = "Neue Vorlage aus Workout";
+"night" = "Nacht";
+"nine" = "Neun";
+"noData" = "Keine Daten";
+"noEntriesConfirmation" = "Das Workout hat kein Einträge. Workout verwerfen?";
+"noExercises" = "Keine Übungen";
+"noHistory" = "Keine Ausführungen";
+"noName" = "Ohne Namen";
+"noon" = "Mittag";
+"normalset" = "Normal";
+"noTemplates" = "Keine Vorlagen";
+"noWorkouts" = "Keine Workouts";
+"noWorkoutsInWeek" = "Keine Workouts in der Woche";
+
+// MARK: - O
+
+"ok" = "Ok";
+"oldestFirst" = "Älteste zuerst";
+"one" = "Eins";
+"overview" = "Überblick";
+
+// MARK: - P
+
+"performed" = "Ausführungen:";
+"personalBest" = "Persönliche Bestleistung";
+"perWeek" = "pro Woche";
+"preventAutoLock" = "Bildschirmsperre verhindern";
+"preventAutoLockDescription" = "Verhindern das Abschalten des Bildschirms während dem Training.";
+"profile" = "Profil";
+
+// MARK: - R
+
+"recentWorkouts" = "Letzte Workouts";
+"remove" = "Entfernen";
+"reorderExercises" = "Übungen umsortieren";
+"repetitions" = "Wiederholungen";
+"reps" = "Wdh.";
+
+// MARK: - S
+
+"save" = "Speichern";
+"searchExercises" = "In Übungen suchen";
+"searchWorkouts" = "In Workouts suchen";
+"sec" = "sek";
+"selectDuration" = "Dauer auswählen";
+"selectExercise" = "Übung auswählen";
+"set" = "Satz";
+"sets" = "Sätze";
+"setTimer" = "Timer starten";
+"settings" = "Einstellungen";
+"seven" = "Sieben";
+"shoulders" = "Schultern";
+"showAll" = "Alle anzeigen";
+"showDetails" = "Details anzeigen";
+"six" = "Sechs";
+"sortBy" = "Sortieren nach";
+"start" = "Start";
+"startEmpty" = "Leeres Workout starten";
+"startSetup" = "Set-Up starten";
+"starttime" = "Startzeit";
+"startWorkout" = "Workout starten";
+"stop" = "Stop";
+"summary" = "Zusammenfassung";
+"superset" = "Supersatz";
+
+// MARK: - T
+
+"target" = "Ziel";
 "targetPerWeek" = "Ziel pro Woche";
 "targetPerWeekDescription" = "Wähle dein Workout Ziel pro Woche aus.";
-"perWeek" = "pro Woche";
-"weeklyAverage" = "Wöchentlicher Durchschnitt";
-"fromLastWeek" = "zu letzter Woche";
-"showDetails" = "Details anzeigen";
-"setTimer" = "Timer starten";
-"never" = "Nie";
-"lastUsed" = "Zuletzt benutzt";
-"unused" = "Unbenutzt";
+"template" = "Vorlage";
+"templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
+"templates" = "Vorlagen";
+"three" = "Drei";
+"time" = "mal";
+"times" = "mal";
+"title" = "Titel";
+"today" = "Heute";
+"toGo" = "übrig";
+"two" = "Zwei";
+
+// MARK: - U
 
 "unit" = "Einheit";
 "unitDescription" = "Wähle eine Einheit. Alle vorherigen Eingaben werden konvertiert.";
-"profile" = "Profil";
-
-"completed" = "Geschafft";
-"toGo" = "übrig";
-"performed" = "Ausführungen:";
-"time" = "mal";
-"times" = "mal";
-
-"sec" = "sek";
-"date" = "Datum";
-"weekly" = "Wöchentlich";
-"monthly" = "Monatlich";
-"yearly" = "Jährlich";
-"today" = "Heute";
-"yesterday" = "Gestern";
-"set" = "Satz";
-"sets" = "Sätze";
-"addSet" = "Satz hinzufügen";
-"title" = "Titel";
-"target" = "Ziel";
-
-"ascending" = "Aufsteigend";
-"descending" = "Absteigend";
-"oldestFirst" = "Älteste zuerst";
-"newestFirst" = "Neueste zuerst";
-"selectDuration" = "Dauer auswählen";
-"alreadyExists" = "existiert schon.";
-"repetitions" = "Wiederholungen";
-"weight" = "Gewicht";
-
-"cancel" = "Abbrechen";
-"dismiss" = "Verwerfen";
-"done" = "Fertig";
-"stop" = "Stop";
-"start" = "Start";
-"edit" = "Bearbeiten";
+"unused" = "Unbenutzt";
 "update" = "Update";
-"save" = "Speichern";
-"navBack" = "Zurück";
-"ok" = "Ok";
-"nameCantBeEmpty" = "Name kann nicht leer sein.";
-"personalBest" = "Persönliche Bestleistung";
-"edit" = "Bearbeiten";
-"delete" = "Löschen";
-"remove" = "Entfernen";
-"deleteExerciseConfirmation" = "Möchtest du die Übung unwiderruflich löschen?";
-"create" = "Create";
-"reps" = "Wdh.";
-
-"duration" = "Dauer";
-
-"myTemplates" = "Meine Vorlagen";
-"template" = "Vorlage";
-"templates" = "Vorlagen";
-"createTemplate" = "Vorlage erstellen";
-"chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
-"startEmpty" = "Leeres Workout starten";
-"templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
-"deleteTemplate" = "Vorlage löschen";
-"deleteTemplateMsg" = "Möchtest du diese Vorlage unwiderruflich löschen?";
-"editTemplate" = "Vorlagen bearbeiten";
-"newTemplate" = "Vorlage erstellen";
-"newTemplateFromWorkout" = "Neue Vorlage aus Workout";
-
-"welcomeTo" = "Willkommen bei";
-"letsGetStarted" = "Los gehts";
-"letsGetStartedDescription" = "Bevor du trainieren kannst müssen wir ein kurzen Set-Up machen.";
-"weightUnit" = "Gewichts Einheit";
-"weightUnitDescription" = "Wähle deine bevorzugte Einheit aus.";
-"weeklyTarget" = "Wöchentliches Ziel";
-"weeklyTargetDescription" = "Wähle aus, wie viele Workouts du pro Woche machen möchtest.";
-"defaultExercisesDescription" = "Möchtest du die standard Übungen benutzen?";
 "useDefaultExercises" = "Standard Übungen benutzen";
-"(recommended)" = "(empfohlen)";
-"startSetup" = "Set-Up starten";
-"finishSetup" = "Set-Up beenden";
-"continue" = "Weiter";
 
-"zero" = "Null";
-"one" = "Eins";
-"two" = "Zwei";
-"three" = "Drei";
-"four" = "Vier";
-"five" = "Fünf";
-"six" = "Sechs";
-"seven" = "Sieben";
-"eight" = "Acht";
-"nine" = "Neun";
-
-"morning" = "Morgen";
-"noon" = "Mittag";
-"afternoon" = "Nachmittag";
-"evening" = "Abend";
-"night" = "Nacht";
-
-"all" = "Alle";
-"muscleGroup" = "Muskelgruppe";
-"muscleGroups" = "Muskelgruppen";
-"chest" = "Brust";
-"back" = "Rücken";
-"arms" = "Arme";
-"shoulders" = "Schultern";
-"abdominals" = "Bauch";
-"legs" = "Beine";
-
-"normalset" = "Normal";
-"dropset" = "Dropsatz";
-"superset" = "Supersatz";
-
-"starttime" = "Startzeit";
-"maxReps" = "Max Wdh";
-"maxWeight" = "Max Gewicht";
-
-"settings" = "Einstellungen";
-"summary" = "Zusammenfassung";
+// MARK: - W
 
 "week" = "Woche";
+"weekly" = "Wöchentlich";
+"weeklyAverage" = "Wöchentlicher Durchschnitt";
+"weeklyTarget" = "Wöchentliches Ziel";
+"weeklyTargetDescription" = "Wähle aus, wie viele Workouts du pro Woche machen möchtest.";
+"weight" = "Gewicht";
+"weightUnit" = "Gewichts Einheit";
+"weightUnitDescription" = "Wähle deine bevorzugte Einheit aus.";
+"welcomeTo" = "Willkommen bei";
+"workouts" = "Workouts";
+"workoutTarget" = "Workout Ziel";
+
+// MARK: - Y
+
+"yearly" = "Jährlich";
+"yesterday" = "Gestern";
+
+// MARK: - Z
+
+"zero" = "Null";

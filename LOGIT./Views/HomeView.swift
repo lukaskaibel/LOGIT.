@@ -158,7 +158,7 @@ struct HomeView: View {
                 .frame(height: 170)
                 .overlay {
                     if workouts.isEmpty {
-                        Text("No Data")
+                        Text(NSLocalizedString("noData", comment: ""))
                             .font(.title3.weight(.medium))
                             .foregroundColor(.placeholder)
                     }

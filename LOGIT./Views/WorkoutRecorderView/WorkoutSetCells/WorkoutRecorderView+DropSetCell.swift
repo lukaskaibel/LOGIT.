@@ -19,7 +19,7 @@ extension WorkoutRecorderView {
                                     repetitionsPlaceholder: repetitionsPlaceholder(for: dropSet).value(at: index),
                                     weightPlaceholder: weightsPlaceholder(for: dropSet).value(at: index))
             }
-            Stepper("Drop count",
+            Stepper(NSLocalizedString("dropCount", comment: ""),
                     onIncrement: { dropSet.addDrop(); database.refreshObjects() },
                     onDecrement: { dropSet.removeLastDrop(); database.refreshObjects() })
                 .accentColor(dropSet.exercise?.muscleGroup?.color)

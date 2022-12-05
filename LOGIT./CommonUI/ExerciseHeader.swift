@@ -26,7 +26,7 @@ struct ExerciseHeader: View {
                     exerciseAction()
                 } label: {
                     HStack(spacing: 3) {
-                        Text(exercise?.name ?? "No Name")
+                        Text(exercise?.name ?? NSLocalizedString("noName", comment: ""))
                         NavigationChevron()
                             .foregroundColor(.secondaryLabel)
                     }

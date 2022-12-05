@@ -48,7 +48,7 @@ struct TemplateListView: View {
                 .listRowInsets(EdgeInsets())
             }
             .emptyPlaceholder(groupedTemplates) {
-                Text("No Templates")
+                Text(NSLocalizedString("noTemplates", comment: ""))
             }
         }
         .listStyle(.insetGrouped)

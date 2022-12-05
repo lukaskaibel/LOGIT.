@@ -29,9 +29,11 @@ struct TemplateSetGroupDetailView: View {
     var body: some View {
         Section {
             HStack(spacing: 0) {
-                Text(templateSetGroup.setType == .superSet ? "SUPERSET" : templateSetGroup.setType == .dropSet ? "DROPSET" : "SET")
+                Text(templateSetGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
+                        templateSetGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
+                        NSLocalizedString("set", comment: "").uppercased())
                     .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
-                Text("REPS")
+                Text(NSLocalizedString("reps", comment: "").uppercased())
                     .frame(maxWidth: .infinity)
                 Text(WeightUnit.used.rawValue.uppercased())
                     .frame(maxWidth: .infinity)

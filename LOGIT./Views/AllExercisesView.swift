@@ -48,7 +48,7 @@ struct AllExercisesView: View {
             }
             .listRowInsets(EdgeInsets())
             .emptyPlaceholder(groupedExercises) {
-                Text("No Exercises")
+                Text(NSLocalizedString("noExercises", comment: ""))
             }
         }
         .listStyle(.insetGrouped)

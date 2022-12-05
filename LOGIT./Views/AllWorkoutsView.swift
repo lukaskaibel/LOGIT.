@@ -50,7 +50,7 @@ struct AllWorkoutsView: View {
                 .listRowInsets(EdgeInsets())
             }
             .emptyPlaceholder(groupedWorkouts) {
-                Text("No Workouts")
+                Text(NSLocalizedString("noWorkouts", comment: ""))
             }
             Spacer(minLength: 50)
                 .listRowSeparator(.hidden)

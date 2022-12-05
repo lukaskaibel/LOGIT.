@@ -42,7 +42,7 @@ struct WorkoutDetailView: View {
                 workoutInfo
                     .padding(CELL_PADDING)
             } header: {
-                Text("Overview")
+                Text(NSLocalizedString("overview", comment: ""))
                     .sectionHeaderStyle()
             }
             .listRowInsets(EdgeInsets())

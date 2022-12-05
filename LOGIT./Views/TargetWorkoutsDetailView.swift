@@ -52,7 +52,7 @@ struct TargetWorkoutsDetailView: View {
                 .frame(height: 200)
                 .overlay {
                     if workouts.isEmpty {
-                        Text("No Data")
+                        Text(NSLocalizedString("noData", comment: ""))
                             .fontWeight(.bold)
                             .foregroundColor(.secondaryLabel)
                     }
@@ -72,15 +72,15 @@ struct TargetWorkoutsDetailView: View {
                 }
                 .padding(CELL_PADDING)
                 .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup)) {
-                    Text("No Workouts in Week")
+                    Text(NSLocalizedString("noWorkoutsInWeek", comment: ""))
                         .frame(maxWidth: .infinity)
                 }
             } header: {
                 HStack(alignment: .lastTextBaseline) {
-                    Text("Workouts")
+                    Text(NSLocalizedString("workouts", comment: ""))
                         .sectionHeaderStyle()
                     Spacer()
-                    Text("In Selected Week")
+                    Text(NSLocalizedString("inSelectedWeek", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .textCase(.none)
                 }

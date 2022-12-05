@@ -127,7 +127,7 @@ struct StartWorkoutView: View {
         }
         .listRowInsets(EdgeInsets())
         .emptyPlaceholder(database.getTemplates()) {
-            Text("No Templates")
+            Text(NSLocalizedString("noTemplates", comment: ""))
                 .frame(maxWidth: .infinity)
                 .frame(height: 200)
         }

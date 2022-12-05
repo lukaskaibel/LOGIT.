@@ -40,7 +40,7 @@ struct ExerciseDetailView: View {
                 exerciseInfo
                     .padding(CELL_PADDING)
             } header: {
-                Text("Personal Best")
+                Text(NSLocalizedString("personalBest", comment: ""))
                     .sectionHeaderStyle()
             }
             .listRowInsets(EdgeInsets())
@@ -56,7 +56,7 @@ struct ExerciseDetailView: View {
             }
             .listRowInsets(EdgeInsets())
             .emptyPlaceholder(setGroupsForExercise) {
-                Text("No History")
+                Text(NSLocalizedString("noHistory", comment: ""))
                     .frame(maxWidth: .infinity)
                     .frame(height: 150)
             }
