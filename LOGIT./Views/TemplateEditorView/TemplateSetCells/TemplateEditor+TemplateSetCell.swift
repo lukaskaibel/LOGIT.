@@ -14,14 +14,17 @@ extension TemplateEditorView {
     internal func templateSetCell(templateSet: TemplateSet) -> some View {
         HStack {
             HStack {
-                ColorMeter(items: [ColorMeter.Item(color: templateSet.setGroup?.exercise?.muscleGroup?.color.translucentBackground ?? .placeholder,
-                                                   amount: 1)],
-                           roundedEdges: templateSetIsFirst(templateSet: templateSet) && templateSetIsLast(templateSet: templateSet) ? .all :
-                                            templateSetIsFirst(templateSet: templateSet) ? .top :
-                                            templateSetIsLast(templateSet: templateSet) ? .bottom :
-                                            .none)
-                    .padding(.top, templateSetIsFirst(templateSet: templateSet) ? CELL_PADDING : 0)
-                    .padding(.bottom, templateSetIsLast(templateSet: templateSet) ? CELL_PADDING : 0)
+                ColorMeter(
+                    items: [templateSet.setGroup?.exercise?.muscleGroup?.color, templateSet.setGroup?.secondaryExercise?.muscleGroup?.color]
+                        .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
+                    splitStyle: .horizontal,
+                    roundedEdges: templateSetIsFirst(templateSet: templateSet) && templateSetIsLast(templateSet: templateSet) ? .all :
+                                  templateSetIsFirst(templateSet: templateSet) ? .top :
+                                  templateSetIsLast(templateSet: templateSet) ? .bottom :
+                                  .none
+                )
+                .padding(.top, templateSetIsFirst(templateSet: templateSet) ? CELL_PADDING : 0)
+                .padding(.bottom, templateSetIsLast(templateSet: templateSet) ? CELL_PADDING : 0)
                 Spacer()
                 Text("\(templateSet.setGroup!.sets.firstIndex(of: templateSet)! + 1)")
                     .padding(.top, templateSetIsFirst(templateSet: templateSet) ? CELL_PADDING : CELL_PADDING / 2)

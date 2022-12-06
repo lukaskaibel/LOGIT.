@@ -26,6 +26,7 @@
 
 "cancel" = "Abbrechen";
 "chest" = "Brust";
+"chooseExercise" = "Übung auswählen";
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
 "completed" = "Geschafft";
 "continue" = "Weiter";
@@ -85,7 +86,7 @@
 
 // MARK: - L
 
-"lastTenWorkouts" = "Letzte 10 Workouts"
+"lastTenWorkouts" = "Letzte 10 Workouts";
 "lastUsed" = "Zuletzt benutzt";
 "legs" = "Beine";
 "letsGetStarted" = "Los gehts";

@@ -25,7 +25,7 @@ struct SetEntryEditor: View {
     
     var body: some View {
         HStack {
-            TextField(repetitionsPlaceholder ?? "0", text: repetitionsString)
+            TextField(repetitionsPlaceholder ?? "–", text: repetitionsString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
                 .font(.system(.body, design: .rounded, weight: .bold))
@@ -38,7 +38,7 @@ struct SetEntryEditor: View {
                     }
                 )
                 .cornerRadius(5)
-            TextField(weightPlaceholder ?? "0", text: weightString)
+            TextField(weightPlaceholder ?? "–", text: weightString)
                 .keyboardType(.numberPad)
                 .foregroundColor(.accentColor)
                 .font(.system(.body, design: .rounded, weight: .bold))

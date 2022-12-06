@@ -109,6 +109,7 @@ struct ExerciseDetailView: View {
                 UnitView(value: String(personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
                     .foregroundColor(exercise.muscleGroup?.color ?? .label)
             }.frame(maxWidth: .infinity, alignment: .leading)
+            Divider()
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxWeight", comment: ""))
                 UnitView(value: String(personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)

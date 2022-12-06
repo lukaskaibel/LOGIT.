@@ -24,10 +24,12 @@ struct SetGroupDetailView: View {
     var body: some View {
         Section {
             HStack(spacing: 0) {
-                Text(setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
-                        setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
-                        NSLocalizedString("set", comment: "").uppercased())
-                    .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
+                Text(
+                    setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
+                    setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
+                    NSLocalizedString("set", comment: "").uppercased()
+                )
+                .frame(maxWidth: SET_GROUP_FIRST_COLUMN_WIDTH)
                 Text(NSLocalizedString("reps", comment: "").uppercased())
                     .frame(maxWidth: .infinity)
                 Text(WeightUnit.used.rawValue.uppercased())
@@ -39,11 +41,13 @@ struct SetGroupDetailView: View {
             .listRowBackground(Color.fill)
             .listRowInsets(EdgeInsets())
             ZStack {
-                ColorMeter(items: [setGroup.exercise?.muscleGroup?.color,
-                                   setGroup.secondaryExercise?.muscleGroup?.color]
-                                .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
-                    .padding( .vertical, CELL_PADDING)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                ColorMeter(
+                    items: [setGroup.exercise?.muscleGroup?.color, setGroup.secondaryExercise?.muscleGroup?.color]
+                                .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
+                    splitStyle: .horizontal
+                )
+                .padding( .vertical, CELL_PADDING)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
                     ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                         HStack(spacing: 0) {
@@ -71,11 +75,13 @@ struct SetGroupDetailView: View {
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
                     .textCase(.none)
-                ExerciseHeader(exercise: setGroup.exercise,
-                               secondaryExercise: setGroup.secondaryExercise,
-                               exerciseAction: { exerciseForDetail = setGroup.exercise; navigateToDetail = true },
-                               secondaryExerciseAction: { exerciseForDetail = setGroup.secondaryExercise },
-                               isSuperSet: setGroup.setType == .superSet)
+                ExerciseHeader(
+                    exercise: setGroup.exercise,
+                    secondaryExercise: setGroup.secondaryExercise,
+                    exerciseAction: { exerciseForDetail = setGroup.exercise; navigateToDetail = true },
+                    secondaryExerciseAction: { exerciseForDetail = setGroup.secondaryExercise },
+                    isSuperSet: setGroup.setType == .superSet
+                )
             }
             .padding(.vertical, 10)
         }

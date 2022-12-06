@@ -65,10 +65,13 @@ struct EditExerciseView: View {
                                 }
                             }
                             .labelsHidden()
-                        } label: {	
-                            Text(muscleGroup.description)
-                                .font(.system(.body, design: .rounded, weight: .bold))
-                                .foregroundColor(muscleGroup.color)
+                        } label: {
+                            HStack {
+                                Text(muscleGroup.description)
+                                    .fontWeight(.medium)
+                                Image(systemName: "chevron.up.chevron.down")
+                            }
+                            .foregroundColor(muscleGroup.color)
                         }
                     }
                 })

@@ -44,9 +44,11 @@ struct TemplateSetGroupDetailView: View {
             .listRowBackground(Color.fill)
             .listRowInsets(EdgeInsets())
             ZStack {
-                ColorMeter(items: [templateSetGroup.exercise?.muscleGroup?.color,
-                                   templateSetGroup.secondaryExercise?.muscleGroup?.color]
-                    .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) })
+                ColorMeter(
+                    items: [templateSetGroup.exercise?.muscleGroup?.color, templateSetGroup.secondaryExercise?.muscleGroup?.color]
+                        .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
+                    splitStyle: .horizontal
+                )
                 .padding( .vertical, CELL_PADDING)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
@@ -75,11 +77,13 @@ struct TemplateSetGroupDetailView: View {
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
                     .textCase(.none)
-                ExerciseHeader(exercise: templateSetGroup.exercise,
-                               secondaryExercise: templateSetGroup.secondaryExercise,
-                               exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },
-                               secondaryExerciseAction: { exerciseForDetail = templateSetGroup.secondaryExercise },
-                               isSuperSet: templateSetGroup.setType == .superSet)
+                ExerciseHeader(
+                    exercise: templateSetGroup.exercise,
+                    secondaryExercise: templateSetGroup.secondaryExercise,
+                    exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },
+                    secondaryExerciseAction: { exerciseForDetail = templateSetGroup.secondaryExercise },
+                    isSuperSet: templateSetGroup.setType == .superSet
+                )
             }
             .padding(.vertical, 10)
         }

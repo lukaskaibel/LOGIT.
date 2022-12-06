@@ -13,14 +13,17 @@ extension WorkoutRecorderView {
     internal func workoutSetCell(workoutSet: WorkoutSet) -> some View {
         HStack {
             HStack {
-                ColorMeter(items: [ColorMeter.Item(color: workoutSet.setGroup?.exercise?.muscleGroup?.color.translucentBackground ?? .placeholder,
-                                                   amount: 1)],
-                           roundedEdges: workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
-                                            workoutSetIsFirst(workoutSet: workoutSet) ? .top :
-                                            workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
-                                            .none)
-                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : 0)
-                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : 0)
+                ColorMeter(
+                    items: [workoutSet.setGroup?.exercise?.muscleGroup?.color, workoutSet.setGroup?.secondaryExercise?.muscleGroup?.color]
+                        .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
+                    splitStyle: .horizontal,
+                    roundedEdges: workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
+                                  workoutSetIsFirst(workoutSet: workoutSet) ? .top :
+                                  workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
+                                  .none
+                )
+                .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : 0)
+                .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : 0)
                 Spacer()
                 Text("\(indexInSetGroup(for: workoutSet)! + 1)")
                     .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)

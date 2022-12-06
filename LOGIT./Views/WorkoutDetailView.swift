@@ -133,6 +133,7 @@ struct WorkoutDetailView: View {
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
                     Text("\(workoutDurationString)")
@@ -147,6 +148,7 @@ struct WorkoutDetailView: View {
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .foregroundColor(.accentColor)
                 }.frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
                     Text("\(workout.numberOfSets)")

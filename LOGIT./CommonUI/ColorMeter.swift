@@ -13,14 +13,20 @@ struct ColorMeter: View {
         case top, bottom, all, none
     }
     
+    enum SplitStyle {
+        case horizontal, vertical
+    }
+    
     // MARK: - Parameters
     
     let items: [Item]
+    let splitStyle: SplitStyle
     let roundedEdges: Edges
     
-    init(items: [Item], roundedEdges: Edges = .all) {
+    init(items: [Item], splitStyle: SplitStyle = .vertical, roundedEdges: Edges = .all) {
         self.items = items
         self.roundedEdges = roundedEdges
+        self.splitStyle = splitStyle
     }
     
     // MARK: - Body
@@ -32,11 +38,21 @@ struct ColorMeter: View {
                     .foregroundColor(.secondaryLabel)
                     .frame(maxHeight: geometry.size.height)
             } else {
-                VStack(spacing: 0) {
-                    ForEach(items) { item in
-                        Rectangle()
-                            .foregroundColor(item.color)
-                            .frame(maxHeight: geometry.size.height * CGFloat(item.amount)/CGFloat(overallAmount()))
+                if splitStyle == .horizontal {
+                    HStack(spacing: 0) {
+                        ForEach(items) { item in
+                            Rectangle()
+                                .foregroundColor(item.color)
+                                .frame(width: geometry.size.width * CGFloat(item.amount)/CGFloat(overallAmount()))
+                        }
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(items) { item in
+                            Rectangle()
+                                .foregroundColor(item.color)
+                                .frame(maxHeight: geometry.size.height * CGFloat(item.amount)/CGFloat(overallAmount()))
+                        }
                     }
                 }
             }
@@ -67,7 +83,7 @@ struct ColorMeter: View {
 struct ColorMeter_Previews: PreviewProvider {
     static var previews: some View {
         ColorMeter(items: [ColorMeter.Item(color: .green, amount: 1),
-                           ColorMeter.Item(color: .blue, amount: 2),
-                           ColorMeter.Item(color: .red, amount: 3)])
+                           ColorMeter.Item(color: .blue, amount: 1),
+                           ColorMeter.Item(color: .red, amount: 0)], splitStyle: .horizontal)
     }
 }

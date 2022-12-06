@@ -46,7 +46,7 @@ struct ExerciseSelectionView: View {
         }.listStyle(.insetGrouped)
             .offset(x: 0, y: -30)
             .edgesIgnoringSafeArea(.bottom)
-            .navigationTitle(selectedExercise == nil  ? NSLocalizedString("addExercise", comment: "") : NSLocalizedString("selectExercise", comment: ""))
+            .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchedText,
                         placement: .navigationBarDrawer(displayMode: .always),

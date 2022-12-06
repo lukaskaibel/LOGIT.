@@ -19,7 +19,7 @@ struct WorkoutRecorderView: View {
     
     // MARK: - AppStorage
     
-    @AppStorage("preventAutoLock") var preventAutoLock: Bool = false
+    @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
     
     // MARK: - Environment
     
@@ -136,7 +136,7 @@ struct WorkoutRecorderView: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .onAppear {
-            if !preventAutoLock {
+            if preventAutoLock {
                 UIApplication.shared.isIdleTimerDisabled = true
             }
         }
@@ -236,6 +236,11 @@ struct WorkoutRecorderView: View {
     private func saveWorkout() {
         if workout.name?.isEmpty ?? true {
             workout.name = Workout.getStandardName(for: workout.date!)
+        }
+        workout.setGroups.forEach {
+            if $0.setType == .superSet && $0.secondaryExercise == nil {
+                database.convertSetGroupToStandardSets($0)
+            }
         }
         workout.endDate = .now
         database.save()
