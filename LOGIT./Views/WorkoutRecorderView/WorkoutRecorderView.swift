@@ -123,7 +123,6 @@ struct WorkoutRecorderView: View {
                     workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
                     if workout.isEmpty { database.delete(workout, saveContext: true) }
                     else { saveWorkout() }
-                    UINotificationFeedbackGenerator().notificationOccurred(.success)
                     dismiss()
                     goHome()
                 }.font(.body.weight(.semibold))
@@ -159,6 +158,7 @@ struct WorkoutRecorderView: View {
                         deleteWorkout()
                         dismiss()
                     } else {
+                        UINotificationFeedbackGenerator().notificationOccurred(.success)
                         isShowingFinishConfirmation = true
                     }
                 }

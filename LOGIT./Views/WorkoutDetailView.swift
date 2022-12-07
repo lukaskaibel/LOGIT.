@@ -121,6 +121,7 @@ struct WorkoutDetailView: View {
     private var workoutHeader: some View {
         Text(workout.name ?? "")
             .font(.largeTitle.weight(.bold))
+            .lineLimit(2)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     

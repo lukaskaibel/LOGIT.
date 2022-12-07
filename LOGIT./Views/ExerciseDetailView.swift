@@ -99,7 +99,8 @@ struct ExerciseDetailView: View {
             Text(exercise.muscleGroup?.description.capitalized ?? "")
                 .font(.system(.title2, design: .rounded, weight: .semibold))
                 .foregroundColor(exercise.muscleGroup?.color ?? .clear)
-        }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var exerciseInfo: some View {

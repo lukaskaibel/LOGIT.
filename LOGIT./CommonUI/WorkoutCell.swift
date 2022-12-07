@@ -16,28 +16,29 @@ struct WorkoutCell: View {
     // MARK: Body
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
-                HStack(alignment: .top) {
-                    ColorMeter(items: workout.muscleGroupOccurances.map {
-                        ColorMeter.Item(color: $0.color, amount: $1)
-                    })
-                    VStack(alignment: .leading) {
-                        Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
-                            .font(.footnote.weight(.medium))
-                            .foregroundColor(.secondaryLabel)
-                        Text(workout.name ?? NSLocalizedString("noName", comment: ""))
-                            .font(.headline)
-                            .lineLimit(1)
-                        Text(exercisesString)
-                            .lineLimit(2, reservesSpace: true)
-                    }
+                VStack(alignment: .leading) {
+                    Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
+                        .font(.footnote.weight(.medium))
+                        .foregroundColor(.secondaryLabel)
+                    Text(workout.name ?? NSLocalizedString("noName", comment: ""))
+                        .font(.title3.weight(.bold))
+                        .lineLimit(1)
                 }
                 Spacer()
                 NavigationChevron()
-                    .foregroundColor(workout.primaryMuscleGroup?.color ?? .separator)
+                    .foregroundColor(workout.primaryMuscleGroup?.color)
+            }
+            HStack {
+                ColorMeter(items: workout.muscleGroupOccurances.map {
+                    ColorMeter.Item(color: $0.color, amount: $1)
+                })
+                Text("\(exercisesString)")
+                    .lineLimit(2, reservesSpace: true)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     // MARK: - Computed UI Properties
@@ -51,11 +52,12 @@ struct WorkoutCell: View {
         }
         return result.isEmpty ? " " : result
     }
-
+    
 }
 
 struct WorkoutCell_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutCell(workout: Database.preview.fetch(Workout.self).first! as! Workout)
+            .environmentObject(Database.preview)
     }
 }

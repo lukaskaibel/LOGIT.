@@ -16,26 +16,24 @@ struct TemplateCell: View {
     // MARK: - Body
     
     var body: some View {
-        HStack {
-            HStack(alignment: .top) {
-                ColorMeter(items: template.muscleGroupOccurances
-                    .map { ColorMeter.Item(color: $0.color, amount: $1) })
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(spacing: 5) {
-                        Image(systemName: "list.bullet.rectangle.portrait")
-                        Text(lastUsedDate)
-                    }
+        VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading) {
+                Text("\(lastUsedDate)  ·  \(template.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(template.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
-                    Text(template.name ?? NSLocalizedString("noName", comment: ""))
-                        .font(.headline)
-                        .lineLimit(1)
-                    Text(exercisesString)
-                        .lineLimit(2, reservesSpace: true)
-                }
+                Text(template.name ?? NSLocalizedString("noName", comment: ""))
+                    .font(.title3.weight(.bold))
+                    .lineLimit(1)
             }
-            Spacer()
+            HStack {
+                ColorMeter(items: template.muscleGroupOccurances.map {
+                    ColorMeter.Item(color: $0.color, amount: $1)
+                })
+                Text("\(exercisesString)")
+                    .lineLimit(2, reservesSpace: true)
+            }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     // MARK: - Computed Properties
