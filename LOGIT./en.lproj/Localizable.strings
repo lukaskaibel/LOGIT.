@@ -15,16 +15,17 @@
 "afternoon" = "Afternoon";
 "all" = "All";
 "alreadyExists" = "already exists.";
-"arms" = "Arms";
 "ascending" = "Ascending";
 
 // MARK: - B
 
 "back" = "Back";
+"biceps" = "Biceps";
 
 // MARK: - C
 
 "cancel" = "Cancel";
+"cardio" = "Cardio";
 "chest" = "Chest";
 "chooseExercise" = "Choose Exercise";
 "chooseTemplateText" = "Choose a template or start an empty workout";
@@ -190,6 +191,7 @@
 "title" = "Title";
 "today" = "Today";
 "toGo" = "to go";
+"triceps" = "Triceps";
 "two" = "Two";
 
 // MARK: - U

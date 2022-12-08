@@ -203,15 +203,11 @@ struct HomeView: View {
     }
     
     func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
-        if lastTenWorkouts.isEmpty {
-            return Array(MuscleGroup.allCases.reduce(into: [MuscleGroup:Int](), { $0[$1, default: 0] = 0 })).sorted { $0.key.rawValue < $1.key.rawValue }
-        } else {
-            return Array(lastTenWorkouts
-                .reduce([:], { current, workout in
-                    current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
-                })
-            ).sorted { $0.key.rawValue < $1.key.rawValue }
-        }
+        Array(lastTenWorkouts
+            .reduce([:], { current, workout in
+                current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
+            })
+        ).sorted { MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases.firstIndex(of: $1.key)! }
     }
     
 }

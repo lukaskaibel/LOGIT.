@@ -36,25 +36,8 @@ struct MuscleGroupDetailView: View {
                          hideLegend: true)
                 .frame(height: 200)
                 .padding()
-                HStack {
-                    Grid(verticalSpacing: 5) {
-                        ForEach(0..<((muscleGroupOccurances.count+1)/3), id:\.self) { index in
-                            GridRow {
-                                HStack {
-                                    titleUnitView(forOccuranceAtIndex: index * 3)
-                                    if muscleGroupOccurances.indices.contains(index * 3 + 1) {
-                                        Spacer()
-                                        titleUnitView(forOccuranceAtIndex: index * 3 + 1)
-                                    }
-                                    if muscleGroupOccurances.indices.contains(index * 3 + 2) {
-                                        Spacer()
-                                        titleUnitView(forOccuranceAtIndex: index * 3 + 2)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                .padding(.vertical, 50)
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
             }
             .listRowBackground(Color.clear)
             .listRowSeparator(.hidden)
@@ -119,7 +102,7 @@ struct MuscleGroupDetailView: View {
                 }
             }
             .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
-        ).sorted { $0.key.rawValue < $1.key.rawValue }
+        ).sorted { MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases.firstIndex(of: $1.key)! }
     }
     
     private var allMuscleGroupZeroDict: [MuscleGroup:Int] {

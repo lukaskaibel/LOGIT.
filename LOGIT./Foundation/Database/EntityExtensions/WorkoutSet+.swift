@@ -25,6 +25,10 @@ extension WorkoutSet {
         setGroup?.workout
     }
     
+    func isTraining(_ muscleGroup: MuscleGroup) -> Bool {
+        setGroup?.exercise?.muscleGroup == muscleGroup || setGroup?.secondaryExercise?.muscleGroup == muscleGroup
+    }
+    
     public var isSuperSet: Bool { (self as? SuperSet) != nil }
     public var isDropSet: Bool { (self as? DropSet) != nil }
     

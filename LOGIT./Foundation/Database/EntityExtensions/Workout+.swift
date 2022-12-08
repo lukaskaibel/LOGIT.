@@ -59,17 +59,10 @@ extension Workout {
     }
     
     var muscleGroupOccurances: [(MuscleGroup, Int)] {
-        Array(sets
-            .reduce(into: [MuscleGroup:Int]()) {
-                if let muscleGroup = $1.setGroup?.exercise?.muscleGroup {
-                    $0[muscleGroup, default: 0] += 1
-                }
-                if let muscleGroup = $1.setGroup?.secondaryExercise?.muscleGroup {
-                    $0[muscleGroup, default: 0] += 1
-                }
+        MuscleGroup.allCases
+            .map { muscleGroup in
+                (muscleGroup, sets.reduce(into: 0, { $0 += $1.isTraining(muscleGroup) ? 1 : 0 }))
             }
-            .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
-        ).sorted { $0.key.rawValue < $1.key.rawValue }
     }
     
     private var allMuscleGroupZeroDict: [MuscleGroup:Int] {

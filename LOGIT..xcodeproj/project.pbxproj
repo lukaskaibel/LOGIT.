@@ -288,8 +288,6 @@
 				79E2E60329132C46003845BC /* Database+SetConvert.swift */,
 				79B70BF428030BF70012EAAD /* EntityExtensions */,
 				8065AA792686668100F53A5A /* LOGIT.xcdatamodeld */,
-				798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */,
-				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -431,6 +429,8 @@
 			isa = PBXGroup;
 			children = (
 				79A4E33227E9EBA20089001F /* Database */,
+				798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */,
+				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
 				801CDC482688BD9D00BB653D /* Extentions */,
 				79DB259F2914382400ADDF24 /* Constants.swift */,
 			);

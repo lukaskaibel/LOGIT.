@@ -15,16 +15,17 @@
 "afternoon" = "Nachmittag";
 "all" = "Alle";
 "alreadyExists" = "existiert schon.";
-"arms" = "Arme";
 "ascending" = "Aufsteigend";
 
 // MARK: - B
 
 "back" = "Rücken";
+"biceps" = "Bizeps";
 
 // MARK: - C
 
 "cancel" = "Abbrechen";
+"cardio" = "Ausdauer";
 "chest" = "Brust";
 "chooseExercise" = "Übung auswählen";
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
@@ -190,6 +191,7 @@
 "title" = "Titel";
 "today" = "Heute";
 "toGo" = "übrig";
+"triceps" = "Trizeps";
 "two" = "Zwei";
 
 // MARK: - U

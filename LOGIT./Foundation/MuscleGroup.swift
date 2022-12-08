@@ -9,8 +9,8 @@ import SwiftUI
 
 enum MuscleGroup: String, Identifiable, CaseIterable {
     
-    case chest, back, arms, shoulders, abdominals, legs
-    
+    case chest, triceps, shoulders, biceps, back, legs, abdominals, cardio
+
     var id: String { self.rawValue }
     
     var description: String {
@@ -20,11 +20,13 @@ enum MuscleGroup: String, Identifiable, CaseIterable {
     var color: Color {
         switch self {
         case .chest: return .green
-        case .back: return .mint
-        case .arms: return .purple
+        case .triceps: return .yellow
         case .shoulders: return .orange
-        case .abdominals: return .indigo
+        case .biceps: return .mint
+        case .back: return .blue
         case .legs: return .pink
+        case .abdominals: return .brown
+        case .cardio: return .gray
         }
     }
     
