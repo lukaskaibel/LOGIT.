@@ -20,7 +20,7 @@ struct LOGIT: App {
     
     // MARK: - State
     
-    @StateObject private var database = Database.shared
+    @StateObject private var database = Database.preview
     @State private var selectedTab: TabType = .home
     
     // MARK: - Init
@@ -35,7 +35,7 @@ struct LOGIT: App {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")
         
         // MARK: - Test Methods
-        // testLanguage()
+        testLanguage()
         // testFirstStart()
     }
     

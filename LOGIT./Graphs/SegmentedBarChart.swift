@@ -35,10 +35,11 @@ struct SegmentedBarChart: View {
                                     .frame(height: 2)
                                     .foregroundColor(line.color)
                                     .overlay {
-                                        Text(NSLocalizedString("target", comment: ""))
+                                        Text(line.title)
                                             .font(.footnote.weight(.medium))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .offset(x: 0, y: 12)
+                                            .shadow(radius: 3)
                                     }
                                 Rectangle()
                                     .foregroundColor(.clear)
