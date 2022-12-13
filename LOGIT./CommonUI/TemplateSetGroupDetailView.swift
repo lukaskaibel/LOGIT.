@@ -82,7 +82,8 @@ struct TemplateSetGroupDetailView: View {
                     secondaryExercise: templateSetGroup.secondaryExercise,
                     exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },
                     secondaryExerciseAction: { exerciseForDetail = templateSetGroup.secondaryExercise },
-                    isSuperSet: templateSetGroup.setType == .superSet
+                    isSuperSet: templateSetGroup.setType == .superSet,
+                    navigationToDetailEnabled: true
                 )
             }
             .padding(.vertical, 10)

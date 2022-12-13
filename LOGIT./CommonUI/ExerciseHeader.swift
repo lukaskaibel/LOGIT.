@@ -16,6 +16,7 @@ struct ExerciseHeader: View {
     let exerciseAction: () -> Void
     let secondaryExerciseAction: (() -> Void)?
     let isSuperSet: Bool
+    let navigationToDetailEnabled: Bool
     
     // MARK: - Body
     
@@ -23,12 +24,16 @@ struct ExerciseHeader: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Button {
-                    exerciseAction()
+                    if navigationToDetailEnabled {
+                        exerciseAction()
+                    }
                 } label: {
                     HStack(spacing: 3) {
                         Text(exercise?.name ?? NSLocalizedString("noName", comment: ""))
-                        NavigationChevron()
-                            .foregroundColor(.secondaryLabel)
+                        if navigationToDetailEnabled {
+                            NavigationChevron()
+                                .foregroundColor(.secondaryLabel)
+                        }
                     }
                 }
             }
@@ -38,12 +43,16 @@ struct ExerciseHeader: View {
                         .font(.body.weight(.medium))
                         .padding(.leading)
                     Button {
-                        secondaryExerciseAction?()
+                        if navigationToDetailEnabled {
+                            secondaryExerciseAction?()
+                        }
                     } label: {
                         HStack(spacing: 3) {
                             Text(secondaryExercise?.name ?? "Select second exercise")
-                            NavigationChevron()
-                                .foregroundColor(secondaryExercise == nil ? .placeholder : .secondaryLabel)
+                            if navigationToDetailEnabled {
+                                NavigationChevron()
+                                    .foregroundColor(secondaryExercise == nil ? .placeholder : .secondaryLabel)
+                            }
                         }
                     }
                     Spacer()

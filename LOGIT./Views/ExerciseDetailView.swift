@@ -51,8 +51,11 @@ struct ExerciseDetailView: View {
                     .sectionHeaderStyle()
             }.listRowInsets(EdgeInsets())
             ForEach(setGroupsForExercise) { setGroup in
-                SetGroupDetailView(setGroup: setGroup,
-                                   supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")")
+                SetGroupDetailView(
+                    setGroup: setGroup,
+                    supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")",
+                    navigationToDetailEnabled: false
+                )
             }
             .listRowInsets(EdgeInsets())
             .emptyPlaceholder(setGroupsForExercise) {
@@ -70,10 +73,10 @@ struct ExerciseDetailView: View {
         .tint(muscleGroupColor)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Menu(content: {
+                Menu {
                     Button(action: { showingEditExercise.toggle() }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
                     Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
-                }) {
+                } label: {
                     Image(systemName: "ellipsis.circle")
                 }
             }

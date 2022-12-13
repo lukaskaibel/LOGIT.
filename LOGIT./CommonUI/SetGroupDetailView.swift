@@ -18,6 +18,15 @@ struct SetGroupDetailView: View {
     
     let setGroup: WorkoutSetGroup
     let supplementaryText: String
+    let navigationToDetailEnabled: Bool
+    
+    // MARK: - Init
+    
+    init(setGroup: WorkoutSetGroup, supplementaryText: String, navigationToDetailEnabled: Bool = true) {
+        self.setGroup = setGroup
+        self.supplementaryText = supplementaryText
+        self.navigationToDetailEnabled = navigationToDetailEnabled
+    }
     
     // MARK: - Body
     
@@ -80,7 +89,8 @@ struct SetGroupDetailView: View {
                     secondaryExercise: setGroup.secondaryExercise,
                     exerciseAction: { exerciseForDetail = setGroup.exercise; navigateToDetail = true },
                     secondaryExerciseAction: { exerciseForDetail = setGroup.secondaryExercise },
-                    isSuperSet: setGroup.setType == .superSet
+                    isSuperSet: setGroup.setType == .superSet,
+                    navigationToDetailEnabled: navigationToDetailEnabled
                 )
             }
             .padding(.vertical, 10)

@@ -197,15 +197,17 @@ struct TemplateEditorView: View {
                     .font(.footnote.weight(.medium))
                     .foregroundColor(.secondaryLabel)
                     .textCase(.none)
-                ExerciseHeader(exercise: setGroup.exercise,
-                               secondaryExercise: setGroup.secondaryExercise,
-                               exerciseAction: {
-                    sheetType = .exerciseSelection(exercise: setGroup.exercise,
-                                                   setExercise: { setGroup.exercise = $0; database.refreshObjects()}) },
-                               secondaryExerciseAction: {
-                    sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
-                                                   setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }) },
-                               isSuperSet: setGroup.setType == .superSet)
+                ExerciseHeader(
+                    exercise: setGroup.exercise,
+                    secondaryExercise: setGroup.secondaryExercise,
+                    exerciseAction: {
+                        sheetType = .exerciseSelection(exercise: setGroup.exercise,
+                                                       setExercise: { setGroup.exercise = $0; database.refreshObjects()}) },
+                    secondaryExerciseAction: {
+                        sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
+                                                       setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }) },
+                    isSuperSet: setGroup.setType == .superSet,
+                    navigationToDetailEnabled: true)
             }
             Spacer()
             if !isEditing {

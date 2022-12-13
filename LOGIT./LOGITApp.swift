@@ -20,7 +20,7 @@ struct LOGIT: App {
     
     // MARK: - State
     
-    @StateObject private var database = Database.preview
+    @StateObject private var database = Database.shared
     @State private var selectedTab: TabType = .home
     
     // MARK: - Init
