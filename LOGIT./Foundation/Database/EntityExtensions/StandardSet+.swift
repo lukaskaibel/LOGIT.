@@ -11,14 +11,6 @@ import Foundation
 extension StandardSet {
     
     // MARK: Overrides from WorkoutSet
-            
-    public override var maxRepetitions: Int {
-        return Int(repetitions)
-    }
-    
-    public override var maxWeight: Int {
-        return Int(weight)
-    }
     
     override public var hasEntry: Bool {
         repetitions > 0 || weight > 0

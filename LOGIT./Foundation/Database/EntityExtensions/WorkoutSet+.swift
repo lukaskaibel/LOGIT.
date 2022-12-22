@@ -47,15 +47,7 @@ extension WorkoutSet {
         }
     }
     
-    // MARK: Subclass Method Interface
-    
-    @objc public var maxRepetitions: Int {
-        fatalError("WorkoutSet+: maxRepetitions must be implemented in subclass of WorkoutSet")
-    }
-    
-    @objc public var maxWeight: Int {
-        fatalError("WorkoutSet+: maxWeight must be implemented in subclass of WorkoutSet")
-    }
+    // MARK: Methods to override for subclass
     
     @objc public var hasEntry: Bool {
         fatalError("WorkoutSet+: hasEntry must be implemented in subclass of WorkoutSet")

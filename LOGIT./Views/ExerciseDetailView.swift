@@ -22,7 +22,6 @@ struct ExerciseDetailView: View {
     
     // MARK: - State
     
-    @State private var sortingKey: Database.WorkoutSetSortingKey = .date
     @State private var selectedTimeSpan: TimeSpan = .threeMonths
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
@@ -141,7 +140,7 @@ struct ExerciseDetailView: View {
                         }
                         ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
                             LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                                      y: .value("Weight", convertWeightForDisplaying(workoutSet.maxWeight)))
+                                     y: .value("Weight", convertWeightForDisplaying(max(.weight, in: workoutSet))))
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
                             .symbol {
@@ -174,7 +173,7 @@ struct ExerciseDetailView: View {
                         }
                         ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
                             LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                                     y: .value("Weight", workoutSet.maxRepetitions))
+                                     y: .value("Weight", max(.repetitions, in: workoutSet)))
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
                             .symbol {
@@ -204,15 +203,32 @@ struct ExerciseDetailView: View {
     
     // MARK: - Computed Properties
     
-    func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
+    private func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
         database.getWorkoutSets(with: exercise)
-            .map { workoutSet in
-                return attribute == .repetitions ? workoutSet.maxRepetitions : convertWeightForDisplaying(workoutSet.maxWeight)
+            .map {
+                attribute == .repetitions ? max(.repetitions, in: $0) : convertWeightForDisplaying(max(.weight, in: $0))
             }
             .max() ?? 0
     }
     
-    var firstPerformedOverOneYearAgo: Bool {
+    private func max(_ attribute: WorkoutSet.Attribute, in workoutSet: WorkoutSet) -> Int {
+        if let standardSet = workoutSet as? StandardSet {
+            return Int(attribute == .repetitions ? standardSet.repetitions : standardSet.weight)
+        }
+        if let dropSet = workoutSet as? DropSet {
+            return Int((attribute == .repetitions ? dropSet.repetitions : dropSet.weights)?.max() ?? 0)
+        }
+        if let superSet = workoutSet as? SuperSet {
+            if superSet.setGroup?.exercise == exercise {
+                return Int(attribute == .repetitions ? superSet.repetitionsFirstExercise : superSet.weightFirstExercise)
+            } else {
+                return Int(attribute == .repetitions ? superSet.repetitionsSecondExercise : superSet.weightSecondExercise)
+            }
+        }
+        return 0
+    }
+    
+    private var firstPerformedOverOneYearAgo: Bool {
         Calendar.current.date(byAdding: .year, value: -1, to: .now)!
         >
         database.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date }).min() ?? .now
@@ -220,8 +236,8 @@ struct ExerciseDetailView: View {
     
     private func setsForExercise(withoutZeroRepetitions: Bool = false, withoutZeroWeights: Bool = false) -> [WorkoutSet] {
         database.getWorkoutSets(with: exercise)
-            .filter { !withoutZeroRepetitions || $0.maxRepetitions > 0 }
-            .filter { !withoutZeroWeights || $0.maxWeight > 0 }
+            .filter { !withoutZeroRepetitions || max(.repetitions, in: $0) > 0 }
+            .filter { !withoutZeroWeights || max(.weight, in: $0) > 0 }
     }
     
 }

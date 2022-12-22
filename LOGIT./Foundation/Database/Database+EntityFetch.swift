@@ -76,23 +76,11 @@ extension Database {
     
     // MARK: - WorkoutSet Fetch
     
-    enum WorkoutSetSortingKey {
-        case date, maxRepetitions, maxWeight
-    }
-    
-    func getWorkoutSets(with exercise: Exercise? = nil,
-                        sortedBy sortingkey: WorkoutSetSortingKey = .date) -> [WorkoutSet] {
+    func getWorkoutSets(with exercise: Exercise? = nil) -> [WorkoutSet] {
         (fetch(WorkoutSet.self,
               sortingKey: "setGroup.workout.date",
               ascending: false) as! [WorkoutSet])
             .filter { exercise == nil || $0.exercise == exercise || ($0 as? SuperSet)?.secondaryExercise == exercise }
-            .sorted {
-                switch sortingkey {
-                case .date: return false
-                case .maxRepetitions: return $0.maxRepetitions > $1.maxRepetitions
-                case .maxWeight: return $0.maxWeight > $1.maxWeight
-                }
-            }
     }
     
     // MARK: - Exercise Fetch

@@ -23,14 +23,6 @@ extension DropSet {
     
     // MARK: Overrides from WorkoutSet
     
-    public override var maxRepetitions: Int {
-        return Int(repetitions?.max() ?? 0)
-    }
-    
-    public override var maxWeight: Int {
-        return Int(weights?.max() ?? 0)
-    }
-    
     public override var hasEntry: Bool {
         (repetitions?.reduce(0, +) ?? 0) > 0 || (weights?.reduce(0, +) ?? 0) > 0
     }
