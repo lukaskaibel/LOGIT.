@@ -35,14 +35,14 @@ struct ColorMeter: View {
         GeometryReader { geometry in
             if items.isEmpty {
                 Rectangle()
-                    .foregroundColor(.secondaryLabel)
+                    .foregroundStyle(Color.secondaryLabel.gradient)
                     .frame(maxHeight: geometry.size.height)
             } else {
                 if splitStyle == .horizontal {
                     HStack(spacing: 0) {
                         ForEach(items) { item in
                             Rectangle()
-                                .foregroundColor(item.color)
+                                .foregroundStyle(item.color.gradient)
                                 .frame(width: geometry.size.width * CGFloat(item.amount)/CGFloat(overallAmount()))
                         }
                     }
@@ -50,7 +50,7 @@ struct ColorMeter: View {
                     VStack(spacing: 0) {
                         ForEach(items) { item in
                             Rectangle()
-                                .foregroundColor(item.color)
+                                .foregroundStyle(item.color.gradient)
                                 .frame(maxHeight: geometry.size.height * CGFloat(item.amount)/CGFloat(overallAmount()))
                         }
                     }

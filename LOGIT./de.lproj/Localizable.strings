@@ -186,6 +186,7 @@
 "templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
 "templates" = "Vorlagen";
 "three" = "Drei";
+"threeMonths" = "3 Monate";
 "time" = "mal";
 "times" = "mal";
 "title" = "Titel";
@@ -218,6 +219,7 @@
 
 // MARK: - Y
 
+"year" = "Jahr";
 "yearly" = "Jährlich";
 "yesterday" = "Gestern";
 

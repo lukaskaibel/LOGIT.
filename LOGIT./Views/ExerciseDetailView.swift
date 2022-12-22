@@ -11,6 +11,10 @@ import Charts
 
 struct ExerciseDetailView: View {
     
+    enum TimeSpan {
+        case threeMonths, year, allTime
+    }
+    
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
@@ -19,7 +23,7 @@ struct ExerciseDetailView: View {
     // MARK: - State
     
     @State private var sortingKey: Database.WorkoutSetSortingKey = .date
-    @State private var selectedCalendarComponent: Calendar.Component = .weekOfYear
+    @State private var selectedTimeSpan: TimeSpan = .threeMonths
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
     
@@ -39,18 +43,13 @@ struct ExerciseDetailView: View {
             Section {
                 exerciseInfo
                     .padding(CELL_PADDING)
+                weightRepetitionsGraph
             } header: {
-                Text(NSLocalizedString("personalBest", comment: ""))
+                Text(NSLocalizedString("overview", comment: ""))
                     .sectionHeaderStyle()
             }
             .listRowInsets(EdgeInsets())
-            Section {
-                weightGraph
-            } header: {
-                Text(NSLocalizedString("weight", comment: ""))
-                    .sectionHeaderStyle()
-            }.listRowInsets(EdgeInsets())
-            ForEach(setGroupsForExercise) { setGroup in
+            ForEach(database.getWorkoutSetGroups(with: exercise)) { setGroup in
                 SetGroupDetailView(
                     setGroup: setGroup,
                     supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")",
@@ -58,7 +57,7 @@ struct ExerciseDetailView: View {
                 )
             }
             .listRowInsets(EdgeInsets())
-            .emptyPlaceholder(setGroupsForExercise) {
+            .emptyPlaceholder(database.getWorkoutSetGroups(with: exercise)) {
                 Text(NSLocalizedString("noHistory", comment: ""))
                     .frame(maxWidth: .infinity)
                     .frame(height: 150)
@@ -70,7 +69,7 @@ struct ExerciseDetailView: View {
         .offset(x: 0, y: -30)
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
-        .tint(muscleGroupColor)
+        .tint(exercise.muscleGroup?.color ?? .accentColor)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
@@ -101,7 +100,7 @@ struct ExerciseDetailView: View {
                 .lineLimit(2)
             Text(exercise.muscleGroup?.description.capitalized ?? "")
                 .font(.system(.title2, design: .rounded, weight: .semibold))
-                .foregroundColor(exercise.muscleGroup?.color ?? .clear)
+                .foregroundStyle((exercise.muscleGroup?.color ?? .clear).gradient)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -111,42 +110,96 @@ struct ExerciseDetailView: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxReps", comment: ""))
                 UnitView(value: String(personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
-                    .foregroundColor(exercise.muscleGroup?.color ?? .label)
+                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
             }.frame(maxWidth: .infinity, alignment: .leading)
             Divider()
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxWeight", comment: ""))
                 UnitView(value: String(personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)
-                    .foregroundColor(exercise.muscleGroup?.color ?? .label)
+                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
             }.frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
-    private var weightGraph: some View {
+    private var weightRepetitionsGraph: some View {
         VStack {
-            Chart {
-                ForEach(personalBests(for: .weight, per: selectedCalendarComponent)) { chartEntry in
-                    LineMark(x: .value("CalendarComponent", chartEntry.xValue),
-                             y: .value("Weight", chartEntry.yValue))
-                    .foregroundStyle(muscleGroupColor)
-                    AreaMark(x: .value("CalendarComponent", chartEntry.xValue),
-                             y: .value("Weight", chartEntry.yValue))
-                    .foregroundStyle(.linearGradient(colors: [muscleGroupColor.opacity(0.5), .clear], startPoint: .top, endPoint: .bottom))
+            TabView {
+                VStack {
+                    Text(NSLocalizedString("weight", comment: ""))
+                        .font(.body.weight(.bold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Chart {
+                        if selectedTimeSpan != .allTime || !firstPerformedOverOneYearAgo {
+                            PointMark(x: .value(
+                                "Day",
+                                Calendar.current.date(byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
+                                                      value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
+                                                      to: .now)!,
+                                unit: .day
+                            ), y: .value("Weight", 0))
+                            .foregroundStyle(.clear)
+                        }
+                        ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
+                            LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
+                                      y: .value("Weight", convertWeightForDisplaying(workoutSet.maxWeight)))
+                            .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
+                            .interpolationMethod(.catmullRom)
+                            .symbol {
+                                Circle()
+                                    .fill((exercise.muscleGroup?.color ?? .accentColor).gradient)
+                                    .frame(width: 10)
+                            }
+                        }
+                        .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
+                        PointMark(x: .value("Day", Date.now),
+                                  y: .value("Weight", 0))
+                        .foregroundStyle(.clear)
+                    }
+                    .chartYScale(domain: 0...(personalBest(for: .weight) + 20))
                 }
-            }.frame(height: 180)
-            Picker("Calendar Component", selection: $selectedCalendarComponent) {
-                Text(NSLocalizedString("weekly", comment: "")).tag(Calendar.Component.weekOfYear)
-                Text(NSLocalizedString("monthly", comment: "")).tag(Calendar.Component.month)
-                Text(NSLocalizedString("yearly", comment: "")).tag(Calendar.Component.year)
+                VStack {
+                    Text(NSLocalizedString("repetitions", comment: ""))
+                        .font(.body.weight(.bold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Chart {
+                        if selectedTimeSpan != .allTime || !firstPerformedOverOneYearAgo {
+                            PointMark(x: .value(
+                                "Day",
+                                Calendar.current.date(byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
+                                                      value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
+                                                      to: .now)!,
+                                unit: .day
+                            ), y: .value("Weight", 0))
+                            .foregroundStyle(.clear)
+                        }
+                        ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
+                            LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
+                                     y: .value("Weight", workoutSet.maxRepetitions))
+                            .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
+                            .interpolationMethod(.catmullRom)
+                            .symbol {
+                                Circle()
+                                    .fill((exercise.muscleGroup?.color ?? .accentColor).gradient)
+                                    .frame(width: 10)
+                            }
+                        }
+                        .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
+                        PointMark(x: .value("Day", Date.now),
+                                  y: .value("Weight", 0))
+                        .foregroundStyle(.clear)
+                    }
+                    .chartYScale(domain: 0...(personalBest(for: .repetitions) + 20))
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: 180)
+            Picker("Calendar Component", selection: $selectedTimeSpan) {
+                Text(NSLocalizedString("threeMonths", comment: "")).tag(TimeSpan.threeMonths)
+                Text(NSLocalizedString("year", comment: "")).tag(TimeSpan.year)
+                Text(NSLocalizedString("all", comment: "")).tag(TimeSpan.allTime)
             }.pickerStyle(.segmented)
                 .padding(.top)
         }.padding(CELL_PADDING)
-    }
-    
-    private var dividerCircle: some View {
-        Circle()
-            .foregroundColor(.separator)
-            .frame(width: 4, height: 4)
     }
     
     // MARK: - Computed Properties
@@ -159,59 +212,16 @@ struct ExerciseDetailView: View {
             .max() ?? 0
     }
     
-    struct ChartEntry: Identifiable {
-        let id = UUID()
-        let xValue: String
-        let yValue: Int
+    var firstPerformedOverOneYearAgo: Bool {
+        Calendar.current.date(byAdding: .year, value: -1, to: .now)!
+        >
+        database.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date }).min() ?? .now
     }
     
-    func personalBests(for attribute: WorkoutSet.Attribute, per calendarComponent: Calendar.Component) -> [ChartEntry] {
-        let numberOfValues = calendarComponent == .month ? 12 : 5
-        var result = [(String, Int)](repeating: ("", 0), count: numberOfValues)
-        for i in 0..<numberOfValues {
-            guard let iteratedDay = Calendar.current.date(byAdding: calendarComponent,
-                                                          value: -i,
-                                                          to: Date()) else { continue }
-            result[i].0 = getFirstDayString(in: calendarComponent, for: iteratedDay)
-            for workoutSet in exercise.sets {
-                guard let setDate = workoutSet.setGroup?.workout?.date,
-                        Calendar.current.isDate(setDate,
-                                                equalTo: iteratedDay,
-                                                toGranularity: calendarComponent) else { continue }
-                switch attribute {
-                case .repetitions: result[i].1 = max(result[i].1, Int(workoutSet.maxRepetitions))
-                case .weight: result[i].1 = max(result[i].1, convertWeightForDisplaying(workoutSet.maxWeight))
-                }
-            }
-        }
-        return result.reversed().map { ChartEntry(xValue: $0.0, yValue: $0.1) }
-    }
-    
-    private func getFirstDayString(in component: Calendar.Component, for date: Date) -> String {
-        let firstDayOfWeek = Calendar.current.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: date).date!
-        let formatter = DateFormatter()
-        formatter.locale = Locale.current
-        formatter.dateFormat = component == .weekOfYear ? "dd.MM." : component == .month ? "MMM" : "yyyy"
-        return formatter.string(from: firstDayOfWeek)
-    }
-    
-    private var setGroupsForExercise: [WorkoutSetGroup] {
-        database.getWorkoutSetGroups(with: exercise)
-    }
-    
-    private func dateString(for workoutSet: WorkoutSet) -> String {
-        if let date = workoutSet.setGroup?.workout?.date {
-            let formatter = DateFormatter()
-            formatter.locale = Locale.current
-            formatter.dateStyle = .short
-            return formatter.string(from: date)
-        } else {
-            return ""
-        }
-    }
-    
-    private var muscleGroupColor: Color {
-        exercise.muscleGroup?.color ?? .accentColor
+    private func setsForExercise(withoutZeroRepetitions: Bool = false, withoutZeroWeights: Bool = false) -> [WorkoutSet] {
+        database.getWorkoutSets(with: exercise)
+            .filter { !withoutZeroRepetitions || $0.maxRepetitions > 0 }
+            .filter { !withoutZeroWeights || $0.maxWeight > 0 }
     }
     
 }

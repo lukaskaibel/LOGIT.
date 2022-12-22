@@ -70,6 +70,10 @@ extension Database {
             database.newStandardSet(repetitions: 12, weight: 50, setGroup: inclinedBenchpressGroup)
             database.newStandardSet(repetitions: 12, weight: 50, setGroup: inclinedBenchpressGroup)
             database.newStandardSet(repetitions: 12, weight: 50, setGroup: inclinedBenchpressGroup)
+            let dipsGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false, exercise: dips, workout: pushday)
+            database.newStandardSet(repetitions: 8, weight: 0, setGroup: dipsGroup)
+            database.newStandardSet(repetitions: 8, weight: 0, setGroup: dipsGroup)
+            database.newStandardSet(repetitions: 6, weight: 0, setGroup: dipsGroup)
             let tricepsShoulderGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false, exercise: tricepsExtensions, workout: pushday)
             tricepsShoulderGroup.secondaryExercise = lateralRaises
             database.newSuperSet(repetitionsFirstExercise: 12,

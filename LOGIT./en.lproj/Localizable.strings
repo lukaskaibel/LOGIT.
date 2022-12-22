@@ -186,6 +186,7 @@
 "templateExplanation" = "Use Templates to plan and reuse workouts. You can select a Template when starting a workout.";
 "templates" = "Templates";
 "three" = "Three";
+"threeMonths" = "3 Months";
 "time" = "time";
 "times" = "times";
 "title" = "Title";
@@ -218,6 +219,7 @@
 
 // MARK: - Y
 
+"year" = "Year";
 "yearly" = "Yearly";
 "yesterday" = "Yesterday";
 
