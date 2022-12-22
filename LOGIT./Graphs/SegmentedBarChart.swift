@@ -86,7 +86,8 @@ struct SegmentedBarChart: View {
             }.frame(width: 25)
                 .cornerRadius(5)
                 .frame(maxWidth: .infinity)
-        }.foregroundColor(item.barColor)
+        }
+        .foregroundStyle(item.barColor.gradient)
     }
     
     var maxYValue: Int {

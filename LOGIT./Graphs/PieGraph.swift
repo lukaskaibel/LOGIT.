@@ -53,12 +53,12 @@ struct PieGraph: View {
                         .trim(from: trimFrom(for: item), to: trimTo(for: item))
                         .stroke(lineWidth: circleLineWidth)
                         .rotation(Angle(degrees: -90))
-                        .foregroundColor(item.color)
+                        .foregroundStyle(item.color.gradient)
                 }
             }.background {
                 Circle()
                     .stroke(lineWidth: circleLineWidth)
-                    .foregroundColor(.placeholder)
+                    .foregroundStyle(Color.placeholder.gradient)
             }
             .frame(minHeight: 100, alignment: .trailing)
                 .padding(configuration == .small ? 5 : 15)
@@ -70,7 +70,7 @@ struct PieGraph: View {
         VStack(alignment: .leading) {
             Text(item.title)
             UnitView(value: "\(percentage(for: item))", unit: "%  (\(item.amount))")
-                .foregroundColor(item.amount > 0 ? item.color : .placeholder)
+                .foregroundStyle((item.amount > 0 ? item.color : .placeholder).gradient)
         }.frame(minWidth: 80, alignment: .leading)
     }
     

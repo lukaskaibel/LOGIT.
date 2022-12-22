@@ -132,14 +132,14 @@ struct WorkoutDetailView: View {
                     Text(NSLocalizedString("starttime", comment: ""))
                     Text("\(workout.date?.timeString ?? "")")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
                     Text("\(workoutDurationString)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack {
@@ -147,14 +147,14 @@ struct WorkoutDetailView: View {
                     Text(NSLocalizedString("exercises", comment: ""))
                     Text("\(workout.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
                     Text("\(workout.numberOfSets)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
         }

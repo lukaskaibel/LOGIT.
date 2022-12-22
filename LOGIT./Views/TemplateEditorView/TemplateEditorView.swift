@@ -176,7 +176,7 @@ struct TemplateEditorView: View {
                     Label(NSLocalizedString("addSet", comment: ""),
                           systemImage: "plus.circle.fill")
                         .foregroundColor(setGroup.exercise?.muscleGroup?.color)
-                        .font(.body.weight(.bold))
+                        .font(.system(.body, design: .rounded, weight: .bold))
                 }
                 .padding(15)
                 .frame(maxWidth: .infinity)

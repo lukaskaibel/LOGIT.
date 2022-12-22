@@ -38,7 +38,7 @@ struct SectionHeaderModifier: ViewModifier {
 struct ListButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.body.weight(.bold))
+            .font(.system(.body, design: .rounded, weight: .bold))
             .foregroundColor(.accentColor)
             .padding(10)
             .listRowBackground(Color.accentColor.secondaryTranslucentBackground)

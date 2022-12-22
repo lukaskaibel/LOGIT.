@@ -135,7 +135,7 @@ struct HomeView: View {
                         Text(NSLocalizedString("target", comment: ""))
                     }
                     UnitView(value: "\(targetPerWeek)", unit: "/"+NSLocalizedString("week", comment: ""))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
@@ -145,7 +145,7 @@ struct HomeView: View {
                     }
                     Text("\(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundColor(.accentColor)
+                        .foregroundStyle(Color.accentColor.gradient)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 NavigationChevron()
                     .foregroundColor(.secondaryLabel)

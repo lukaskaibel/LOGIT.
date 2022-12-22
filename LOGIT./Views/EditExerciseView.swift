@@ -68,7 +68,7 @@ struct EditExerciseView: View {
                         } label: {
                             HStack {
                                 Text(muscleGroup.description)
-                                    .fontWeight(.medium)
+                                    .font(.system(.body, design: .rounded, weight: .semibold))
                                 Image(systemName: "chevron.up.chevron.down")
                             }
                             .foregroundColor(muscleGroup.color)
