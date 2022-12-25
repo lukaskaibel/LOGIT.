@@ -24,11 +24,13 @@ struct EditExerciseView: View {
     // MARK: - Variables
     
     private let exerciseToEdit: Exercise?
+    private let onEditFinished: ((_ exercise: Exercise) -> Void)?
     
     // MARK: - Init
     
-    init(exerciseToEdit: Exercise? = nil) {
+    init(exerciseToEdit: Exercise? = nil, onEditFinished: ((_ exercise: Exercise) -> Void)? = nil) {
         self.exerciseToEdit = exerciseToEdit
+        self.onEditFinished = onEditFinished
         _exerciseName = State(initialValue: exerciseToEdit?.name ?? "")
         _muscleGroup = State(initialValue: exerciseToEdit?.muscleGroup ?? .chest)
     }
@@ -92,7 +94,6 @@ struct EditExerciseView: View {
                                 showingExerciseExistsAlert = true
                             } else {
                                 saveExercise()
-                                dismiss()
                             }
                         }.font(.body.weight(.semibold))
                     }
@@ -113,14 +114,18 @@ struct EditExerciseView: View {
     // MARK: - Computed Properties
     
     private func saveExercise() {
+        let exercise: Exercise
         if let exerciseToEdit = exerciseToEdit {
             exerciseToEdit.name = exerciseName.trimmingCharacters(in: .whitespacesAndNewlines)
             exerciseToEdit.muscleGroup = muscleGroup
+            exercise = exerciseToEdit
         } else {
-            database.newExercise(name: exerciseName.trimmingCharacters(in: .whitespacesAndNewlines),
-                                 muscleGroup: muscleGroup)
+            exercise = database.newExercise(name: exerciseName.trimmingCharacters(in: .whitespacesAndNewlines),
+                                            muscleGroup: muscleGroup)
         }
         database.save()
+        dismiss()
+        onEditFinished?(exercise)
     }
     
 }

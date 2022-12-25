@@ -74,10 +74,6 @@ struct HomeView: View {
                             }.opacity(0)
                         }
                         .padding(CELL_PADDING)
-                    }.onDelete { indexSet in
-                        for index in indexSet {
-                            database.delete(recentWorkouts.value(at: index), saveContext: true)
-                        }
                     }
                     .emptyPlaceholder(recentWorkouts) {
                         Text("No Workouts")
@@ -102,6 +98,7 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
             }
             .listStyle(.insetGrouped)
+            .scrollIndicators(.hidden)
             .navigationTitle("LOGIT.")
             .navigationDestination(isPresented: $navigateToTarget) {
                 TargetWorkoutsDetailView()

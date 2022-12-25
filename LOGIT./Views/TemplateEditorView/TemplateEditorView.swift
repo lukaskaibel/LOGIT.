@@ -76,6 +76,7 @@ struct TemplateEditorView: View {
                     .listRowBackground(Color.clear)
             }
             .listStyle(.insetGrouped)
+            .scrollIndicators(.hidden)
             .offset(x: 0, y: -30)
             .edgesIgnoringSafeArea(.bottom)
             .interactiveDismissDisabled()

@@ -62,7 +62,7 @@ struct ExerciseSelectionView: View {
             }
             .sheet(item: $sheetType) { type in
                 switch type {
-                case .addExercise: EditExerciseView()
+                case .addExercise: EditExerciseView(onEditFinished: { setExercise($0); dismiss() })
                 case let .exerciseDetail(exercise):
                     NavigationStack {
                         ExerciseDetailView(exercise: exercise)

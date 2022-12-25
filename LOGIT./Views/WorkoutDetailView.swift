@@ -40,16 +40,9 @@ struct WorkoutDetailView: View {
                 .listRowBackground(Color.clear)
             Section {
                 workoutInfo
-                    .padding(CELL_PADDING)
-            } header: {
-                Text(NSLocalizedString("overview", comment: ""))
-                    .sectionHeaderStyle()
-            }
-            .listRowInsets(EdgeInsets())
-            Section {
                 setsPerMuscleGroup
             } header: {
-                Text(NSLocalizedString("muscleGroups", comment: ""))
+                Text(NSLocalizedString("overview", comment: ""))
                     .sectionHeaderStyle()
             }
             .listRowInsets(EdgeInsets())
@@ -158,14 +151,21 @@ struct WorkoutDetailView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .padding(CELL_PADDING)
     }
     
     private var setsPerMuscleGroup: some View {
-        PieGraph(items: workout.muscleGroupOccurances
-            .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
-                                 amount: $0.1,
-                                 color: $0.0.color) }
-        ).padding(CELL_PADDING)
+        VStack {
+            Text(NSLocalizedString("muscleGroups", comment: ""))
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            PieGraph(items: workout.muscleGroupOccurances
+                .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
+                                     amount: $0.1,
+                                     color: $0.0.color) }
+            )
+        }
+        .padding(CELL_PADDING)
     }
     
     private var templateButton: some View {

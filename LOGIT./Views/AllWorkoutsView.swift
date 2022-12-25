@@ -37,11 +37,6 @@ struct AllWorkoutsView: View {
                             }.opacity(0).buttonStyle(PlainButtonStyle())
                         }
                         .padding(CELL_PADDING)
-                    }.onDelete { indexSet in
-                        for i in indexSet {
-                            guard let workout = groupedWorkouts.value(at: index)?.value(at: i) else { return }
-                            database.delete(workout, saveContext: true)
-                        }
                     }
                 } header: {
                     Text(header(for: index))

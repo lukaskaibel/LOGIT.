@@ -72,6 +72,7 @@ struct WorkoutRecorderView: View {
                         }
                     }
                 }
+                .scrollIndicators(.hidden)
             }
             .toolbar(.hidden, for: .navigationBar)
             .environment(\.editMode, $editMode)
