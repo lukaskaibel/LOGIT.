@@ -20,7 +20,11 @@ struct LOGIT: App {
     
     // MARK: - State
     
+    #if targetEnvironment(simulator)
+    @StateObject private var database = Database.preview
+    #else
     @StateObject private var database = Database.shared
+    #endif
     @State private var selectedTab: TabType = .home
     
     // MARK: - Init
@@ -97,6 +101,9 @@ struct LOGIT: App {
                 .environmentObject(database)
                 .environment(\.goHome, { selectedTab = .home })
                 .preferredColorScheme(.dark)
+                #if targetEnvironment(simulator)
+                .statusBarHidden(true)
+                #endif
             } else {
                 FirstStartView()
                     .environmentObject(database)

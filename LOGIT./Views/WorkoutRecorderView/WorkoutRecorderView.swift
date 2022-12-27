@@ -146,6 +146,9 @@ struct WorkoutRecorderView: View {
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
         }
+        #if targetEnvironment(simulator)
+        .statusBarHidden(true)
+        #endif
     }
     
     private var header: some View {
