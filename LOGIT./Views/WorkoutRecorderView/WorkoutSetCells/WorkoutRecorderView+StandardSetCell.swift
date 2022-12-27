@@ -9,14 +9,20 @@ import SwiftUI
 
 extension WorkoutRecorderView {
     
-    internal func StandardSetCell(for standardSet: StandardSet) -> some View {
+    internal func standardSetCell(for standardSet: StandardSet) -> some View {
         return HStack {
-            SetEntryEditor(repetitions: Binding(get: {standardSet.repetitions},
-                                                     set: {standardSet.repetitions = $0}),
-                                weight: Binding(get: {standardSet.weight},
-                                                set: {standardSet.weight = $0}),
-                                repetitionsPlaceholder: repetitionsPlaceholder(for: standardSet),
-                                weightPlaceholder: weightPlaceholder(for: standardSet))
+            SetEntryEditor(
+                repetitions: Binding(
+                    get: {standardSet.repetitions},
+                    set: {standardSet.repetitions = $0}
+                ),
+                weight: Binding(
+                    get: {standardSet.weight},
+                    set: {standardSet.weight = $0}
+                ),
+                repetitionsPlaceholder: repetitionsPlaceholder(for: standardSet),
+                weightPlaceholder: weightPlaceholder(for: standardSet)
+            )
         }
     }
     

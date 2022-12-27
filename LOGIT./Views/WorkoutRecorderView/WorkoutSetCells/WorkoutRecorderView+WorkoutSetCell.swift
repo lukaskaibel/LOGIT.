@@ -14,13 +14,16 @@ extension WorkoutRecorderView {
         HStack {
             HStack {
                 ColorMeter(
-                    items: [workoutSet.setGroup?.exercise?.muscleGroup?.color, workoutSet.setGroup?.secondaryExercise?.muscleGroup?.color]
-                        .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
+                    items:
+                        [workoutSet.setGroup?.exercise?.muscleGroup?.color,
+                         workoutSet.setGroup?.secondaryExercise?.muscleGroup?.color]
+                            .compactMap({ $0 }).map { ColorMeter.Item(color: $0, amount: 1) },
                     splitStyle: .horizontal,
-                    roundedEdges: workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
-                                  workoutSetIsFirst(workoutSet: workoutSet) ? .top :
-                                  workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
-                                  .none
+                    roundedEdges:
+                        workoutSetIsFirst(workoutSet: workoutSet) && workoutSetIsLast(workoutSet: workoutSet) ? .all :
+                        workoutSetIsFirst(workoutSet: workoutSet) ? .top :
+                        workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
+                        .none
                 )
                 .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : 0)
                 .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : 0)
@@ -32,17 +35,17 @@ extension WorkoutRecorderView {
             }
             .frame(maxWidth: 80)
             if let standardSet = workoutSet as? StandardSet {
-                StandardSetCell(for: standardSet)
+                standardSetCell(for: standardSet)
                     .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .frame(maxWidth: .infinity)
             } else if let dropSet = workoutSet as? DropSet {
-                DropSetCell(for: dropSet)
+                dropSetCell(for: dropSet)
                     .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .frame(maxWidth: .infinity)
             } else if let superSet = workoutSet as? SuperSet {
-                SuperSetCell(for: superSet)
+                superSetCell(for: superSet)
                     .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
                     .frame(maxWidth: .infinity)

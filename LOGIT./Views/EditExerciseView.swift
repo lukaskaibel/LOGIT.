@@ -20,6 +20,7 @@ struct EditExerciseView: View {
     @State private var muscleGroup: MuscleGroup
     @State private var showingExerciseExistsAlert: Bool = false
     @State private var showingExerciseNameEmptyAlert: Bool = false
+    @FocusState private var nameFieldIsFocused: Bool
     
     // MARK: - Variables
     
@@ -46,6 +47,7 @@ struct EditExerciseView: View {
                                                            amount: 1)])
                         TextField(NSLocalizedString("exerciseName", comment: ""),
                                   text: $exerciseName)
+                        .focused($nameFieldIsFocused)
                             .font(.body.weight(.semibold))
                             .padding(.vertical, 5)
                     }
@@ -108,6 +110,9 @@ struct EditExerciseView: View {
                         showingExerciseNameEmptyAlert = false
                     }
                 }
+        }
+        .onAppear {
+            nameFieldIsFocused = true
         }
     }
     

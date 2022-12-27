@@ -12,10 +12,12 @@ extension WorkoutRecorderView {
     internal func setGroupCell(for setGroup: WorkoutSetGroup) -> some View {
         Section {
             HStack {
-                Text(setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
-                        setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
-                        NSLocalizedString("set", comment: "").uppercased())
-                    .frame(maxWidth: 80)
+                Text(
+                    setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
+                    setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
+                    NSLocalizedString("set", comment: "").uppercased()
+                )
+                .frame(maxWidth: 80)
                 Text(NSLocalizedString("reps", comment: "").uppercased())
                     .frame(maxWidth: .infinity)
                 Text(WeightUnit.used.rawValue.uppercased())
@@ -34,11 +36,10 @@ extension WorkoutRecorderView {
                                 UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                                 if workoutSet.hasEntry {
                                     workoutSet.clearEntries()
-                                    database.refreshObjects()
                                 } else {
                                     workoutSet.match(templateSet)
-                                    database.refreshObjects()
                                 }
+                                database.refreshObjects()
                             } label: {
                                 Image(systemName: "checkmark")
                             }
@@ -74,25 +75,34 @@ extension WorkoutRecorderView {
     internal func exerciseHeader(setGroup: WorkoutSetGroup) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 0) {
-                Text("\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(.secondaryLabel)
-                    .textCase(.none)
+                Text(
+                    "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))"
+                )
+                .font(.footnote.weight(.medium))
+                .foregroundColor(.secondaryLabel)
+                .textCase(.none)
                 ExerciseHeader(
                     exercise: setGroup.exercise,
                     secondaryExercise: setGroup.secondaryExercise,
                     exerciseAction: {
-                        sheetType = .exerciseSelection(exercise: setGroup.exercise,
-                                                       setExercise: { setGroup.exercise = $0; database.refreshObjects()}) },
+                        sheetType = .exerciseSelection(
+                            exercise: setGroup.exercise,
+                            setExercise: { setGroup.exercise = $0; database.refreshObjects()}
+                        )
+                    },
                     secondaryExerciseAction: {
-                        sheetType = .exerciseSelection(exercise: setGroup.secondaryExercise,
-                                                       setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }) },
+                        sheetType = .exerciseSelection(
+                            exercise: setGroup.secondaryExercise,
+                            setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }
+                        )
+                    },
                     isSuperSet: setGroup.setType == .superSet,
-                    navigationToDetailEnabled: true)
+                    navigationToDetailEnabled: true
+                )
             }
             Spacer()
             if !isEditing {
-                Menu(content: {
+                Menu {
                     Section {
                         Button { database.convertSetGroupToStandardSets(setGroup) } label: {
                             Label(NSLocalizedString("normalset", comment: ""),
@@ -130,7 +140,7 @@ extension WorkoutRecorderView {
                             Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                         }
                     }
-                }) {
+                } label: {
                     Image(systemName: "ellipsis")
                         .padding([.vertical, .trailing])
                 }

@@ -31,16 +31,11 @@ struct WorkoutRecorderView: View {
     // MARK: - State
     
     @StateObject var workout: Workout
-    
     @State internal var isEditing: Bool = false
     @State private var editMode: EditMode = .inactive
-    
     @State internal var sheetType: SheetType?
-    
     @State internal var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
-    
     @State private var showingTimerView = false
-    
     @State private var isShowingFinishConfirmation = false
     
     // MARK: - Variables
@@ -68,7 +63,7 @@ struct WorkoutRecorderView: View {
                     .listRowInsets(EdgeInsets())
                     Section {
                         if !isEditing {
-                            AddExerciseButton
+                            addExerciseButton
                         }
                     }
                 }
@@ -113,23 +108,31 @@ struct WorkoutRecorderView: View {
                     }
                 }
             }
-            .confirmationDialog(Text(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
-                                        !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                                        NSLocalizedString("deleteSetsWithoutEntries", comment: "")),
-                                isPresented: $isShowingFinishConfirmation,
-                                titleVisibility: .visible) {
-                Button(workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
-                        !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                        NSLocalizedString("deleteSets", comment: "")) {
+            .confirmationDialog(
+                Text(
+                    workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
+                    !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                    NSLocalizedString("deleteSetsWithoutEntries", comment: "")
+                ),
+                isPresented: $isShowingFinishConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button(
+                    workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
+                    !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
+                    NSLocalizedString("deleteSets", comment: "")
+                ) {
                     workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
                     if workout.isEmpty { database.delete(workout, saveContext: true) }
                     else { saveWorkout() }
                     dismiss()
                     goHome()
-                }.font(.body.weight(.semibold))
+                }
+                .font(.body.weight(.semibold))
                 Button(NSLocalizedString("continueWorkout", comment: ""), role: .cancel) {}
             }
-        }.onAppear {
+        }
+        .onAppear {
             if let template = template {
                 updateWorkout(with: template)
             }
@@ -171,7 +174,7 @@ struct WorkoutRecorderView: View {
         .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
     
-    private var AddExerciseButton: some View {
+    private var addExerciseButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             sheetType = .exerciseSelection(exercise: nil, setExercise: { exercise in

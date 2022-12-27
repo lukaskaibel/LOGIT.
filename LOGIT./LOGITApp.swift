@@ -24,7 +24,7 @@ struct LOGIT: App {
     @State private var selectedTab: TabType = .home
     
     // MARK: - Init
-        
+    
     init() {
         UserDefaults.standard.register(defaults: [
             "weightUnit" : WeightUnit.kg.rawValue,
@@ -40,33 +40,58 @@ struct LOGIT: App {
     }
     
     // MARK: - Body
-
+    
     var body: some Scene {
         WindowGroup {
             if setupDone {
                 TabView(selection: $selectedTab) {
                     HomeView()
-                        .tabItem { Label(NSLocalizedString("home", comment: ""), systemImage: "house.fill") }
+                        .tabItem {
+                            Label(
+                                NSLocalizedString("home", comment: ""),
+                                systemImage: "house.fill"
+                            )
+                        }
                         .tag(TabType.home)
                     NavigationStack {
                         TemplateListView()
                     }
-                    .tabItem { Label(NSLocalizedString("templates", comment: ""), systemImage: "list.bullet.rectangle.portrait") }
+                    .tabItem {
+                        Label(
+                            NSLocalizedString("templates", comment: ""),
+                            systemImage: "list.bullet.rectangle.portrait"
+                        )
+                    }
                     .tag(TabType.templates)
                     NavigationStack {
                         StartWorkoutView()
                     }
-                    .tabItem { Label(NSLocalizedString("startWorkout", comment: ""), systemImage: "plus") }
+                    .tabItem {
+                        Label(
+                            NSLocalizedString("startWorkout", comment: ""),
+                            systemImage: "plus"
+                        )
+                    }
                     .tag(TabType.startWorkout)
                     NavigationStack {
                         AllExercisesView()
                     }
-                    .tabItem { Label(NSLocalizedString("exercises", comment: ""), image: "LOGIT") }
+                    .tabItem {
+                        Label(
+                            NSLocalizedString("exercises", comment: ""),
+                            image: "LOGIT"
+                        )
+                    }
                     .tag(TabType.exercises)
                     NavigationStack {
                         ProfileView()
                     }
-                    .tabItem { Label(NSLocalizedString("settings", comment: ""), systemImage: "gear") }
+                    .tabItem {
+                        Label(
+                            NSLocalizedString("settings", comment: ""),
+                            systemImage: "gear"
+                        )
+                    }
                     .tag(TabType.settings)
                 }
                 .environmentObject(database)
