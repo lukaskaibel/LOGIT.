@@ -39,7 +39,7 @@ struct LOGIT: App {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")
         
         // MARK: - Test Methods
-        testLanguage()
+        //testLanguage()
         // testFirstStart()
     }
     

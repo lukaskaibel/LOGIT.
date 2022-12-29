@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PieGraph: View {
+struct PieGraph<CenterView: View>: View {
     
     enum Configuration {
         case normal, small
@@ -16,13 +16,15 @@ struct PieGraph: View {
     let items: [Item]
     let circleLineWidth: CGFloat
     let configuration: Configuration
+    let centerView: CenterView?
     let showZeroValuesInLegend: Bool
     let hideLegend: Bool
     
-    init(items: [Item], configuration: Configuration = .normal, showZeroValuesInLegend: Bool = false, hideLegend: Bool = false) {
+    init(items: [Item], configuration: Configuration = .normal, centerView: CenterView? = Spacer(), showZeroValuesInLegend: Bool = false, hideLegend: Bool = false) {
         self.items = items.filter { showZeroValuesInLegend ? true : $0.amount > 0 }
         self.circleLineWidth = configuration == .small ? 10 : 15
         self.configuration = configuration
+        self.centerView = centerView
         self.showZeroValuesInLegend = showZeroValuesInLegend
         self.hideLegend = hideLegend
     }
@@ -48,20 +50,23 @@ struct PieGraph: View {
                 Spacer()
             }
             ZStack {
-                ForEach(items) { item in
-                    Circle()
-                        .trim(from: trimFrom(for: item), to: trimTo(for: item))
-                        .stroke(lineWidth: circleLineWidth)
-                        .rotation(Angle(degrees: -90))
-                        .foregroundStyle(item.color.gradient)
-                }
-            }.background {
                 Circle()
                     .stroke(lineWidth: circleLineWidth)
                     .foregroundStyle(Color.placeholder.gradient)
+                ForEach(items) { item in
+                    Circle()
+                        .trim(from: trimFrom(for: item), to: trimTo(for: item))
+                        .stroke(lineWidth: circleLineWidth * (item.isSelected ? 1.5 : 1.0))
+                        .rotation(Angle(degrees: -90))
+                        .foregroundStyle(item.color.gradient)
+                        .shadow(radius: item.isSelected ? 5 : 0)
+                }
+                if let centerView = centerView {
+                    centerView
+                }
             }
-            .frame(minHeight: 100, alignment: .trailing)
-                .padding(configuration == .small ? 5 : 15)
+            .frame(maxWidth: hideLegend ? .infinity : 100, minHeight: 100, maxHeight: hideLegend ? .infinity : 100)
+            .padding(configuration == .small ? 5 : 15)
         }
     }
     
@@ -104,20 +109,23 @@ struct PieGraph: View {
         let title: String
         let amount: Int
         let color: Color
+        let isSelected: Bool
     }
 }
 
 struct PieGraph_Previews: PreviewProvider {
     static var previews: some View {
-            PieGraph(items: [PieGraph.Item(title: "Chest", amount: 4, color: .blue),
-                             PieGraph.Item(title: "Back", amount: 3, color: .green),
-                             PieGraph.Item(title: "Arms", amount: 4, color: .yellow),
-                             PieGraph.Item(title: "Shoulders", amount: 2, color: .purple),
-                             PieGraph.Item(title: "Abs", amount: 1, color: .cyan),
-                             PieGraph.Item(title: "Legs", amount: 2, color: .red)
-                            ], configuration: .small)
-            .frame(height: 40)
-            .tileStyle()
-            .padding()
+        PieGraph(
+            items: [PieGraph.Item(title: "Chest", amount: 4, color: .blue, isSelected: false),
+                    PieGraph.Item(title: "Back", amount: 3, color: .green, isSelected: false),
+                    PieGraph.Item(title: "Arms", amount: 4, color: .yellow, isSelected: true),
+                    PieGraph.Item(title: "Shoulders", amount: 2, color: .purple, isSelected: false),
+                    PieGraph.Item(title: "Abs", amount: 1, color: .cyan, isSelected: false),
+                    PieGraph.Item(title: "Legs", amount: 2, color: .red, isSelected: false)],
+            configuration: .small, centerView: Text("3")
+        )
+        .frame(height: 40)
+        .tileStyle()
+        .padding()
     }
 }

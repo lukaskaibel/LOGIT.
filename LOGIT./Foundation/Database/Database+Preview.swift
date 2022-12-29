@@ -119,21 +119,21 @@ extension Database {
             }
         }
         
-        var date = Calendar.current.date(byAdding: .weekOfYear, value: -6, to: .now)!
+        let date = Calendar.current.date(byAdding: .weekOfYear, value: -6, to: .now)!
         let firstBenchWorkout = database.newWorkout(name: "Benchday", date: date)
-        let benchGroup = database.newWorkoutSetGroup(
+        let _ = database.newWorkoutSetGroup(
             sets: [database.newStandardSet(repetitions: 12, weight: 78000)],
             exercise: benchpress,
             workout: firstBenchWorkout
         )
         let secondBenchWorkout = database.newWorkout(name: "Benchday", date: Calendar.current.date(byAdding: .weekOfYear, value: -7, to: .now)!)
-        let bench2Group = database.newWorkoutSetGroup(
+        let _ = database.newWorkoutSetGroup(
             sets: [database.newStandardSet(repetitions: 12, weight: 67000)],
             exercise: benchpress,
             workout: secondBenchWorkout
         )
         let thirdBenchWorkout = database.newWorkout(name: "Benchday", date: Calendar.current.date(byAdding: .weekOfYear, value: -9, to: .now)!)
-        let bench3Group = database.newWorkoutSetGroup(
+        let _ = database.newWorkoutSetGroup(
             sets: [database.newStandardSet(repetitions: 12, weight: 55000)],
             exercise: benchpress,
             workout: thirdBenchWorkout

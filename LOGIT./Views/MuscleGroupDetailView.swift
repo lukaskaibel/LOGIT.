@@ -30,10 +30,16 @@ struct MuscleGroupDetailView: View {
                         .foregroundColor(.secondaryLabel)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                PieGraph(items: muscleGroupOccurances.map { PieGraph.Item(title: $0.0.description,
-                                                                          amount: $0.1,
-                                                                          color: $0.0.color) },
-                         hideLegend: true)
+                PieGraph(
+                    items: muscleGroupOccurances.map {
+                        PieGraph.Item(title: $0.0.description,
+                                      amount: $0.1,
+                                      color: $0.0.color,
+                                      isSelected: $0.0 == selectedMuscleGroup)
+                        },
+                    centerView: centerView,
+                    hideLegend: true
+                )
                 .frame(height: 200)
                 .padding()
                 .padding(.vertical, 50)
@@ -79,6 +85,19 @@ struct MuscleGroupDetailView: View {
             .cornerRadius(10)
         }
         .buttonStyle(.plain)
+    }
+                    
+    private var centerView: some View {
+        let numberOfSetsForSelectedMuscleGroup = (muscleGroupOccurances.filter { $0.0 == selectedMuscleGroup }).first?.1 ?? setGroups.reduce(0, { $0 + $1.sets.count })
+        
+        return VStack {
+            Text(String(numberOfSetsForSelectedMuscleGroup))
+                .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                .foregroundStyle(selectedMuscleGroup?.color.opacity(numberOfSetsForSelectedMuscleGroup == 0 ? 0.7 : 1.0).gradient ?? Color.label.gradient)
+            Text(NSLocalizedString("set\(numberOfSetsForSelectedMuscleGroup == 1 ? "" : "s")", comment: ""))
+                .fontWeight(.medium)
+                .foregroundColor(.secondaryLabel)
+        }
     }
     
     // MARK: - Computed Properties

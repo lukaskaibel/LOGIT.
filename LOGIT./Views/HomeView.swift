@@ -111,11 +111,16 @@ struct HomeView: View {
     
     private var muscleGroupPercentageView: some View {
         HStack {
-            PieGraph(items: getOverallMuscleGroupOccurances()
-                                    .map { PieGraph.Item(title: $0.0.description.capitalized,
-                                                         amount: $0.1,
-                                                         color: $0.0.color) },
-                     showZeroValuesInLegend: true)
+            PieGraph(
+                items:
+                    getOverallMuscleGroupOccurances().map {
+                        PieGraph.Item(title: $0.0.description.capitalized,
+                                      amount: $0.1,
+                                      color: $0.0.color,
+                                      isSelected: false)
+                    },
+                showZeroValuesInLegend: true
+            )
             Spacer()
             NavigationChevron()
                 .foregroundColor(.secondaryLabel)
@@ -204,11 +209,15 @@ struct HomeView: View {
             .reduce([:], { current, workout in
                 current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
             })
+            .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
         ).sorted { MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases.firstIndex(of: $1.key)! }
     }
     
 }
 
+private var allMuscleGroupZeroDict: [MuscleGroup:Int] {
+    MuscleGroup.allCases.reduce(into: [MuscleGroup:Int](), { $0[$1, default: 0] = 0 })
+}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

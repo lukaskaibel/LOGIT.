@@ -159,10 +159,14 @@ struct WorkoutDetailView: View {
             Text(NSLocalizedString("muscleGroups", comment: ""))
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            PieGraph(items: workout.muscleGroupOccurances
-                .map { PieGraph.Item(title: $0.0.rawValue.capitalized,
-                                     amount: $0.1,
-                                     color: $0.0.color) }
+            PieGraph(
+                items: workout.muscleGroupOccurances.map {
+                    PieGraph.Item(title: $0.0.rawValue.capitalized,
+                                  amount: $0.1,
+                                  color: $0.0.color,
+                                  isSelected: false
+                    )
+                }
             )
         }
         .padding(CELL_PADDING)
