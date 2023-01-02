@@ -63,7 +63,7 @@ struct AllExercisesView: View {
             }
         }
         .sheet(isPresented: $showingAddExercise) {
-            EditExerciseView()
+            EditExerciseView(initialMuscleGroup: selectedMuscleGroup ?? .chest)
         }
     }
     

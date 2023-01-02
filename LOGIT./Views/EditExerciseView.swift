@@ -29,11 +29,15 @@ struct EditExerciseView: View {
     
     // MARK: - Init
     
-    init(exerciseToEdit: Exercise? = nil, onEditFinished: ((_ exercise: Exercise) -> Void)? = nil) {
+    init(
+        exerciseToEdit: Exercise? = nil,
+        onEditFinished: ((_ exercise: Exercise) -> Void)? = nil,
+        initialMuscleGroup: MuscleGroup = .chest
+    ) {
         self.exerciseToEdit = exerciseToEdit
         self.onEditFinished = onEditFinished
         _exerciseName = State(initialValue: exerciseToEdit?.name ?? "")
-        _muscleGroup = State(initialValue: exerciseToEdit?.muscleGroup ?? .chest)
+        _muscleGroup = State(initialValue: exerciseToEdit?.muscleGroup ?? initialMuscleGroup)
     }
     
     // MARK: - Body
@@ -80,7 +84,7 @@ struct EditExerciseView: View {
                     }
                 })
             }.listStyle(.insetGrouped)
-                .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(exerciseName)" : NSLocalizedString("newExercise", comment: ""))
+                .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(NSLocalizedString("exercise", comment: ""))" : NSLocalizedString("newExercise", comment: ""))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -137,6 +141,6 @@ struct EditExerciseView: View {
 
 struct EditExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        EditExerciseView()
+        EditExerciseView(initialMuscleGroup: .chest)
     }
 }
