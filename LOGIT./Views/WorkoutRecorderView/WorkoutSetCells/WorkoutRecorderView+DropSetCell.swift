@@ -15,11 +15,11 @@ extension WorkoutRecorderView {
                 SetEntryEditor(
                     repetitions: Binding(
                         get: { dropSet.repetitions?.value(at: index) ?? 0 },
-                        set: { dropSet.repetitions?.replaceValue(at: index, with: $0) }
+                        set: { dropSet.repetitions?.replaceValue(at: index, with: $0); workout.endDate = .now }
                     ),
                     weight: Binding(
                         get: { dropSet.weights?.value(at: index) ?? 0 },
-                        set: { dropSet.weights?.replaceValue(at: index, with: $0) }
+                        set: { dropSet.weights?.replaceValue(at: index, with: $0); workout.endDate = .now }
                     ),
                     repetitionsPlaceholder: repetitionsPlaceholder(for: dropSet).value(at: index),
                     weightPlaceholder: weightsPlaceholder(for: dropSet).value(at: index)

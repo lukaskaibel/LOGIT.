@@ -112,7 +112,7 @@
 "newestFirst" = "Neueste zuerst";
 "newExercise" = "Neue Übung";
 "newTemplate" = "Vorlage erstellen";
-"newTemplateFromWorkout" = "Neue Vorlage aus Workout";
+"newTemplateFromWorkout" = "Als Vorlage verwenden...";
 "night" = "Nacht";
 "nine" = "Neun";
 "noData" = "Keine Daten";
@@ -139,7 +139,7 @@
 "personalBest" = "Persönliche Bestleistung";
 "perWeek" = "pro Woche";
 "preventAutoLock" = "Bildschirmsperre verhindern";
-"preventAutoLockDescription" = "Verhindern das Abschalten des Bildschirms während dem Training.";
+"preventAutoLockDescription" = "Verhindert das Abschalten des Bildschirms während des Training.";
 "profile" = "Profil";
 
 // MARK: - R
@@ -188,6 +188,7 @@
 "three" = "Drei";
 "threeMonths" = "3 Monate";
 "time" = "mal";
+"timer" = "Timer";
 "times" = "mal";
 "title" = "Titel";
 "today" = "Heute";

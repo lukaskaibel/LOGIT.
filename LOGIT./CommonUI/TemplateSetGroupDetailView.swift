@@ -62,8 +62,10 @@ struct TemplateSetGroupDetailView: View {
                                     .frame(height: 1)
                                 TemplateSetCell(templateSet: templateSet)
                                     .padding(.vertical, 15)
-                                Divider()
-                                    .padding(.leading)
+                                if templateSetGroup.sets.last != templateSet {
+                                    Divider()
+                                        .padding(.leading)
+                                }
                             }
                             .frame(maxWidth: .infinity)
                         }

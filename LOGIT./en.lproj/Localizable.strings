@@ -112,7 +112,7 @@
 "newestFirst" = "Newest First";
 "newExercise" = "New Exercise";
 "newTemplate" = "New Template";
-"newTemplateFromWorkout" = "New Template from Workout";
+"newTemplateFromWorkout" = "Use as Template...";
 "night" = "Night";
 "nine" = "Nine";
 "noData" = "No Data";
@@ -160,7 +160,6 @@
 "selectExercise" = "Select Exercise";
 "set" = "Set";
 "sets" = "Sets";
-"setTimer" = "Set Timer";
 "settings" = "Settings";
 "seven" = "Seven";
 "shoulders" = "Shoulders";
@@ -188,6 +187,7 @@
 "three" = "Three";
 "threeMonths" = "3 Months";
 "time" = "time";
+"timer" = "Timer";
 "times" = "times";
 "title" = "Title";
 "today" = "Today";

@@ -249,7 +249,6 @@ struct WorkoutRecorderView: View {
                 database.convertSetGroupToStandardSets($0)
             }
         }
-        workout.endDate = .now
         database.save()
     }
     

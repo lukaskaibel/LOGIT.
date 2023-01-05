@@ -95,6 +95,7 @@ struct TemplateEditorView: View {
                     Button(NSLocalizedString("cancel", comment: "")) {
                         if !isEditingExistingTemplate {
                             template.sets.forEach { database.delete($0) }
+                            template.workouts.forEach { $0.template = nil }
                             database.delete(template, saveContext: true)
                         }
                         dismiss()

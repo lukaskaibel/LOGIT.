@@ -13,12 +13,12 @@ extension WorkoutRecorderView {
         return HStack {
             SetEntryEditor(
                 repetitions: Binding(
-                    get: {standardSet.repetitions},
-                    set: {standardSet.repetitions = $0}
+                    get: { standardSet.repetitions },
+                    set: { standardSet.repetitions = $0; workout.endDate = .now }
                 ),
                 weight: Binding(
-                    get: {standardSet.weight},
-                    set: {standardSet.weight = $0}
+                    get: { standardSet.weight },
+                    set: { standardSet.weight = $0; workout.endDate = .now }
                 ),
                 repetitionsPlaceholder: repetitionsPlaceholder(for: standardSet),
                 weightPlaceholder: weightPlaceholder(for: standardSet)

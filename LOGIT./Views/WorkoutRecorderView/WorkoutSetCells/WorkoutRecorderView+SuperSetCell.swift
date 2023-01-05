@@ -18,11 +18,11 @@ extension WorkoutRecorderView {
                 SetEntryEditor(
                     repetitions: Binding(
                         get: { superSet.repetitionsFirstExercise },
-                        set: { superSet.repetitionsFirstExercise = $0 }
+                        set: { superSet.repetitionsFirstExercise = $0; workout.endDate = .now }
                     ),
                     weight: Binding(
                         get: { superSet.weightFirstExercise },
-                        set: { superSet.weightFirstExercise = $0 }
+                        set: { superSet.weightFirstExercise = $0; workout.endDate = .now }
                     ),
                     repetitionsPlaceholder: repetitionsPlaceholder(for: superSet).first!,
                     weightPlaceholder: weightsPlaceholder(for: superSet).first!
@@ -35,11 +35,11 @@ extension WorkoutRecorderView {
                 SetEntryEditor(
                     repetitions: Binding(
                         get: { superSet.repetitionsSecondExercise },
-                        set: { superSet.repetitionsSecondExercise = $0 }
+                        set: { superSet.repetitionsSecondExercise = $0; workout.endDate = .now }
                     ),
                     weight: Binding(
                         get: { superSet.weightSecondExercise },
-                        set: { superSet.weightSecondExercise = $0 }
+                        set: { superSet.weightSecondExercise = $0; workout.endDate = .now }
                     ),
                     repetitionsPlaceholder: repetitionsPlaceholder(for: superSet).second!,
                     weightPlaceholder: weightsPlaceholder(for: superSet).second!

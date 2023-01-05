@@ -72,7 +72,7 @@ struct SetEntryEditor: View {
         Binding<String>(
             get: { weight == 0 ? "" : String(convertWeightForDisplaying(weight)) },
             set: { value in
-                if Int(value) ?? 10000 < 10000 {
+                if Int(value) ?? 10000 < 10000 || value == "" {
                     weight = convertWeightForStoring(NumberFormatter().number(from: value)?.int64Value ?? 0)
                     database.refreshObjects()
                 }

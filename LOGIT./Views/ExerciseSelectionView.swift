@@ -40,41 +40,46 @@ struct ExerciseSelectionView: View {
                 .listRowBackground(Color.clear)
             ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
                 exerciseSection(for: group)
-            }.listRowInsets(EdgeInsets())
+            }
+            .emptyPlaceholder(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) {
+                Text(NSLocalizedString("noExercises", comment: ""))
+            }
+            .listRowInsets(EdgeInsets())
             Spacer(minLength: 30)
                 .listRowBackground(Color.clear)
-        }.listStyle(.insetGrouped)
-            .offset(x: 0, y: -30)
-            .edgesIgnoringSafeArea(.bottom)
-            .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))
-            .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchedText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: NSLocalizedString("searchExercises", comment: ""))
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        sheetType = .addExercise
-                    }, label: {
-                        Image(systemName: "plus")
-                    })
-                }
+        }
+        .listStyle(.insetGrouped)
+        .offset(x: 0, y: -30)
+        .edgesIgnoringSafeArea(.bottom)
+        .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))
+        .navigationBarTitleDisplayMode(.inline)
+        .searchable(text: $searchedText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: NSLocalizedString("searchExercises", comment: ""))
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    sheetType = .addExercise
+                }, label: {
+                    Image(systemName: "plus")
+                })
             }
-            .sheet(item: $sheetType) { type in
-                switch type {
-                case .addExercise:
-                    EditExerciseView(onEditFinished: { setExercise($0); dismiss() }, initialMuscleGroup: selectedMuscleGroup ?? .chest)
-                case let .exerciseDetail(exercise):
-                    NavigationStack {
-                        ExerciseDetailView(exercise: exercise)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
-                                }
+        }
+        .sheet(item: $sheetType) { type in
+            switch type {
+            case .addExercise:
+                EditExerciseView(onEditFinished: { setExercise($0); dismiss() }, initialMuscleGroup: selectedMuscleGroup ?? .chest)
+            case let .exerciseDetail(exercise):
+                NavigationStack {
+                    ExerciseDetailView(exercise: exercise)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
                             }
-                    }
+                        }
                 }
             }
+        }
     }
     
     // MARK: - Supporting Views

@@ -95,7 +95,7 @@ struct WorkoutDetailView: View {
         .sheet(item: $sheetType) { type in
             switch type {
             case .newTemplateFromWorkout: TemplateEditorView(template: database.newTemplate(from: workout),
-                                                             isEditingExistingTemplate: true)
+                                                             isEditingExistingTemplate: false)
             case .templateDetail:
                 NavigationStack {
                     TemplateDetailView(template: workout.template!)
@@ -195,6 +195,7 @@ struct WorkoutDetailView: View {
                 }
             }
             .padding()
+            .contentShape(Rectangle())
         }
     }
     

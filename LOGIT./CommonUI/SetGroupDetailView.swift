@@ -68,8 +68,10 @@ struct SetGroupDetailView: View {
                                     .frame(height: 1)
                                 WorkoutSetCell(workoutSet: workoutSet)
                                     .padding(.vertical, 15)
-                                Divider()
-                                    .padding(.leading)
+                                if setGroup.sets.last != workoutSet {
+                                    Divider()
+                                        .padding(.leading)
+                                }
                             }
                             .frame(maxWidth: .infinity)
                         }
