@@ -37,6 +37,7 @@ struct WorkoutRecorderView: View {
     @State internal var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
     @State private var showingTimerView = false
     @State private var isShowingFinishConfirmation = false
+    @State internal var focusedIntegerFieldIndex: IntegerField.Index? = IntegerField.Index(primary: 0, secondary: 0, tertiary: 0)
     
     // MARK: - Variables
     
@@ -66,6 +67,9 @@ struct WorkoutRecorderView: View {
                             addExerciseButton
                         }
                     }
+                    Spacer(minLength: 30)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 }
                 .scrollIndicators(.hidden)
             }
@@ -84,6 +88,50 @@ struct WorkoutRecorderView: View {
                         isEditing.toggle()
                         editMode = isEditing ? .active : .inactive
                     }.disabled(workout.numberOfSetGroups == 0)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    if let workoutSet = selectedWorkoutSet, let index = focusedIntegerFieldIndex?.primary {
+                        if let _ = workoutSetTemplateSetDictionary[workoutSet] {
+                            Button {
+                                toggleSetCompleted(for: workoutSet)
+                            } label: {
+                                Image(systemName: "\(selectedWorkoutSet?.hasEntry ?? false ? "xmark" : "checkmark").circle.fill")
+                                    .keyboardToolbarButtonStyle()
+                            }
+                        } else {
+                            Button {
+                                copyPreviousSetIfExists(for: workoutSet)
+                            } label: {
+                                Image(systemName: "\(selectedWorkoutSet?.hasEntry ?? false ? "xmark.circle" : "doc.on.doc").fill")
+                                    .keyboardToolbarButtonStyle()
+                            }
+                            .disabled(workout.sets.value(at: index)?.setGroup == workoutSet.setGroup)
+                        }
+                    }
+                    Spacer()
+                    HStack(spacing: 0) {
+                        Button {
+                             focusedIntegerFieldIndex = previousIntegerFieldIndex()
+                        } label: {
+                            Image(systemName: "arrow.left.circle")
+                                .keyboardToolbarButtonStyle()
+                        }
+                        .disabled(previousIntegerFieldIndex() == nil)
+                        Button {
+                             focusedIntegerFieldIndex = nextIntegerFieldIndex()
+                        } label: {
+                            Image(systemName: "arrow.right.circle")
+                                .keyboardToolbarButtonStyle()
+                        }
+                        .disabled(nextIntegerFieldIndex() == nil)
+                    }
+                    Spacer()
+                    Button {
+                        focusedIntegerFieldIndex = nil
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down.fill")
+                            .keyboardToolbarButtonStyle()
+                    }
                 }
             }
             .sheet(item: $sheetType) { type in
@@ -192,7 +240,7 @@ struct WorkoutRecorderView: View {
         .listButton()
     }
     
-    // MARK: - Computed Properties
+    // MARK: - Supporting Methods / Computed Properties
     
     private var workoutName: Binding<String> {
         Binding(get: { workout.name ?? "" }, set: { workout.name = $0 })
@@ -212,6 +260,71 @@ struct WorkoutRecorderView: View {
             if let index = setGroup.index(of: workoutSet) {
                 return index
             }
+        }
+        return nil
+    }
+    
+    internal var selectedWorkoutSet: WorkoutSet? {
+        guard let focusedIndex = focusedIntegerFieldIndex else { return nil }
+        return workout.sets.value(at: focusedIndex.primary)
+    }
+    
+    internal func copyPreviousSetIfExists(for workoutSet: WorkoutSet) {
+        guard let index = focusedIntegerFieldIndex?.primary, let lastSet = workout.sets.value(at: index) else { return }
+        if workoutSet.hasEntry {
+            workoutSet.clearEntries()
+        } else {
+            workoutSet.match(lastSet)
+        }
+        database.refreshObjects()
+    }
+    
+    internal func toggleSetCompleted(for workoutSet: WorkoutSet) {
+        if let templateSet = workoutSetTemplateSetDictionary[workoutSet] {
+            if workoutSet.hasEntry {
+                workoutSet.clearEntries()
+            } else {
+                workoutSet.match(templateSet)
+            }
+            database.refreshObjects()
+        }
+    }
+    
+    private func nextIntegerFieldIndex() -> IntegerField.Index? {
+        guard let focusedIndex = focusedIntegerFieldIndex,
+                let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
+        if focusedIndex.tertiary == 0 {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary, tertiary: 1)
+        }
+        if let _ = focusedWorkoutSet as? SuperSet, focusedIndex.secondary == 0 {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: 1, tertiary: 0)
+        }
+        if let focusedDropSet = focusedWorkoutSet as? DropSet, focusedIndex.secondary + 1 < focusedDropSet.numberOfDrops {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary + 1, tertiary: 0)
+        }
+        guard workout.sets.value(at: focusedIndex.primary + 1) != nil else { return nil }
+        return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: 0)
+    }
+    
+    private func previousIntegerFieldIndex() -> IntegerField.Index? {
+        guard let focusedIndex = focusedIntegerFieldIndex,
+                let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
+        if focusedIndex.tertiary == 1 {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary, tertiary: 0)
+        }
+        if let _ = focusedWorkoutSet as? SuperSet, focusedIndex.secondary == 1 {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: 0, tertiary: 1)
+        }
+        if let _ = focusedWorkoutSet as? DropSet, focusedIndex.secondary - 1 >= 0 {
+            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary - 1, tertiary: 1)
+        }
+        guard let previousSet = workout.sets.value(at: focusedIndex.primary - 1) else { return nil }
+        if let _ = previousSet as? StandardSet {
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 0, tertiary: 1)
+        } else if let _ = previousSet as? SuperSet {
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 1, tertiary: 1)
+        } else if let previousDropSet = previousSet as? DropSet {
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: previousDropSet.numberOfDrops - 1, tertiary: 1)
         }
         return nil
     }
@@ -259,36 +372,36 @@ struct WorkoutRecorderView: View {
     
     // MARK: Placeholder Methods
     
-    public func repetitionsPlaceholder(for standardSet: StandardSet) -> String {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return "0" }
-        return String(templateStandardSet.repetitions)
+    public func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
+        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        return templateStandardSet.repetitions
     }
     
-    public func weightPlaceholder(for standardSet: StandardSet) -> String {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return "0" }
-        return String(convertWeightForDisplaying(templateStandardSet.weight))
+    public func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
+        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        return Int64(convertWeightForDisplaying(templateStandardSet.weight))
     }
     
-    public func repetitionsPlaceholder(for dropSet: DropSet) -> [String] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return ["0"] }
-        return templateDropSet.repetitions?.map { String($0) } ?? .emptyList
+    public func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        return templateDropSet.repetitions?.map { $0 } ?? .emptyList
     }
     
-    public func weightsPlaceholder(for dropSet: DropSet) -> [String] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return ["0"] }
-        return templateDropSet.weights?.map { String(convertWeightForDisplaying($0)) } ?? .emptyList
+    public func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        return templateDropSet.weights?.map { Int64(convertWeightForDisplaying($0)) } ?? .emptyList
     }
     
-    public func repetitionsPlaceholder(for superSet: SuperSet) -> [String] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return ["0", "0"] }
+    public func repetitionsPlaceholder(for superSet: SuperSet) -> [Int64] {
+        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return [0, 0] }
         return [templateSuperSet.repetitionsFirstExercise, templateSuperSet.repetitionsSecondExercise]
-            .map { String($0) }
+            .map { $0 }
     }
     
-    public func weightsPlaceholder(for superSet: SuperSet) -> [String] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return ["0", "0"] }
+    public func weightsPlaceholder(for superSet: SuperSet) -> [Int64] {
+        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return [0, 0] }
         return [templateSuperSet.weightFirstExercise, templateSuperSet.weightSecondExercise]
-            .map { String(convertWeightForDisplaying($0)) }
+            .map { Int64(convertWeightForDisplaying($0)) }
     }
     
 }

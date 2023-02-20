@@ -46,6 +46,16 @@ struct ListButtonModifier: ViewModifier {
     }
 }
 
+struct KeyboardToolbarButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.primary)
+            .frame(width: 70, height: 35)
+            .background(Color.tertiaryFill)
+            .cornerRadius(5)
+    }
+}
+
 struct EmptyPlaceholderModifier<Items: Collection>: ViewModifier {
     let items: Items
     let placeholder: AnyView
@@ -91,6 +101,10 @@ extension View {
     
     func listButton() -> some View {
         modifier(ListButtonModifier())
+    }
+    
+    func keyboardToolbarButtonStyle() -> some View {
+        modifier(KeyboardToolbarButtonModifier())
     }
     
     func emptyPlaceholder<Items: Collection, PlaceholderView: View>(_ items: Items, _ placeholder: @escaping () -> PlaceholderView) -> some View {

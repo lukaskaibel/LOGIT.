@@ -31,15 +31,10 @@ extension WorkoutRecorderView {
             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                 workoutSetCell(workoutSet: workoutSet)
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        if let templateSet = workoutSetTemplateSetDictionary[workoutSet] {
+                        if let _ = workoutSetTemplateSetDictionary[workoutSet] {
                             Button {
                                 UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-                                if workoutSet.hasEntry {
-                                    workoutSet.clearEntries()
-                                } else {
-                                    workoutSet.match(templateSet)
-                                }
-                                database.refreshObjects()
+                                toggleSetCompleted(for: workoutSet)
                             } label: {
                                 Image(systemName: "checkmark")
                             }

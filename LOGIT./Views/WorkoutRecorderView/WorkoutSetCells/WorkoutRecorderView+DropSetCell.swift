@@ -12,18 +12,32 @@ extension WorkoutRecorderView {
     internal func dropSetCell(for dropSet: DropSet) -> some View {
         VStack {
             ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
-                SetEntryEditor(
-                    repetitions: Binding(
-                        get: { dropSet.repetitions?.value(at: index) ?? 0 },
-                        set: { dropSet.repetitions?.replaceValue(at: index, with: $0); workout.endDate = .now }
-                    ),
-                    weight: Binding(
-                        get: { dropSet.weights?.value(at: index) ?? 0 },
-                        set: { dropSet.weights?.replaceValue(at: index, with: $0); workout.endDate = .now }
-                    ),
-                    repetitionsPlaceholder: repetitionsPlaceholder(for: dropSet).value(at: index),
-                    weightPlaceholder: weightsPlaceholder(for: dropSet).value(at: index)
-                )
+                HStack {
+                    IntegerField(
+                        placeholder: repetitionsPlaceholder(for: dropSet).value(at: index) ?? 0,
+                        value: dropSet.repetitions?.value(at: index) ?? 0,
+                        setValue: { dropSet.repetitions?.replaceValue(at: index, with: $0); workout.endDate = .now },
+                        maxDigits: 4,
+                        index: IntegerField.Index(
+                            primary: workout.sets.firstIndex(of: dropSet)!,
+                            secondary: index,
+                            tertiary: 0
+                        ),
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                    )
+                    IntegerField(
+                        placeholder: weightsPlaceholder(for: dropSet).value(at: index) ?? 0,
+                        value: Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)),
+                        setValue: { dropSet.weights?.replaceValue(at: index, with: $0); workout.endDate = .now },
+                        maxDigits: 4,
+                        index: IntegerField.Index(
+                            primary: workout.sets.firstIndex(of: dropSet)!,
+                            secondary: index,
+                            tertiary: 1
+                        ),
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                    )
+                }
             }
             Stepper(
                 NSLocalizedString("dropCount", comment: ""),

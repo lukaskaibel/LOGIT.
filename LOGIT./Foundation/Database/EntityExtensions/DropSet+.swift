@@ -9,6 +9,10 @@ import Foundation
 
 extension DropSet {
     
+    public var numberOfDrops: Int {
+        repetitions?.count ?? 0
+    }
+    
     public func addDrop() {
         repetitions?.append(0)
         weights?.append(0)

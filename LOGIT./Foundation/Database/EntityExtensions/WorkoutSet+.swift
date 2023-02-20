@@ -47,6 +47,21 @@ extension WorkoutSet {
         }
     }
     
+    public func match(_ workoutSet: WorkoutSet) {
+        if let standardSet = self as? StandardSet, let workoutStandardSet = workoutSet as? StandardSet {
+            standardSet.repetitions = workoutStandardSet.repetitions
+            standardSet.weight = workoutStandardSet.weight
+        } else if let dropSet = self as? DropSet, let workoutDropSet = workoutSet as? DropSet {
+            dropSet.repetitions = workoutDropSet.repetitions
+            dropSet.weights = workoutDropSet.weights
+        } else if let superSet = self as? SuperSet, let workoutSuperSet = workoutSet as? SuperSet {
+            superSet.repetitionsFirstExercise = workoutSuperSet.repetitionsFirstExercise
+            superSet.repetitionsSecondExercise = workoutSuperSet.repetitionsSecondExercise
+            superSet.weightFirstExercise = workoutSuperSet.weightFirstExercise
+            superSet.weightSecondExercise = workoutSuperSet.weightSecondExercise
+        }
+    }
+    
     // MARK: Methods to override for subclass
     
     @objc public var hasEntry: Bool {

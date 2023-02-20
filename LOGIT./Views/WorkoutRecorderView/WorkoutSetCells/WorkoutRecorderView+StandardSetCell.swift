@@ -11,17 +11,29 @@ extension WorkoutRecorderView {
     
     internal func standardSetCell(for standardSet: StandardSet) -> some View {
         return HStack {
-            SetEntryEditor(
-                repetitions: Binding(
-                    get: { standardSet.repetitions },
-                    set: { standardSet.repetitions = $0; workout.endDate = .now }
+            IntegerField(
+                placeholder: repetitionsPlaceholder(for: standardSet),
+                value: standardSet.repetitions,
+                setValue: { standardSet.repetitions = $0; workout.endDate = .now },
+                maxDigits: 4,
+                index: IntegerField.Index(
+                    primary: workout.sets.firstIndex(of: standardSet)!,
+                    secondary: 0,
+                    tertiary: 0
                 ),
-                weight: Binding(
-                    get: { standardSet.weight },
-                    set: { standardSet.weight = $0; workout.endDate = .now }
+                focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+            )
+            IntegerField(
+                placeholder: weightPlaceholder(for: standardSet),
+                value: Int64(convertWeightForDisplaying(standardSet.weight)),
+                setValue: { standardSet.weight = convertWeightForStoring($0); workout.endDate = .now },
+                maxDigits: 4,
+                index: IntegerField.Index(
+                    primary: workout.sets.firstIndex(of: standardSet)!,
+                    secondary: 0,
+                    tertiary: 1
                 ),
-                repetitionsPlaceholder: repetitionsPlaceholder(for: standardSet),
-                weightPlaceholder: weightPlaceholder(for: standardSet)
+                focusedIntegerFieldIndex: $focusedIntegerFieldIndex
             )
         }
     }
