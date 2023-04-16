@@ -15,7 +15,7 @@ struct IntegerField: View {
     let value: Int64
     let setValue: (_ newValue: Int64) -> Void
     let maxDigits: Int?
-    @State var index: Index
+    let index: Index
     @Binding var focusedIntegerFieldIndex: Index?
     
     // MARK: - State

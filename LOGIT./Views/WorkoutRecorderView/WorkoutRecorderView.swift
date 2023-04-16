@@ -57,6 +57,8 @@ struct WorkoutRecorderView: View {
                                 .deleteDisabled(true)
                         } else {
                             setGroupCell(for: setGroup)
+                                .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
+                                .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
                         }
                     }
                     .onMove(perform: moveSetGroups)
@@ -90,51 +92,52 @@ struct WorkoutRecorderView: View {
                     }.disabled(workout.numberOfSetGroups == 0)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
-                    if let workoutSet = selectedWorkoutSet, let index = focusedIntegerFieldIndex?.primary {
+                    Spacer()
+                    if let workoutSet = selectedWorkoutSet {
                         if let _ = workoutSetTemplateSetDictionary[workoutSet] {
                             Button {
                                 toggleSetCompleted(for: workoutSet)
                             } label: {
-                                Image(systemName: "\(selectedWorkoutSet?.hasEntry ?? false ? "xmark" : "checkmark").circle.fill")
+                                Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "checkmark")")
                                     .keyboardToolbarButtonStyle()
                             }
                         } else {
                             Button {
-                                copyPreviousSetIfExists(for: workoutSet)
+                                toggleCopyPrevious(for: workoutSet)
                             } label: {
-                                Image(systemName: "\(selectedWorkoutSet?.hasEntry ?? false ? "xmark.circle" : "doc.on.doc").fill")
+                                Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
+                                    .foregroundColor(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry ? Color.placeholder : .primary)
                                     .keyboardToolbarButtonStyle()
                             }
-                            .disabled(workout.sets.value(at: index)?.setGroup == workoutSet.setGroup)
+                            .disabled(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry)
                         }
                     }
-                    Spacer()
                     HStack(spacing: 0) {
                         Button {
                              focusedIntegerFieldIndex = previousIntegerFieldIndex()
                         } label: {
-                            Image(systemName: "arrow.left.circle")
+                            Image(systemName: "arrowshape.turn.up.backward")
                                 .keyboardToolbarButtonStyle()
                         }
                         .disabled(previousIntegerFieldIndex() == nil)
                         Button {
                              focusedIntegerFieldIndex = nextIntegerFieldIndex()
                         } label: {
-                            Image(systemName: "arrow.right.circle")
+                            Image(systemName: "arrowshape.turn.up.forward")
                                 .keyboardToolbarButtonStyle()
                         }
                         .disabled(nextIntegerFieldIndex() == nil)
                     }
-                    Spacer()
                     Button {
                         focusedIntegerFieldIndex = nil
                     } label: {
-                        Image(systemName: "keyboard.chevron.compact.down.fill")
+                        Image(systemName: "keyboard.chevron.compact.down")
                             .keyboardToolbarButtonStyle()
                     }
+                    Spacer()
                 }
             }
-            .sheet(item: $sheetType) { type in
+            .fullScreenCover(item: $sheetType) { type in
                 NavigationStack {
                     switch type {
                     case let .exerciseDetail(exercise):
@@ -269,12 +272,12 @@ struct WorkoutRecorderView: View {
         return workout.sets.value(at: focusedIndex.primary)
     }
     
-    internal func copyPreviousSetIfExists(for workoutSet: WorkoutSet) {
-        guard let index = focusedIntegerFieldIndex?.primary, let lastSet = workout.sets.value(at: index) else { return }
+    internal func toggleCopyPrevious(for workoutSet: WorkoutSet) {
         if workoutSet.hasEntry {
             workoutSet.clearEntries()
         } else {
-            workoutSet.match(lastSet)
+            guard let previousSet = workoutSet.previousSetInSetGroup else { return }
+            workoutSet.match(previousSet)
         }
         database.refreshObjects()
     }
@@ -370,45 +373,31 @@ struct WorkoutRecorderView: View {
         database.delete(workout, saveContext: true)
     }
     
-    // MARK: Placeholder Methods
-    
-    public func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
-        return templateStandardSet.repetitions
-    }
-    
-    public func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
-        return Int64(convertWeightForDisplaying(templateStandardSet.weight))
-    }
-    
-    public func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
-        return templateDropSet.repetitions?.map { $0 } ?? .emptyList
-    }
-    
-    public func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
-        return templateDropSet.weights?.map { Int64(convertWeightForDisplaying($0)) } ?? .emptyList
-    }
-    
-    public func repetitionsPlaceholder(for superSet: SuperSet) -> [Int64] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return [0, 0] }
-        return [templateSuperSet.repetitionsFirstExercise, templateSuperSet.repetitionsSecondExercise]
-            .map { $0 }
-    }
-    
-    public func weightsPlaceholder(for superSet: SuperSet) -> [Int64] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet else { return [0, 0] }
-        return [templateSuperSet.weightFirstExercise, templateSuperSet.weightSecondExercise]
-            .map { Int64(convertWeightForDisplaying($0)) }
-    }
-    
 }
 
 struct WorkoutRecorderView_Previews: PreviewProvider {
     static var previews: some View {
         WorkoutRecorderView(workout: Database.preview.testWorkout, template: Database.preview.testTemplate)
             .environmentObject(Database.preview)
+    }
+}
+
+
+private struct WorkoutSetTemplateSetDictionaryKey: EnvironmentKey {
+    static let defaultValue: [WorkoutSet:TemplateSet] = [WorkoutSet:TemplateSet]()
+}
+
+private struct SetWorkoutEndDateKey: EnvironmentKey {
+    static let defaultValue: (Date) -> Void = { _ in }
+}
+
+extension EnvironmentValues {
+    var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet] {
+        get { self[WorkoutSetTemplateSetDictionaryKey.self] }
+        set { self[WorkoutSetTemplateSetDictionaryKey.self] = newValue }
+    }
+    var setWorkoutEndDate: (Date) -> Void {
+        get { self[SetWorkoutEndDateKey.self] }
+        set { self[SetWorkoutEndDateKey.self] = newValue }
     }
 }

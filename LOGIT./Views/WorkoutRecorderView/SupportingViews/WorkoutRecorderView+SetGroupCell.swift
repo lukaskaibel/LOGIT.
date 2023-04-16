@@ -29,18 +29,23 @@ extension WorkoutRecorderView {
             .listRowBackground(Color.fill)
             .listRowInsets(EdgeInsets())
             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
-                workoutSetCell(workoutSet: workoutSet)
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                        if let _ = workoutSetTemplateSetDictionary[workoutSet] {
-                            Button {
-                                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-                                toggleSetCompleted(for: workoutSet)
-                            } label: {
-                                Image(systemName: "checkmark")
-                            }
-                            .tint(.green)
+                WorkoutSetCell(
+                    workoutSet: workoutSet,
+                    indexInWorkout: workout.sets.firstIndex(of: workoutSet)!,
+                    indexInSetGroup: setGroup.sets.firstIndex(of: workoutSet)!,
+                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                )
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    if let _ = workoutSetTemplateSetDictionary[workoutSet] {
+                        Button {
+                            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                            toggleSetCompleted(for: workoutSet)
+                        } label: {
+                            Image(systemName: "checkmark")
                         }
+                        .tint(.green)
                     }
+                }
             }
             .onDelete { indexSet in
                 setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }

@@ -25,6 +25,10 @@ extension WorkoutSet {
         setGroup?.workout
     }
     
+    public var previousSetInSetGroup: WorkoutSet? {
+        setGroup?.sets.value(at: (setGroup?.sets.firstIndex(of: self) ?? 0) - 1)
+    }
+    
     func isTraining(_ muscleGroup: MuscleGroup) -> Bool {
         setGroup?.exercise?.muscleGroup == muscleGroup || setGroup?.secondaryExercise?.muscleGroup == muscleGroup
     }

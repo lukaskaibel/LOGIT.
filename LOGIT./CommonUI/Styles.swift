@@ -49,10 +49,9 @@ struct ListButtonModifier: ViewModifier {
 struct KeyboardToolbarButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .font(.title3.weight(.light))
             .foregroundColor(.primary)
-            .frame(width: 70, height: 35)
-            .background(Color.tertiaryFill)
-            .cornerRadius(5)
+            .frame(width: 70)
     }
 }
 
