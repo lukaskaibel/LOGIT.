@@ -25,6 +25,7 @@
 		794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 794C3C462804AD1A003CB9F1 /* Localizable.strings */; };
 		794E64FC28EE38F3003AACDD /* ExerciseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E64FB28EE38F3003AACDD /* ExerciseCell.swift */; };
 		794E64FE28EE3A69003AACDD /* ColorMeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E64FD28EE3A69003AACDD /* ColorMeter.swift */; };
+		7950AFD329A3E58A00B2C9C2 /* LogitKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7950AFD229A3E58A00B2C9C2 /* LogitKeyboard.swift */; };
 		79511D072925A2EE00AF8363 /* TargetWorkoutsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79511D062925A2EE00AF8363 /* TargetWorkoutsDetailView.swift */; };
 		7955EEAE27FDC2F30010693C /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAD27FDC2F30010693C /* TemplateListView.swift */; };
 		7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB127FDC5680010693C /* TemplateCell.swift */; };
@@ -129,6 +130,7 @@
 		794C3C472804AD2A003CB9F1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		794E64FB28EE38F3003AACDD /* ExerciseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCell.swift; sourceTree = "<group>"; };
 		794E64FD28EE3A69003AACDD /* ColorMeter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorMeter.swift; sourceTree = "<group>"; };
+		7950AFD229A3E58A00B2C9C2 /* LogitKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogitKeyboard.swift; sourceTree = "<group>"; };
 		79511D062925A2EE00AF8363 /* TargetWorkoutsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetWorkoutsDetailView.swift; sourceTree = "<group>"; };
 		7955EEAD27FDC2F30010693C /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
 		7955EEB127FDC5680010693C /* TemplateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCell.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				80D9A7DA28860BB1000BF05E /* WorkoutCell.swift */,
 				797F40BC28300AB2002D8807 /* WorkoutSetCell.swift */,
+				7950AFD229A3E58A00B2C9C2 /* LogitKeyboard.swift */,
 			);
 			path = CommonUI;
 			sourceTree = "<group>";
@@ -579,6 +582,7 @@
 				79A4E33027E8CB0C0089001F /* FirstStartView.swift in Sources */,
 				790E1A34279DB5B300EDB715 /* Database.swift in Sources */,
 				79511D072925A2EE00AF8363 /* TargetWorkoutsDetailView.swift in Sources */,
+				7950AFD329A3E58A00B2C9C2 /* LogitKeyboard.swift in Sources */,
 				7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */,
 				79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */,
 				795BFA3028384C07005E59FE /* TemplateSet+.swift in Sources */,
