@@ -116,14 +116,16 @@ struct WorkoutRecorderView: View {
                         Button {
                              focusedIntegerFieldIndex = previousIntegerFieldIndex()
                         } label: {
-                            Image(systemName: "arrowshape.turn.up.backward")
+                            Image(systemName: "chevron.up")
+                                .foregroundColor(previousIntegerFieldIndex() == nil ? Color.placeholder : .label)
                                 .keyboardToolbarButtonStyle()
                         }
                         .disabled(previousIntegerFieldIndex() == nil)
                         Button {
                              focusedIntegerFieldIndex = nextIntegerFieldIndex()
                         } label: {
-                            Image(systemName: "arrowshape.turn.up.forward")
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(nextIntegerFieldIndex() == nil ? Color.placeholder : .label)
                                 .keyboardToolbarButtonStyle()
                         }
                         .disabled(nextIntegerFieldIndex() == nil)
@@ -296,38 +298,38 @@ struct WorkoutRecorderView: View {
     private func nextIntegerFieldIndex() -> IntegerField.Index? {
         guard let focusedIndex = focusedIntegerFieldIndex,
                 let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
-        if focusedIndex.tertiary == 0 {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary, tertiary: 1)
+        if let _ = focusedWorkoutSet as? StandardSet {
+            guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
+            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
+        } else if let superSet = focusedWorkoutSet as? SuperSet {
+            guard focusedIndex.secondary == 1 else { return IntegerField.Index(primary: focusedIndex.primary,
+                                                                               secondary: 1,
+                                                                               tertiary: focusedIndex.tertiary) }
+            guard focusedIndex.primary + 1 < workout.sets.count else  { return nil }
+            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
+        } else if let dropSet = focusedWorkoutSet as? DropSet {
+            if focusedIndex.secondary + 1 < dropSet.numberOfDrops {
+                return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary + 1, tertiary: focusedIndex.tertiary)
+            }
+            guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
+            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
         }
-        if let _ = focusedWorkoutSet as? SuperSet, focusedIndex.secondary == 0 {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: 1, tertiary: 0)
-        }
-        if let focusedDropSet = focusedWorkoutSet as? DropSet, focusedIndex.secondary + 1 < focusedDropSet.numberOfDrops {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary + 1, tertiary: 0)
-        }
-        guard workout.sets.value(at: focusedIndex.primary + 1) != nil else { return nil }
-        return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: 0)
+        return nil
     }
     
     private func previousIntegerFieldIndex() -> IntegerField.Index? {
-        guard let focusedIndex = focusedIntegerFieldIndex,
-                let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
-        if focusedIndex.tertiary == 1 {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary, tertiary: 0)
-        }
-        if let _ = focusedWorkoutSet as? SuperSet, focusedIndex.secondary == 1 {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: 0, tertiary: 1)
-        }
-        if let _ = focusedWorkoutSet as? DropSet, focusedIndex.secondary - 1 >= 0 {
-            return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary - 1, tertiary: 1)
-        }
-        guard let previousSet = workout.sets.value(at: focusedIndex.primary - 1) else { return nil }
+        guard let focusedIndex = focusedIntegerFieldIndex else { return nil }
+        guard focusedIndex.secondary == 0 else { return IntegerField.Index(primary: focusedIndex.primary,
+                                                                           secondary: focusedIndex.secondary - 1,
+                                                                           tertiary: focusedIndex.tertiary) }
+        guard focusedIndex.primary > 0 else { return nil }
+        let previousSet = workout.sets.value(at: focusedIndex.primary - 1)
         if let _ = previousSet as? StandardSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 0, tertiary: 1)
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: focusedIndex.secondary, tertiary: focusedIndex.tertiary)
         } else if let _ = previousSet as? SuperSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 1, tertiary: 1)
-        } else if let previousDropSet = previousSet as? DropSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: previousDropSet.numberOfDrops - 1, tertiary: 1)
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 1, tertiary: focusedIndex.tertiary)
+        } else if let dropSet = previousSet as? DropSet {
+            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: dropSet.numberOfDrops - 1 , tertiary: focusedIndex.tertiary)
         }
         return nil
     }
