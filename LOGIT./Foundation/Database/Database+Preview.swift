@@ -139,7 +139,7 @@ extension Database {
             workout: thirdBenchWorkout
         )
         let fourthBenchWorkout = database.newWorkout(name: "Benchday", date: Calendar.current.date(byAdding: .weekOfYear, value: -12, to: .now)!)
-        let bench4Group = database.newWorkoutSetGroup(
+        let _ = database.newWorkoutSetGroup(
             sets: [database.newStandardSet(repetitions: 12, weight: 50000)],
             exercise: benchpress,
             workout: fourthBenchWorkout

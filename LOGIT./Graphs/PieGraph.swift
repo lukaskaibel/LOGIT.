@@ -55,8 +55,8 @@ struct PieGraph<CenterView: View>: View {
                     .foregroundStyle(Color.placeholder.gradient)
                 ForEach(items) { item in
                     Circle()
-                        .trim(from: trimFrom(for: item), to: trimTo(for: item))
-                        .stroke(lineWidth: circleLineWidth * (item.isSelected ? 1.5 : 1.0))
+                        .trim(from: trimFrom(for: item) + 0.001, to: trimTo(for: item) - 0.001)
+                        .stroke(style: StrokeStyle(lineWidth: circleLineWidth * (item.isSelected ? 1.5 : 1.0)))
                         .rotation(Angle(degrees: -90))
                         .foregroundStyle(item.color.gradient)
                         .shadow(radius: item.isSelected ? 5 : 0)

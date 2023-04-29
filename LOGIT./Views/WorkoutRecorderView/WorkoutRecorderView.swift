@@ -301,7 +301,7 @@ struct WorkoutRecorderView: View {
         if let _ = focusedWorkoutSet as? StandardSet {
             guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
             return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
-        } else if let superSet = focusedWorkoutSet as? SuperSet {
+        } else if let _ = focusedWorkoutSet as? SuperSet {
             guard focusedIndex.secondary == 1 else { return IntegerField.Index(primary: focusedIndex.primary,
                                                                                secondary: 1,
                                                                                tertiary: focusedIndex.tertiary) }
