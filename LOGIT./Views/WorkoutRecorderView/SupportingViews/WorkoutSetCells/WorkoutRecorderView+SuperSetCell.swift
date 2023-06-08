@@ -50,7 +50,7 @@ extension WorkoutRecorderView {
                         placeholder: weightsPlaceholder(for: superSet).first!,
                         value: Int64(convertWeightForDisplaying(superSet.weightFirstExercise)),
                         setValue: {
-                            superSet.weightFirstExercise = $0
+                            superSet.weightFirstExercise = convertWeightForStoring($0)
                             setWorkoutEndDate(.now)
                         },
                         maxDigits: 4,
@@ -85,7 +85,7 @@ extension WorkoutRecorderView {
                         placeholder: weightsPlaceholder(for: superSet).second!,
                         value: Int64(convertWeightForDisplaying(superSet.weightSecondExercise)),
                         setValue: {
-                            superSet.weightSecondExercise = $0
+                            superSet.weightSecondExercise = convertWeightForStoring($0)
                             setWorkoutEndDate(.now)
                         },
                         maxDigits: 4,

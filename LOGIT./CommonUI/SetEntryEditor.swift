@@ -62,7 +62,7 @@ struct SetEntryEditor: View {
             set: { value in
                 if Int(value) ?? 10000 < 10000 || value == "" {
                     repetitions = NumberFormatter().number(from: value)?.int64Value ?? 0
-                    // database.refreshObjects()
+                    database.refreshObjects()
                 }
             }
         )

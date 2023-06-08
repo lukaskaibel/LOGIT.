@@ -28,7 +28,8 @@ extension TemplateEditorView {
                                                           set: { templateSuperSet.repetitionsSecondExercise = $0 }),
                                      weight: Binding(get: { templateSuperSet.weightSecondExercise },
                                                      set: { templateSuperSet.weightSecondExercise = $0 }))
-            }.accentColor(templateSuperSet.secondaryExercise?.muscleGroup?.color)
+            }
+            .accentColor(templateSuperSet.secondaryExercise?.muscleGroup?.color)
         }
     }
     
