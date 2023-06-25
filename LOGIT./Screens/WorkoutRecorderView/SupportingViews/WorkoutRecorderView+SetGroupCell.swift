@@ -28,6 +28,7 @@ extension WorkoutRecorderView {
             .padding(.horizontal, CELL_PADDING)
             .listRowBackground(Color.fill)
             .listRowInsets(EdgeInsets())
+            .moveDisabled(true)
             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                 WorkoutSetCell(
                     workoutSet: workoutSet,
@@ -51,6 +52,7 @@ extension WorkoutRecorderView {
                 setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
                 database.refreshObjects()
             }
+            .moveDisabled(true)
             Button {
                 database.addSet(to: setGroup)
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
@@ -63,6 +65,7 @@ extension WorkoutRecorderView {
             .padding(15)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.fill)
+            .moveDisabled(true)
         } header: {
             exerciseHeader(setGroup: setGroup)
         }
@@ -104,6 +107,21 @@ extension WorkoutRecorderView {
             if !isEditing {
                 Menu {
                     Section {
+                        Button(role: .destructive, action: {
+                            withAnimation {
+                                database.delete(setGroup)
+                            }
+                        }) {
+                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
+                        }
+                        Button {
+                            isEditing = true
+                            editMode = .active
+                        } label: {
+                            Label(NSLocalizedString("reorderExercises", comment: ""), systemImage: "arrow.up.arrow.down")
+                        }
+                    }
+                    Section {
                         Button { database.convertSetGroupToStandardSets(setGroup) } label: {
                             Label(NSLocalizedString("normalset", comment: ""),
                                   systemImage: setGroup.setType == .standard ? "checkmark" : "")
@@ -116,6 +134,8 @@ extension WorkoutRecorderView {
                             Label(NSLocalizedString("dropset", comment: ""),
                                   systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
                         }
+                    } header: {
+                        Text(NSLocalizedString("setType", comment: ""))
                     }
                     Section {
                         if let exercise = setGroup.exercise {
@@ -131,13 +151,6 @@ extension WorkoutRecorderView {
                             } label: {
                                 Label(secondaryExercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
                             }
-                        }
-                        Button(role: .destructive, action: {
-                            withAnimation {
-                                database.delete(setGroup)
-                            }
-                        }) {
-                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                         }
                     }
                 } label: {

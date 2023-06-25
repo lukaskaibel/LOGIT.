@@ -163,6 +163,7 @@ struct TemplateEditorView: View {
                 .padding(.horizontal, CELL_PADDING)
                 .listRowBackground(Color.fill)
                 .listRowInsets(EdgeInsets())
+                .moveDisabled(true)
                 ForEach(setGroup.sets, id:\.objectID) { templateSet in
                     templateSetCell(templateSet: templateSet)
                         .listRowSeparator(.hidden, edges: .bottom)
@@ -171,6 +172,7 @@ struct TemplateEditorView: View {
                     setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
                     database.refreshObjects()
                 }
+                .moveDisabled(true)
                 Button {
                     UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                     database.addSet(to: setGroup)
@@ -183,6 +185,7 @@ struct TemplateEditorView: View {
                 .padding(15)
                 .frame(maxWidth: .infinity)
                 .listRowBackground(Color.fill)
+                .moveDisabled(true)
             }
         } header: {
             setGroupHeader(for: setGroup)
@@ -215,6 +218,21 @@ struct TemplateEditorView: View {
             if !isEditing {
                 Menu(content: {
                     Section {
+                        Button(role: .destructive, action: {
+                            withAnimation {
+                                database.delete(setGroup)
+                            }
+                        }) {
+                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
+                        }
+                        Button {
+                            isEditing = true
+                            editMode = .active
+                        } label: {
+                            Label(NSLocalizedString("reorderExercises", comment: ""), systemImage: "arrow.up.arrow.down")
+                        }
+                    }
+                    Section {
                         Button { database.convertSetGroupToStandardSets(setGroup) } label: {
                             Label(NSLocalizedString("normalset", comment: ""),
                                   systemImage: setGroup.setType == .standard ? "checkmark" : "")
@@ -227,6 +245,8 @@ struct TemplateEditorView: View {
                             Label(NSLocalizedString("dropset", comment: ""),
                                   systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
                         }
+                    } header: {
+                        Text(NSLocalizedString("setType", comment: ""))
                     }
                     Section {
                         if let exercise = setGroup.exercise {
@@ -242,13 +262,6 @@ struct TemplateEditorView: View {
                             } label: {
                                 Label(secondaryExercise.name ?? NSLocalizedString("showDetail", comment: ""), systemImage: "info.circle")
                             }
-                        }
-                        Button(role: .destructive, action: {
-                            withAnimation {
-                                database.delete(setGroup)
-                            }
-                        }) {
-                            Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                         }
                     }
                 }) {
