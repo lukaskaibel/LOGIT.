@@ -32,7 +32,10 @@ extension WorkoutRecorderView {
                         IntegerField(
                             placeholder: repetitionsPlaceholder(for: dropSet).value(at: index) ?? 0,
                             value: dropSet.repetitions?.value(at: index) ?? 0,
-                            setValue: { dropSet.repetitions?.replaceValue(at: index, with: $0); setWorkoutEndDate(.now) },
+                            setValue: {
+                                dropSet.repetitions?.replaceValue(at: index, with: $0)
+                                setWorkoutEndDate(.now)
+                            },
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInWorkout,
@@ -44,7 +47,10 @@ extension WorkoutRecorderView {
                         IntegerField(
                             placeholder: weightsPlaceholder(for: dropSet).value(at: index) ?? 0,
                             value: Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)),
-                            setValue: { dropSet.weights?.replaceValue(at: index, with: $0); setWorkoutEndDate(.now) },
+                            setValue: {
+                                dropSet.weights?.replaceValue(at: index, with: convertWeightForStoring(Int64($0)))
+                                setWorkoutEndDate(.now)
+                            },
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInWorkout,

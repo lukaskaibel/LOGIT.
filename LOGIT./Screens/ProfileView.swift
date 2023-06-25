@@ -14,6 +14,7 @@ struct ProfileView: View {
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
     @AppStorage("workoutPerWeekTarget") var workoutPerWeekTarget: Int = 3
     @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
+    @AppStorage("timerIsMuted") var timerIsMuted: Bool = false
     
     // MARK: - Body
     
@@ -34,6 +35,9 @@ struct ProfileView: View {
                 Toggle(NSLocalizedString("preventAutoLock", comment: ""), isOn: $preventAutoLock)
             } footer: {
                 Text(NSLocalizedString("preventAutoLockDescription", comment: ""))
+            }
+            Section {
+                Toggle(NSLocalizedString("timerIsMuted", comment: ""), isOn: $timerIsMuted)
             }
         }.listStyle(.insetGrouped)
             .navigationTitle(NSLocalizedString("settings", comment: ""))

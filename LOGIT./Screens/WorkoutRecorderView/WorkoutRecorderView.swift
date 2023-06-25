@@ -5,9 +5,12 @@
 //  Created by Lukas Kaibel on 24.02.22.
 //
 
+import AVFoundation
+import CoreData
+import OSLog
 import SwiftUI
 import UIKit
-import CoreData
+
 
 struct WorkoutRecorderView: View {
 
@@ -20,24 +23,36 @@ struct WorkoutRecorderView: View {
     // MARK: - AppStorage
     
     @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
+    @AppStorage("timerIsMuted") var timerIsMuted: Bool = false
     
     // MARK: - Environment
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.goHome) var goHome
+    
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @EnvironmentObject var database: Database
     
     // MARK: - State
     
     @StateObject var workout: Workout
-    @State internal var isEditing: Bool = false
-    @State private var editMode: EditMode = .inactive
-    @State internal var sheetType: SheetType?
     @State internal var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
-    @State private var showingTimerView = false
+    
+    @State internal var isEditing: Bool = false
+    @State internal var editMode: EditMode = .inactive
+    
+    @StateObject var timer = TimerModel()
+    @State internal var isShowingTimerView = false
+    @State private var shouldShowTimerViewAgainWhenPossible = false
+    @State private var isShowingTimerInHeader = false
+    @State private var shouldFlash = false
+    @State private var timerSound: AVAudioPlayer?
+    
     @State private var isShowingFinishConfirmation = false
-    @State internal var focusedIntegerFieldIndex: IntegerField.Index? = IntegerField.Index(primary: 0, secondary: 0, tertiary: 0)
+    @State internal var sheetType: SheetType?
+    
+    @State internal var focusedIntegerFieldIndex: IntegerField.Index?
     
     // MARK: - Variables
     
@@ -48,7 +63,7 @@ struct WorkoutRecorderView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                header
+                Header
                 Divider()
                 List {
                     ForEach(workout.setGroups, id:\.objectID) { setGroup in
@@ -66,7 +81,7 @@ struct WorkoutRecorderView: View {
                     .listRowInsets(EdgeInsets())
                     Section {
                         if !isEditing {
-                            addExerciseButton
+                            AddExerciseButton
                         }
                     }
                     Spacer(minLength: 30)
@@ -75,69 +90,24 @@ struct WorkoutRecorderView: View {
                 }
                 .scrollIndicators(.hidden)
             }
+            .overlay {
+                if isShowingTimerView {
+                    TimerView(timer: timer)
+                        .contentShape(Rectangle())
+                        .onSwipeDown { withAnimation { isShowingTimerView = false } }
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(30)
+                        .shadow(color: .black.opacity(0.8), radius: 20)
+                        .padding(.bottom, 10)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                        .transition(.move(edge: .bottom))
+                }
+            }
             .toolbar(.hidden, for: .navigationBar)
             .environment(\.editMode, $editMode)
             .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: { showingTimerView.toggle() }) {
-                        TimerTimeView(showingTimerView: $showingTimerView)
-                    }.font(.body.monospacedDigit())
-                    Spacer()
-                    Text("\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))")
-                        .font(.caption)
-                    Spacer()
-                    Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
-                        isEditing.toggle()
-                        editMode = isEditing ? .active : .inactive
-                    }.disabled(workout.numberOfSetGroups == 0)
-                }
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    if let workoutSet = selectedWorkoutSet {
-                        if let _ = workoutSetTemplateSetDictionary[workoutSet] {
-                            Button {
-                                toggleSetCompleted(for: workoutSet)
-                            } label: {
-                                Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "checkmark")")
-                                    .keyboardToolbarButtonStyle()
-                            }
-                        } else {
-                            Button {
-                                toggleCopyPrevious(for: workoutSet)
-                            } label: {
-                                Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
-                                    .foregroundColor(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry ? Color.placeholder : .primary)
-                                    .keyboardToolbarButtonStyle()
-                            }
-                            .disabled(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry)
-                        }
-                    }
-                    HStack(spacing: 0) {
-                        Button {
-                             focusedIntegerFieldIndex = previousIntegerFieldIndex()
-                        } label: {
-                            Image(systemName: "chevron.up")
-                                .foregroundColor(previousIntegerFieldIndex() == nil ? Color.placeholder : .label)
-                                .keyboardToolbarButtonStyle()
-                        }
-                        .disabled(previousIntegerFieldIndex() == nil)
-                        Button {
-                             focusedIntegerFieldIndex = nextIntegerFieldIndex()
-                        } label: {
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(nextIntegerFieldIndex() == nil ? Color.placeholder : .label)
-                                .keyboardToolbarButtonStyle()
-                        }
-                        .disabled(nextIntegerFieldIndex() == nil)
-                    }
-                    Button {
-                        focusedIntegerFieldIndex = nil
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                            .keyboardToolbarButtonStyle()
-                    }
-                    Spacer()
-                }
+                ToolbarItemsKeyboard
+                ToolbarItemsBottomBar
             }
             .fullScreenCover(item: $sheetType) { type in
                 NavigationStack {
@@ -185,28 +155,54 @@ struct WorkoutRecorderView: View {
                 Button(NSLocalizedString("continueWorkout", comment: ""), role: .cancel) {}
             }
         }
-        .onAppear {
-            if let template = template {
-                updateWorkout(with: template)
+        .overlay {
+            FlashView(color: .accentColor, shouldFlash: $shouldFlash)
+                .edgesIgnoringSafeArea(.all)
+                .allowsHitTesting(false)
+        }
+        .onChange(of: focusedIntegerFieldIndex) { newValue in
+            if newValue == nil {
+                isShowingTimerView = shouldShowTimerViewAgainWhenPossible
+                shouldShowTimerViewAgainWhenPossible = false
+            } else {
+                shouldShowTimerViewAgainWhenPossible = shouldShowTimerViewAgainWhenPossible ? shouldShowTimerViewAgainWhenPossible : isShowingTimerView
+                isShowingTimerView = false
+            }
+            withAnimation {
+                isShowingTimerInHeader = timer.isRunning && newValue != nil
             }
         }
-        .scrollDismissesKeyboard(.immediately)
         .onAppear {
+            timer.onTimerFired =  {
+                shouldFlash = true
+                if !timerIsMuted {
+                    playTimerSound()
+                }
+            }
             if preventAutoLock {
                 UIApplication.shared.isIdleTimerDisabled = true
+            }
+            if let template = template {
+                updateWorkout(with: template)
             }
         }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
         }
+        .scrollDismissesKeyboard(.interactively)
         #if targetEnvironment(simulator)
         .statusBarHidden(true)
         #endif
     }
     
-    private var header: some View {
+    private var Header: some View {
         VStack(spacing: 5) {
-            WorkoutDurationView()
+            HStack {
+                WorkoutDurationView()
+                if isShowingTimerInHeader {
+                    TimeStringView
+                }
+            }
             HStack {
                 TextField(Workout.getStandardName(for: Date()), text: workoutName, axis: .vertical)
                     .lineLimit(2)
@@ -230,7 +226,13 @@ struct WorkoutRecorderView: View {
         .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
     
-    private var addExerciseButton: some View {
+    internal var TimeStringView: some View {
+        Text(timer.remainingTimeString)
+            .foregroundColor(timer.isRunning ? .accentColor : .secondaryLabel)
+            .font(.body.weight(.semibold).monospacedDigit())
+    }
+    
+    private var AddExerciseButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             sheetType = .exerciseSelection(exercise: nil, setExercise: { exercise in
@@ -295,7 +297,7 @@ struct WorkoutRecorderView: View {
         }
     }
     
-    private func nextIntegerFieldIndex() -> IntegerField.Index? {
+    internal func nextIntegerFieldIndex() -> IntegerField.Index? {
         guard let focusedIndex = focusedIntegerFieldIndex,
                 let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
         if let _ = focusedWorkoutSet as? StandardSet {
@@ -317,7 +319,7 @@ struct WorkoutRecorderView: View {
         return nil
     }
     
-    private func previousIntegerFieldIndex() -> IntegerField.Index? {
+    internal func previousIntegerFieldIndex() -> IntegerField.Index? {
         guard let focusedIndex = focusedIntegerFieldIndex else { return nil }
         guard focusedIndex.secondary == 0 else { return IntegerField.Index(primary: focusedIndex.primary,
                                                                            secondary: focusedIndex.secondary - 1,
@@ -373,6 +375,18 @@ struct WorkoutRecorderView: View {
     private func deleteWorkout() {
         workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
         database.delete(workout, saveContext: true)
+    }
+    
+    private func playTimerSound() {
+        guard let url = Bundle.main.url(forResource: "timer", withExtension: "wav") else { return }
+        do {
+            timerSound = try AVAudioPlayer(contentsOf: url)
+            timerSound?.volume = 0.3
+            timerSound?.play()
+        } catch {
+            Logger().error("WorkoutRecorderView: Could not find and play the timer sound.")
+            print()
+        }
     }
     
 }

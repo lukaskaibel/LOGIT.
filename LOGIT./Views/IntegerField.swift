@@ -39,12 +39,12 @@ struct IntegerField: View {
             )
             .cornerRadius(5)
             .onChange(of: focusedIntegerFieldIndex) { newValue in
+                guard isFocused != (newValue == index) else { return }
                 isFocused = newValue == index
             }
             .onChange(of: isFocused) { newValue in
-                if newValue {
-                    focusedIntegerFieldIndex = index
-                }
+                guard newValue != (focusedIntegerFieldIndex == index) else { return }
+                focusedIntegerFieldIndex = index
             }
     }
     
