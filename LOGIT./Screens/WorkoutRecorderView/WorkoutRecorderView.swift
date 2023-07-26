@@ -42,10 +42,10 @@ struct WorkoutRecorderView: View {
     @State internal var isEditing: Bool = false
     @State internal var editMode: EditMode = .inactive
     
-    @StateObject var timer = TimerModel()
-    @State internal var isShowingTimerView = false
-    @State private var shouldShowTimerViewAgainWhenPossible = false
-    @State private var isShowingTimerInHeader = false
+    @StateObject var chronograph = Chronograph()
+    @State internal var isShowingChronoView = false
+    @State private var shouldShowChronoViewAgainWhenPossible = false
+    @State private var isShowingChronoInHeader = false
     @State private var shouldFlash = false
     @State private var timerSound: AVAudioPlayer?
     
@@ -91,10 +91,10 @@ struct WorkoutRecorderView: View {
                 .scrollIndicators(.hidden)
             }
             .overlay {
-                if isShowingTimerView {
-                    TimerView(timer: timer)
+                if isShowingChronoView {
+                    ChronoView(chronograph: chronograph)
                         .contentShape(Rectangle())
-                        .onSwipeDown { withAnimation { isShowingTimerView = false } }
+                        .onSwipeDown { withAnimation { isShowingChronoView = false } }
                         .background(.ultraThinMaterial)
                         .cornerRadius(30)
                         .shadow(color: .black.opacity(0.8), radius: 20)
@@ -162,18 +162,18 @@ struct WorkoutRecorderView: View {
         }
         .onChange(of: focusedIntegerFieldIndex) { newValue in
             if newValue == nil {
-                isShowingTimerView = shouldShowTimerViewAgainWhenPossible
-                shouldShowTimerViewAgainWhenPossible = false
+                isShowingChronoView = shouldShowChronoViewAgainWhenPossible
+                shouldShowChronoViewAgainWhenPossible = false
             } else {
-                shouldShowTimerViewAgainWhenPossible = shouldShowTimerViewAgainWhenPossible ? shouldShowTimerViewAgainWhenPossible : isShowingTimerView
-                isShowingTimerView = false
+                shouldShowChronoViewAgainWhenPossible = shouldShowChronoViewAgainWhenPossible ? shouldShowChronoViewAgainWhenPossible : isShowingChronoView
+                isShowingChronoView = false
             }
             withAnimation {
-                isShowingTimerInHeader = timer.isRunning && newValue != nil
+                isShowingChronoInHeader = chronograph.status != .idle && newValue != nil
             }
         }
         .onAppear {
-            timer.onTimerFired =  {
+            chronograph.onTimerFired =  {
                 shouldFlash = true
                 if !timerIsMuted {
                     playTimerSound()
@@ -199,7 +199,7 @@ struct WorkoutRecorderView: View {
         VStack(spacing: 5) {
             HStack {
                 WorkoutDurationView()
-                if isShowingTimerInHeader {
+                if isShowingChronoInHeader {
                     TimeStringView
                 }
             }
@@ -227,8 +227,8 @@ struct WorkoutRecorderView: View {
     }
     
     internal var TimeStringView: some View {
-        Text(timer.remainingTimeString)
-            .foregroundColor(timer.isRunning ? .accentColor : .secondaryLabel)
+        Text(remainingChronoTimeString)
+            .foregroundColor(chronograph.status == .running ? .accentColor : .secondaryLabel)
             .font(.body.weight(.semibold).monospacedDigit())
     }
     
@@ -380,13 +380,19 @@ struct WorkoutRecorderView: View {
     private func playTimerSound() {
         guard let url = Bundle.main.url(forResource: "timer", withExtension: "wav") else { return }
         do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
             timerSound = try AVAudioPlayer(contentsOf: url)
-            timerSound?.volume = 0.3
+            timerSound?.volume = 0.25
             timerSound?.play()
         } catch {
             Logger().error("WorkoutRecorderView: Could not find and play the timer sound.")
             print()
         }
+    }
+    
+    private var remainingChronoTimeString: String {
+        "\(Int(chronograph.seconds)/60 / 10 % 6 )\(Int(chronograph.seconds)/60 % 10):\(Int(chronograph.seconds) % 60 / 10)\(Int(chronograph.seconds) % 60 % 10)"
     }
     
 }

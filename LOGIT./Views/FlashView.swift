@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FlashView: View {
-    private let flashDuration = 0.2
-    private let flashRepeatCount = 4
+    private let flashDuration = 0.1
+    private let flashRepeatCount = 3
     
     let color: Color
     
@@ -21,19 +21,30 @@ struct FlashView: View {
         color
             .opacity(isFlashing ? 1 : 0)
             .onChange(of: shouldFlash) { newValue in
-                guard newValue else {
-                    withAnimation(Animation.easeInOut(duration: flashDuration)) {
-                        isFlashing = false
-                    }
-                    return
-                }
-                withAnimation(Animation.easeInOut(duration: flashDuration).repeatCount(flashRepeatCount, autoreverses: true)) {
-                    isFlashing = true
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + flashDuration * Double(flashRepeatCount)) {
-                    shouldFlash = false
-                }
+                guard newValue else { return }
+                animateFlash(count: flashRepeatCount)
             }
+    }
+    
+    private func animateFlash(count: Int) {
+        if count <= 0 {
+            isFlashing = false
+            shouldFlash = false
+            return
+        }
+        
+        withAnimation(Animation.easeInOut(duration: flashDuration)) {
+            isFlashing = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + flashDuration * 2) {
+            withAnimation(Animation.easeInOut(duration: flashDuration)) {
+                isFlashing = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + flashDuration) {
+                animateFlash(count: count - 1)
+            }
+        }
     }
 }
 

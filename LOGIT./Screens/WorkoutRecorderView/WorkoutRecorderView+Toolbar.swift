@@ -14,16 +14,16 @@ extension WorkoutRecorderView {
             Button {
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                 withAnimation {
-                    isShowingTimerView.toggle()
+                    isShowingChronoView.toggle()
                 }
             } label: {
-                if !isShowingTimerView && (timer.isRunning || timer.isPaused) {
+                if !isShowingChronoView && chronograph.status != .idle {
                     TimeStringView
                 } else {
                     Image(systemName: "timer")
-                        .foregroundColor(isShowingTimerView ? .white : .accentColor)
+                        .foregroundColor(isShowingChronoView ? .white : .accentColor)
                         .padding(3)
-                        .background(isShowingTimerView ? Color.accentColor.opacity(0.9) : .clear)
+                        .background(isShowingChronoView ? Color.accentColor.opacity(0.9) : .clear)
                         .cornerRadius(8)
                 }
             }
