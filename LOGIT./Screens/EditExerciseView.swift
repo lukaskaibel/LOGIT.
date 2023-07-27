@@ -142,5 +142,6 @@ struct EditExerciseView: View {
 struct EditExerciseView_Previews: PreviewProvider {
     static var previews: some View {
         EditExerciseView(initialMuscleGroup: .chest)
+            .environmentObject(Database.preview)
     }
 }

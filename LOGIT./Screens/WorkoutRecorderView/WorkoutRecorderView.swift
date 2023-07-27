@@ -399,8 +399,11 @@ struct WorkoutRecorderView: View {
 
 struct WorkoutRecorderView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderView(workout: Database.preview.testWorkout, template: Database.preview.testTemplate)
-            .environmentObject(Database.preview)
+        WorkoutRecorderView(
+            workout: Database.preview.newWorkout(),
+            template: Database.preview.testTemplate
+        )
+        .environmentObject(Database.preview)
     }
 }
 

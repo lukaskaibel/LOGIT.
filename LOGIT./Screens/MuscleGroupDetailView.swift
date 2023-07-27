@@ -132,7 +132,9 @@ struct MuscleGroupDetailView: View {
 
 struct MuscleGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MuscleGroupDetailView(setGroups: Database.preview.testWorkout.setGroups)
-            .environmentObject(Database.preview)
+        NavigationView {
+            MuscleGroupDetailView(setGroups: Database.preview.testWorkout.setGroups)
+        }
+        .environmentObject(Database.preview)
     }
 }

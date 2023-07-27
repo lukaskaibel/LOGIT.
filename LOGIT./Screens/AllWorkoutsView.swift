@@ -101,5 +101,6 @@ struct AllWorkoutsView_Previews: PreviewProvider {
         NavigationView {
             AllWorkoutsView()
         }
+        .environmentObject(Database.preview)
     }
 }

@@ -119,7 +119,9 @@ struct TemplateDetailView: View {
 
 struct TemplateDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateDetailView(template: Database.preview.testTemplate)
-            .environmentObject(Database.preview)
+        NavigationView {
+            TemplateDetailView(template: Database.preview.testTemplate)
+        }
+        .environmentObject(Database.preview)
     }
 }

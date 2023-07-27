@@ -137,7 +137,9 @@ struct StartWorkoutView: View {
 
 struct WorkoutRecorderStartScreen_Previews: PreviewProvider {
     static var previews: some View {
-        StartWorkoutView()
-            .environmentObject(Database.preview)
+        NavigationView {
+            StartWorkoutView()
+        }
+        .environmentObject(Database.preview)
     }
 }

@@ -14,6 +14,7 @@ class Database: ObservableObject {
     // MARK: - Constants
     
     static let shared = Database()
+    static let preview = Database(isPreview: true)
     
     private let container: NSPersistentContainer
     
@@ -29,6 +30,9 @@ class Database: ObservableObject {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        if isPreview {
+            setupPreviewDatabase()
+        }
     }
     
     // MARK: - Computed Properties

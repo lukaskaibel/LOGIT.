@@ -9,8 +9,8 @@ import Foundation
 
 extension Database {
     
-    static var preview: Database {
-        let database = Database(isPreview: true)
+    internal func setupPreviewDatabase() {
+        let database = self
         
         (database.fetch(Workout.self) as! [Workout]).forEach { database.delete($0) }
         (database.fetch(Exercise.self) as! [Workout]).forEach { database.delete($0) }
@@ -146,7 +146,6 @@ extension Database {
         )
         
         database.save()
-        return database
     }
     
     var testWorkout: Workout {

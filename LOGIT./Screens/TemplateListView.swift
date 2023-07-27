@@ -111,6 +111,9 @@ struct TemplateListView: View {
 
 struct TemplateListView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateListView()
+        NavigationStack {
+            TemplateListView()
+        }
+        .environmentObject(Database.preview)
     }
 }

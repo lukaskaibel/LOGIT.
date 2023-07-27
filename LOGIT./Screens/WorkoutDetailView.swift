@@ -212,7 +212,12 @@ struct WorkoutDetailView: View {
 
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutDetailView(workout: Database.preview.testWorkout, canNavigateToTemplate: false)
-            .environmentObject(Database.preview)
+        NavigationStack {
+            WorkoutDetailView(
+                workout: Database.preview.getWorkouts().first!,
+                canNavigateToTemplate: false
+            )
+        }
+        .environmentObject(Database.preview)
     }
 }

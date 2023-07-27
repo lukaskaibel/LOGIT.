@@ -83,5 +83,6 @@ struct AllExercisesView: View {
 struct AllExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         AllExercisesView()
+            .environmentObject(Database.preview)
     }
 }

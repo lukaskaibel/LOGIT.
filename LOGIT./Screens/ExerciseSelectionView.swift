@@ -122,8 +122,8 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(selectedExercise: nil, setExercise: { _ in })
-                .environmentObject(Database.preview)
+            ExerciseSelectionView(selectedExercise: nil, setExercise: { _ in }) 
         }
+        .environmentObject(Database.preview)
     }
 }

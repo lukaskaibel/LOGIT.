@@ -295,7 +295,12 @@ struct TemplateEditorView: View {
 
 struct TemplateEditorView_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateEditorView(template: Database.preview.testTemplate, isEditingExistingTemplate: true)
-            .environmentObject(Database.preview)
+        NavigationView {
+            TemplateEditorView(
+                template: Database.preview.testTemplate,
+                isEditingExistingTemplate: true
+            )
+        }
+        .environmentObject(Database.preview)
     }
 }

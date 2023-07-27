@@ -143,7 +143,7 @@ struct TargetWorkoutsDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             TargetWorkoutsDetailView()
-                .environmentObject(Database.preview)
         }
+        .environmentObject(Database.preview)
     }
 }

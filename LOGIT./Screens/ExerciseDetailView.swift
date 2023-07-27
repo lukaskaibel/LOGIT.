@@ -244,6 +244,9 @@ struct ExerciseDetailView: View {
 
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseDetailView(exercise: Database.preview.newExercise(name: "Pushup"))
+        NavigationView {
+            ExerciseDetailView(exercise: Database.preview.getExercises().first!)
+        }
+        .environmentObject(Database.preview)
     }
 }
