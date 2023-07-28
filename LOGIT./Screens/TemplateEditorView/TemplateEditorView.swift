@@ -69,7 +69,7 @@ struct TemplateEditorView: View {
                         } label: {
                             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                         }
-                        .listButton()
+                        .bigButton()
                     }
                 }
                 Spacer(minLength: 50)

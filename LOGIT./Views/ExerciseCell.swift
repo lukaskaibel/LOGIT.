@@ -29,9 +29,10 @@ struct ExerciseCell: View {
                     .lineLimit(1)
                 Text(exercise.name ?? "")
                     .font(.headline)
+                    .foregroundColor(.primary)
             }
             Spacer()
-        }.padding(CELL_PADDING)
+        }
     }
     
     // MARK: - Computed Properties
@@ -44,7 +45,7 @@ struct ExerciseCell: View {
 
 struct ExerciseCell_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseCell(exercise: Database.preview.newExercise(name: "Push-Up",
-                                                           muscleGroup: .chest))
+        ExerciseCell(exercise: Database.preview.getExercises().first!)
+            .environmentObject(Database.preview)
     }
 }

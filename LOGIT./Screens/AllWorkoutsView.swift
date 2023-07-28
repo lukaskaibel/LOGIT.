@@ -22,39 +22,43 @@ struct AllWorkoutsView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            ForEach(groupedWorkouts.indices, id:\.self) { index in
-                Section {
-                    ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
-                        ZStack {
-                            WorkoutCell(workout: workout)
-                            NavigationLink(destination: WorkoutDetailView(workout: workout,
-                                                                          canNavigateToTemplate: true)) {
-                                EmptyView()
-                            }.opacity(0).buttonStyle(PlainButtonStyle())
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                ForEach(groupedWorkouts.indices, id:\.self) { index in
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        Text(header(for: index))
+                            .sectionHeaderStyle()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        VStack(spacing: CELL_SPACING) {
+                            ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
+                                NavigationLink(value: workout) {
+                                    WorkoutCell(workout: workout)
+                                        .padding(CELL_PADDING)
+                                        .tileStyle()
+                                }
+                            }
                         }
-                        .padding(CELL_PADDING)
                     }
-                } header: {
-                    Text(header(for: index))
-                        .sectionHeaderStyle()
                 }
-                .listRowInsets(EdgeInsets())
+                .emptyPlaceholder(groupedWorkouts) {
+                    Text(NSLocalizedString("noWorkouts", comment: ""))
+                }
+                .padding(.horizontal)
+                Spacer(minLength: 50)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
             }
-            .emptyPlaceholder(groupedWorkouts) {
-                Text(NSLocalizedString("noWorkouts", comment: ""))
-            }
-            Spacer(minLength: 50)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
         }
-        .listStyle(.insetGrouped)
         .searchable(text: $searchedText,
                     prompt: NSLocalizedString("searchWorkouts", comment: ""))
         .navigationTitle(NSLocalizedString("workouts", comment: ""))
+        .navigationDestination(for: Workout.self) { selectedWorkout in
+            WorkoutDetailView(
+                workout: selectedWorkout,
+                canNavigateToTemplate: true
+            )
+        }
         .toolbar  {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {

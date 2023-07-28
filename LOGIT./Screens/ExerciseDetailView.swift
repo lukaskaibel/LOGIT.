@@ -33,39 +33,27 @@ struct ExerciseDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            Section {
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
                 header
-            }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
-            Section {
-                exerciseInfo
+                    .padding(.horizontal)
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("overview", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack {
+                        exerciseInfo
+                        weightRepetitionsGraph
+                    }
                     .padding(CELL_PADDING)
-                weightRepetitionsGraph
-            } header: {
-                Text(NSLocalizedString("overview", comment: ""))
-                    .sectionHeaderStyle()
+                    .tileStyle()
+                }
+                .padding(.horizontal)
+                setGroupList
+                    .padding(.horizontal)
             }
-            .listRowInsets(EdgeInsets())
-            ForEach(database.getWorkoutSetGroups(with: exercise)) { setGroup in
-                SetGroupDetailView(
-                    setGroup: setGroup,
-                    supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")",
-                    navigationToDetailEnabled: false
-                )
-            }
-            .listRowInsets(EdgeInsets())
-            .emptyPlaceholder(database.getWorkoutSetGroups(with: exercise)) {
-                Text(NSLocalizedString("noHistory", comment: ""))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 150)
-            }
-            Spacer(minLength: 50)
-                .listRowBackground(Color.clear)
+            .padding(.bottom, 50)
         }
-        .listStyle(.insetGrouped)
-        .offset(x: 0, y: -30)
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .tint(exercise.muscleGroup?.color ?? .accentColor)
@@ -198,7 +186,35 @@ struct ExerciseDetailView: View {
                 Text(NSLocalizedString("all", comment: "")).tag(TimeSpan.allTime)
             }.pickerStyle(.segmented)
                 .padding(.top)
-        }.padding(CELL_PADDING)
+        }
+    }
+    
+    private var setGroupList: some View {
+        VStack(spacing: SECTION_SPACING) {
+            ForEach(groupedWorkoutSetGroups.indices, id:\.self) { index in
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(setGroupGroupHeaderTitle(for: index))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: CELL_SPACING) {
+                        ForEach(groupedWorkoutSetGroups[index]) { setGroup in
+                            SetGroupDetailView(
+                                setGroup: setGroup,
+                                supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")",
+                                navigationToDetailEnabled: false
+                            )
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                        }
+                    }
+                }
+            }
+            .emptyPlaceholder(database.getWorkoutSetGroups(with: exercise)) {
+                Text(NSLocalizedString("noHistory", comment: ""))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 150)
+            }
+        }
     }
     
     // MARK: - Computed Properties
@@ -238,6 +254,18 @@ struct ExerciseDetailView: View {
         database.getWorkoutSets(with: exercise)
             .filter { !withoutZeroRepetitions || max(.repetitions, in: $0) > 0 }
             .filter { !withoutZeroWeights || max(.weight, in: $0) > 0 }
+    }
+    
+    private var groupedWorkoutSetGroups: [[WorkoutSetGroup]] {
+        database.getGroupedWorkoutSetGroups(with: exercise)
+    }
+    
+    private func setGroupGroupHeaderTitle(for index: Int) -> String {
+        guard let date = groupedWorkoutSetGroups.value(at: index)?.first?.workout?.date else { return "" }
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        formatter.dateFormat = "MMMM yyyy"
+        return formatter.string(from: date)
     }
     
 }

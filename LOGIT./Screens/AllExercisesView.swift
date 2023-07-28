@@ -22,39 +22,42 @@ struct AllExercisesView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-            ForEach(groupedExercises) { group in
-                Section(content: {
-                    ForEach(group, id: \.objectID) { exercise in
-                        ZStack {
-                            ExerciseCell(exercise: exercise)
-                            NavigationChevron()
-                                .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
-                                .padding(.trailing)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                            NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
-                                EmptyView()
-                            }.opacity(0)
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                ForEach(groupedExercises) { group in
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        Text(getLetter(for: group))
+                            .sectionHeaderStyle2()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        VStack(spacing: CELL_SPACING) {
+                            ForEach(group, id: \.objectID) { exercise in
+                                NavigationLink(value: exercise) {
+                                    HStack {
+                                        ExerciseCell(exercise: exercise)
+                                        Spacer()
+                                        NavigationChevron()
+                                            .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
+                                    }
+                                    .padding(CELL_PADDING)
+                                    .tileStyle()
+                                }
+                            }
                         }
                     }
-                }, header: {
-                    Text(getLetter(for: group))
-                        .sectionHeaderStyle()
-                })
-            }
-            .listRowInsets(EdgeInsets())
-            .emptyPlaceholder(groupedExercises) {
-                Text(NSLocalizedString("noExercises", comment: ""))
+                }
+                .padding(.horizontal)
+                .emptyPlaceholder(groupedExercises) {
+                    Text(NSLocalizedString("noExercises", comment: ""))
+                }
             }
         }
-        .listStyle(.insetGrouped)
         .searchable(text: $searchedText )
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)
+        .navigationDestination(for: Exercise.self) { selectedExercise in
+            ExerciseDetailView(exercise: selectedExercise)
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showingAddExercise.toggle() }) {
@@ -82,7 +85,9 @@ struct AllExercisesView: View {
 
 struct AllExercisesView_Previews: PreviewProvider {
     static var previews: some View {
-        AllExercisesView()
-            .environmentObject(Database.preview)
+        NavigationStack {
+            AllExercisesView()
+        }
+        .environmentObject(Database.preview)
     }
 }

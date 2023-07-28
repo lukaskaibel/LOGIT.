@@ -244,7 +244,7 @@ struct WorkoutRecorderView: View {
         } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
         }
-        .listButton()
+        .bigButton()
     }
     
     // MARK: - Supporting Methods / Computed Properties

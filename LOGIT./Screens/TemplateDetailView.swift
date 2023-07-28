@@ -28,57 +28,68 @@ struct TemplateDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            Section {
+        ScrollView {
+            VStack(spacing: SECTION_SPACING) {
                 templateHeader
-            }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets())
-            ForEach(template.setGroups) { templateSetGroup in
-                TemplateSetGroupDetailView(templateSetGroup: templateSetGroup,
-                                           supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.sets.count) \(NSLocalizedString("set" + (templateSetGroup.sets.count == 1 ? "" : "s"), comment: ""))")
-            }
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            Section(content: {
-                workoutList
-            }, header: {
-                Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
-                    .sectionHeaderStyle()
-            }).listRowInsets(EdgeInsets())
-            Spacer(minLength: 50)
-                .listRowBackground(Color.clear)
-        }.listStyle(.insetGrouped)
-            .offset(x: 0, y: -30)
-            .edgesIgnoringSafeArea(.bottom)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? "")) : NSLocalizedString("unused", comment: ""))
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Menu(content: {
-                        Button(action: { showingTemplateEditor = true }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
-                        Button(role: .destructive, action: {
-                            showingDeletionAlert = true
-                        }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
-                    }) {
-                        Image(systemName: "ellipsis.circle")
+                    .padding(.horizontal)
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("exercises", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LazyVStack(spacing: CELL_SPACING) {
+                        ForEach(template.setGroups) { templateSetGroup in
+                            TemplateSetGroupDetailView(
+                                templateSetGroup: templateSetGroup,
+                                supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.sets.count) \(NSLocalizedString("set" + (templateSetGroup.sets.count == 1 ? "" : "s"), comment: ""))"
+                            )
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                        }
                     }
+                }
+                .padding(.horizontal)
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    workoutList
+                }
+                .padding(.horizontal)
+            }
+            .padding(.bottom, 50)
+        }
+        .edgesIgnoringSafeArea(.bottom)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: Workout.self) { selectedWorkout in
+            WorkoutDetailView(workout:  selectedWorkout, canNavigateToTemplate: false)
+        }
+        .navigationTitle(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? "")) : NSLocalizedString("unused", comment: ""))
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Menu(content: {
+                    Button(action: { showingTemplateEditor = true }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
+                    Button(role: .destructive, action: {
+                        showingDeletionAlert = true
+                    }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
+                }) {
+                    Image(systemName: "ellipsis.circle")
+                }
 
-                }
             }
-            .alert(NSLocalizedString("templates", comment: ""),
-                   isPresented: $showingTemplateInfoAlert,
-                   actions: {  },
-                   message: { Text(NSLocalizedString("templateExplanation", comment: "")) })
-            .confirmationDialog(NSLocalizedString("deleteTemplateMsg", comment: ""), isPresented: $showingDeletionAlert) {
-                Button(NSLocalizedString("deleteTemplate", comment: ""), role: .destructive) {
-                    database.delete(template, saveContext: true)
-                    dismiss()
-                }
+        }
+        .alert(NSLocalizedString("templates", comment: ""),
+               isPresented: $showingTemplateInfoAlert,
+               actions: {  },
+               message: { Text(NSLocalizedString("templateExplanation", comment: "")) })
+        .confirmationDialog(NSLocalizedString("deleteTemplateMsg", comment: ""), isPresented: $showingDeletionAlert) {
+            Button(NSLocalizedString("deleteTemplate", comment: ""), role: .destructive) {
+                database.delete(template, saveContext: true)
+                dismiss()
             }
-            .sheet(isPresented: $showingTemplateEditor) {
-                TemplateEditorView(template: template, isEditingExistingTemplate: true)
-            }
+        }
+        .sheet(isPresented: $showingTemplateEditor) {
+            TemplateEditorView(template: template, isEditingExistingTemplate: true)
+        }
     }
     
     // MARK: - Supporting Views
@@ -98,14 +109,12 @@ struct TemplateDetailView: View {
     
     private var workoutList: some View {
         ForEach(template.workouts, id:\.objectID) { workout in
-            ZStack {
+            NavigationLink(value: workout) {
                 WorkoutCell(workout: workout)
-                NavigationLink(destination: WorkoutDetailView(workout: workout,
-                                                              canNavigateToTemplate: false)) {
-                    EmptyView()
-                }.opacity(0)
             }
-        }.padding(CELL_PADDING)
+            .padding(CELL_PADDING)
+            .tileStyle()
+        }
     }
     
     // MARK: - Computed Properties
@@ -119,7 +128,7 @@ struct TemplateDetailView: View {
 
 struct TemplateDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             TemplateDetailView(template: Database.preview.testTemplate)
         }
         .environmentObject(Database.preview)

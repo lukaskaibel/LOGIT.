@@ -56,6 +56,8 @@ struct EditExerciseView: View {
                             .padding(.vertical, 5)
                     }
                     .padding(CELL_PADDING)
+                    .tileStyle()
+                    .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                 } footer: {
                     Text(NSLocalizedString("exerciseNameDescription", comment: ""))

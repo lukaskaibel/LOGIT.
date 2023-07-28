@@ -34,22 +34,17 @@ struct ExerciseSelectionView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
-                exerciseSection(for: group)
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                ForEach(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) { group in
+                    exerciseSection(for: group)
+                }
+                .emptyPlaceholder(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) {
+                    Text(NSLocalizedString("noExercises", comment: ""))
+                }
             }
-            .emptyPlaceholder(database.getGroupedExercises(withNameIncluding: searchedText, for: selectedMuscleGroup)) {
-                Text(NSLocalizedString("noExercises", comment: ""))
-            }
-            .listRowInsets(EdgeInsets())
-            Spacer(minLength: 30)
-                .listRowBackground(Color.clear)
         }
-        .listStyle(.insetGrouped)
-        .offset(x: 0, y: -30)
         .edgesIgnoringSafeArea(.bottom)
         .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
@@ -86,35 +81,39 @@ struct ExerciseSelectionView: View {
     
     @ViewBuilder
     private func exerciseSection(for group: [Exercise]) -> some View {
-        Section(content: {
-            ForEach(group, id:\.objectID) { exercise in
-                HStack {
-                    ExerciseCell(exercise: exercise)
-                    Spacer()
-                    if exercise == selectedExercise {
-                        Image(systemName: "checkmark")
-                            .fontWeight(.semibold)
+        VStack(spacing: SECTION_HEADER_SPACING) {
+            Text((group.first?.name?.first ?? Character(" ")).uppercased())
+                .sectionHeaderStyle2()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(spacing: CELL_SPACING) {
+                ForEach(group, id:\.objectID) { exercise in
+                    HStack {
+                        ExerciseCell(exercise: exercise)
+                        Spacer()
+                        if exercise == selectedExercise {
+                            Image(systemName: "checkmark")
+                                .fontWeight(.semibold)
+                                .foregroundColor(exercise.muscleGroup?.color)
+                        }
+                        Button {
+                            sheetType = .exerciseDetail(exercise: exercise)
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(.title3)
+                        }.buttonStyle(.plain)
                             .foregroundColor(exercise.muscleGroup?.color)
                     }
-                    Button {
-                        sheetType = .exerciseDetail(exercise: exercise)
-                    } label: {
-                        Image(systemName: "info.circle")
-                            .font(.title3)
-                    }.buttonStyle(.plain)
-                        .foregroundColor(exercise.muscleGroup?.color)
-                }
-                .padding(.trailing)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    setExercise(exercise)
-                    dismiss()
+                    .padding(CELL_PADDING)
+                    .tileStyle()
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        setExercise(exercise)
+                        dismiss()
+                    }
                 }
             }
-        }, header: {
-            Text((group.first?.name?.first ?? Character(" ")).uppercased())
-                .sectionHeaderStyle()
-        })
+        }
+        .padding(.horizontal)
     }
     
 }

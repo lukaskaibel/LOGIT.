@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-struct TileModifier: ViewModifier {
-    func body(content: Content) -> some View {
-       content
-            .padding()
-            .background(Color.secondaryBackground)
-            .cornerRadius(20)
-   }
-}
-
 struct CellTileModifier: ViewModifier {
     func body(content: Content) -> some View {
        content
@@ -32,17 +23,6 @@ struct SectionHeaderModifier: ViewModifier {
             .foregroundColor(.label)
             .padding(.vertical, 10)
             .textCase(.none)
-    }
-}
-
-struct ListButtonModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.system(.body, design: .rounded, weight: .bold))
-            .foregroundColor(.accentColor)
-            .padding(10)
-            .listRowBackground(Color.accentColor.secondaryTranslucentBackground)
-            .frame(maxWidth: .infinity)
     }
 }
 
@@ -102,9 +82,6 @@ struct SwipeDownModifier: ViewModifier {
 }
 
 extension View {
-    func tileStyle() -> some View {
-        modifier(TileModifier())
-    }
     
     func cellTileStyle() -> some View {
         modifier(CellTileModifier())
@@ -112,10 +89,6 @@ extension View {
     
     func sectionHeaderStyle() -> some View {
         modifier(SectionHeaderModifier())
-    }
-    
-    func listButton() -> some View {
-        modifier(ListButtonModifier())
     }
     
     func keyboardToolbarButtonStyle() -> some View {

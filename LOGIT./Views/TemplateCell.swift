@@ -23,6 +23,7 @@ struct TemplateCell: View {
                     .foregroundColor(.secondaryLabel)
                 Text(template.name ?? NSLocalizedString("noName", comment: ""))
                     .font(.title3.weight(.bold))
+                    .foregroundColor(.primary)
                     .lineLimit(1)
             }
             HStack {
@@ -30,7 +31,9 @@ struct TemplateCell: View {
                     ColorMeter.Item(color: $0.color, amount: $1)
                 })
                 Text("\(exercisesString)")
+                    .foregroundColor(.primary)
                     .lineLimit(2, reservesSpace: true)
+                    .multilineTextAlignment(.leading)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

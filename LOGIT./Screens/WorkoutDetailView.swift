@@ -33,45 +33,56 @@ struct WorkoutDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            Section {
+        ScrollView {
+            VStack(spacing: SECTION_SPACING) {
                 workoutHeader
-            }.listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            Section {
-                workoutInfo
-                setsPerMuscleGroup
-            } header: {
-                Text(NSLocalizedString("overview", comment: ""))
-                    .sectionHeaderStyle()
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("overview", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    workoutInfo
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                }
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("muscleGroups", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    setsPerMuscleGroup
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                }
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("exercises", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LazyVStack(spacing: CELL_SPACING) {
+                        ForEach(workout.setGroups) { setGroup in
+                            SetGroupDetailView(setGroup: setGroup,
+                                               supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                        }
+                    }
+                }
+                if canNavigateToTemplate {
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        Text(NSLocalizedString("template", comment: ""))
+                            .sectionHeaderStyle2()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        templateButton
+                            .bigButton()
+                        Text(NSLocalizedString("templateExplanation", comment: ""))
+                            .font(.footnote)
+                            .foregroundColor(.secondaryLabel)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal)
+                    }
+                }
             }
-            .listRowInsets(EdgeInsets())
-            ForEach(workout.setGroups) { setGroup in
-                SetGroupDetailView(setGroup: setGroup,
-                                   supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
-            }
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            if canNavigateToTemplate {
-                Section {
-                    templateButton
-                        .buttonStyle(PlainButtonStyle())
-                } header: {
-                    Text(NSLocalizedString("template", comment: ""))
-                        .sectionHeaderStyle()
-                } footer: {
-                    Text(NSLocalizedString("templateExplanation", comment: ""))
-                        .font(.footnote)
-                        .foregroundColor(.secondaryLabel)
-                        .padding(.vertical, 10)
-                        .padding(.horizontal)
-                }.listRowInsets(EdgeInsets())
-            }
-            Spacer(minLength: 50)
-                .listRowBackground(Color.clear)
+            .padding(.bottom, 30)
+            .padding(.horizontal)
         }
-        .listStyle(.insetGrouped)
-        .offset(x: 0, y: -30)
         .edgesIgnoringSafeArea(.bottom)
         .navigationTitle(workout.date?.description(.medium) ?? "")
         .navigationBarTitleDisplayMode(.inline)
@@ -151,25 +162,18 @@ struct WorkoutDetailView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(CELL_PADDING)
     }
     
     private var setsPerMuscleGroup: some View {
-        VStack {
-            Text(NSLocalizedString("muscleGroups", comment: ""))
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            PieGraph(
-                items: workout.muscleGroupOccurances.map {
-                    PieGraph.Item(title: $0.0.rawValue.capitalized,
-                                  amount: $0.1,
-                                  color: $0.0.color,
-                                  isSelected: false
-                    )
-                }
-            )
-        }
-        .padding(CELL_PADDING)
+        PieGraph(
+            items: workout.muscleGroupOccurances.map {
+                PieGraph.Item(title: $0.0.rawValue.capitalized,
+                              amount: $0.1,
+                              color: $0.0.color,
+                              isSelected: false
+                )
+            }
+        )
     }
     
     private var templateButton: some View {
@@ -194,7 +198,6 @@ struct WorkoutDetailView: View {
                     Spacer()
                 }
             }
-            .padding()
             .contentShape(Rectangle())
         }
     }

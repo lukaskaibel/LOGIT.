@@ -27,7 +27,24 @@ struct TemplateSetGroupDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        Section {
+        VStack {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(supplementaryText)
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
+                    .textCase(.none)
+                ExerciseHeader(
+                    exercise: templateSetGroup.exercise,
+                    secondaryExercise: templateSetGroup.secondaryExercise,
+                    exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },
+                    secondaryExerciseAction: { exerciseForDetail = templateSetGroup.secondaryExercise },
+                    isSuperSet: templateSetGroup.setType == .superSet,
+                    navigationToDetailEnabled: true
+                )
+            }
+            .padding(.bottom, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
             HStack(spacing: 0) {
                 Text(templateSetGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
                         templateSetGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
@@ -40,16 +57,12 @@ struct TemplateSetGroupDetailView: View {
             }
             .font(.caption)
             .foregroundColor(.secondaryLabel)
-            .padding(.horizontal, CELL_PADDING)
-            .listRowBackground(Color.fill)
-            .listRowInsets(EdgeInsets())
             ZStack {
                 ColorMeter(
                     items: [templateSetGroup.exercise?.muscleGroup?.color, templateSetGroup.secondaryExercise?.muscleGroup?.color]
                         .compactMap({$0}).map{ ColorMeter.Item(color: $0, amount: 1) },
                     splitStyle: .horizontal
                 )
-                .padding( .vertical, CELL_PADDING)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
                     ForEach(templateSetGroup.sets, id:\.objectID) { templateSet in
@@ -72,23 +85,6 @@ struct TemplateSetGroupDetailView: View {
                     }
                 }
             }
-            .padding(.horizontal, CELL_PADDING)
-        } header: {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(supplementaryText)
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(.secondaryLabel)
-                    .textCase(.none)
-                ExerciseHeader(
-                    exercise: templateSetGroup.exercise,
-                    secondaryExercise: templateSetGroup.secondaryExercise,
-                    exerciseAction: { exerciseForDetail = templateSetGroup.exercise; navigateToDetail = true },
-                    secondaryExerciseAction: { exerciseForDetail = templateSetGroup.secondaryExercise },
-                    isSuperSet: templateSetGroup.setType == .superSet,
-                    navigationToDetailEnabled: true
-                )
-            }
-            .padding(.vertical, 10)
         }
         .navigationDestination(isPresented: $navigateToDetail) {
             if let exercise = exerciseForDetail {

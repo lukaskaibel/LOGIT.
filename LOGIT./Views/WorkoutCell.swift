@@ -24,6 +24,7 @@ struct WorkoutCell: View {
                         .foregroundColor(.secondaryLabel)
                     Text(workout.name ?? NSLocalizedString("noName", comment: ""))
                         .font(.title3.weight(.bold))
+                        .foregroundColor(.primary)
                         .lineLimit(1)
                 }
                 Spacer()
@@ -35,7 +36,9 @@ struct WorkoutCell: View {
                     ColorMeter.Item(color: $0.color, amount: $1)
                 })
                 Text("\(exercisesString)")
+                    .foregroundColor(.primary)
                     .lineLimit(2, reservesSpace: true)
+                    .multilineTextAlignment(.leading)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -57,7 +60,11 @@ struct WorkoutCell: View {
 
 struct WorkoutCell_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutCell(workout: Database.preview.fetch(Workout.self).first! as! Workout)
-            .environmentObject(Database.preview)
+        ScrollView {
+            WorkoutCell(workout: Database.preview.fetch(Workout.self).first! as! Workout)
+                .padding(CELL_PADDING)
+                .tileStyle()
+        }
+        .environmentObject(Database.preview)
     }
 }

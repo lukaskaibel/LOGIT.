@@ -23,39 +23,41 @@ struct TemplateListView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            ForEach(groupedTemplates.indices, id:\.self) { index in
-                Section {
-                    ForEach(groupedTemplates.value(at: index) ?? [], id:\.objectID) { template in
-                        ZStack {
-                            HStack {
-                                TemplateCell(template: template)
-                                NavigationChevron()
-                                    .foregroundColor(template.primaryMuscleGroup?.color ?? .separator)
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                ForEach(groupedTemplates.indices, id:\.self) { index in
+                    VStack(spacing: CELL_SPACING) {
+                        Text(header(for: index))
+                            .sectionHeaderStyle2()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        ForEach(groupedTemplates.value(at: index) ?? [], id:\.objectID) { template in
+                            NavigationLink(value: template) {
+                                HStack {
+                                    TemplateCell(template: template)
+                                    NavigationChevron()
+                                        .foregroundColor(template.primaryMuscleGroup?.color ?? .separator)
+                                }
+                                .padding(CELL_PADDING)
+                                .tileStyle()
                             }
-                            NavigationLink(destination: TemplateDetailView(template: template)) {
-                                EmptyView()
-                            }.opacity(0)
-                        }.padding(CELL_PADDING)
+                        }
                     }
-                } header: {
-                    Text(header(for: index))
-                        .sectionHeaderStyle()
                 }
-                .listRowInsets(EdgeInsets())
+                .emptyPlaceholder(groupedTemplates) {
+                    Text(NSLocalizedString("noTemplates", comment: ""))
+                }
+                .padding(.horizontal)
             }
-            .emptyPlaceholder(groupedTemplates) {
-                Text(NSLocalizedString("noTemplates", comment: ""))
-            }
+            
+            
         }
-        .listStyle(.insetGrouped)
         .searchable(text: $searchedText)
         .navigationBarTitleDisplayMode(.large)
+        .navigationDestination(for: Template.self) { selectedTemplate in
+            TemplateDetailView(template: selectedTemplate)
+        }
         .navigationTitle(NSLocalizedString("templates", comment: ""))
-        
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Menu {

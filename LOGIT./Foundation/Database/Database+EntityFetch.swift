@@ -74,6 +74,24 @@ extension Database {
             .filter { exercise == nil || $0.exercise == exercise || $0.secondaryExercise == exercise }
     }
     
+    func getGroupedWorkoutSetGroups(
+        with exercise: Exercise? = nil,
+        groupedBy sortingKey: WorkoutSortingKey = .date
+    ) -> [[WorkoutSetGroup]] {
+        var result = [[WorkoutSetGroup]]()
+        getWorkoutSetGroups(with: exercise)
+            .forEach { setGroup in
+                if let lastDate = result.last?.last?.workout?.date,
+                   let setGroupDate = setGroup.workout?.date,
+                   Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: .month) {
+                    result[result.count - 1].append(setGroup)
+                } else {
+                    result.append([setGroup])
+                }
+            }
+        return result
+    }
+    
     // MARK: - WorkoutSet Fetch
     
     func getWorkoutSets(with exercise: Exercise? = nil) -> [WorkoutSet] {

@@ -39,19 +39,19 @@ struct FirstStartView: View {
             }.padding(.top, 30)
             Spacer()
             if setupStage == .start {
-                VStack {
+                VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("letsGetStarted", comment: "")) 💪")
-                        .font(.title3.weight(.semibold))
+                        .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(NSLocalizedString("letsGetStartedDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                }.padding()
-                    .background(Color.secondaryBackground)
-                    .cornerRadius(20)
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                }
+                .padding(CELL_PADDING)
+                .tileStyle()
+                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else if setupStage == .weightUnit {
-                VStack {
+                VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weightUnit", comment: "")) ⚖️")
                         .font(.title3.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,12 +64,12 @@ struct FirstStartView: View {
                             Text(unit.rawValue).tag(unit)
                         }
                     }).pickerStyle(.wheel)
-                }.padding()
-                    .background(Color.secondaryBackground)
-                    .cornerRadius(20)
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                }
+                .padding(CELL_PADDING)
+                .tileStyle()
+                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else {
-                VStack {
+                VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weeklyTarget", comment: "")) 🗓")
                         .font(.title3.weight(.semibold))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,10 +82,10 @@ struct FirstStartView: View {
                             Text(String(i)).tag(i)
                         }
                     }).pickerStyle(.wheel)
-                }.padding()
-                    .background(Color.secondaryBackground)
-                    .cornerRadius(20)
-                    .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                }
+                .padding(CELL_PADDING)
+                .tileStyle()
+                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             }
             Spacer()
             Button(action: {

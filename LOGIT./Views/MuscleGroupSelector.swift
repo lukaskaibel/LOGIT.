@@ -31,6 +31,7 @@ struct MuscleGroupSelector: View {
                         .clipShape(Capsule())
                 }
             }
+            .padding(.horizontal)
         }
     }
 }

@@ -36,42 +36,44 @@ struct StartWorkoutView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            Section {
-                chooseTemplateText
-            }.listRowBackground(Color.clear)
-            Section {
+        ScrollView {
+            VStack(spacing: SECTION_SPACING) {
                 withoutTemplateButton
-            }.listRowInsets(EdgeInsets())
-            Section {
-                templateList
-            } header: {
-                Text(NSLocalizedString("myTemplates", comment: ""))
-                    .sectionHeaderStyle()
-                    .listRowInsets(EdgeInsets())
-            }
-        }.listStyle(.insetGrouped)
-            .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
-            .fullScreenCover(item: $fullScreenCoverType) { type in
-                switch type {
-                case let .workoutRecorder(template): WorkoutRecorderView(workout: database.newWorkout(), template: template)
-                }
-            }
-            .sheet(item: $sheetType) { type in
-                switch type {
-                case let .templateDetail(template):
-                    NavigationStack {
-                        TemplateDetailView(template: template)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(NSLocalizedString("back", comment: "")) {
-                                        sheetType = nil
-                                    }
-                                }
-                            }
+                    .padding(.horizontal)
+                    .padding(.vertical, 30)
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("myTemplates", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LazyVStack(spacing: CELL_SPACING) {
+                        templateList
                     }
                 }
+                .padding(.horizontal)
             }
+            .padding(.top)
+        }
+        .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
+        .fullScreenCover(item: $fullScreenCoverType) { type in
+            switch type {
+            case let .workoutRecorder(template): WorkoutRecorderView(workout: database.newWorkout(), template: template)
+            }
+        }
+        .sheet(item: $sheetType) { type in
+            switch type {
+            case let .templateDetail(template):
+                NavigationStack {
+                    TemplateDetailView(template: template)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(NSLocalizedString("back", comment: "")) {
+                                    sheetType = nil
+                                }
+                            }
+                        }
+                }
+            }
+        }
     }
     
     // MARK: - Supporting Views
@@ -85,25 +87,10 @@ struct StartWorkoutView: View {
     }
     
     private var withoutTemplateButton: some View {
-        Button {
+        Button(NSLocalizedString("startEmpty", comment: "")) {
             fullScreenCoverType = .workoutRecorder(template: nil)
-        } label: {
-            HStack(spacing: 15) {
-                Image(systemName: "square.dashed")
-                    .resizable()
-                    .font(.body.weight(.thin))
-                    .frame(width: 40, height: 40)
-                    .overlay {
-                        Image(systemName: "plus")
-                    }
-                Text(NSLocalizedString("startEmpty", comment: ""))
-                    .font(.body.weight(.semibold))
-                Spacer()
-                NavigationChevron()
-            }.font(.body.weight(.semibold))
-                .foregroundColor(.accentColor)
-                .frame(height: 60)
-        }.padding(CELL_PADDING)
+        }
+        .bigButton()
     }
     
     private var templateList: some View {
@@ -122,10 +109,12 @@ struct StartWorkoutView: View {
                             .font(.title3)
                     }
                     NavigationChevron()
-                }.foregroundColor(template.primaryMuscleGroup?.color ?? .accentColor)
-            }.padding(CELL_PADDING)
+                }
+                .foregroundColor(template.primaryMuscleGroup?.color ?? .accentColor)
+                .padding(CELL_PADDING)
+                .tileStyle()
+            }
         }
-        .listRowInsets(EdgeInsets())
         .emptyPlaceholder(database.getTemplates()) {
             Text(NSLocalizedString("noTemplates", comment: ""))
                 .frame(maxWidth: .infinity)

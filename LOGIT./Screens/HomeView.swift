@@ -22,82 +22,79 @@ struct HomeView: View {
     
     @State private var navigateToTarget: Bool = false
     @State private var navigateToMuscleGroupDetail: Bool = false
+    @State private var selectedWorkout: Workout?
     
     // MARK: - Body
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    targetWorkoutsView
-                        .contentShape(Rectangle())
-                        .highPriorityGesture(
-                            TapGesture()
-                                .onEnded {
-                                    navigateToTarget = true
+            ScrollView {
+                LazyVStack(spacing: SECTION_SPACING) {
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        HStack(alignment: .lastTextBaseline) {
+                            Text("Workout Target")
+                                .sectionHeaderStyle2()
+                            Spacer()
+                            Text("Per Week")
+                                .sectionHeaderSecondaryStyle()
+                        }
+                        targetWorkoutsView
+                            .tileStyle()
+                            .contentShape(Rectangle())
+                            .highPriorityGesture(
+                                TapGesture()
+                                    .onEnded {
+                                        navigateToTarget = true
+                                    }
+                            )
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        HStack(alignment: .lastTextBaseline) {
+                            Text("Muscle Groups")
+                                .sectionHeaderStyle2()
+                            Spacer()
+                            Text("Last 10 Workouts")
+                                .sectionHeaderSecondaryStyle()
+                        }
+                        muscleGroupPercentageView
+                            .tileStyle()
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                navigateToMuscleGroupDetail = true
+                            }
+                    }
+                    .padding(.horizontal)
+
+                    VStack(spacing: SECTION_HEADER_SPACING) {
+                        HStack {
+                            Text(NSLocalizedString("recentWorkouts", comment: ""))
+                                .sectionHeaderStyle2()
+                                .fixedSize()
+                            NavigationLink(destination: AllWorkoutsView()) {
+                                Text(NSLocalizedString("showAll", comment: ""))
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                        }
+                        VStack(spacing: CELL_SPACING) {
+                            ForEach(recentWorkouts, id:\.objectID) { workout in
+                                NavigationLink(value: workout) {
+                                    WorkoutCell(workout: workout)
+                                        .padding(CELL_PADDING)
+                                        .tileStyle()
                                 }
-                        )
-                } header: {
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("Workout Target")
-                            .sectionHeaderStyle()
-                        Spacer()
-                        Text("Per Week")
-                            .font(.body)
-                            .textCase(nil)
-                            .foregroundColor(.secondaryLabel)
-                    }
-                }.listRowInsets(EdgeInsets())
-                Section {
-                    muscleGroupPercentageView
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            navigateToMuscleGroupDetail = true
+                            }
+                            .emptyPlaceholder(recentWorkouts) {
+                                Text("No Workouts")
+                            }
                         }
-                } header: {
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("Muscle Groups")
-                            .sectionHeaderStyle()
-                        Spacer()
-                        Text("Last 10 Workouts")
-                            .font(.body)
-                            .textCase(nil)
-                            .foregroundColor(.secondaryLabel)
                     }
-                }.listRowInsets(EdgeInsets())
-                Section(content: {
-                    ForEach(recentWorkouts, id:\.objectID) { workout in
-                        ZStack {
-                            WorkoutCell(workout: workout)
-                            NavigationLink(destination: WorkoutDetailView(workout: workout, canNavigateToTemplate: true)) {
-                                EmptyView()
-                            }.opacity(0)
-                        }
-                        .padding(CELL_PADDING)
-                    }
-                    .emptyPlaceholder(recentWorkouts) {
-                        Text("No Workouts")
-                    }
-                }, header: {
-                    HStack {
-                        Text(NSLocalizedString("recentWorkouts", comment: ""))
-                            .sectionHeaderStyle()
-                            .fixedSize()
-                        Spacer()
-                        NavigationLink(destination: AllWorkoutsView()) {
-                            Text(NSLocalizedString("showAll", comment: ""))
-                                .font(.body)
-                                .foregroundColor(.accentColor)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .textCase(.none)
-                        }
-                    }.listRowSeparator(.hidden, edges: .top)
-                }).listRowInsets(EdgeInsets())
-                Spacer(minLength: 50)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
+                    .padding(.horizontal)
+                }
+                .padding(.bottom, 50)
+                .padding(.top)
             }
-            .listStyle(.insetGrouped)
             .scrollIndicators(.hidden)
             .navigationTitle("LOGIT.")
             .navigationDestination(isPresented: $navigateToTarget) {
@@ -105,6 +102,9 @@ struct HomeView: View {
             }
             .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
                 MuscleGroupDetailView(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
+            }
+            .navigationDestination(for: Workout.self) { selectedWorkout in
+                WorkoutDetailView(workout: selectedWorkout, canNavigateToTemplate: true)
             }
         }
     }

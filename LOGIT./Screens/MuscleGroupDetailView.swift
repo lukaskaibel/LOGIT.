@@ -20,8 +20,8 @@ struct MuscleGroupDetailView: View {
     // MARK: - Body
     
     var body: some View {
-        List {
-            Section {
+        ScrollView {
+            LazyVStack(spacing: SECTION_SPACING) {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("muscleGroups", comment: ""))
                         .font(.largeTitle.weight(.bold))
@@ -30,37 +30,41 @@ struct MuscleGroupDetailView: View {
                         .foregroundColor(.secondaryLabel)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                
                 PieGraph(
                     items: muscleGroupOccurances.map {
                         PieGraph.Item(title: $0.0.description,
                                       amount: $0.1,
                                       color: $0.0.color,
                                       isSelected: $0.0 == selectedMuscleGroup)
-                        },
+                    },
                     centerView: centerView,
                     hideLegend: true
                 )
                 .frame(height: 200)
                 .padding()
                 .padding(.vertical, 50)
+                
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                
+                VStack(spacing: CELL_SPACING) {
+                    ForEach(filteredSetGroups, id:\.objectID) { setGroup in
+                        SetGroupDetailView(
+                            setGroup: setGroup,
+                            supplementaryText: "\(setGroup.workout!.date!.description(.short))  ·  \(setGroup.workout!.name!)"
+                        )
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                    }
+                    .emptyPlaceholder(filteredSetGroups) {
+                        Text(NSLocalizedString("noExercises", comment: ""))
+                    }
+                }
+                .padding(.horizontal)
             }
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            ForEach(filteredSetGroups, id:\.objectID) { setGroup in
-                SetGroupDetailView(setGroup: setGroup,
-                                   supplementaryText: "\(setGroup.workout!.date!.description(.short))  ·  \(setGroup.workout!.name!)")
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
-            }
-            .emptyPlaceholder(filteredSetGroups) {
-                Text(NSLocalizedString("noExercises", comment: ""))
-            }
-            Spacer(minLength: 30)
-                .listRowBackground(Color.clear)
+            .padding(.bottom, 30)
         }
-        .offset(y: -30)
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
     }
