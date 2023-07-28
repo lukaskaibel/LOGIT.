@@ -15,16 +15,34 @@ struct TileModifier: ViewModifier {
    }    
 }
 
+struct SecondaryTileModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(Color.tertiaryBackground)
+            .cornerRadius(20)
+   }
+}
+
 extension View {
     func tileStyle() -> some View {
         modifier(TileModifier())
+    }
+    func secondaryTileStyle() -> some View {
+        modifier(SecondaryTileModifier())
     }
 }
 
 struct TileStyle_Previews: PreviewProvider {
     static var previews: some View {
-        Text("Hello World")
-            .padding()
-            .tileStyle()
+        VStack {
+            Text("Hello World")
+                .padding()
+                .tileStyle()
+            Text("Hello World")
+                .padding()
+                .secondaryTileStyle()
+                .padding()
+                .tileStyle()
+        }
     }
 }

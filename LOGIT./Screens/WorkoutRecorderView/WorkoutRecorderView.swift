@@ -65,20 +65,21 @@ struct WorkoutRecorderView: View {
             VStack(spacing: 0) {
                 Header
                 Divider()
-                List {
-                    ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                        if isEditing {
-                            exerciseHeader(setGroup: setGroup)
-                                .deleteDisabled(true)
-                        } else {
-                            setGroupCell(for: setGroup)
-                                .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
-                                .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
+                ScrollView {
+                    LazyVStack(spacing: SECTION_SPACING) {
+                        ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                            if isEditing {
+                                exerciseHeader(setGroup: setGroup)
+                                    .deleteDisabled(true)
+                            } else {
+                                setGroupCell(for: setGroup)
+                                    .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
+                                    .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
+                            }
                         }
                     }
-                    .onMove(perform: moveSetGroups)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets())
+                    
+//                    .onMove(perform: moveSetGroups)
                     Section {
                         if !isEditing {
                             AddExerciseButton

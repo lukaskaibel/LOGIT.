@@ -35,12 +35,12 @@ extension WorkoutRecorderView {
                             workoutSetIsLast(workoutSet: workoutSet) ? .bottom :
                             .none
                     )
-                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : 0)
-                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : 0)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? 0 : 0)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? 0 : 0)
                     Spacer()
                     Text("\(indexInSetGroup + 1)")
-                        .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
-                        .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                        .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
+                        .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
                     Spacer()
                 }
                 .frame(maxWidth: 80)
@@ -50,8 +50,8 @@ extension WorkoutRecorderView {
                         indexInWorkout: indexInWorkout,
                         focusedIntegerFieldIndex: $focusedIntegerFieldIndex
                     )
-                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
-                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
                     .frame(maxWidth: .infinity)
                 } else if let dropSet = workoutSet as? DropSet {
                     DropSetCell(
@@ -59,8 +59,8 @@ extension WorkoutRecorderView {
                         indexInWorkout: indexInWorkout,
                         focusedIntegerFieldIndex: $focusedIntegerFieldIndex
                     )
-                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
-                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
                     .frame(maxWidth: .infinity)
                 } else if let superSet = workoutSet as? SuperSet {
                     SuperSetCell(
@@ -68,12 +68,11 @@ extension WorkoutRecorderView {
                         indexInWorkout: indexInWorkout,
                         focusedIntegerFieldIndex: $focusedIntegerFieldIndex
                     )
-                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
-                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? CELL_PADDING : CELL_PADDING / 2)
+                    .padding(.top, workoutSetIsFirst(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
+                    .padding(.bottom, workoutSetIsLast(workoutSet: workoutSet) ? 0 : CELL_SPACING / 2)
                     .frame(maxWidth: .infinity)
                 }
             }
-            .padding(.horizontal, CELL_PADDING)
         }
         
         // MARK: - Supporting Methods

@@ -10,8 +10,12 @@ import Foundation
 
 extension WorkoutSetGroup {
     
-    public enum SetType: Int {
+    public enum SetType: String {
         case standard, superSet, dropSet
+        
+        var description: String {
+            NSLocalizedString(self.rawValue, comment: "")
+        }
     }
     
     var sets: [WorkoutSet] {

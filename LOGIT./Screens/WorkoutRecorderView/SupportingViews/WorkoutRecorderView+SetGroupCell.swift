@@ -123,7 +123,7 @@ extension WorkoutRecorderView {
                     }
                     Section {
                         Button { database.convertSetGroupToStandardSets(setGroup) } label: {
-                            Label(NSLocalizedString("normalset", comment: ""),
+                            Label(NSLocalizedString("standard", comment: ""),
                                   systemImage: setGroup.setType == .standard ? "checkmark" : "")
                         }
                         Button { database.convertSetGroupToSuperSets(setGroup) } label: {

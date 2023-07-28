@@ -14,8 +14,8 @@
             filePath = "LOGIT./Screens/WorkoutRecorderView/WorkoutRecorderView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "381"
-            endingLineNumber = "381"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
             landmarkName = "playTimerSound()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "LOGIT./Screens/WorkoutRecorderView/WorkoutRecorderView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "385"
-            endingLineNumber = "385"
+            startingLineNumber = "386"
+            endingLineNumber = "386"
             landmarkName = "playTimerSound()"
             landmarkType = "7">
          </BreakpointContent>
