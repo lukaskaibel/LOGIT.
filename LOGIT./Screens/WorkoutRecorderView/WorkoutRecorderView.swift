@@ -62,34 +62,61 @@ struct WorkoutRecorderView: View {
         
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                Header
-                Divider()
-                ScrollView {
-                    LazyVStack(spacing: SECTION_SPACING) {
+            ZStack {
+                if isEditing {
+                    List {
+                        Spacer(minLength: 90)
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
                         ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                            if isEditing {
-                                exerciseHeader(setGroup: setGroup)
-                                    .deleteDisabled(true)
-                            } else {
-                                setGroupCell(for: setGroup)
-                                    .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
-                                    .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
+                            WorkoutRecorderView.WorkoutSetGroupRecorderCell(
+                                setGroup: setGroup,
+                                focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                                sheetType: $sheetType,
+                                isEditing: $isEditing,
+                                editMode: $editMode
+                            )
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                            .padding(.top, workout.setGroups.first == setGroup ? 0 : CELL_SPACING / 2)
+                            .padding(.bottom, workout.setGroups.last == setGroup ? 0 : CELL_SPACING / 2)
+                            .padding(.horizontal)
+                            .buttonStyle(.plain)
+                        }
+                        .onMove(perform: moveSetGroups)
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                    }
+                    .listStyle(.plain)
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: SECTION_SPACING) {
+                            ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                                WorkoutRecorderView.WorkoutSetGroupRecorderCell(
+                                    setGroup: setGroup,
+                                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                                    sheetType: $sheetType,
+                                    isEditing: $isEditing,
+                                    editMode: $editMode
+                                )
+                                .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
+                                .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
+                                .padding(CELL_PADDING)
+                                .tileStyle()
                             }
                         }
+                        .padding(.horizontal)
+                        .padding(.top, 90)
+                        
+                        AddExerciseButton
+                            .padding(.horizontal)
+                            .padding(.bottom, 30)
                     }
-                    
-//                    .onMove(perform: moveSetGroups)
-                    Section {
-                        if !isEditing {
-                            AddExerciseButton
-                        }
-                    }
-                    Spacer(minLength: 30)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+                    .scrollIndicators(.hidden)
                 }
-                .scrollIndicators(.hidden)
+                
+                Header
+                    .frame(maxHeight: .infinity, alignment: .top)
             }
             .overlay {
                 if isShowingChronoView {
@@ -99,7 +126,7 @@ struct WorkoutRecorderView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(30)
                         .shadow(color: .black.opacity(0.8), radius: 20)
-                        .padding(.bottom, 10)
+                        .padding(.bottom, CELL_SPACING)
                         .frame(maxHeight: .infinity, alignment: .bottom)
                         .transition(.move(edge: .bottom))
                 }
@@ -197,34 +224,37 @@ struct WorkoutRecorderView: View {
     }
     
     private var Header: some View {
-        VStack(spacing: 5) {
-            HStack {
-                WorkoutDurationView()
-                if isShowingChronoInHeader {
-                    TimeStringView
-                }
-            }
-            HStack {
-                TextField(Workout.getStandardName(for: Date()), text: workoutName, axis: .vertical)
-                    .lineLimit(2)
-                    .foregroundColor(.label)
-                    .font(.title2.weight(.bold))
-                Spacer()
-                ProgressCircleButton(progress: workout.setGroups.count > 0 ? progressInWorkout : 0.0) {
-                    if !workout.hasEntries {
-                        deleteWorkout()
-                        dismiss()
-                    } else {
-                        UINotificationFeedbackGenerator().notificationOccurred(.success)
-                        isShowingFinishConfirmation = true
+        VStack(spacing: 0) {
+            VStack(spacing: 5) {
+                HStack {
+                    WorkoutDurationView()
+                    if isShowingChronoInHeader {
+                        TimeStringView
                     }
                 }
-                .offset(y: -2)
+                HStack {
+                    TextField(Workout.getStandardName(for: Date()), text: workoutName, axis: .vertical)
+                        .lineLimit(2)
+                        .foregroundColor(.label)
+                        .font(.title2.weight(.bold))
+                    Spacer()
+                    ProgressCircleButton(progress: workout.setGroups.count > 0 ? progressInWorkout : 0.0) {
+                        if !workout.hasEntries {
+                            deleteWorkout()
+                            dismiss()
+                        } else {
+                            UINotificationFeedbackGenerator().notificationOccurred(.success)
+                            isShowingFinishConfirmation = true
+                        }
+                    }
+                    .offset(y: -2)
+                }
             }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+            .background(.ultraThinMaterial)
+            Divider()
         }
-        .padding(.horizontal)
-        .padding(.bottom, 10)
-        .background(colorScheme == .light ? Color.tertiaryBackground : .secondaryBackground)
     }
     
     internal var TimeStringView: some View {

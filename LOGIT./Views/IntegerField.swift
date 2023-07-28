@@ -17,6 +17,7 @@ struct IntegerField: View {
     let maxDigits: Int?
     let index: Index
     @Binding var focusedIntegerFieldIndex: Index?
+    var unit: String? = "kg"
     
     // MARK: - State
     
@@ -25,27 +26,29 @@ struct IntegerField: View {
     // MARK: - Body
     
     var body: some View {
-        TextField(String(placeholder), text: valueAsStringBinding)
-            .focused($isFocused)
-            .keyboardType(.numberPad)
-            .font(.system(.body, design: .rounded, weight: .bold))
-            .multilineTextAlignment(.center)
-            .padding(10)
-            .background(
-                ZStack {
-                    Color.background
-                    Color.fill
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
+            TextField(String(placeholder), text: valueAsStringBinding)
+                .focused($isFocused)
+                .keyboardType(.numberPad)
+                .font(.system(.title3, design: .rounded, weight: .bold))
+                .multilineTextAlignment(.center)
+                .fixedSize()
+                .onChange(of: focusedIntegerFieldIndex) { newValue in
+                    guard isFocused != (newValue == index) else { return }
+                    isFocused = newValue == index
                 }
-            )
-            .cornerRadius(5)
-            .onChange(of: focusedIntegerFieldIndex) { newValue in
-                guard isFocused != (newValue == index) else { return }
-                isFocused = newValue == index
-            }
-            .onChange(of: isFocused) { newValue in
-                guard newValue != (focusedIntegerFieldIndex == index) else { return }
-                focusedIntegerFieldIndex = index
-            }
+                .onChange(of: isFocused) { newValue in
+                    guard newValue != (focusedIntegerFieldIndex == index) else { return }
+                    focusedIntegerFieldIndex = index
+                }
+            Text(unit?.uppercased() ?? "")
+                .font(.system(.footnote, design: .rounded, weight: .bold))
+                .foregroundColor(value == 0 ? .placeholder : .primary)
+        }
+        .onTapGesture {
+            isFocused = true
+        }
+        .frame(minWidth: 100, alignment: .trailing)
     }
     
     // MARK: - Computed Properties
@@ -87,5 +90,7 @@ struct IntegerField_Previews: PreviewProvider {
             index: .init(primary: 0),
             focusedIntegerFieldIndex: .constant(.init(primary: 0))
         )
+        .padding(CELL_PADDING)
+        .secondaryTileStyle()
     }
 }

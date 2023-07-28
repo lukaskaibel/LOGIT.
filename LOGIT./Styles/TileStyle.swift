@@ -19,7 +19,7 @@ struct SecondaryTileModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .background(Color.tertiaryBackground)
-            .cornerRadius(20)
+            .cornerRadius(15)
    }
 }
 

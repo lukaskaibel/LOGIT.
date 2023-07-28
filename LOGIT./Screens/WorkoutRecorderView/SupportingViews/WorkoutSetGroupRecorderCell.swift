@@ -29,25 +29,9 @@ extension WorkoutRecorderView {
         var body: some View {
             VStack(spacing: SECTION_HEADER_SPACING) {
                 header
-                    .padding([.top, .horizontal], CELL_PADDING)
-                VStack(spacing: 20) {
-                    VStack {
-                        HStack {
-                            Text(
-                                setGroup.setType == .superSet ? NSLocalizedString("superset", comment: "").uppercased() :
-                                setGroup.setType == .dropSet ? NSLocalizedString("dropset", comment: "").uppercased() :
-                                NSLocalizedString("set", comment: "").uppercased()
-                            )
-                            .frame(maxWidth: 80)
-                            Text(NSLocalizedString("reps", comment: "").uppercased())
-                                .frame(maxWidth: .infinity)
-                            Text(WeightUnit.used.rawValue.uppercased())
-                                .frame(maxWidth: .infinity)
-                        }
-                        .font(.caption)
-                        .foregroundColor(.secondaryLabel)
-                        .padding(.horizontal, CELL_PADDING)
-                        VStack(spacing: 0) {
+                if !isEditing {
+                    VStack(spacing: CELL_PADDING) {
+                        VStack(spacing: CELL_SPACING) {
                             ForEach(setGroup.sets, id:\.objectID) { workoutSet in
                                 WorkoutRecorderView.WorkoutSetCell(
                                     workoutSet: workoutSet,
@@ -55,24 +39,23 @@ extension WorkoutRecorderView {
                                     indexInSetGroup: setGroup.sets.firstIndex(of: workoutSet)!,
                                     focusedIntegerFieldIndex: $focusedIntegerFieldIndex
                                 )
-                                .padding(.horizontal, CELL_PADDING)
+                                .padding(CELL_PADDING)
+                                .onDelete {
+                                    database.delete(workoutSet)
+                                    database.refreshObjects()
+                                }
+                                .secondaryTileStyle()
                             }
                         }
+                        Button {
+                            database.addSet(to: setGroup)
+                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                        } label: {
+                            Label(NSLocalizedString("addSet", comment: ""),
+                                  systemImage: "plus.circle.fill")
+                        }
+                        .secondaryBigButton()
                     }
-                    
-        //            .onDelete { indexSet in
-        //                setGroup.sets.elements(for: indexSet).forEach { database.delete($0) }
-        //                database.refreshObjects()
-        //            }
-                    Button {
-                        database.addSet(to: setGroup)
-                        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                    } label: {
-                        Label(NSLocalizedString("addSet", comment: ""),
-                              systemImage: "plus.circle.fill")
-                    }
-                    .bigButton()
-                    .padding([.bottom, .horizontal], CELL_PADDING)
                 }
             }
             .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
@@ -188,6 +171,7 @@ struct WorkoutSetGroupRecorderCell_Previews: PreviewProvider {
                 isEditing: .constant(false),
                 editMode: .constant(.inactive)
             )
+            .padding(CELL_PADDING)
             .tileStyle()
             .padding()
         }

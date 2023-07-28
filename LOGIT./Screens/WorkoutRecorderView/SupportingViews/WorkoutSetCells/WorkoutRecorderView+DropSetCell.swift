@@ -42,7 +42,8 @@ extension WorkoutRecorderView {
                                 secondary: index,
                                 tertiary: 0
                             ),
-                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                            unit: NSLocalizedString("reps", comment: "")
                         )
                         IntegerField(
                             placeholder: weightsPlaceholder(for: dropSet).value(at: index) ?? 0,
@@ -57,16 +58,11 @@ extension WorkoutRecorderView {
                                 secondary: index,
                                 tertiary: 1
                             ),
-                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                            unit: WeightUnit.used.rawValue
                         )
                     }
                 }
-                Stepper(
-                    NSLocalizedString("dropCount", comment: ""),
-                    onIncrement: { dropSet.addDrop(); database.refreshObjects() },
-                    onDecrement: { dropSet.removeLastDrop(); database.refreshObjects() }
-                )
-                .accentColor(dropSet.exercise?.muscleGroup?.color)
             }
         }
         

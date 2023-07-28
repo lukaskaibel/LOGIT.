@@ -40,7 +40,8 @@ extension WorkoutRecorderView {
                         secondary: 0,
                         tertiary: 0
                     ),
-                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                    unit: NSLocalizedString("reps", comment: "")
                 )
                 IntegerField(
                     placeholder: weightPlaceholder(for: standardSet),
@@ -55,7 +56,8 @@ extension WorkoutRecorderView {
                         secondary: 0,
                         tertiary: 1
                     ),
-                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                    unit: WeightUnit.used.rawValue
                 )
             }
         }

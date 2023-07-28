@@ -44,7 +44,8 @@ extension WorkoutRecorderView {
                             secondary: 0,
                             tertiary: 0
                         ),
-                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                        unit: NSLocalizedString("reps", comment: "")
                     )
                     IntegerField(
                         placeholder: weightsPlaceholder(for: superSet).first!,
@@ -59,7 +60,8 @@ extension WorkoutRecorderView {
                             secondary: 0,
                             tertiary: 1
                         ),
-                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                        unit: WeightUnit.used.rawValue
                     )
                 }
                 HStack {
@@ -79,7 +81,8 @@ extension WorkoutRecorderView {
                             secondary: 1,
                             tertiary: 0
                         ),
-                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                        unit: NSLocalizedString("reps", comment: "")
                     )
                     IntegerField(
                         placeholder: weightsPlaceholder(for: superSet).second!,
@@ -94,7 +97,8 @@ extension WorkoutRecorderView {
                             secondary: 1,
                             tertiary: 1
                         ),
-                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex
+                        focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                        unit: WeightUnit.used.rawValue
                     )
                 }.accentColor(superSet.secondaryExercise?.muscleGroup?.color)
             }
