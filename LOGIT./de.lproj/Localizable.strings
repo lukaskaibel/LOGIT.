@@ -53,7 +53,7 @@
 "dismiss" = "Verwerfen";
 "done" = "Fertig";
 "dropCount" = "Anzahl Drops";
-"dropset" = "Dropsatz";
+"dropSet" = "Dropsatz";
 "duration" = "Dauer";
 
 // MARK: - E
@@ -147,9 +147,12 @@
 
 "recentWorkouts" = "Letzte Workouts";
 "remove" = "Entfernen";
+"reorderingDone" = "Fertig umsortiert";
 "reorderExercises" = "Übungen umsortieren";
 "repetitions" = "Wiederholungen";
 "reps" = "Wdh";
+"replaceExercise" = "Übung ersetzen";
+"replaceSecondaryExercise" = "Zweite Übung ersetzen";
 
 // MARK: - S
 
@@ -178,7 +181,7 @@
 "startWorkout" = "Workout starten";
 "stop" = "Stop";
 "summary" = "Zusammenfassung";
-"superset" = "Supersatz";
+"superSet" = "Supersatz";
 
 // MARK: - T
 

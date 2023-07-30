@@ -92,8 +92,14 @@ struct Delete: ViewModifier {
 
 extension View {
     
-    func onDelete(perform action: @escaping () -> Void) -> some View {
-        self.modifier(Delete(action: action))
+    func onDelete(disabled: Bool = false, perform action: @escaping () -> Void) -> some View {
+        Group {
+            if disabled {
+                self
+            } else {
+                self.modifier(Delete(action: action))
+            }
+        }
     }
     
 }

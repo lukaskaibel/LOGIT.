@@ -44,6 +44,7 @@ struct ExerciseSelectionView: View {
                     Text(NSLocalizedString("noExercises", comment: ""))
                 }
             }
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))

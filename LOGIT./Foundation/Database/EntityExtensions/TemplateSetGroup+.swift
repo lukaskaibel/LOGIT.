@@ -9,8 +9,12 @@ import Foundation
 
 extension TemplateSetGroup {
     
-    @objc enum SetType: Int {
+    enum SetType: String {
         case standard, superSet, dropSet
+        
+        var description: String {
+            NSLocalizedString(self.rawValue, comment: "")
+        }
     }
     
     public var sets: [TemplateSet] {

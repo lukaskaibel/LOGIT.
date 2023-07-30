@@ -9,6 +9,10 @@ import SwiftUI
 
 struct IntegerField: View {
     
+    // MARK: - Environment
+    
+    @Environment(\.canEdit) var canEdit: Bool
+    
     // MARK: - Parameters
     
     let placeholder: Int64
@@ -27,20 +31,28 @@ struct IntegerField: View {
     
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
-            TextField(String(placeholder), text: valueAsStringBinding)
-                .focused($isFocused)
-                .keyboardType(.numberPad)
-                .font(.system(.title3, design: .rounded, weight: .bold))
-                .multilineTextAlignment(.center)
-                .fixedSize()
-                .onChange(of: focusedIntegerFieldIndex) { newValue in
-                    guard isFocused != (newValue == index) else { return }
-                    isFocused = newValue == index
+            Group {
+                if canEdit {
+                    TextField(String(placeholder), text: valueAsStringBinding)
+                        .focused($isFocused)
+                        .foregroundColor(value == 0 ? .placeholder : .primary)
+                        .keyboardType(.numberPad)
+                } else {
+                    Text(String(value))
+                        .foregroundColor(value == 0 ? .placeholder : .primary)
                 }
-                .onChange(of: isFocused) { newValue in
-                    guard newValue != (focusedIntegerFieldIndex == index) else { return }
-                    focusedIntegerFieldIndex = index
-                }
+            }
+            .font(.system(.title3, design: .rounded, weight: .bold))
+            .multilineTextAlignment(.center)
+            .fixedSize()
+            .onChange(of: focusedIntegerFieldIndex) { newValue in
+                guard isFocused != (newValue == index) else { return }
+                isFocused = newValue == index
+            }
+            .onChange(of: isFocused) { newValue in
+                guard newValue != (focusedIntegerFieldIndex == index) else { return }
+                focusedIntegerFieldIndex = index
+            }
             Text(unit?.uppercased() ?? "")
                 .font(.system(.footnote, design: .rounded, weight: .bold))
                 .foregroundColor(value == 0 ? .placeholder : .primary)

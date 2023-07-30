@@ -1,5 +1,5 @@
 //
-//  WorkoutRecorderView+DropSetCell.swift
+//  DropSetCell.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 13.05.22.
@@ -7,26 +7,24 @@
 
 import SwiftUI
 
-extension WorkoutRecorderView {
+struct DropSetCell: View {
+        
+    // MARK: - Environment
     
-    internal struct DropSetCell: View {
-        
-        // MARK: - Environment
-        
-        @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
-        @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
-        @EnvironmentObject var database: Database
-        
-        // MARK: - Parameters
-        
-        @ObservedObject var dropSet: DropSet
-        let indexInWorkout: Int
-        @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-        
-        // MARK: - Body
-        
-        var body: some View {
-            VStack {
+    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
+    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
+    @EnvironmentObject var database: Database
+    
+    // MARK: - Parameters
+    
+    @ObservedObject var dropSet: DropSet
+    @Binding var focusedIntegerFieldIndex: IntegerField.Index?
+    
+    // MARK: - Body
+    
+    var body: some View {
+        VStack {
+            if let indexInWorkout = indexInWorkout {
                 ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
                     HStack {
                         IntegerField(
@@ -65,19 +63,22 @@ extension WorkoutRecorderView {
                 }
             }
         }
-        
-        // MARK: - Supporting Methods
-        
-        private func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
-            guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
-            return templateDropSet.repetitions?.map { $0 } ?? .emptyList
-        }
-        
-        private func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
-            guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
-            return templateDropSet.weights?.map { Int64(convertWeightForDisplaying($0)) } ?? .emptyList
-        }
-        
     }
-
+    
+    // MARK: - Supporting Methods
+    
+    private var indexInWorkout: Int? {
+        dropSet.workout?.sets.firstIndex(of: dropSet)
+    }
+    
+    private func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        return templateDropSet.repetitions?.map { $0 } ?? .emptyList
+    }
+    
+    private func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        return templateDropSet.weights?.map { Int64(convertWeightForDisplaying($0)) } ?? .emptyList
+    }
+    
 }

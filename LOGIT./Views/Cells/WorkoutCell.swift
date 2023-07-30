@@ -16,7 +16,7 @@ struct WorkoutCell: View {
     // MARK: Body
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) {
                     Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
@@ -29,17 +29,19 @@ struct WorkoutCell: View {
                 }
                 Spacer()
                 NavigationChevron()
-                    .foregroundColor(workout.primaryMuscleGroup?.color)
+                    .muscleGroupGradientStyle(for: workout.muscleGroups)
             }
             HStack {
-                ColorMeter(items: workout.muscleGroupOccurances.map {
-                    ColorMeter.Item(color: $0.color, amount: $1)
-                })
-                Text("\(exercisesString)")
-                    .foregroundColor(.primary)
-                    .lineLimit(2, reservesSpace: true)
-                    .multilineTextAlignment(.leading)
+                ForEach(workout.muscleGroups) { muscleGroup in
+                    Text(muscleGroup.description)
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundStyle(muscleGroup.color.gradient)
+                        .lineLimit(1)
+                }
             }
+            Text("\(exercisesString)")
+                .foregroundColor(.secondary)
+                .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

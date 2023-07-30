@@ -50,10 +50,14 @@ struct MuscleGroupDetailView: View {
                 
                 VStack(spacing: CELL_SPACING) {
                     ForEach(filteredSetGroups, id:\.objectID) { setGroup in
-                        SetGroupDetailView(
+                        WorkoutSetGroupCell(
                             setGroup: setGroup,
+                            focusedIntegerFieldIndex: .constant(nil),
+                            sheetType: .constant(nil),
+                            isReordering: .constant(false),
                             supplementaryText: "\(setGroup.workout!.date!.description(.short))  ·  \(setGroup.workout!.name!)"
                         )
+                        .canEdit(false)
                         .padding(CELL_PADDING)
                         .tileStyle()
                     }
@@ -63,9 +67,8 @@ struct MuscleGroupDetailView: View {
                 }
                 .padding(.horizontal)
             }
-            .padding(.bottom, 30)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
-        .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
     }
     

@@ -74,7 +74,7 @@ struct PieGraph<CenterView: View>: View {
     private func itemView(for item: Item) -> some View {
         VStack(alignment: .leading) {
             Text(item.title)
-            UnitView(value: "\(percentage(for: item))", unit: "%  (\(item.amount))")
+            UnitView(value: "\(percentage(for: item))", unit: "%")
                 .foregroundStyle((item.amount > 0 ? item.color : .placeholder).gradient)
         }.frame(minWidth: 80, alignment: .leading)
     }

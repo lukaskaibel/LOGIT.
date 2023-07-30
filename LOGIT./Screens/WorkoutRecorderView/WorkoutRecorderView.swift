@@ -69,12 +69,12 @@ struct WorkoutRecorderView: View {
                             .listRowInsets(EdgeInsets())
                             .listRowSeparator(.hidden)
                         ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                            WorkoutRecorderView.WorkoutSetGroupRecorderCell(
+                            WorkoutSetGroupCell(
                                 setGroup: setGroup,
                                 focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
                                 sheetType: $sheetType,
-                                isEditing: $isEditing,
-                                editMode: $editMode
+                                isReordering: $isEditing,
+                                supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.setType.description)"
                             )
                             .padding(CELL_PADDING)
                             .tileStyle()
@@ -90,27 +90,19 @@ struct WorkoutRecorderView: View {
                     .listStyle(.plain)
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: SECTION_SPACING) {
-                            ForEach(workout.setGroups, id:\.objectID) { setGroup in
-                                WorkoutRecorderView.WorkoutSetGroupRecorderCell(
-                                    setGroup: setGroup,
-                                    focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
-                                    sheetType: $sheetType,
-                                    isEditing: $isEditing,
-                                    editMode: $editMode
-                                )
-                                .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
-                                .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                            }
-                        }
+                        WorkoutSetGroupList(
+                            workout: workout,
+                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                            sheetType: $sheetType,
+                            isReordering: $isEditing
+                        )
                         .padding(.horizontal)
                         .padding(.top, 90)
                         
                         AddExerciseButton
+                            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                             .padding(.horizontal)
-                            .padding(.bottom, 30)
+                            .padding(.vertical, 30)
                     }
                     .scrollIndicators(.hidden)
                 }
@@ -200,6 +192,9 @@ struct WorkoutRecorderView: View {
                 isShowingChronoInHeader = chronograph.status != .idle && newValue != nil
             }
         }
+        .onChange(of: isEditing) { newValue in
+            editMode = newValue ? .active : .inactive
+        }
         .onAppear {
             chronograph.onTimerFired =  {
                 shouldFlash = true
@@ -274,8 +269,8 @@ struct WorkoutRecorderView: View {
             })
         } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
+                .bigButton()
         }
-        .bigButton()
     }
     
     // MARK: - Supporting Methods / Computed Properties
@@ -435,25 +430,5 @@ struct WorkoutRecorderView_Previews: PreviewProvider {
             template: Database.preview.testTemplate
         )
         .environmentObject(Database.preview)
-    }
-}
-
-
-private struct WorkoutSetTemplateSetDictionaryKey: EnvironmentKey {
-    static let defaultValue: [WorkoutSet:TemplateSet] = [WorkoutSet:TemplateSet]()
-}
-
-private struct SetWorkoutEndDateKey: EnvironmentKey {
-    static let defaultValue: (Date) -> Void = { _ in }
-}
-
-extension EnvironmentValues {
-    var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet] {
-        get { self[WorkoutSetTemplateSetDictionaryKey.self] }
-        set { self[WorkoutSetTemplateSetDictionaryKey.self] = newValue }
-    }
-    var setWorkoutEndDate: (Date) -> Void {
-        get { self[SetWorkoutEndDateKey.self] }
-        set { self[SetWorkoutEndDateKey.self] = newValue }
     }
 }

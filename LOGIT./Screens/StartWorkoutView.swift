@@ -51,6 +51,7 @@ struct StartWorkoutView: View {
                 }
                 .padding(.horizontal)
             }
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
             .padding(.top)
         }
         .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
@@ -87,10 +88,12 @@ struct StartWorkoutView: View {
     }
     
     private var withoutTemplateButton: some View {
-        Button(NSLocalizedString("startEmpty", comment: "")) {
+        Button {
             fullScreenCoverType = .workoutRecorder(template: nil)
+        } label: {
+            Text(NSLocalizedString("startEmpty", comment: ""))
+                .bigButton()
         }
-        .bigButton()
     }
     
     private var templateList: some View {
@@ -110,7 +113,7 @@ struct StartWorkoutView: View {
                     }
                     NavigationChevron()
                 }
-                .foregroundColor(template.primaryMuscleGroup?.color ?? .accentColor)
+                .muscleGroupGradientStyle(for: template.muscleGroups)
                 .padding(CELL_PADDING)
                 .tileStyle()
             }

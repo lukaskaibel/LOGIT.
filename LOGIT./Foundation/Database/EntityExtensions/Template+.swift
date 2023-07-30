@@ -60,8 +60,7 @@ extension Template {
     }
     
     var muscleGroups: [MuscleGroup] {
-        exercises
-            .compactMap { $0.muscleGroup }
+        Array(Set(exercises.compactMap { $0.muscleGroup }))
     }
     
     var primaryMuscleGroup: MuscleGroup? {

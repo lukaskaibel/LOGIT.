@@ -52,9 +52,8 @@ struct ExerciseDetailView: View {
                 setGroupList
                     .padding(.horizontal)
             }
-            .padding(.bottom, 50)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
-        .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .tint(exercise.muscleGroup?.color ?? .accentColor)
         .toolbar {
@@ -81,7 +80,7 @@ struct ExerciseDetailView: View {
     // MARK: - Supporting Views
     
     private var header: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading) {
             Text(exercise.name ?? "")
                 .font(.largeTitle.weight(.bold))
                 .lineLimit(2)
@@ -198,13 +197,16 @@ struct ExerciseDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     VStack(spacing: CELL_SPACING) {
                         ForEach(groupedWorkoutSetGroups[index]) { setGroup in
-                            SetGroupDetailView(
+                            WorkoutSetGroupCell(
                                 setGroup: setGroup,
-                                supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")",
-                                navigationToDetailEnabled: false
+                                focusedIntegerFieldIndex: .constant(nil),
+                                sheetType: .constant(nil),
+                                isReordering: .constant(false),
+                                supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")"
                             )
                             .padding(CELL_PADDING)
                             .tileStyle()
+                            .canEdit(false)
                         }
                     }
                 }

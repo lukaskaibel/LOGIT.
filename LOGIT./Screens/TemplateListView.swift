@@ -36,7 +36,7 @@ struct TemplateListView: View {
                                 HStack {
                                     TemplateCell(template: template)
                                     NavigationChevron()
-                                        .foregroundColor(template.primaryMuscleGroup?.color ?? .separator)
+                                        .muscleGroupGradientStyle(for: template.muscleGroups)
                                 }
                                 .padding(CELL_PADDING)
                                 .tileStyle()
@@ -49,8 +49,7 @@ struct TemplateListView: View {
                 }
                 .padding(.horizontal)
             }
-            
-            
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .searchable(text: $searchedText)
         .navigationBarTitleDisplayMode(.large)

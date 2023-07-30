@@ -31,39 +31,44 @@ struct TemplateDetailView: View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 templateHeader
-                    .padding(.horizontal)
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("overview", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    templateInfo
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                }
+                VStack(spacing: SECTION_HEADER_SPACING) {
+                    Text(NSLocalizedString("muscleGroups", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    setsPerMuscleGroup
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                }
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("exercises", comment: ""))
                         .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    LazyVStack(spacing: CELL_SPACING) {
-                        ForEach(template.setGroups) { templateSetGroup in
-                            TemplateSetGroupDetailView(
-                                templateSetGroup: templateSetGroup,
-                                supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.sets.count) \(NSLocalizedString("set" + (templateSetGroup.sets.count == 1 ? "" : "s"), comment: ""))"
-                            )
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                        }
-                    }
+                    exercisesList
                 }
-                .padding(.horizontal)
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
                         .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     workoutList
                 }
-                .padding(.horizontal)
             }
-            .padding(.bottom, 50)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
+            .padding(.horizontal)
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Workout.self) { selectedWorkout in
             WorkoutDetailView(workout:  selectedWorkout, canNavigateToTemplate: false)
         }
-        .navigationTitle(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.short) ?? "")) : NSLocalizedString("unused", comment: ""))
+        .navigationTitle(NSLocalizedString("template", comment: ""))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Menu(content: {
@@ -74,7 +79,6 @@ struct TemplateDetailView: View {
                 }) {
                     Image(systemName: "ellipsis.circle")
                 }
-
             }
         }
         .alert(NSLocalizedString("templates", comment: ""),
@@ -95,16 +99,71 @@ struct TemplateDetailView: View {
     // MARK: - Supporting Views
     
     private var templateHeader: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading) {
+            Text(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.long) ?? "")) : NSLocalizedString("unused", comment: ""))
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
             Text(template.name ?? "")
                 .font(.largeTitle.weight(.bold))
                 .lineLimit(2)
             HStack {
-                Image(systemName: "list.bullet.rectangle.portrait")
-                Text(NSLocalizedString("template", comment: ""))
-            }.font(.system(.title3, design: .rounded, weight: .semibold))
-                .foregroundColor(.secondaryLabel)
+                ForEach(template.muscleGroups) { muscleGroup in
+                    Text(muscleGroup.description)
+                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .foregroundStyle(muscleGroup.color.gradient)
+                        .lineLimit(1)
+                }
+            }
         }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var templateInfo: some View {
+        VStack(spacing: 10) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("exercises", comment: ""))
+                    Text("\(template.numberOfSetGroups)")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .muscleGroupGradientStyle(for: template.muscleGroups)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("sets", comment: ""))
+                    Text("\(template.sets.count)")
+                        .font(.system(.title3, design: .rounded, weight: .semibold))
+                        .muscleGroupGradientStyle(for: template.muscleGroups)
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+    
+    private var setsPerMuscleGroup: some View {
+        PieGraph(
+            items: template.muscleGroupOccurances.map {
+                PieGraph.Item(title: $0.0.rawValue.capitalized,
+                              amount: $0.1,
+                              color: $0.0.color,
+                              isSelected: false
+                )
+            }
+        )
+    }
+    
+    private var exercisesList: some View {
+        VStack(spacing: CELL_SPACING) {
+            ForEach(template.setGroups) { templateSetGroup in
+                TemplateSetGroupCell(
+                    setGroup: templateSetGroup,
+                    focusedIntegerFieldIndex: .constant(nil),
+                    sheetType: .constant(nil),
+                    isReordering: .constant(false),
+                    supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.setType.description)"
+                )
+                .padding(CELL_PADDING)
+                .tileStyle()
+                .canEdit(false)
+            }
+        }
     }
     
     private var workoutList: some View {

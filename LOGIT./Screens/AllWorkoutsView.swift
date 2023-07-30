@@ -44,11 +44,9 @@ struct AllWorkoutsView: View {
                 .emptyPlaceholder(groupedWorkouts) {
                     Text(NSLocalizedString("noWorkouts", comment: ""))
                 }
-                .padding(.horizontal)
-                Spacer(minLength: 50)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
             }
+            .padding(.horizontal)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .searchable(text: $searchedText,
                     prompt: NSLocalizedString("searchWorkouts", comment: ""))

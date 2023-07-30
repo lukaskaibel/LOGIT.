@@ -46,11 +46,12 @@ struct AllExercisesView: View {
                         }
                     }
                 }
-                .padding(.horizontal)
                 .emptyPlaceholder(groupedExercises) {
                     Text(NSLocalizedString("noExercises", comment: ""))
                 }
             }
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
+            .padding(.horizontal)
         }
         .searchable(text: $searchedText )
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))

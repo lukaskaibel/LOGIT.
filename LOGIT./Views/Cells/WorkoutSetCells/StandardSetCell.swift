@@ -1,5 +1,5 @@
 //
-//  WorkoutRecorderView+StandardSetCell.swift
+//  StandardSetCell.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 13.05.22.
@@ -7,26 +7,24 @@
 
 import SwiftUI
 
-extension WorkoutRecorderView {
+struct StandardSetCell: View {
+        
+    // MARK: - Environment
     
-    internal struct StandardSetCell: View {
-        
-        // MARK: - Environment
-        
-        @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
-        @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
-        @EnvironmentObject var database: Database
-        
-        // MARK: - Parameters
-        
-        @ObservedObject var standardSet: StandardSet
-        let indexInWorkout: Int
-        @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-        
-        // MARK: - Body
-        
-        var body: some View {
-            HStack {
+    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
+    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
+    @EnvironmentObject var database: Database
+    
+    // MARK: - Parameters
+    
+    @ObservedObject var standardSet: StandardSet
+    @Binding var focusedIntegerFieldIndex: IntegerField.Index?
+    
+    // MARK: - Body
+    
+    var body: some View {
+        HStack {
+            if let indexInWorkout = indexInWorkout {
                 IntegerField(
                     placeholder: repetitionsPlaceholder(for: standardSet),
                     value: standardSet.repetitions,
@@ -61,19 +59,22 @@ extension WorkoutRecorderView {
                 )
             }
         }
-        
-        // MARK: - Supporting Methods
-        
-        private func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
-            guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
-            return templateStandardSet.repetitions
-        }
-        
-        private func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
-            guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
-            return Int64(convertWeightForDisplaying(templateStandardSet.weight))
-        }
-        
+    }
+    
+    // MARK: - Supporting Methods
+    
+    private var indexInWorkout: Int? {
+        standardSet.workout?.sets.firstIndex(of: standardSet)
+    }
+    
+    private func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
+        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        return templateStandardSet.repetitions
+    }
+    
+    private func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
+        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        return Int64(convertWeightForDisplaying(templateStandardSet.weight))
     }
     
 }

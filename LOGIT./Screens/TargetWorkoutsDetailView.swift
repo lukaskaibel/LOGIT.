@@ -88,6 +88,7 @@ struct TargetWorkoutsDetailView: View {
                 }
                 .padding(.horizontal)
             }
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $isShowingWorkoutDetail) {
@@ -95,7 +96,6 @@ struct TargetWorkoutsDetailView: View {
                 WorkoutDetailView(workout: workout, canNavigateToTemplate: true)
             }
         }
-        .edgesIgnoringSafeArea(.bottom)
     }
     
     // MARK: - Supporting Methods

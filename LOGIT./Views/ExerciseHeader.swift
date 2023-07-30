@@ -13,8 +13,8 @@ struct ExerciseHeader: View {
     
     let exercise: Exercise?
     let secondaryExercise: Exercise?
-    let exerciseAction: () -> Void
-    let secondaryExerciseAction: (() -> Void)?
+    let noExerciseAction: () -> Void
+    let noSecondaryExerciseAction: (() -> Void)?
     let isSuperSet: Bool
     let navigationToDetailEnabled: Bool
     
@@ -22,43 +22,67 @@ struct ExerciseHeader: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Button {
-                    if navigationToDetailEnabled {
-                        exerciseAction()
-                    }
-                } label: {
+            if let exercise = exercise {
+                NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
                     HStack(spacing: 3) {
-                        Text(exercise?.name ?? NSLocalizedString("noName", comment: ""))
+                        Text(exercise.name ?? NSLocalizedString("noName", comment: ""))
                         if navigationToDetailEnabled {
                             NavigationChevron()
                                 .foregroundColor(.secondaryLabel)
                         }
                     }
                 }
+            } else {
+                Button(action: noExerciseAction) {
+                    HStack(spacing: 3) {
+                        Text(NSLocalizedString("selectExercise", comment: ""))
+                        if navigationToDetailEnabled {
+                            NavigationChevron()
+                                .foregroundColor(.secondaryLabel)
+                        }
+                    }
+                }
+                .foregroundColor(.placeholder)
             }
             if isSuperSet {
                 HStack {
                     Image(systemName: "arrow.turn.down.right")
                         .font(.body.weight(.medium))
                         .padding(.leading)
-                    Button {
-                        if navigationToDetailEnabled {
-                            secondaryExerciseAction?()
-                        }
-                    } label: {
-                        HStack(spacing: 3) {
-                            Text(secondaryExercise?.name ?? "Select second exercise")
-                            if navigationToDetailEnabled {
-                                NavigationChevron()
-                                    .foregroundColor(secondaryExercise == nil ? .placeholder : .secondaryLabel)
+                    if let secondaryExercise = secondaryExercise {
+                        NavigationLink(destination: ExerciseDetailView(exercise: secondaryExercise)) {
+                            HStack(spacing: 3) {
+                                Text(secondaryExercise.name ?? NSLocalizedString("noName", comment: ""))
+                                if navigationToDetailEnabled {
+                                    NavigationChevron()
+                                        .foregroundColor(.secondaryLabel)
+                                }
                             }
                         }
+                    } else if let noSecondaryExerciseAction = noSecondaryExerciseAction {
+                        Button(action: noSecondaryExerciseAction) {
+                            HStack(spacing: 3) {
+                                Text(NSLocalizedString("selectExercise", comment: ""))
+                                if navigationToDetailEnabled {
+                                    NavigationChevron()
+                                        .foregroundColor(.secondaryLabel)
+                                }
+                            }
+                        }
+                        .foregroundColor(.placeholder)
                     }
                     Spacer()
                 }
-                .foregroundColor(secondaryExercise == nil ? .placeholder : .label)
             }
+            HStack {
+                Text(exercise?.muscleGroup?.description ?? "")
+                    .foregroundColor(exercise?.muscleGroup?.color ?? .accentColor)
+                if isSuperSet {
+                    Text(secondaryExercise?.muscleGroup?.description ?? "")
+                        .foregroundColor(secondaryExercise?.muscleGroup?.color ?? .accentColor)
+                }
+            }
+            .font(.system(.body, design: .rounded, weight: .bold))
         }
         .textCase(nil)
         .font(.title3.weight(.bold))

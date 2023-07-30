@@ -21,7 +21,7 @@ extension WorkoutRecorderView {
                     TimeStringView
                 } else {
                     Image(systemName: "timer")
-                        .foregroundColor(isShowingChronoView ? .white : .accentColor)
+                        .foregroundStyle(isShowingChronoView ? .white : .accentColor)
                         .padding(3)
                         .background(isShowingChronoView ? Color.accentColor.opacity(0.9) : .clear)
                         .cornerRadius(8)
@@ -33,7 +33,6 @@ extension WorkoutRecorderView {
             Spacer()
             Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
                 isEditing.toggle()
-                editMode = isEditing ? .active : .inactive
             }.disabled(workout.numberOfSetGroups == 0)
         }
     }

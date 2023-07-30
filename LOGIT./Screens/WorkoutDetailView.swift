@@ -56,14 +56,13 @@ struct WorkoutDetailView: View {
                     Text(NSLocalizedString("exercises", comment: ""))
                         .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    LazyVStack(spacing: CELL_SPACING) {
-                        ForEach(workout.setGroups) { setGroup in
-                            SetGroupDetailView(setGroup: setGroup,
-                                               supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.sets.count) \(NSLocalizedString("set" + (setGroup.sets.count == 1 ? "" : "s"), comment: ""))")
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                        }
-                    }
+                    WorkoutSetGroupList(
+                        workout: workout,
+                        focusedIntegerFieldIndex: .constant(nil),
+                        sheetType: .constant(nil),
+                        isReordering: .constant(false)
+                    )
+                    .canEdit(false)
                 }
                 if canNavigateToTemplate {
                     VStack(spacing: SECTION_HEADER_SPACING) {
@@ -80,11 +79,9 @@ struct WorkoutDetailView: View {
                     }
                 }
             }
-            .padding(.bottom, 30)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
             .padding(.horizontal)
         }
-        .edgesIgnoringSafeArea(.bottom)
-        .navigationTitle(workout.date?.description(.medium) ?? "")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -123,10 +120,23 @@ struct WorkoutDetailView: View {
     // MARK: - Supporting Views
     
     private var workoutHeader: some View {
-        Text(workout.name ?? "")
-            .font(.largeTitle.weight(.bold))
-            .lineLimit(2)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: .leading) {
+            Text(workout.date?.description(.long) ?? "")
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+            Text(workout.name ?? "")
+                .font(.largeTitle.weight(.bold))
+                .lineLimit(2)
+            HStack {
+                ForEach(workout.muscleGroups) { muscleGroup in
+                    Text(muscleGroup.description)
+                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .foregroundStyle(muscleGroup.color.gradient)
+                        .lineLimit(1)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var workoutInfo: some View {
@@ -136,14 +146,14 @@ struct WorkoutDetailView: View {
                     Text(NSLocalizedString("starttime", comment: ""))
                     Text("\(workout.date?.timeString ?? "")")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundStyle(Color.accentColor.gradient)
+                        .muscleGroupGradientStyle(for: workout.muscleGroups)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
                     Text("\(workoutDurationString)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundStyle(Color.accentColor.gradient)
+                        .muscleGroupGradientStyle(for: workout.muscleGroups)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack {
@@ -151,14 +161,14 @@ struct WorkoutDetailView: View {
                     Text(NSLocalizedString("exercises", comment: ""))
                     Text("\(workout.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundStyle(Color.accentColor.gradient)
+                        .muscleGroupGradientStyle(for: workout.muscleGroups)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
                     Text("\(workout.numberOfSets)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .foregroundStyle(Color.accentColor.gradient)
+                        .muscleGroupGradientStyle(for: workout.muscleGroups)
                 }.frame(maxWidth: .infinity, alignment: .leading)
             }
         }

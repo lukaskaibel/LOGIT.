@@ -16,7 +16,7 @@ struct TemplateCell: View {
     // MARK: - Body
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading) {
             VStack(alignment: .leading) {
                 Text("\(lastUsedDate)  ·  \(template.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(template.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
                     .font(.footnote.weight(.medium))
@@ -27,14 +27,16 @@ struct TemplateCell: View {
                     .lineLimit(1)
             }
             HStack {
-                ColorMeter(items: template.muscleGroupOccurances.map {
-                    ColorMeter.Item(color: $0.color, amount: $1)
-                })
-                Text("\(exercisesString)")
-                    .foregroundColor(.primary)
-                    .lineLimit(2, reservesSpace: true)
-                    .multilineTextAlignment(.leading)
+                ForEach(template.muscleGroups) { muscleGroup in
+                    Text(muscleGroup.description)
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundStyle(muscleGroup.color.gradient)
+                        .lineLimit(1)
+                }
             }
+            Text("\(exercisesString)")
+                .foregroundColor(.secondary)
+                .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -56,13 +58,17 @@ struct TemplateCell: View {
                 result += (!result.isEmpty ? ", " : "") + name
             }
         }
-        return result.isEmpty ? " " : result
+        return result.isEmpty ? NSLocalizedString("noExercises", comment: "") : result
     }
     
 }
 
 struct TemplateCell_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateCell(template: Database.preview.newTemplate(name: "Pushday"))
+        ScrollView {
+            TemplateCell(template: Database.preview.testTemplate)
+                .padding(CELL_PADDING)
+                .tileStyle()
+        }
     }
 }

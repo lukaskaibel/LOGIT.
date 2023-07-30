@@ -22,6 +22,7 @@ struct HomeView: View {
     
     @State private var navigateToTarget: Bool = false
     @State private var navigateToMuscleGroupDetail: Bool = false
+    @State private var navigateToWorkoutList: Bool = false
     @State private var selectedWorkout: Workout?
     
     // MARK: - Body
@@ -72,10 +73,10 @@ struct HomeView: View {
                             Text(NSLocalizedString("recentWorkouts", comment: ""))
                                 .sectionHeaderStyle2()
                                 .fixedSize()
-                            NavigationLink(destination: AllWorkoutsView()) {
-                                Text(NSLocalizedString("showAll", comment: ""))
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            Button(NSLocalizedString("showAll", comment: "")) {
+                                navigateToWorkoutList = true
                             }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                         VStack(spacing: CELL_SPACING) {
                             ForEach(recentWorkouts, id:\.objectID) { workout in
@@ -92,7 +93,7 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                 .padding(.top)
             }
             .scrollIndicators(.hidden)
@@ -102,6 +103,9 @@ struct HomeView: View {
             }
             .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
                 MuscleGroupDetailView(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
+            }
+            .navigationDestination(isPresented: $navigateToWorkoutList) {
+                AllWorkoutsView()
             }
             .navigationDestination(for: Workout.self) { selectedWorkout in
                 WorkoutDetailView(workout: selectedWorkout, canNavigateToTemplate: true)
