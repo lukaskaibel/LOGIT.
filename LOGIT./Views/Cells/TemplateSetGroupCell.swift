@@ -19,7 +19,7 @@ struct TemplateSetGroupCell: View {
     @ObservedObject var setGroup: TemplateSetGroup
     
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    @Binding var sheetType: TemplateEditorView.SheetType?
+    @Binding var sheetType: TemplateEditorScreen.SheetType?
     @Binding var isReordering: Bool
     
     let supplementaryText: String?

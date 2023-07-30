@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Delete: ViewModifier {
+struct OnDeleteModifier: ViewModifier {
     
     let action: () -> Void
     
@@ -97,7 +97,7 @@ extension View {
             if disabled {
                 self
             } else {
-                self.modifier(Delete(action: action))
+                self.modifier(OnDeleteModifier(action: action))
             }
         }
     }

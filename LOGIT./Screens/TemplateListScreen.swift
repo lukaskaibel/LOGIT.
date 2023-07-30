@@ -1,5 +1,5 @@
 //
-//  TemplateListView.swift
+//  TemplateListScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 06.04.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TemplateListView: View {
+struct TemplateListScreen: View {
     
     // MARK: - Environment
     
@@ -54,7 +54,7 @@ struct TemplateListView: View {
         .searchable(text: $searchedText)
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Template.self) { selectedTemplate in
-            TemplateDetailView(template: selectedTemplate)
+            TemplateDetailScreen(template: selectedTemplate)
         }
         .navigationTitle(NSLocalizedString("templates", comment: ""))
         .toolbar {
@@ -82,7 +82,7 @@ struct TemplateListView: View {
             }
         }
         .popover(isPresented: $showingTemplateCreation) {
-            TemplateEditorView(template: database.newTemplate(), isEditingExistingTemplate: false)
+            TemplateEditorScreen(template: database.newTemplate(), isEditingExistingTemplate: false)
         }
     }
     
@@ -113,7 +113,7 @@ struct TemplateListView: View {
 struct TemplateListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TemplateListView()
+            TemplateListScreen()
         }
         .environmentObject(Database.preview)
     }

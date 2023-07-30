@@ -1,5 +1,5 @@
 //
-//  EditExerciseView.swift
+//  ExerciseEditScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 18.03.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EditExerciseView: View {
+struct ExerciseEditScreen: View {
     
     // MARK: - Environment
     
@@ -143,7 +143,7 @@ struct EditExerciseView: View {
 
 struct EditExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        EditExerciseView(initialMuscleGroup: .chest)
+        ExerciseEditScreen(initialMuscleGroup: .chest)
             .environmentObject(Database.preview)
     }
 }

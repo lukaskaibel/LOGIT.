@@ -58,10 +58,10 @@ struct ColorMeter: View {
             }
         }
         .frame(width: 7)
-        .cornerRadius(3.5, corners: roundedEdges == .top ? [.topLeft, .topRight] :
-                        roundedEdges == .bottom ? [.bottomLeft, .bottomRight] :
-                        roundedEdges == .all ? [.allCorners] :
-                        [])
+//        .cornerRadius(3.5, corners: roundedEdges == .top ? [.topLeft, .topRight] :
+//                        roundedEdges == .bottom ? [.bottomLeft, .bottomRight] :
+//                        roundedEdges == .all ? [.allCorners] :
+//                        [])
     }
     
     // MARK: - Computed Properties

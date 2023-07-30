@@ -1,5 +1,5 @@
 //
-//  FirstStartView.swift
+//  FirstStartScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 21.03.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FirstStartView: View {
+struct FirstStartScreen: View {
     
     private enum SetupStage {
         case start, weightUnit, weeklyTarget
@@ -122,6 +122,6 @@ struct FirstStartView: View {
 
 struct FirstStartView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstStartView()
+        FirstStartScreen()
     }
 }

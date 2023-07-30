@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  HomeScreen.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 24.09.21.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct HomeView: View {
+struct HomeScreen: View {
     
     // MARK: - AppStorage
         
@@ -99,16 +99,16 @@ struct HomeView: View {
             .scrollIndicators(.hidden)
             .navigationTitle("LOGIT.")
             .navigationDestination(isPresented: $navigateToTarget) {
-                TargetWorkoutsDetailView()
+                TargetPerWeekDetailScreen()
             }
             .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
-                MuscleGroupDetailView(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
+                MuscleGroupsDetailScreen(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
             }
             .navigationDestination(isPresented: $navigateToWorkoutList) {
-                AllWorkoutsView()
+                WorkoutListScreen()
             }
             .navigationDestination(for: Workout.self) { selectedWorkout in
-                WorkoutDetailView(workout: selectedWorkout, canNavigateToTemplate: true)
+                WorkoutDetailScreen(workout: selectedWorkout, canNavigateToTemplate: true)
             }
         }
     }
@@ -225,7 +225,7 @@ private var allMuscleGroupZeroDict: [MuscleGroup:Int] {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeScreen()
             .environmentObject(Database.preview)
     }
 }

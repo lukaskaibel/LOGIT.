@@ -1,5 +1,5 @@
 //
-//  AllExercisesView.swift
+//  ExerciseListScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 19.03.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AllExercisesView: View {
+struct ExerciseListScreen: View {
     
     // MARK: - Environment
     
@@ -57,7 +57,7 @@ struct AllExercisesView: View {
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Exercise.self) { selectedExercise in
-            ExerciseDetailView(exercise: selectedExercise)
+            ExerciseDetailScreen(exercise: selectedExercise)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -67,7 +67,7 @@ struct AllExercisesView: View {
             }
         }
         .sheet(isPresented: $showingAddExercise) {
-            EditExerciseView(initialMuscleGroup: selectedMuscleGroup ?? .chest)
+            ExerciseEditScreen(initialMuscleGroup: selectedMuscleGroup ?? .chest)
         }
     }
     
@@ -87,7 +87,7 @@ struct AllExercisesView: View {
 struct AllExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            AllExercisesView()
+            ExerciseListScreen()
         }
         .environmentObject(Database.preview)
     }

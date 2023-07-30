@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension WorkoutRecorderView {
+extension WorkoutRecorderScreen {
     
     internal var ToolbarItemsBottomBar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {

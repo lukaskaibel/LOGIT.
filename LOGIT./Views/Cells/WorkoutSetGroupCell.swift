@@ -19,7 +19,7 @@ struct WorkoutSetGroupCell: View {
     @ObservedObject var setGroup: WorkoutSetGroup
     
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    @Binding var sheetType: WorkoutRecorderView.SheetType?
+    @Binding var sheetType: WorkoutRecorderScreen.SheetType?
     @Binding var isReordering: Bool
     
     let supplementaryText: String?

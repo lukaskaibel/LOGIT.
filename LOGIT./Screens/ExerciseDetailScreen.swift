@@ -1,5 +1,5 @@
 //
-//  ExerciseDetailView.swift
+//  ExerciseDetailScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 06.01.22.
@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import Charts
 
-struct ExerciseDetailView: View {
+struct ExerciseDetailScreen: View {
     
     enum TimeSpan {
         case threeMonths, year, allTime
@@ -73,7 +73,7 @@ struct ExerciseDetailView: View {
             })
         }
         .sheet(isPresented: $showingEditExercise) {
-            EditExerciseView(exerciseToEdit: exercise)
+            ExerciseEditScreen(exerciseToEdit: exercise)
         }
     }
     
@@ -275,7 +275,7 @@ struct ExerciseDetailView: View {
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseDetailView(exercise: Database.preview.getExercises().first!)
+            ExerciseDetailScreen(exercise: Database.preview.getExercises().first!)
         }
         .environmentObject(Database.preview)
     }

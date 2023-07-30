@@ -34,7 +34,7 @@ struct MonthView<DateView>: View where DateView: View {
     var body: some View {
         VStack {
             Text(month.monthDescription)
-                .sectionHeaderStyle()
+                .sectionHeaderStyle2()
                 .padding()
             ForEach(weeks, id: \.self) { week in
                 WeekView(week: week, content: self.content)

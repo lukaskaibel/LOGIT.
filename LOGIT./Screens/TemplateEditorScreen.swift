@@ -1,5 +1,5 @@
 //
-//  TemplateEditorView.swift
+//  TemplateEditorScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 02.04.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TemplateEditorView: View {
+struct TemplateEditorScreen: View {
     
     enum SheetType: Identifiable {
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
@@ -131,7 +131,7 @@ struct TemplateEditorView: View {
                 NavigationStack {
                     switch style {
                     case let .exerciseSelection(exercise, setExercise):
-                        ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
+                        ExerciseSelectionScreen(selectedExercise: exercise, setExercise: setExercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
@@ -140,7 +140,7 @@ struct TemplateEditorView: View {
                                 }
                             }
                     case let .exerciseDetail(exercise):
-                        ExerciseDetailView(exercise: exercise)
+                        ExerciseDetailScreen(exercise: exercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(NSLocalizedString("dismiss", comment: ""), role: .cancel) {
@@ -190,7 +190,7 @@ struct TemplateEditorView: View {
 struct TemplateEditorView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TemplateEditorView(
+            TemplateEditorScreen(
                 template: Database.preview.testTemplate,
                 isEditingExistingTemplate: true
             )

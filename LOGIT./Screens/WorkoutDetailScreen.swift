@@ -1,5 +1,5 @@
 //
-//  WorkoutDetailView.swift
+//  WorkoutDetailScreen.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 20.12.21.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct WorkoutDetailView: View {
+struct WorkoutDetailScreen: View {
     
     enum SheetType: Int, Identifiable {
         case newTemplateFromWorkout, templateDetail
@@ -102,11 +102,11 @@ struct WorkoutDetailView: View {
         }
         .sheet(item: $sheetType) { type in
             switch type {
-            case .newTemplateFromWorkout: TemplateEditorView(template: database.newTemplate(from: workout),
+            case .newTemplateFromWorkout: TemplateEditorScreen(template: database.newTemplate(from: workout),
                                                              isEditingExistingTemplate: false)
             case .templateDetail:
                 NavigationStack {
-                    TemplateDetailView(template: workout.template!)
+                    TemplateDetailScreen(template: workout.template!)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button(NSLocalizedString("navBack", comment: "")) { sheetType = nil }
@@ -226,7 +226,7 @@ struct WorkoutDetailView: View {
 struct WorkoutDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            WorkoutDetailView(
+            WorkoutDetailScreen(
                 workout: Database.preview.getWorkouts().first!,
                 canNavigateToTemplate: false
             )

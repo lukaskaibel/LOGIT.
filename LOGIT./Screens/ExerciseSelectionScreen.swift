@@ -1,5 +1,5 @@
 //
-//  ExerciseSelectionView.swift
+//  ExerciseSelectionScreen.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 11.12.21.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ExerciseSelectionView: View {
+struct ExerciseSelectionScreen: View {
     
     enum SheetType: Identifiable {
         case addExercise, exerciseDetail(exercise: Exercise)
@@ -64,10 +64,10 @@ struct ExerciseSelectionView: View {
         .sheet(item: $sheetType) { type in
             switch type {
             case .addExercise:
-                EditExerciseView(onEditFinished: { setExercise($0); dismiss() }, initialMuscleGroup: selectedMuscleGroup ?? .chest)
+                ExerciseEditScreen(onEditFinished: { setExercise($0); dismiss() }, initialMuscleGroup: selectedMuscleGroup ?? .chest)
             case let .exerciseDetail(exercise):
                 NavigationStack {
-                    ExerciseDetailView(exercise: exercise)
+                    ExerciseDetailScreen(exercise: exercise)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
@@ -122,7 +122,7 @@ struct ExerciseSelectionView: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionView(selectedExercise: nil, setExercise: { _ in }) 
+            ExerciseSelectionScreen(selectedExercise: nil, setExercise: { _ in }) 
         }
         .environmentObject(Database.preview)
     }

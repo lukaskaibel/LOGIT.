@@ -49,7 +49,7 @@ struct LOGIT: App {
         WindowGroup {
             if setupDone {
                 TabView(selection: $selectedTab) {
-                    HomeView()
+                    HomeScreen()
                         .tabItem {
                             Label(
                                 NSLocalizedString("home", comment: ""),
@@ -58,7 +58,7 @@ struct LOGIT: App {
                         }
                         .tag(TabType.home)
                     NavigationStack {
-                        TemplateListView()
+                        TemplateListScreen()
                     }
                     .tabItem {
                         Label(
@@ -68,7 +68,7 @@ struct LOGIT: App {
                     }
                     .tag(TabType.templates)
                     NavigationStack {
-                        StartWorkoutView()
+                        StartWorkoutScreen()
                     }
                     .tabItem {
                         Label(
@@ -78,7 +78,7 @@ struct LOGIT: App {
                     }
                     .tag(TabType.startWorkout)
                     NavigationStack {
-                        AllExercisesView()
+                        ExerciseListScreen()
                     }
                     .tabItem {
                         Label(
@@ -88,7 +88,7 @@ struct LOGIT: App {
                     }
                     .tag(TabType.exercises)
                     NavigationStack {
-                        ProfileView()
+                        SettingsScreen()
                     }
                     .tabItem {
                         Label(
@@ -105,7 +105,7 @@ struct LOGIT: App {
                 .statusBarHidden(true)
                 #endif
             } else {
-                FirstStartView()
+                FirstStartScreen()
                     .environmentObject(database)
                     .preferredColorScheme(.dark)
             }

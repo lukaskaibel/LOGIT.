@@ -23,7 +23,7 @@ struct ExerciseHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let exercise = exercise {
-                NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                NavigationLink(destination: ExerciseDetailScreen(exercise: exercise)) {
                     HStack(spacing: 3) {
                         Text(exercise.name ?? NSLocalizedString("noName", comment: ""))
                         if navigationToDetailEnabled {
@@ -50,7 +50,7 @@ struct ExerciseHeader: View {
                         .font(.body.weight(.medium))
                         .padding(.leading)
                     if let secondaryExercise = secondaryExercise {
-                        NavigationLink(destination: ExerciseDetailView(exercise: secondaryExercise)) {
+                        NavigationLink(destination: ExerciseDetailScreen(exercise: secondaryExercise)) {
                             HStack(spacing: 3) {
                                 Text(secondaryExercise.name ?? NSLocalizedString("noName", comment: ""))
                                 if navigationToDetailEnabled {

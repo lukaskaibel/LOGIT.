@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct SettingsScreen: View {
     
     // MARK: - UserDefaults
     
@@ -49,7 +49,7 @@ struct ProfileView: View {
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ProfileView()
+            SettingsScreen()
         }
     }
 }

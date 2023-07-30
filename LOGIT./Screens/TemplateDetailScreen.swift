@@ -1,5 +1,5 @@
 //
-//  TemplateDetailView.swift
+//  TemplateDetailScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 08.04.22.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct TemplateDetailView: View {
+struct TemplateDetailScreen: View {
     
     // MARK: - Environment
     
@@ -66,7 +66,7 @@ struct TemplateDetailView: View {
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Workout.self) { selectedWorkout in
-            WorkoutDetailView(workout:  selectedWorkout, canNavigateToTemplate: false)
+            WorkoutDetailScreen(workout:  selectedWorkout, canNavigateToTemplate: false)
         }
         .navigationTitle(NSLocalizedString("template", comment: ""))
         .toolbar {
@@ -92,7 +92,7 @@ struct TemplateDetailView: View {
             }
         }
         .sheet(isPresented: $showingTemplateEditor) {
-            TemplateEditorView(template: template, isEditingExistingTemplate: true)
+            TemplateEditorScreen(template: template, isEditingExistingTemplate: true)
         }
     }
     
@@ -188,7 +188,7 @@ struct TemplateDetailView: View {
 struct TemplateDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TemplateDetailView(template: Database.preview.testTemplate)
+            TemplateDetailScreen(template: Database.preview.testTemplate)
         }
         .environmentObject(Database.preview)
     }

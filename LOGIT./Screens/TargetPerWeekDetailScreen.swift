@@ -1,5 +1,5 @@
 //
-//  TargetWorkoutsDetailView.swift
+//  TargetPerWeekDetailScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 16.11.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TargetWorkoutsDetailView: View {
+struct TargetPerWeekDetailScreen: View {
     
     // MARK: - AppStorage
         
@@ -93,7 +93,7 @@ struct TargetWorkoutsDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $isShowingWorkoutDetail) {
             if let workout = selectedWorkout {
-                WorkoutDetailView(workout: workout, canNavigateToTemplate: true)
+                WorkoutDetailScreen(workout: workout, canNavigateToTemplate: true)
             }
         }
     }
@@ -141,7 +141,7 @@ struct TargetWorkoutsDetailView: View {
 struct TargetWorkoutsDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TargetWorkoutsDetailView()
+            TargetPerWeekDetailScreen()
         }
         .environmentObject(Database.preview)
     }

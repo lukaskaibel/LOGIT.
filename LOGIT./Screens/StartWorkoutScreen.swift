@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StartWorkoutView: View {
+struct StartWorkoutScreen: View {
     
     enum FullScreenCoverType: Identifiable {
         case workoutRecorder(template: Template?)
@@ -57,14 +57,14 @@ struct StartWorkoutView: View {
         .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
         .fullScreenCover(item: $fullScreenCoverType) { type in
             switch type {
-            case let .workoutRecorder(template): WorkoutRecorderView(workout: database.newWorkout(), template: template)
+            case let .workoutRecorder(template): WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
             }
         }
         .sheet(item: $sheetType) { type in
             switch type {
             case let .templateDetail(template):
                 NavigationStack {
-                    TemplateDetailView(template: template)
+                    TemplateDetailScreen(template: template)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button(NSLocalizedString("back", comment: "")) {
@@ -130,7 +130,7 @@ struct StartWorkoutView: View {
 struct WorkoutRecorderStartScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            StartWorkoutView()
+            StartWorkoutScreen()
         }
         .environmentObject(Database.preview)
     }

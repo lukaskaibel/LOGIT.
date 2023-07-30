@@ -1,5 +1,5 @@
 //
-//  MuscleGroupDetailView.swift
+//  MuscleGroupsDetailScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 19.11.22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MuscleGroupDetailView: View {
+struct MuscleGroupsDetailScreen: View {
     
     // MARK: - Parameters
     
@@ -140,7 +140,7 @@ struct MuscleGroupDetailView: View {
 struct MuscleGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            MuscleGroupDetailView(setGroups: Database.preview.testWorkout.setGroups)
+            MuscleGroupsDetailScreen(setGroups: Database.preview.testWorkout.setGroups)
         }
         .environmentObject(Database.preview)
     }

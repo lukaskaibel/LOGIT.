@@ -1,5 +1,5 @@
 //
-//  WorkoutRecorderView.swift
+//  WorkoutRecorderScreen.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 24.02.22.
@@ -12,7 +12,7 @@ import SwiftUI
 import UIKit
 
 
-struct WorkoutRecorderView: View {
+struct WorkoutRecorderScreen: View {
 
     enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
@@ -133,7 +133,7 @@ struct WorkoutRecorderView: View {
                 NavigationStack {
                     switch type {
                     case let .exerciseDetail(exercise):
-                        ExerciseDetailView(exercise: exercise)
+                        ExerciseDetailScreen(exercise: exercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
@@ -141,7 +141,7 @@ struct WorkoutRecorderView: View {
                             }
                             .tag("detail")
                     case let .exerciseSelection(exercise, setExercise):
-                        ExerciseSelectionView(selectedExercise: exercise, setExercise: setExercise)
+                        ExerciseSelectionScreen(selectedExercise: exercise, setExercise: setExercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
@@ -412,7 +412,7 @@ struct WorkoutRecorderView: View {
             timerSound?.volume = 0.25
             timerSound?.play()
         } catch {
-            Logger().error("WorkoutRecorderView: Could not find and play the timer sound.")
+            Logger().error("WorkoutRecorderScreen: Could not find and play the timer sound.")
             print()
         }
     }
@@ -425,7 +425,7 @@ struct WorkoutRecorderView: View {
 
 struct WorkoutRecorderView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderView(
+        WorkoutRecorderScreen(
             workout: Database.preview.newWorkout(),
             template: Database.preview.testTemplate
         )

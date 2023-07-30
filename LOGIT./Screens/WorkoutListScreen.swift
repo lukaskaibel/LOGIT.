@@ -1,5 +1,5 @@
 //
-//  AllWorkoutsView.swift
+//  WorkoutListScreen.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 12.12.21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AllWorkoutsView: View {
+struct WorkoutListScreen: View {
     
     // MARK: - Environment
     
@@ -28,7 +28,7 @@ struct AllWorkoutsView: View {
                 ForEach(groupedWorkouts.indices, id:\.self) { index in
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         Text(header(for: index))
-                            .sectionHeaderStyle()
+                            .sectionHeaderStyle2()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: CELL_SPACING) {
                             ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
@@ -52,7 +52,7 @@ struct AllWorkoutsView: View {
                     prompt: NSLocalizedString("searchWorkouts", comment: ""))
         .navigationTitle(NSLocalizedString("workouts", comment: ""))
         .navigationDestination(for: Workout.self) { selectedWorkout in
-            WorkoutDetailView(
+            WorkoutDetailScreen(
                 workout: selectedWorkout,
                 canNavigateToTemplate: true
             )
@@ -101,7 +101,7 @@ struct AllWorkoutsView: View {
 struct AllWorkoutsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            AllWorkoutsView()
+            WorkoutListScreen()
         }
         .environmentObject(Database.preview)
     }

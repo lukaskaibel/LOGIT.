@@ -11,7 +11,7 @@ struct WorkoutSetGroupList: View {
     
     @ObservedObject var workout: Workout
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    @Binding var sheetType: WorkoutRecorderView.SheetType?
+    @Binding var sheetType: WorkoutRecorderScreen.SheetType?
     @Binding var isReordering: Bool
     
     var body: some View {
