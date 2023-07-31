@@ -524,6 +524,7 @@
 				8065AA682686667F00F53A5A /* Frameworks */,
 				8065AA692686667F00F53A5A /* Resources */,
 				792D523927F1160A00B08813 /* Embed Foundation Extensions */,
+				790091622A772B2000FAE34E /* Swift-Format Script */,
 			);
 			buildRules = (
 			);
@@ -585,6 +586,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		790091622A772B2000FAE34E /* Swift-Format Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift-Format Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/.build/debug:$PATH\"\nif which swift-format >/dev/null; then\n    swift-format format --configuration \"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/myConfiguration.json\" -i -r \"${PROJECT_DIR}\"\nelse\n    echo \"warning: swift-format not installed\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8065AA672686667F00F53A5A /* Sources */ = {

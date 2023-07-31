@@ -8,21 +8,28 @@
 import SwiftUI
 
 struct ProgressCircleButton: View {
-    
+
     let progress: Float
     let action: () -> Void
-    
+
     @State private var animationValue: CGFloat = 1.0
-    
+
     var body: some View {
         Button {
             action()
         } label: {
             Image(systemName: (progress == 0.0 ? "xmark" : "checkmark"))
                 .font(.body.weight(.bold))
-                .foregroundColor(progress == 0.0 ? .secondaryLabel : progress == 1.0 ? .white : .accentColor)
+                .foregroundColor(
+                    progress == 0.0 ? .secondaryLabel : progress == 1.0 ? .white : .accentColor
+                )
                 .padding(8)
-                .background(progress == 0.0 ? Color.fill : progress == 1.0 ? .accentColor : .accentColor.secondaryTranslucentBackground)
+                .background(
+                    progress == 0.0
+                        ? Color.fill
+                        : progress == 1.0
+                            ? .accentColor : .accentColor.secondaryTranslucentBackground
+                )
                 .clipShape(Circle())
                 .overlay {
                     Circle()
@@ -36,11 +43,11 @@ struct ProgressCircleButton: View {
                 }
         }
     }
-    
+
     // MARK: - Constants
-    
+
     private let lineWidth: CGFloat = 3
-    
+
 }
 
 struct ProgressCircleButton_Previews: PreviewProvider {

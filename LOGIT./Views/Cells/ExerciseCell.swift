@@ -8,23 +8,26 @@
 import SwiftUI
 
 struct ExerciseCell: View {
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     let exercise: Exercise
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack(alignment: .leading) {
-            Text(NSLocalizedString("lastUsed", comment: "") + ": " + (lastUsed?.description(.short) ?? NSLocalizedString("never", comment: "")))
-                .font(.footnote.weight(.medium))
-                .foregroundColor(.secondaryLabel)
-                .lineLimit(1)
+            Text(
+                NSLocalizedString("lastUsed", comment: "") + ": "
+                    + (lastUsed?.description(.short) ?? NSLocalizedString("never", comment: ""))
+            )
+            .font(.footnote.weight(.medium))
+            .foregroundColor(.secondaryLabel)
+            .lineLimit(1)
             Text(exercise.name ?? "")
                 .font(.body.weight(.bold))
                 .foregroundColor(.primary)
@@ -34,13 +37,13 @@ struct ExerciseCell: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var lastUsed: Date? {
         database.getWorkoutSetGroups(with: exercise).last?.workout?.date
     }
-    
+
 }
 
 struct ExerciseCell_Previews: PreviewProvider {

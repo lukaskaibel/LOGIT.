@@ -7,13 +7,12 @@
 
 import Foundation
 
-
 extension Date {
-    
+
     var weekOfYear: DateInterval? {
         Calendar.current.dateInterval(of: .weekOfYear, for: self)
     }
-    
+
     func inSameWeekOfYear(as date: Date) -> Bool {
         return self.weekOfYear == date.weekOfYear
     }
@@ -31,13 +30,13 @@ extension Date {
         }
         return formatter.string(from: self)
     }
-    
+
     var monthDescription: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM YYYY"
         return formatter.string(from: self)
     }
-    
+
     var timeString: String {
         let minute = Calendar.current.component(.minute, from: self)
         return "\(Calendar.current.component(.hour, from: self)):\(minute/10)\(minute%10)"

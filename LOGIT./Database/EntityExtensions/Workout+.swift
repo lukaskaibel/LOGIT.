@@ -7,31 +7,35 @@
 
 import Foundation
 
-
 extension Workout {
-    
+
     var numberOfSets: Int {
         sets.count
     }
     var numberOfSetGroups: Int {
         setGroups.count
     }
-    
+
     var isEmpty: Bool {
         setGroups.isEmpty
     }
-    
+
     var setGroups: [WorkoutSetGroup] {
         get {
             return (setGroupOrder ?? .emptyList)
-                .compactMap { id in (setGroups_?.allObjects as? [WorkoutSetGroup])?.first { setGroup in setGroup.id == id } }
+                .compactMap { id in
+                    (setGroups_?.allObjects as? [WorkoutSetGroup])?
+                        .first { setGroup in
+                            setGroup.id == id
+                        }
+                }
         }
         set {
             setGroupOrder = newValue.map { $0.id! }
             setGroups_ = NSSet(array: newValue)
         }
     }
-    
+
     var exercises: [Exercise] {
         var result = [Exercise]()
         for setGroup in setGroups {
@@ -41,7 +45,7 @@ extension Workout {
         }
         return result
     }
-    
+
     var sets: [WorkoutSet] {
         var result = [WorkoutSet]()
         for setGroup in setGroups {
@@ -49,42 +53,42 @@ extension Workout {
         }
         return result
     }
-    
+
     var muscleGroups: [MuscleGroup] {
         Array(Set(exercises.compactMap { $0.muscleGroup }))
     }
-    
+
     var primaryMuscleGroup: MuscleGroup? {
         (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
     }
-    
+
     var muscleGroupOccurances: [(MuscleGroup, Int)] {
         MuscleGroup.allCases
             .map { muscleGroup in
                 (muscleGroup, sets.reduce(into: 0, { $0 += $1.isTraining(muscleGroup) ? 1 : 0 }))
             }
     }
-    
-    private var allMuscleGroupZeroDict: [MuscleGroup:Int] {
-        MuscleGroup.allCases.reduce(into: [MuscleGroup:Int](), { $0[$1, default: 0] = 0 })
+
+    private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
+        MuscleGroup.allCases.reduce(into: [MuscleGroup: Int](), { $0[$1, default: 0] = 0 })
     }
-    
+
     func remove(setGroup: WorkoutSetGroup) {
         setGroups = setGroups.filter { $0 != setGroup }
     }
-    
+
     func index(of setGroup: WorkoutSetGroup) -> Int? {
         setGroups.firstIndex(of: setGroup)
     }
-    
+
     var hasEntries: Bool {
         sets.filter({ !$0.hasEntry }).count != numberOfSets
     }
-    
+
     var allSetsHaveEntries: Bool {
         sets.filter({ !$0.hasEntry }).isEmpty
     }
-    
+
     static func getStandardName(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
@@ -100,5 +104,5 @@ extension Workout {
         }
         return "\(weekday) \(daytime) Workout"
     }
-    
+
 }

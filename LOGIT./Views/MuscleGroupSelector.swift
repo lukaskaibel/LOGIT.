@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MuscleGroupSelector: View {
-    
+
     @Binding var selectedMuscleGroup: MuscleGroup?
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
@@ -18,16 +18,27 @@ struct MuscleGroupSelector: View {
                     .font(.system(.headline, design: .rounded, weight: .semibold))
                     .padding(.vertical, 8)
                     .padding(.horizontal, 15)
-                    .foregroundStyle((selectedMuscleGroup == nil ? Color.white : .accentColor).gradient)
-                    .background((selectedMuscleGroup == nil ? Color.accentColor : .accentColorBackground).gradient)
+                    .foregroundStyle(
+                        (selectedMuscleGroup == nil ? Color.white : .accentColor).gradient
+                    )
+                    .background(
+                        (selectedMuscleGroup == nil ? Color.accentColor : .accentColorBackground)
+                            .gradient
+                    )
                     .clipShape(Capsule())
                 ForEach(MuscleGroup.allCases) { muscleGroup in
                     Button(muscleGroup.description) { selectedMuscleGroup = muscleGroup }
                         .font(.system(.headline, design: .rounded, weight: .semibold))
                         .padding(.vertical, 8)
                         .padding(.horizontal, 15)
-                        .foregroundStyle((selectedMuscleGroup == muscleGroup ? .white : muscleGroup.color).gradient)
-                        .background(muscleGroup.color.opacity(selectedMuscleGroup == muscleGroup ? 1 : 0.1).gradient)
+                        .foregroundStyle(
+                            (selectedMuscleGroup == muscleGroup ? .white : muscleGroup.color)
+                                .gradient
+                        )
+                        .background(
+                            muscleGroup.color.opacity(selectedMuscleGroup == muscleGroup ? 1 : 0.1)
+                                .gradient
+                        )
                         .clipShape(Capsule())
                 }
             }

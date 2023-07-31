@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct BarGraph: View {
-    
+
     let xValues: [String]?
     let yValues: [Int]
     let barColors: [Color]
     let hLineValue: Int?
     let hLineSymbol: Image?
-    
-    init(xValues: [String]? = nil, yValues: [Int], barColors: [Color]? = nil, hLineValue: Int? = nil, hLineSymbol: Image? = nil) {
+
+    init(
+        xValues: [String]? = nil,
+        yValues: [Int],
+        barColors: [Color]? = nil,
+        hLineValue: Int? = nil,
+        hLineSymbol: Image? = nil
+    ) {
         self.xValues = xValues
         self.yValues = yValues
         if let barColors = barColors {
@@ -26,14 +32,14 @@ struct BarGraph: View {
         self.hLineValue = hLineValue
         self.hLineSymbol = hLineSymbol
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
                         HStack(spacing: 0) {
-                            ForEach(yValues.indices, id:\.self) { i in
+                            ForEach(yValues.indices, id: \.self) { i in
                                 HStack(spacing: 0) {
                                     VerticalDivider
                                     VStack {
@@ -41,7 +47,10 @@ struct BarGraph: View {
                                         Rectangle()
                                             .foregroundColor(barColors[i])
                                             .background(Color.secondaryLabel)
-                                            .frame(height: CGFloat(yValues[i]) / CGFloat(maxValue) * geometry.size.height)
+                                            .frame(
+                                                height: CGFloat(yValues[i]) / CGFloat(maxValue)
+                                                    * geometry.size.height
+                                            )
                                             .cornerRadius(5)
                                             .padding(.horizontal)
                                     }
@@ -66,16 +75,21 @@ struct BarGraph: View {
                                             .frame(height: 1)
                                         Rectangle()
                                             .foregroundColor(.clear)
-                                            .frame(height: CGFloat(hLineValue+1) / CGFloat(maxValue) * geometry.size.height)
+                                            .frame(
+                                                height: CGFloat(hLineValue + 1) / CGFloat(maxValue)
+                                                    * geometry.size.height
+                                            )
                                     }
-                                } else { EmptyView() }
+                                } else {
+                                    EmptyView()
+                                }
                             }
                         }
                     }
                     HorizontalDivider
                     if let xValues = xValues {
                         HStack {
-                            ForEach(xValues, id:\.self) { value in
+                            ForEach(xValues, id: \.self) { value in
                                 HStack(alignment: .bottom, spacing: 3) {
                                     VerticalDivider
                                     Text(value)
@@ -84,7 +98,8 @@ struct BarGraph: View {
                                     Spacer(minLength: 0)
                                 }
                             }
-                        }.frame(height: 20)
+                        }
+                        .frame(height: 20)
                     }
                 }
                 VerticalDivider
@@ -95,7 +110,8 @@ struct BarGraph: View {
                         Spacer()
                         Text(String(0))
                             .offset(x: 0, y: 8)
-                    }.overlay {
+                    }
+                    .overlay {
                         GeometryReader { geometry in
                             if let hLineSymbol = hLineSymbol, let hLineValue = hLineValue {
                                 VStack(spacing: 0) {
@@ -105,7 +121,10 @@ struct BarGraph: View {
                                         .offset(x: -2, y: 6)
                                     Rectangle()
                                         .foregroundColor(.clear)
-                                        .frame(height: CGFloat(hLineValue+1) / CGFloat(maxValue) * geometry.size.height)
+                                        .frame(
+                                            height: CGFloat(hLineValue + 1) / CGFloat(maxValue)
+                                                * geometry.size.height
+                                        )
                                 }
                             }
                         }
@@ -115,14 +134,15 @@ struct BarGraph: View {
                             .foregroundColor(.clear)
                             .frame(width: 1, height: 20)
                     }
-                }.foregroundColor(.tertiaryLabel)
-                    .font(.footnote)
-                    .padding(.leading, 5)
+                }
+                .foregroundColor(.tertiaryLabel)
+                .font(.footnote)
+                .padding(.leading, 5)
             }
-            
+
         }
     }
-    
+
     var VerticalDivider: some View {
         Rectangle()
             .strokeBorder(style: StrokeStyle(lineWidth: 0.25, dash: [2]))
@@ -130,26 +150,31 @@ struct BarGraph: View {
             .frame(width: 0.5)
             .fixedSize(horizontal: true, vertical: false)
     }
-    
+
     var HorizontalDivider: some View {
         Rectangle()
             .foregroundColor(.separator)
             .frame(height: 0.5)
             .fixedSize(horizontal: false, vertical: true)
     }
-    
+
     // MARK: Computed Properties
-    
+
     private var maxValue: Int {
         ((yValues.max() ?? 1) / 4) * 4 + 4
     }
-    
+
 }
 
 struct BarGraph2_Previews: PreviewProvider {
     static var previews: some View {
-        BarGraph(xValues: ["Jan", "Feb", "Mar", "Apr", "May"], yValues: [3, 4, 6, 5, 2], hLineValue: 3, hLineSymbol: Image(systemName: "target"))
-            .padding()
-            .frame(height: 120)
+        BarGraph(
+            xValues: ["Jan", "Feb", "Mar", "Apr", "May"],
+            yValues: [3, 4, 6, 5, 2],
+            hLineValue: 3,
+            hLineSymbol: Image(systemName: "target")
+        )
+        .padding()
+        .frame(height: 120)
     }
 }

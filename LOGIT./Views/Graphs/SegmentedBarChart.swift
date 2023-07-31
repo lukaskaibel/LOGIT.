@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct SegmentedBarChart: View {
-    
+
     let items: [Item]
     let hLines: [HLine]
     @Binding var selectedItemIndex: Int
-    
+
     var body: some View {
         VStack(spacing: 20) {
             GeometryReader { geometry in
@@ -24,8 +24,9 @@ struct SegmentedBarChart: View {
                                 selectedItemIndex = items.firstIndex(of: item)!
                             }
                     }
-                }.frame(maxWidth: .infinity)
-                    .padding(.horizontal, 10)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 10)
                 .overlay {
                     ZStack {
                         ForEach(hLines) { line in
@@ -43,71 +44,86 @@ struct SegmentedBarChart: View {
                                     }
                                 Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(height: (geometry.size.height / CGFloat(maxYValue)) * CGFloat(line.y) - 10)
+                                    .frame(
+                                        height: (geometry.size.height / CGFloat(maxYValue))
+                                            * CGFloat(line.y) - 10
+                                    )
                             }
                         }
                     }
                 }
             }
-            
+
             HStack {
                 ForEach(items) { item in
                     Text(item.x)
-                        .foregroundColor(selectedItemIndex == items.firstIndex(of: item)! ? .white : .secondaryLabel)
-                        .font(.footnote.weight(selectedItemIndex == items.firstIndex(of: item)! ? .bold : .regular))
+                        .foregroundColor(
+                            selectedItemIndex == items.firstIndex(of: item)!
+                                ? .white : .secondaryLabel
+                        )
+                        .font(
+                            .footnote.weight(
+                                selectedItemIndex == items.firstIndex(of: item)! ? .bold : .regular
+                            )
+                        )
                         .padding(.vertical, 2)
                         .padding(.horizontal, 5)
-                        .background(selectedItemIndex == items.firstIndex(of: item)! ? Color.accentColor : .clear)
+                        .background(
+                            selectedItemIndex == items.firstIndex(of: item)!
+                                ? Color.accentColor : .clear
+                        )
                         .clipShape(Capsule())
                         .frame(maxWidth: .infinity)
                 }
-            }.padding(.horizontal, 3)
-             
+            }
+            .padding(.horizontal, 3)
+
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     @ViewBuilder
     private func bar(for item: Item, chartHeight: CGFloat) -> some View {
         VStack(spacing: 0) {
             Spacer()
             VStack(spacing: 2) {
-                if item.y == 0 {         // prevents columns from collapsing when y is 0
+                if item.y == 0 {  // prevents columns from collapsing when y is 0
                     Rectangle()
                         .foregroundColor(.clear)
                         .frame(height: chartHeight / CGFloat(maxYValue) - 2)
                 } else {
-                    ForEach(0..<item.y, id:\.self) { _ in
+                    ForEach(0..<item.y, id: \.self) { _ in
                         Rectangle()
                             .frame(height: chartHeight / CGFloat(maxYValue) - 2)
                     }
                 }
-            }.frame(width: 25)
-                .cornerRadius(5)
-                .frame(maxWidth: .infinity)
+            }
+            .frame(width: 25)
+            .cornerRadius(5)
+            .frame(maxWidth: .infinity)
         }
         .foregroundStyle(item.barColor.gradient)
     }
-    
+
     var maxYValue: Int {
-        ((items.map{ $0.y }) + (hLines.map{ $0.y })).max() ?? 1
+        ((items.map { $0.y }) + (hLines.map { $0.y })).max() ?? 1
     }
-    
+
     struct Item: Identifiable, Equatable {
         let x: String
         let y: Int
         let barColor: Color
         var id: UUID { UUID() }
     }
-    
+
     struct HLine: Identifiable {
         let title: String
         let y: Int
         let color: Color
         var id: UUID { UUID() }
     }
-    
+
 }
 
 /*

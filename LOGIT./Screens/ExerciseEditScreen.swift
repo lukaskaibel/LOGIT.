@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct ExerciseEditScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var exerciseName: String
     @State private var muscleGroup: MuscleGroup
     @State private var showingExerciseExistsAlert: Bool = false
     @State private var showingExerciseNameEmptyAlert: Bool = false
     @FocusState private var nameFieldIsFocused: Bool
-    
+
     // MARK: - Variables
-    
+
     private let exerciseToEdit: Exercise?
     private let onEditFinished: ((_ exercise: Exercise) -> Void)?
-    
+
     // MARK: - Init
-    
+
     init(
         exerciseToEdit: Exercise? = nil,
         onEditFinished: ((_ exercise: Exercise) -> Void)? = nil,
@@ -39,21 +39,27 @@ struct ExerciseEditScreen: View {
         _exerciseName = State(initialValue: exerciseToEdit?.name ?? "")
         _muscleGroup = State(initialValue: exerciseToEdit?.muscleGroup ?? initialMuscleGroup)
     }
-    
+
     // MARK: - Body
-        
+
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     HStack {
-                        ColorMeter(items: [ColorMeter.Item(color: muscleGroup.color,
-                                                           amount: 1)])
-                        TextField(NSLocalizedString("exerciseName", comment: ""),
-                                  text: $exerciseName)
+                        ColorMeter(items: [
+                            ColorMeter.Item(
+                                color: muscleGroup.color,
+                                amount: 1
+                            )
+                        ])
+                        TextField(
+                            NSLocalizedString("exerciseName", comment: ""),
+                            text: $exerciseName
+                        )
                         .focused($nameFieldIsFocused)
-                            .font(.body.weight(.semibold))
-                            .padding(.vertical, 5)
+                        .font(.body.weight(.semibold))
+                        .padding(.vertical, 5)
                     }
                     .padding(CELL_PADDING)
                     .tileStyle()
@@ -67,8 +73,10 @@ struct ExerciseEditScreen: View {
                         Text(NSLocalizedString("muscleGroup", comment: ""))
                         Spacer()
                         Menu {
-                            Picker(NSLocalizedString("muscleGroup", comment: ""),
-                                   selection: $muscleGroup) {
+                            Picker(
+                                NSLocalizedString("muscleGroup", comment: ""),
+                                selection: $muscleGroup
+                            ) {
                                 ForEach(MuscleGroup.allCases) { muscleGroup in
                                     Text(muscleGroup.description).tag(muscleGroup)
                                         .foregroundColor(muscleGroup.color)
@@ -85,45 +93,59 @@ struct ExerciseEditScreen: View {
                         }
                     }
                 })
-            }.listStyle(.insetGrouped)
-                .navigationTitle(exerciseToEdit != nil ? "\(NSLocalizedString("edit", comment: "")) \(NSLocalizedString("exercise", comment: ""))" : NSLocalizedString("newExercise", comment: ""))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(NSLocalizedString("cancel", comment: "")) {
-                            dismiss()
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle(
+                exerciseToEdit != nil
+                    ? "\(NSLocalizedString("edit", comment: "")) \(NSLocalizedString("exercise", comment: ""))"
+                    : NSLocalizedString("newExercise", comment: "")
+            )
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(NSLocalizedString("cancel", comment: "")) {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(NSLocalizedString("done", comment: "")) {
+                        if exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
+                            showingExerciseNameEmptyAlert = true
+                        } else if exerciseToEdit == nil
+                            && !database.getExercises(withNameIncluding: exerciseName).isEmpty
+                        {
+                            showingExerciseExistsAlert = true
+                        } else {
+                            saveExercise()
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(NSLocalizedString("done", comment: "")) {
-                            if exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
-                                showingExerciseNameEmptyAlert = true
-                            } else if exerciseToEdit == nil && !database.getExercises(withNameIncluding: exerciseName).isEmpty {
-                                showingExerciseExistsAlert = true
-                            } else {
-                                saveExercise()
-                            }
-                        }.font(.body.weight(.semibold))
-                    }
+                    .font(.body.weight(.semibold))
                 }
-                .alert("\(exerciseName.trimmingCharacters(in: .whitespaces)) \(NSLocalizedString("alreadyExists", comment: ""))", isPresented: $showingExerciseExistsAlert) {
-                    Button(NSLocalizedString("ok", comment: "")) {
-                        showingExerciseExistsAlert = false
-                    }
+            }
+            .alert(
+                "\(exerciseName.trimmingCharacters(in: .whitespaces)) \(NSLocalizedString("alreadyExists", comment: ""))",
+                isPresented: $showingExerciseExistsAlert
+            ) {
+                Button(NSLocalizedString("ok", comment: "")) {
+                    showingExerciseExistsAlert = false
                 }
-                .alert(NSLocalizedString("nameCantBeEmpty", comment: ""), isPresented: $showingExerciseNameEmptyAlert) {
-                    Button(NSLocalizedString("ok", comment: "")) {
-                        showingExerciseNameEmptyAlert = false
-                    }
+            }
+            .alert(
+                NSLocalizedString("nameCantBeEmpty", comment: ""),
+                isPresented: $showingExerciseNameEmptyAlert
+            ) {
+                Button(NSLocalizedString("ok", comment: "")) {
+                    showingExerciseNameEmptyAlert = false
                 }
+            }
         }
         .onAppear {
             nameFieldIsFocused = true
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private func saveExercise() {
         let exercise: Exercise
         if let exerciseToEdit = exerciseToEdit {
@@ -131,14 +153,16 @@ struct ExerciseEditScreen: View {
             exerciseToEdit.muscleGroup = muscleGroup
             exercise = exerciseToEdit
         } else {
-            exercise = database.newExercise(name: exerciseName.trimmingCharacters(in: .whitespacesAndNewlines),
-                                            muscleGroup: muscleGroup)
+            exercise = database.newExercise(
+                name: exerciseName.trimmingCharacters(in: .whitespacesAndNewlines),
+                muscleGroup: muscleGroup
+            )
         }
         database.save()
         dismiss()
         onEditFinished?(exercise)
     }
-    
+
 }
 
 struct EditExerciseView_Previews: PreviewProvider {

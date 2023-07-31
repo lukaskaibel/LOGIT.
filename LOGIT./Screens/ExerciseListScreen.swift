@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ExerciseListScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var searchedText = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingAddExercise = false
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
@@ -37,7 +37,9 @@ struct ExerciseListScreen: View {
                                         ExerciseCell(exercise: exercise)
                                         Spacer()
                                         NavigationChevron()
-                                            .foregroundColor(exercise.muscleGroup?.color ?? .secondaryLabel)
+                                            .foregroundColor(
+                                                exercise.muscleGroup?.color ?? .secondaryLabel
+                                            )
                                     }
                                     .padding(CELL_PADDING)
                                     .tileStyle()
@@ -53,7 +55,7 @@ struct ExerciseListScreen: View {
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
             .padding(.horizontal)
         }
-        .searchable(text: $searchedText )
+        .searchable(text: $searchedText)
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Exercise.self) { selectedExercise in
@@ -70,18 +72,20 @@ struct ExerciseListScreen: View {
             ExerciseEditScreen(initialMuscleGroup: selectedMuscleGroup ?? .chest)
         }
     }
-    
+
     // MARK: - Methods / Computed Properties
-    
+
     var groupedExercises: [[Exercise]] {
-        database.getGroupedExercises(withNameIncluding: searchedText,
-                                     for: selectedMuscleGroup)
+        database.getGroupedExercises(
+            withNameIncluding: searchedText,
+            for: selectedMuscleGroup
+        )
     }
-    
+
     func getLetter(for group: [Exercise]) -> String {
         String(group.first?.name?.first ?? Character(" "))
     }
-    
+
 }
 
 struct AllExercisesView_Previews: PreviewProvider {

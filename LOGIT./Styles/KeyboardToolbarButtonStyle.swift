@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct KeyboardToolbarButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -17,12 +16,10 @@ struct KeyboardToolbarButtonModifier: ViewModifier {
     }
 }
 
-
 extension View {
-    
+
     func keyboardToolbarButtonStyle() -> some View {
         modifier(KeyboardToolbarButtonModifier())
     }
-    
-    
+
 }

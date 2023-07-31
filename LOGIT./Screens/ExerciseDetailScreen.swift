@@ -5,33 +5,33 @@
 //  Created by Lukas Kaibel on 06.01.22.
 //
 
-import SwiftUI
-import CoreData
 import Charts
+import CoreData
+import SwiftUI
 
 struct ExerciseDetailScreen: View {
-    
+
     enum TimeSpan {
         case threeMonths, year, allTime
     }
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var selectedTimeSpan: TimeSpan = .threeMonths
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
-    
+
     // MARK: - Variables
-    
+
     let exercise: Exercise
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
@@ -59,26 +59,45 @@ struct ExerciseDetailScreen: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
-                    Button(action: { showingEditExercise.toggle() }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
-                    Button(role: .destructive, action: { showDeletionAlert.toggle() }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
+                    Button(
+                        action: { showingEditExercise.toggle() },
+                        label: {
+                            Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil")
+                        }
+                    )
+                    Button(
+                        role: .destructive,
+                        action: { showDeletionAlert.toggle() },
+                        label: {
+                            Label(NSLocalizedString("delete", comment: ""), systemImage: "trash")
+                        }
+                    )
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
             }
         }
-        .confirmationDialog(Text(NSLocalizedString("deleteExerciseConfirmation", comment: "")), isPresented: $showDeletionAlert, titleVisibility: .visible) {
-            Button("\(NSLocalizedString("delete", comment: ""))", role: .destructive, action: {
-                database.delete(exercise, saveContext: true)
-                dismiss()
-            })
+        .confirmationDialog(
+            Text(NSLocalizedString("deleteExerciseConfirmation", comment: "")),
+            isPresented: $showDeletionAlert,
+            titleVisibility: .visible
+        ) {
+            Button(
+                "\(NSLocalizedString("delete", comment: ""))",
+                role: .destructive,
+                action: {
+                    database.delete(exercise, saveContext: true)
+                    dismiss()
+                }
+            )
         }
         .sheet(isPresented: $showingEditExercise) {
             ExerciseEditScreen(exerciseToEdit: exercise)
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var header: some View {
         VStack(alignment: .leading) {
             Text(exercise.name ?? "")
@@ -90,23 +109,31 @@ struct ExerciseDetailScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var exerciseInfo: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxReps", comment: ""))
-                UnitView(value: String(personalBest(for: .repetitions)), unit: NSLocalizedString("rps", comment: ""))
-                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
-            }.frame(maxWidth: .infinity, alignment: .leading)
+                UnitView(
+                    value: String(personalBest(for: .repetitions)),
+                    unit: NSLocalizedString("rps", comment: "")
+                )
+                .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             Divider()
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maxWeight", comment: ""))
-                UnitView(value: String(personalBest(for: .weight)), unit: WeightUnit.used.rawValue.capitalized)
-                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
-            }.frame(maxWidth: .infinity, alignment: .leading)
+                UnitView(
+                    value: String(personalBest(for: .weight)),
+                    unit: WeightUnit.used.rawValue.capitalized
+                )
+                .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
-    
+
     private var weightRepetitionsGraph: some View {
         VStack {
             TabView {
@@ -116,18 +143,28 @@ struct ExerciseDetailScreen: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Chart {
                         if selectedTimeSpan != .allTime || !firstPerformedOverOneYearAgo {
-                            PointMark(x: .value(
-                                "Day",
-                                Calendar.current.date(byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
-                                                      value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
-                                                      to: .now)!,
-                                unit: .day
-                            ), y: .value("Weight", 0))
+                            PointMark(
+                                x: .value(
+                                    "Day",
+                                    Calendar.current.date(
+                                        byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
+                                        value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
+                                        to: .now
+                                    )!,
+                                    unit: .day
+                                ),
+                                y: .value("Weight", 0)
+                            )
                             .foregroundStyle(.clear)
                         }
                         ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
-                            LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                                     y: .value("Weight", convertWeightForDisplaying(max(.weight, in: workoutSet))))
+                            LineMark(
+                                x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
+                                y: .value(
+                                    "Weight",
+                                    convertWeightForDisplaying(max(.weight, in: workoutSet))
+                                )
+                            )
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
                             .symbol {
@@ -137,8 +174,10 @@ struct ExerciseDetailScreen: View {
                             }
                         }
                         .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
-                        PointMark(x: .value("Day", Date.now),
-                                  y: .value("Weight", 0))
+                        PointMark(
+                            x: .value("Day", Date.now),
+                            y: .value("Weight", 0)
+                        )
                         .foregroundStyle(.clear)
                     }
                     .chartYScale(domain: 0...(personalBest(for: .weight) + 20))
@@ -149,18 +188,25 @@ struct ExerciseDetailScreen: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Chart {
                         if selectedTimeSpan != .allTime || !firstPerformedOverOneYearAgo {
-                            PointMark(x: .value(
-                                "Day",
-                                Calendar.current.date(byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
-                                                      value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
-                                                      to: .now)!,
-                                unit: .day
-                            ), y: .value("Weight", 0))
+                            PointMark(
+                                x: .value(
+                                    "Day",
+                                    Calendar.current.date(
+                                        byAdding: selectedTimeSpan == .threeMonths ? .month : .year,
+                                        value: -(selectedTimeSpan == .threeMonths ? 3 : 1),
+                                        to: .now
+                                    )!,
+                                    unit: .day
+                                ),
+                                y: .value("Weight", 0)
+                            )
                             .foregroundStyle(.clear)
                         }
                         ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
-                            LineMark(x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                                     y: .value("Weight", max(.repetitions, in: workoutSet)))
+                            LineMark(
+                                x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
+                                y: .value("Weight", max(.repetitions, in: workoutSet))
+                            )
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
                             .symbol {
@@ -170,8 +216,10 @@ struct ExerciseDetailScreen: View {
                             }
                         }
                         .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
-                        PointMark(x: .value("Day", Date.now),
-                                  y: .value("Weight", 0))
+                        PointMark(
+                            x: .value("Day", Date.now),
+                            y: .value("Weight", 0)
+                        )
                         .foregroundStyle(.clear)
                     }
                     .chartYScale(domain: 0...(personalBest(for: .repetitions) + 20))
@@ -183,14 +231,15 @@ struct ExerciseDetailScreen: View {
                 Text(NSLocalizedString("threeMonths", comment: "")).tag(TimeSpan.threeMonths)
                 Text(NSLocalizedString("year", comment: "")).tag(TimeSpan.year)
                 Text(NSLocalizedString("all", comment: "")).tag(TimeSpan.allTime)
-            }.pickerStyle(.segmented)
-                .padding(.top)
+            }
+            .pickerStyle(.segmented)
+            .padding(.top)
         }
     }
-    
+
     private var setGroupList: some View {
         VStack(spacing: SECTION_SPACING) {
-            ForEach(groupedWorkoutSetGroups.indices, id:\.self) { index in
+            ForEach(groupedWorkoutSetGroups.indices, id: \.self) { index in
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(setGroupGroupHeaderTitle(for: index))
                         .sectionHeaderStyle2()
@@ -202,7 +251,8 @@ struct ExerciseDetailScreen: View {
                                 focusedIntegerFieldIndex: .constant(nil),
                                 sheetType: .constant(nil),
                                 isReordering: .constant(false),
-                                supplementaryText: "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")"
+                                supplementaryText:
+                                    "\(setGroup.workout?.date?.description(.short) ?? "")  ·  \(setGroup.workout?.name ?? "")"
                             )
                             .padding(CELL_PADDING)
                             .tileStyle()
@@ -218,58 +268,73 @@ struct ExerciseDetailScreen: View {
             }
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
         database.getWorkoutSets(with: exercise)
             .map {
-                attribute == .repetitions ? max(.repetitions, in: $0) : convertWeightForDisplaying(max(.weight, in: $0))
+                attribute == .repetitions
+                    ? max(.repetitions, in: $0) : convertWeightForDisplaying(max(.weight, in: $0))
             }
             .max() ?? 0
     }
-    
+
     private func max(_ attribute: WorkoutSet.Attribute, in workoutSet: WorkoutSet) -> Int {
         if let standardSet = workoutSet as? StandardSet {
             return Int(attribute == .repetitions ? standardSet.repetitions : standardSet.weight)
         }
         if let dropSet = workoutSet as? DropSet {
-            return Int((attribute == .repetitions ? dropSet.repetitions : dropSet.weights)?.max() ?? 0)
+            return Int(
+                (attribute == .repetitions ? dropSet.repetitions : dropSet.weights)?.max() ?? 0
+            )
         }
         if let superSet = workoutSet as? SuperSet {
             if superSet.setGroup?.exercise == exercise {
-                return Int(attribute == .repetitions ? superSet.repetitionsFirstExercise : superSet.weightFirstExercise)
+                return Int(
+                    attribute == .repetitions
+                        ? superSet.repetitionsFirstExercise : superSet.weightFirstExercise
+                )
             } else {
-                return Int(attribute == .repetitions ? superSet.repetitionsSecondExercise : superSet.weightSecondExercise)
+                return Int(
+                    attribute == .repetitions
+                        ? superSet.repetitionsSecondExercise : superSet.weightSecondExercise
+                )
             }
         }
         return 0
     }
-    
+
     private var firstPerformedOverOneYearAgo: Bool {
         Calendar.current.date(byAdding: .year, value: -1, to: .now)!
-        >
-        database.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date }).min() ?? .now
+            > database.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date })
+            .min()
+            ?? .now
     }
-    
-    private func setsForExercise(withoutZeroRepetitions: Bool = false, withoutZeroWeights: Bool = false) -> [WorkoutSet] {
+
+    private func setsForExercise(
+        withoutZeroRepetitions: Bool = false,
+        withoutZeroWeights: Bool = false
+    ) -> [WorkoutSet] {
         database.getWorkoutSets(with: exercise)
             .filter { !withoutZeroRepetitions || max(.repetitions, in: $0) > 0 }
             .filter { !withoutZeroWeights || max(.weight, in: $0) > 0 }
     }
-    
+
     private var groupedWorkoutSetGroups: [[WorkoutSetGroup]] {
         database.getGroupedWorkoutSetGroups(with: exercise)
     }
-    
+
     private func setGroupGroupHeaderTitle(for index: Int) -> String {
-        guard let date = groupedWorkoutSetGroups.value(at: index)?.first?.workout?.date else { return "" }
+        guard let date = groupedWorkoutSetGroups.value(at: index)?.first?.workout?.date else {
+            return ""
+        }
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateFormat = "MMMM yyyy"
         return formatter.string(from: date)
     }
-    
+
 }
 
 struct ExerciseDetailView_Previews: PreviewProvider {

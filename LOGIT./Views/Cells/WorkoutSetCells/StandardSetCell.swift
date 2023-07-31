@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct StandardSetCell: View {
-        
+
     // MARK: - Environment
-    
+
     @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
-    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
+    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
+        [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     @ObservedObject var standardSet: StandardSet
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         HStack {
             if let indexInWorkout = indexInWorkout {
@@ -60,21 +61,27 @@ struct StandardSetCell: View {
             }
         }
     }
-    
+
     // MARK: - Supporting Methods
-    
+
     private var indexInWorkout: Int? {
         standardSet.workout?.sets.firstIndex(of: standardSet)
     }
-    
+
     private func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        guard
+            let templateStandardSet = workoutSetTemplateSetDictionary[standardSet]
+                as? TemplateStandardSet
+        else { return 0 }
         return templateStandardSet.repetitions
     }
-    
+
     private func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
-        guard let templateStandardSet = workoutSetTemplateSetDictionary[standardSet] as? TemplateStandardSet else { return 0 }
+        guard
+            let templateStandardSet = workoutSetTemplateSetDictionary[standardSet]
+                as? TemplateStandardSet
+        else { return 0 }
         return Int64(convertWeightForDisplaying(templateStandardSet.weight))
     }
-    
+
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 let CELL_PADDING: CGFloat = 14
 let CELL_SPACING: CGFloat = 5
 

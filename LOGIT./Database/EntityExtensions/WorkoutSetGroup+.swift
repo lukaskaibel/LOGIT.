@@ -7,17 +7,16 @@
 
 import Foundation
 
-
 extension WorkoutSetGroup {
-    
+
     public enum SetType: String {
         case standard, superSet, dropSet
-        
+
         var description: String {
             NSLocalizedString(self.rawValue, comment: "")
         }
     }
-    
+
     var sets: [WorkoutSet] {
         get {
             return (setOrder ?? .emptyList)
@@ -28,15 +27,15 @@ extension WorkoutSetGroup {
             sets_ = NSSet(array: newValue)
         }
     }
-    
+
     public var isEmpty: Bool {
         sets.isEmpty
     }
-    
+
     public var numberOfSets: Int {
         sets.count
     }
-    
+
     private var exercises: [Exercise] {
         get {
             return (exerciseOrder ?? .emptyList)
@@ -47,7 +46,7 @@ extension WorkoutSetGroup {
             exercises_ = NSSet(array: newValue)
         }
     }
-    
+
     public var exercise: Exercise? {
         get { exercises.first }
         set {
@@ -59,7 +58,7 @@ extension WorkoutSetGroup {
             }
         }
     }
-    
+
     public var secondaryExercise: Exercise? {
         get { exercises.value(at: 1) }
         set {
@@ -73,7 +72,7 @@ extension WorkoutSetGroup {
             }
         }
     }
-    
+
     public var setType: SetType {
         let firstSet = sets.first
         if let _ = firstSet as? DropSet {
@@ -84,13 +83,13 @@ extension WorkoutSetGroup {
             return .standard
         }
     }
-    
+
     public subscript(index: Int) -> WorkoutSet {
         get { sets[index] }
     }
-    
+
     public func index(of set: WorkoutSet) -> Int? {
         sets.firstIndex(of: set)
     }
-    
+
 }

@@ -9,40 +9,40 @@ import Combine
 import SwiftUI
 
 class Chronograph: ObservableObject {
-    
+
     // MARK: - Enums
-    
+
     enum Mode {
         case timer
         case stopwatch
     }
-    
+
     enum ChronographStatus {
         case idle
         case running
         case paused
     }
-    
+
     // MARK: - Properties
-    
+
     @Published var seconds: TimeInterval = 0
     @Published var mode: Mode = .timer
     @Published var status: ChronographStatus = .idle
-    
+
     var onTimerFired: (() -> Void)?
-    
+
     private var timer: Timer?
     private var startDate: Date?
     private var pauseTime: TimeInterval?
-    
+
     // MARK: - Methods
-    
+
     func start() {
         if pauseTime != nil {
             seconds = pauseTime!
             pauseTime = nil
         }
-        
+
         startDate = Date()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self else { return }
@@ -64,14 +64,14 @@ class Chronograph: ObservableObject {
         }
         self.status = .running
     }
-    
+
     func pause() {
         timer?.invalidate()
         timer = nil
         pauseTime = seconds
         self.status = .paused
     }
-    
+
     func cancel() {
         timer?.invalidate()
         timer = nil
@@ -79,7 +79,7 @@ class Chronograph: ObservableObject {
         seconds = 0
         self.status = .idle
     }
-    
+
     func stop() {
         timer?.invalidate()
         timer = nil

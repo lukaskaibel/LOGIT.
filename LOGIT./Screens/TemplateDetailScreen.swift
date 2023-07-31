@@ -7,26 +7,25 @@
 
 import SwiftUI
 
-
 struct TemplateDetailScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var showingTemplateInfoAlert = false
     @State private var showingDeletionAlert = false
     @State private var showingTemplateEditor = false
-    
+
     // MARK: - Variables
-    
+
     let template: Template
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
@@ -54,9 +53,11 @@ struct TemplateDetailScreen: View {
                     exercisesList
                 }
                 VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text("\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))")
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(
+                        "\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))"
+                    )
+                    .sectionHeaderStyle2()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     workoutList
                 }
             }
@@ -66,26 +67,42 @@ struct TemplateDetailScreen: View {
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Workout.self) { selectedWorkout in
-            WorkoutDetailScreen(workout:  selectedWorkout, canNavigateToTemplate: false)
+            WorkoutDetailScreen(workout: selectedWorkout, canNavigateToTemplate: false)
         }
         .navigationTitle(NSLocalizedString("template", comment: ""))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Menu(content: {
-                    Button(action: { showingTemplateEditor = true }, label: { Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil") })
-                    Button(role: .destructive, action: {
-                        showingDeletionAlert = true
-                    }, label: { Label(NSLocalizedString("delete", comment: ""), systemImage: "trash") } )
+                    Button(
+                        action: { showingTemplateEditor = true },
+                        label: {
+                            Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil")
+                        }
+                    )
+                    Button(
+                        role: .destructive,
+                        action: {
+                            showingDeletionAlert = true
+                        },
+                        label: {
+                            Label(NSLocalizedString("delete", comment: ""), systemImage: "trash")
+                        }
+                    )
                 }) {
                     Image(systemName: "ellipsis.circle")
                 }
             }
         }
-        .alert(NSLocalizedString("templates", comment: ""),
-               isPresented: $showingTemplateInfoAlert,
-               actions: {  },
-               message: { Text(NSLocalizedString("templateExplanation", comment: "")) })
-        .confirmationDialog(NSLocalizedString("deleteTemplateMsg", comment: ""), isPresented: $showingDeletionAlert) {
+        .alert(
+            NSLocalizedString("templates", comment: ""),
+            isPresented: $showingTemplateInfoAlert,
+            actions: {},
+            message: { Text(NSLocalizedString("templateExplanation", comment: "")) }
+        )
+        .confirmationDialog(
+            NSLocalizedString("deleteTemplateMsg", comment: ""),
+            isPresented: $showingDeletionAlert
+        ) {
             Button(NSLocalizedString("deleteTemplate", comment: ""), role: .destructive) {
                 database.delete(template, saveContext: true)
                 dismiss()
@@ -95,14 +112,19 @@ struct TemplateDetailScreen: View {
             TemplateEditorScreen(template: template, isEditingExistingTemplate: true)
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var templateHeader: some View {
         VStack(alignment: .leading) {
-            Text(template.lastUsed != nil ? (NSLocalizedString("lastUsed", comment: "") + " " + (template.lastUsed?.description(.long) ?? "")) : NSLocalizedString("unused", comment: ""))
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
+            Text(
+                template.lastUsed != nil
+                    ? (NSLocalizedString("lastUsed", comment: "") + " "
+                        + (template.lastUsed?.description(.long) ?? ""))
+                    : NSLocalizedString("unused", comment: "")
+            )
+            .fontWeight(.medium)
+            .foregroundColor(.secondary)
             Text(template.name ?? "")
                 .font(.largeTitle.weight(.bold))
                 .lineLimit(2)
@@ -114,9 +136,10 @@ struct TemplateDetailScreen: View {
                         .lineLimit(1)
                 }
             }
-        }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var templateInfo: some View {
         VStack(spacing: 10) {
             HStack {
@@ -125,30 +148,33 @@ struct TemplateDetailScreen: View {
                     Text("\(template.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: template.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
                     Text("\(template.sets.count)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: template.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
-    
+
     private var setsPerMuscleGroup: some View {
         PieGraph(
             items: template.muscleGroupOccurances.map {
-                PieGraph.Item(title: $0.0.rawValue.capitalized,
-                              amount: $0.1,
-                              color: $0.0.color,
-                              isSelected: false
+                PieGraph.Item(
+                    title: $0.0.rawValue.capitalized,
+                    amount: $0.1,
+                    color: $0.0.color,
+                    isSelected: false
                 )
             }
         )
     }
-    
+
     private var exercisesList: some View {
         VStack(spacing: CELL_SPACING) {
             ForEach(template.setGroups) { templateSetGroup in
@@ -157,7 +183,8 @@ struct TemplateDetailScreen: View {
                     focusedIntegerFieldIndex: .constant(nil),
                     sheetType: .constant(nil),
                     isReordering: .constant(false),
-                    supplementaryText: "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.setType.description)"
+                    supplementaryText:
+                        "\(template.setGroups.firstIndex(of: templateSetGroup)! + 1) / \(template.setGroups.count)  ·  \(templateSetGroup.setType.description)"
                 )
                 .padding(CELL_PADDING)
                 .tileStyle()
@@ -165,9 +192,9 @@ struct TemplateDetailScreen: View {
             }
         }
     }
-    
+
     private var workoutList: some View {
-        ForEach(template.workouts, id:\.objectID) { workout in
+        ForEach(template.workouts, id: \.objectID) { workout in
             NavigationLink(value: workout) {
                 WorkoutCell(workout: workout)
             }
@@ -175,15 +202,15 @@ struct TemplateDetailScreen: View {
             .tileStyle()
         }
     }
-    
-    // MARK: - Computed Properties
-    
-    private var lastUsedDateString: String {
-        template.workouts.first?.date?.description(.medium) ?? NSLocalizedString("never", comment: "")
-    }
-    
-}
 
+    // MARK: - Computed Properties
+
+    private var lastUsedDateString: String {
+        template.workouts.first?.date?.description(.medium)
+            ?? NSLocalizedString("never", comment: "")
+    }
+
+}
 
 struct TemplateDetailView_Previews: PreviewProvider {
     static var previews: some View {

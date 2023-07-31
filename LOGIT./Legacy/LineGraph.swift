@@ -8,85 +8,112 @@
 import SwiftUI
 
 struct LineGraph: View {
-    
+
     let xValues: [String]?
     let yValues: [Int]
-    
+
     @Binding var selectedIndex: Int?
-    
+
     init(xValues: [String]? = nil, yValues: [Int], selectedIndex: Binding<Int?> = .constant(nil)) {
         self.xValues = xValues
         self.yValues = yValues
         self._selectedIndex = selectedIndex
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             Divider()
             GeometryReader { outerGeometry in
                 GeometryReader { geometry in
                     Path { path in
-                        path.move(to: CGPoint(x: 0,
-                                              y: (1 - yValues[0].cgFloat / maxYValue.cgFloat) * geometry.size.height))
-                        (1..<yValues.count).forEach { index in
-                            path.addLine(to: CGPoint(x: (index.cgFloat / (yValues.count - 1).cgFloat) * geometry.size.width,
-                                                  y: (1 - yValues[index].cgFloat / maxYValue.cgFloat) * geometry.size.height))
-                        }
-                    }.stroke(Color.accentColor.opacity(0.5), lineWidth: 5)
-                        .overlay {
-                            ZStack {
-                                ForEach(0..<yValues.count, id:\.self) { index in
-                                    Circle()
-                                        .stroke(lineWidth: 3)
-                                        .foregroundColor(.accentColor)
-                                        .frame(width: index == selectedIndex ? 15 : 10, height: index == selectedIndex ? 15 : 10)
-                                        .background(Color.background)
-                                        .offset(x: -geometry.size.width/2, y: -geometry.size.height/2)
-                                        .offset(x: (index.cgFloat / (yValues.count - 1).cgFloat) * geometry.size.width,
-                                                y: (1 - yValues[index].cgFloat / maxYValue.cgFloat) * geometry.size.height)
-                                        .animation(.interactiveSpring(), value: 1.0)
-                                }
+                        path.move(
+                            to: CGPoint(
+                                x: 0,
+                                y: (1 - yValues[0].cgFloat / maxYValue.cgFloat)
+                                    * geometry.size.height
+                            )
+                        )
+                        (1..<yValues.count)
+                            .forEach { index in
+                                path.addLine(
+                                    to: CGPoint(
+                                        x: (index.cgFloat / (yValues.count - 1).cgFloat)
+                                            * geometry.size.width,
+                                        y: (1 - yValues[index].cgFloat / maxYValue.cgFloat)
+                                            * geometry.size.height
+                                    )
+                                )
                             }
-                        }
-                }.padding()
-                    .padding(.top)
+                    }
+                    .stroke(Color.accentColor.opacity(0.5), lineWidth: 5)
                     .overlay {
-                        HStack {
-                            Spacer()
-                            VStack {
-                                Text(String(maxYValue - 1))
+                        ZStack {
+                            ForEach(0..<yValues.count, id: \.self) { index in
+                                Circle()
+                                    .stroke(lineWidth: 3)
                                     .foregroundColor(.accentColor)
-                                    .font(.footnote.weight(.semibold))
-                                    .padding(5)
-                                Spacer()
+                                    .frame(
+                                        width: index == selectedIndex ? 15 : 10,
+                                        height: index == selectedIndex ? 15 : 10
+                                    )
+                                    .background(Color.background)
+                                    .offset(
+                                        x: -geometry.size.width / 2,
+                                        y: -geometry.size.height / 2
+                                    )
+                                    .offset(
+                                        x: (index.cgFloat / (yValues.count - 1).cgFloat)
+                                            * geometry.size.width,
+                                        y: (1 - yValues[index].cgFloat / maxYValue.cgFloat)
+                                            * geometry.size.height
+                                    )
+                                    .animation(.interactiveSpring(), value: 1.0)
                             }
-
                         }
                     }
-                    .contentShape(Rectangle())
-                    .gesture(
-                        DragGesture()
-                            .onChanged { drag in
-                                let oldIndex = selectedIndex
-                                if drag.location.x > 5 {
-                                    let newIndex = Int( drag.location.x / outerGeometry.size.width * yValues.count.cgFloat)
-                                    if yValues.indices.contains(newIndex) {
-                                        selectedIndex = newIndex
-                                        if oldIndex != selectedIndex {
-                                            UISelectionFeedbackGenerator().selectionChanged()
-                                        }
+                }
+                .padding()
+                .padding(.top)
+                .overlay {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text(String(maxYValue - 1))
+                                .foregroundColor(.accentColor)
+                                .font(.footnote.weight(.semibold))
+                                .padding(5)
+                            Spacer()
+                        }
+
+                    }
+                }
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture()
+                        .onChanged { drag in
+                            let oldIndex = selectedIndex
+                            if drag.location.x > 5 {
+                                let newIndex = Int(
+                                    drag.location.x / outerGeometry.size.width
+                                        * yValues.count.cgFloat
+                                )
+                                if yValues.indices.contains(newIndex) {
+                                    selectedIndex = newIndex
+                                    if oldIndex != selectedIndex {
+                                        UISelectionFeedbackGenerator().selectionChanged()
                                     }
                                 }
                             }
-                            .onEnded { _ in
-                                selectedIndex = nil
-                            }
-                    )
+                        }
+                        .onEnded { _ in
+                            selectedIndex = nil
+                        }
+                )
             }
             Divider()
             if let xValues = xValues {
                 HStack {
-                    ForEach(xValues.indices, id:\.self) { index in
+                    ForEach(xValues.indices, id: \.self) { index in
                         Text(xValues[index])
                             .foregroundColor(.secondaryLabel)
                             .font(.footnote)
@@ -94,13 +121,14 @@ struct LineGraph: View {
                             Spacer()
                         }
                     }
-                }.padding(.top, 10)
-                    .padding(.horizontal, 5)
+                }
+                .padding(.top, 10)
+                .padding(.horizontal, 5)
             }
         }
-        
+
     }
-    
+
     private var maxYValue: Int {
         (yValues.max() ?? 0) + 1
     }

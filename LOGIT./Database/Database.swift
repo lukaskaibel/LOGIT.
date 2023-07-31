@@ -8,18 +8,17 @@
 import CoreData
 import OSLog
 
-
 class Database: ObservableObject {
-    
+
     // MARK: - Constants
-    
+
     static let shared = Database()
     static let preview = Database(isPreview: true)
-    
+
     private let container: NSPersistentContainer
-    
+
     // MARK: - Init
-    
+
     init(isPreview: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "LOGIT")
         if isPreview {
@@ -34,15 +33,15 @@ class Database: ObservableObject {
             setupPreviewDatabase()
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     var context: NSManagedObjectContext {
         container.viewContext
     }
-    
+
     // MARK: - Public Methods
-    
+
     func save() {
         if context.hasChanges {
             do {
@@ -54,15 +53,17 @@ class Database: ObservableObject {
             }
         }
     }
-    
+
     func object(with objectID: NSManagedObjectID) -> NSManagedObject {
         context.object(with: objectID)
     }
-    
-    func fetch(_ type: NSManagedObject.Type,
-               sortingKey: String? = nil,
-               ascending: Bool = true,
-               predicate: NSPredicate? = nil) -> [NSFetchRequestResult] {
+
+    func fetch(
+        _ type: NSManagedObject.Type,
+        sortingKey: String? = nil,
+        ascending: Bool = true,
+        predicate: NSPredicate? = nil
+    ) -> [NSFetchRequestResult] {
         do {
             let request = type.fetchRequest()
             if let sortingKey = sortingKey {
@@ -77,7 +78,9 @@ class Database: ObservableObject {
 
     func delete(_ object: NSManagedObject?, saveContext: Bool = false) {
         guard let object = object else { return }
-        if let workoutSet = object as? WorkoutSet, let setGroup = workoutSet.setGroup, setGroup.numberOfSets <= 1 {
+        if let workoutSet = object as? WorkoutSet, let setGroup = workoutSet.setGroup,
+            setGroup.numberOfSets <= 1
+        {
             delete(setGroup)
         }
         context.delete(object)
@@ -86,9 +89,9 @@ class Database: ObservableObject {
             save()
         }
     }
-    
+
     func refreshObjects() {
         context.refreshAllObjects()
     }
-    
+
 }

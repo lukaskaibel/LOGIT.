@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-
 struct UnitView: View {
-    
+
     let value: String
     let unit: String
-    
+
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Text(value)
@@ -21,9 +20,8 @@ struct UnitView: View {
                 .font(.system(.subheadline, design: .rounded, weight: .bold))
         }
     }
-    
-}
 
+}
 
 struct UnitView_Previews: PreviewProvider {
     static var previews: some View {

@@ -5,38 +5,49 @@
 //  Created by Lukas Kaibel on 29.06.21.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 extension Exercise {
-    
+
     var muscleGroup: MuscleGroup? {
-        get { MuscleGroup(rawValue: muscleGroupString ?? "")  }
+        get { MuscleGroup(rawValue: muscleGroupString ?? "") }
         set { muscleGroupString = newValue?.rawValue }
     }
-    
+
     var setGroups: [WorkoutSetGroup] {
         get {
             return (setGroupOrder ?? .emptyList)
-                .compactMap { id in (setGroups_?.allObjects as? [WorkoutSetGroup])?.first { setGroup in setGroup.id == id } }
+                .compactMap { id in
+                    (setGroups_?.allObjects as? [WorkoutSetGroup])?
+                        .first { setGroup in
+                            setGroup.id == id
+                        }
+                }
         }
         set {
             setGroupOrder = newValue.map { $0.id! }
             setGroups_ = NSSet(array: newValue)
         }
     }
-    
+
     var templateSetGroups: [TemplateSetGroup] {
         get {
             return (templateSetGroupOrder ?? .emptyList)
-                .compactMap { id in (templateSetGroups_?.allObjects as? [TemplateSetGroup])?.first { templateSetGroup in templateSetGroup.id == id } }
+                .compactMap { id in
+                    (templateSetGroups_?.allObjects as? [TemplateSetGroup])?
+                        .first {
+                            templateSetGroup in
+                            templateSetGroup.id == id
+                        }
+                }
         }
         set {
             templateSetGroupOrder = newValue.map { $0.id! }
             templateSetGroups_ = NSSet(array: newValue)
         }
     }
-    
+
     var sets: [WorkoutSet] {
         var result = [WorkoutSet]()
         for setGroup in setGroups {
@@ -44,67 +55,66 @@ extension Exercise {
         }
         return result
     }
-    
+
     static let defaultExerciseNames: [String] = [
-    "Push-ups",
-    "Barbell Bench Press",
-    "Dumbbell Bench Press",
-    "Inclined Barbell Bench Press",
-    "Inclined Dumbbell Bench Press",
-    "Dumbbell Fly",
-    "Cable Crossovers",
-    
-    "Pull-ups",
-    "Chin-ups",
-    "Australian Pull-ups",
-    "Lat Pull-Downs",
-    "Standing Barbell Rows",
-    "Standing Dumbbell, Rows",
-    "Sitting Rows",
-    
-    "Squats",
-    "Leg Press",
-    "Walking Lunges",
-    "Barbell Lunges",
-    "Dumbbell Lunges",
-    "Leg Extension",
-    "Leg Curls",
-    "Deadlift",
-    "Calf Raises",
-    
-    "Handstand Push-ups",
-    "Military Press",
-    "Shoulder Press",
-    "Upright Rows",
-    "Lateral Rows",
-    "Rear Delt Raise",
-    
-    "Dips",
-    "Tricep Pullovers",
-    "Tricep Press",
-    "Close Grip Bench Press",
-    "Tricep Kickbacks",
-    "Straight Bar Curl",
-    "Dumbbell Curl",
-    
-    "Sit-ups",
-    "Crunches",
-    "Bicycles",
-    "Leg Raises",
-    "Hanging Knee Raises",
-    "Plank",
-    "Side Plank",
-    
-    "Face Pulls"
+        "Push-ups",
+        "Barbell Bench Press",
+        "Dumbbell Bench Press",
+        "Inclined Barbell Bench Press",
+        "Inclined Dumbbell Bench Press",
+        "Dumbbell Fly",
+        "Cable Crossovers",
+
+        "Pull-ups",
+        "Chin-ups",
+        "Australian Pull-ups",
+        "Lat Pull-Downs",
+        "Standing Barbell Rows",
+        "Standing Dumbbell, Rows",
+        "Sitting Rows",
+
+        "Squats",
+        "Leg Press",
+        "Walking Lunges",
+        "Barbell Lunges",
+        "Dumbbell Lunges",
+        "Leg Extension",
+        "Leg Curls",
+        "Deadlift",
+        "Calf Raises",
+
+        "Handstand Push-ups",
+        "Military Press",
+        "Shoulder Press",
+        "Upright Rows",
+        "Lateral Rows",
+        "Rear Delt Raise",
+
+        "Dips",
+        "Tricep Pullovers",
+        "Tricep Press",
+        "Close Grip Bench Press",
+        "Tricep Kickbacks",
+        "Straight Bar Curl",
+        "Dumbbell Curl",
+
+        "Sit-ups",
+        "Crunches",
+        "Bicycles",
+        "Leg Raises",
+        "Hanging Knee Raises",
+        "Plank",
+        "Side Plank",
+
+        "Face Pulls",
     ]
-    
+
 }
 
-
 extension Array: Identifiable where Element: Exercise {
-    
+
     public var id: NSManagedObjectID {
         first?.objectID ?? NSManagedObjectID()
     }
-    
+
 }

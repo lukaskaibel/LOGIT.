@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct TemplateSuperSetCell: View {
-        
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     @ObservedObject var superSet: TemplateSuperSet
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack {
             if let indexInTemplate = indexInTemplate {
@@ -92,15 +92,16 @@ struct TemplateSuperSetCell: View {
                         focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
                         unit: WeightUnit.used.rawValue
                     )
-                }.accentColor(superSet.secondaryExercise?.muscleGroup?.color)
+                }
+                .accentColor(superSet.secondaryExercise?.muscleGroup?.color)
             }
         }
     }
-    
+
     // MARK: - Supporting Methods
-    
+
     private var indexInTemplate: Int? {
         superSet.setGroup?.workout?.sets.firstIndex(of: superSet)
     }
-    
+
 }

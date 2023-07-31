@@ -8,25 +8,29 @@
 import Foundation
 
 extension Database {
-    
+
     // MARK: - Normal Entitiy Creation
-    
+
     @discardableResult
-    func newWorkout(name: String = "",
-                    date: Date = Date(),
-                    setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()) -> Workout {
+    func newWorkout(
+        name: String = "",
+        date: Date = Date(),
+        setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()
+    ) -> Workout {
         let workout = Workout(context: context)
         workout.name = name
         workout.date = date
         workout.setGroups = setGroups
         return workout
     }
-    
+
     @discardableResult
-    func newWorkoutSetGroup(sets: [WorkoutSet] = [],
-                            createFirstSetAutomatically: Bool = true,
-                            exercise: Exercise? = nil,
-                            workout: Workout? = nil) -> WorkoutSetGroup {
+    func newWorkoutSetGroup(
+        sets: [WorkoutSet] = [],
+        createFirstSetAutomatically: Bool = true,
+        exercise: Exercise? = nil,
+        workout: Workout? = nil
+    ) -> WorkoutSetGroup {
         let setGroup = WorkoutSetGroup(context: context)
         setGroup.id = UUID()
         if !sets.isEmpty {
@@ -41,11 +45,13 @@ extension Database {
         workout?.setGroups.append(setGroup)
         return setGroup
     }
-    
+
     @discardableResult
-    func newStandardSet(repetitions: Int = 0,
-                       weight: Int = 0,
-                       setGroup: WorkoutSetGroup? = nil) -> StandardSet {
+    func newStandardSet(
+        repetitions: Int = 0,
+        weight: Int = 0,
+        setGroup: WorkoutSetGroup? = nil
+    ) -> StandardSet {
         let standardSet = StandardSet(context: context)
         standardSet.id = UUID()
         standardSet.repetitions = Int64(repetitions)
@@ -53,11 +59,13 @@ extension Database {
         setGroup?.sets.append(standardSet)
         return standardSet
     }
-    
+
     @discardableResult
-    func newDropSet(repetitions: [Int] = [0],
-                    weights: [Int] = [0],
-                    setGroup: WorkoutSetGroup? = nil) -> DropSet {
+    func newDropSet(
+        repetitions: [Int] = [0],
+        weights: [Int] = [0],
+        setGroup: WorkoutSetGroup? = nil
+    ) -> DropSet {
         let dropSet = DropSet(context: context)
         dropSet.id = UUID()
         dropSet.repetitions = repetitions.map { Int64($0) }
@@ -65,21 +73,27 @@ extension Database {
         setGroup?.sets.append(dropSet)
         return dropSet
     }
-    
+
     @discardableResult
-    func newDropSet(from templateDropSet: TemplateDropSet,
-                    setGroup: WorkoutSetGroup? = nil) -> DropSet {
-        return newDropSet(repetitions: Array(repeatElement(0, count: templateDropSet.repetitions?.count ?? 0)),
-                          weights: Array(repeating: 0, count: templateDropSet.weights?.count ?? 0),
-                          setGroup: setGroup)
+    func newDropSet(
+        from templateDropSet: TemplateDropSet,
+        setGroup: WorkoutSetGroup? = nil
+    ) -> DropSet {
+        return newDropSet(
+            repetitions: Array(repeatElement(0, count: templateDropSet.repetitions?.count ?? 0)),
+            weights: Array(repeating: 0, count: templateDropSet.weights?.count ?? 0),
+            setGroup: setGroup
+        )
     }
-    
+
     @discardableResult
-    func newSuperSet(repetitionsFirstExercise: Int = 0,
-                     repeptitionsSecondExercise: Int = 0,
-                     weightFirstExercise: Int = 0,
-                     weightSecondExercise: Int = 0,
-                     setGroup: WorkoutSetGroup? = nil) -> SuperSet {
+    func newSuperSet(
+        repetitionsFirstExercise: Int = 0,
+        repeptitionsSecondExercise: Int = 0,
+        weightFirstExercise: Int = 0,
+        weightSecondExercise: Int = 0,
+        setGroup: WorkoutSetGroup? = nil
+    ) -> SuperSet {
         let superSet = SuperSet(context: context)
         superSet.id = UUID()
         superSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
@@ -89,19 +103,23 @@ extension Database {
         setGroup?.sets.append(superSet)
         return superSet
     }
-    
+
     @discardableResult
-    func newSuperSet(from templateSuperSet: TemplateSuperSet,
-                     setGroup: WorkoutSetGroup? = nil) -> SuperSet {
+    func newSuperSet(
+        from templateSuperSet: TemplateSuperSet,
+        setGroup: WorkoutSetGroup? = nil
+    ) -> SuperSet {
         let superSet = newSuperSet(setGroup: setGroup)
         setGroup?.secondaryExercise = templateSuperSet.secondaryExercise
         return superSet
     }
-    
+
     @discardableResult
-    func newExercise(name: String = "",
-                     muscleGroup: MuscleGroup? = nil,
-                     setGroups: [WorkoutSetGroup] = []) -> Exercise {
+    func newExercise(
+        name: String = "",
+        muscleGroup: MuscleGroup? = nil,
+        setGroups: [WorkoutSetGroup] = []
+    ) -> Exercise {
         let exercise = Exercise(context: context)
         exercise.id = UUID()
         exercise.name = name
@@ -109,39 +127,45 @@ extension Database {
         setGroups.forEach { $0.exercise = exercise }
         return exercise
     }
-    
+
     // MARK: - Template Entitiy Creation
-    
+
     @discardableResult
-    func newTemplate(name: String = "",
-                            setGroups: [TemplateSetGroup] = [TemplateSetGroup]()) -> Template {
+    func newTemplate(
+        name: String = "",
+        setGroups: [TemplateSetGroup] = [TemplateSetGroup]()
+    ) -> Template {
         let template = Template(context: context)
         template.name = name
         template.creationDate = Date.now
         template.setGroups = setGroups
         return template
     }
-    
+
     @discardableResult
     func newTemplate(from workout: Workout) -> Template {
         let template = newTemplate(name: workout.name ?? "")
         workout.template = template
         for setGroup in workout.setGroups {
-            let templateSetGroup = newTemplateSetGroup(createFirstSetAutomatically: false,
-                                                              exercise: setGroup.exercise,
-                                                              template: template)
+            let templateSetGroup = newTemplateSetGroup(
+                createFirstSetAutomatically: false,
+                exercise: setGroup.exercise,
+                template: template
+            )
             for workoutSet in setGroup.sets {
                 newTemplateSet(from: workoutSet, templateSetGroup: templateSetGroup)
             }
         }
         return template
     }
-    
+
     @discardableResult
-    func newTemplateSetGroup(templateSets: [TemplateSet]? = nil,
-                                    createFirstSetAutomatically: Bool = true,
-                                    exercise: Exercise? = nil,
-                                    template: Template? = nil) -> TemplateSetGroup {
+    func newTemplateSetGroup(
+        templateSets: [TemplateSet]? = nil,
+        createFirstSetAutomatically: Bool = true,
+        exercise: Exercise? = nil,
+        template: Template? = nil
+    ) -> TemplateSetGroup {
         let templateSetGroup = TemplateSetGroup(context: context)
         templateSetGroup.id = UUID()
         if let templateSets = templateSets, !templateSets.isEmpty {
@@ -156,10 +180,12 @@ extension Database {
         template?.setGroups.append(templateSetGroup)
         return templateSetGroup
     }
-    
+
     @discardableResult
-    func newTemplateSet(from workoutSet: WorkoutSet,
-                        templateSetGroup: TemplateSetGroup? = nil) -> TemplateSet {
+    func newTemplateSet(
+        from workoutSet: WorkoutSet,
+        templateSetGroup: TemplateSetGroup? = nil
+    ) -> TemplateSet {
         if let standardSet = workoutSet as? StandardSet {
             let templateStandardSet = TemplateStandardSet(context: context)
             templateStandardSet.id = UUID()
@@ -189,11 +215,13 @@ extension Database {
             fatalError("Database: Not implemented for variation of TemplateSet.")
         }
     }
-    
+
     @discardableResult
-    func newTemplateStandardSet(repetitions: Int = 0,
-                                weight: Int = 0,
-                                setGroup: TemplateSetGroup? = nil) -> TemplateStandardSet {
+    func newTemplateStandardSet(
+        repetitions: Int = 0,
+        weight: Int = 0,
+        setGroup: TemplateSetGroup? = nil
+    ) -> TemplateStandardSet {
         let templateSet = TemplateStandardSet(context: context)
         templateSet.id = UUID()
         templateSet.repetitions = Int64(repetitions)
@@ -201,11 +229,13 @@ extension Database {
         setGroup?.sets.append(templateSet)
         return templateSet
     }
-        
+
     @discardableResult
-    func newTemplateDropSet(repetitions: [Int] = [0],
-                            weights: [Int] = [0],
-                            templateSetGroup: TemplateSetGroup? = nil) -> TemplateDropSet {
+    func newTemplateDropSet(
+        repetitions: [Int] = [0],
+        weights: [Int] = [0],
+        templateSetGroup: TemplateSetGroup? = nil
+    ) -> TemplateDropSet {
         let templateDropSet = TemplateDropSet(context: context)
         templateDropSet.id = UUID()
         templateDropSet.repetitions = repetitions.map { Int64($0) }
@@ -215,11 +245,13 @@ extension Database {
     }
 
     @discardableResult
-    func newTemplateSuperSet(repetitionsFirstExercise: Int = 0,
-                             repetitionsSecondExercise: Int = 0,
-                             weightFirstExercise: Int = 0,
-                             weightSecondExercise: Int = 0,
-                             setGroup: TemplateSetGroup? = nil) -> TemplateSuperSet {
+    func newTemplateSuperSet(
+        repetitionsFirstExercise: Int = 0,
+        repetitionsSecondExercise: Int = 0,
+        weightFirstExercise: Int = 0,
+        weightSecondExercise: Int = 0,
+        setGroup: TemplateSetGroup? = nil
+    ) -> TemplateSuperSet {
         let templateSuperSet = TemplateSuperSet(context: context)
         templateSuperSet.id = UUID()
         templateSuperSet.repetitionsFirstExercise = Int64(repetitionsFirstExercise)
@@ -229,5 +261,5 @@ extension Database {
         setGroup?.sets.append(templateSuperSet)
         return templateSuperSet
     }
-    
+
 }

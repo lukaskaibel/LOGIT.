@@ -8,35 +8,36 @@
 import SwiftUI
 
 struct FirstStartScreen: View {
-    
+
     private enum SetupStage {
         case start, weightUnit, weeklyTarget
     }
-    
+
     // MARK: - AppStorage
-    
+
     @AppStorage("weightUnit") var weightUnit: WeightUnit = .kg
     @AppStorage("workoutPerWeekTarget") var weeklyWorkoutTarget: Int = 3
     @AppStorage("setupDone") var setupDone: Bool = false
-    
+
     // MARK: - State
-    
+
     @State private var setupStage: SetupStage = .start
     @State private var useStandardExercises: Bool = true
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack {
             HStack {
-                VStack(alignment:.leading) {
+                VStack(alignment: .leading) {
                     Text(NSLocalizedString("welcomeTo", comment: ""))
                         .font(.title2.weight(.medium))
                     Text("LOGIT.")
                         .font(.system(size: 50, weight: .bold, design: .default))
                 }
                 Spacer()
-            }.padding(.top, 30)
+            }
+            .padding(.top, 30)
             Spacer()
             if setupStage == .start {
                 VStack(spacing: SECTION_HEADER_SPACING) {
@@ -49,7 +50,12 @@ struct FirstStartScreen: View {
                 }
                 .padding(CELL_PADDING)
                 .tileStyle()
-                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                .transition(
+                    AnyTransition.asymmetric(
+                        insertion: .move(edge: .trailing),
+                        removal: .move(edge: .leading)
+                    )
+                )
             } else if setupStage == .weightUnit {
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weightUnit", comment: "")) ⚖️")
@@ -59,15 +65,25 @@ struct FirstStartScreen: View {
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
-                    Picker(NSLocalizedString("weightUnit", comment: ""), selection: $weightUnit, content: {
-                        ForEach([WeightUnit.kg, .lbs]) { unit in
-                            Text(unit.rawValue).tag(unit)
+                    Picker(
+                        NSLocalizedString("weightUnit", comment: ""),
+                        selection: $weightUnit,
+                        content: {
+                            ForEach([WeightUnit.kg, .lbs]) { unit in
+                                Text(unit.rawValue).tag(unit)
+                            }
                         }
-                    }).pickerStyle(.wheel)
+                    )
+                    .pickerStyle(.wheel)
                 }
                 .padding(CELL_PADDING)
                 .tileStyle()
-                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                .transition(
+                    AnyTransition.asymmetric(
+                        insertion: .move(edge: .trailing),
+                        removal: .move(edge: .leading)
+                    )
+                )
             } else {
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weeklyTarget", comment: "")) 🗓")
@@ -77,15 +93,25 @@ struct FirstStartScreen: View {
                         .foregroundColor(.secondaryLabel)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
-                    Picker(NSLocalizedString("weeklyTarget", comment: ""), selection: $weeklyWorkoutTarget, content: {
-                        ForEach(1..<10, id:\.self) { i in
-                            Text(String(i)).tag(i)
+                    Picker(
+                        NSLocalizedString("weeklyTarget", comment: ""),
+                        selection: $weeklyWorkoutTarget,
+                        content: {
+                            ForEach(1..<10, id: \.self) { i in
+                                Text(String(i)).tag(i)
+                            }
                         }
-                    }).pickerStyle(.wheel)
+                    )
+                    .pickerStyle(.wheel)
                 }
                 .padding(CELL_PADDING)
                 .tileStyle()
-                .transition(AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                .transition(
+                    AnyTransition.asymmetric(
+                        insertion: .move(edge: .trailing),
+                        removal: .move(edge: .leading)
+                    )
+                )
             }
             Spacer()
             Button(action: {
@@ -105,15 +131,26 @@ struct FirstStartScreen: View {
                 }
             }) {
                 HStack {
-                    Image(systemName: setupStage == .weeklyTarget ? "checkmark.circle.fill" : "arrow.right.circle.fill")
-                    Text(setupStage == .start ? NSLocalizedString("startSetup", comment: "") : setupStage == .weeklyTarget ? NSLocalizedString("finishSetup", comment: "") : NSLocalizedString("continue", comment: ""))
-                }.foregroundColor(.accentColor)
-                    .font(.title3.weight(.bold))
-            }.frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentColor.opacity(0.2))
-                .cornerRadius(15)
-                .padding(.bottom, 50)
+                    Image(
+                        systemName: setupStage == .weeklyTarget
+                            ? "checkmark.circle.fill" : "arrow.right.circle.fill"
+                    )
+                    Text(
+                        setupStage == .start
+                            ? NSLocalizedString("startSetup", comment: "")
+                            : setupStage == .weeklyTarget
+                                ? NSLocalizedString("finishSetup", comment: "")
+                                : NSLocalizedString("continue", comment: "")
+                    )
+                }
+                .foregroundColor(.accentColor)
+                .font(.title3.weight(.bold))
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.accentColor.opacity(0.2))
+            .cornerRadius(15)
+            .padding(.bottom, 50)
         }
         .padding()
     }

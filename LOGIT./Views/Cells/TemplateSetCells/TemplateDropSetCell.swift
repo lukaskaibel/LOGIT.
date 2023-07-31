@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct TemplateDropSetCell: View {
-        
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     @ObservedObject var dropSet: TemplateDropSet
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack {
             if let indexInTemplate = indexInTemplate {
-                ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
+                ForEach(0..<(dropSet.repetitions?.count ?? 0), id: \.self) { index in
                     HStack {
                         IntegerField(
                             placeholder: 0,
@@ -42,9 +42,15 @@ struct TemplateDropSetCell: View {
                         )
                         IntegerField(
                             placeholder: 0,
-                            value: Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)),
+                            value: Int64(
+                                convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)
+                            ),
                             setValue: {
-                                dropSet.weights?.replaceValue(at: index, with: convertWeightForStoring(Int64($0)))
+                                dropSet.weights?
+                                    .replaceValue(
+                                        at: index,
+                                        with: convertWeightForStoring(Int64($0))
+                                    )
                             },
                             maxDigits: 4,
                             index: IntegerField.Index(
@@ -60,11 +66,11 @@ struct TemplateDropSetCell: View {
             }
         }
     }
-    
+
     // MARK: - Supporting Methods
-    
+
     private var indexInTemplate: Int? {
         dropSet.setGroup?.workout?.sets.firstIndex(of: dropSet)
     }
-    
+
 }

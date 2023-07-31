@@ -8,17 +8,17 @@
 import Foundation
 
 enum WeightUnit: String, Codable, Identifiable {
-    
+
     case kg, lbs
 
     static var used: WeightUnit {
         WeightUnit(rawValue: UserDefaults.standard.string(forKey: "weightUnit")!)!
     }
-    
+
     var id: String {
         self.rawValue
     }
-    
+
 }
 
 // MARK: - Functions for translating weight from grams to kilograms or pounds

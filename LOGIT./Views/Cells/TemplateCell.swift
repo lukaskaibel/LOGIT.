@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct TemplateCell: View {
-    
+
     // MARK: - Variables
-    
+
     @ObservedObject var template: Template
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading) {
-                Text("\(lastUsedDate)  ·  \(template.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(template.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
-                    .font(.footnote.weight(.medium))
-                    .foregroundColor(.secondaryLabel)
+                Text(
+                    "\(lastUsedDate)  ·  \(template.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(template.numberOfSetGroups == 1 ? "" : "s")", comment: ""))"
+                )
+                .font(.footnote.weight(.medium))
+                .foregroundColor(.secondaryLabel)
                 Text(template.name ?? NSLocalizedString("noName", comment: ""))
                     .font(.title3.weight(.bold))
                     .foregroundColor(.primary)
@@ -40,9 +42,9 @@ struct TemplateCell: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var lastUsedDate: String {
         if let date = template.lastUsed {
             return "\(NSLocalizedString("lastUsed", comment: "")) \(date.description(.short))"
@@ -50,7 +52,7 @@ struct TemplateCell: View {
             return NSLocalizedString("unused", comment: "")
         }
     }
-    
+
     private var exercisesString: String {
         var result = ""
         for exercise in template.exercises {
@@ -60,7 +62,7 @@ struct TemplateCell: View {
         }
         return result.isEmpty ? NSLocalizedString("noExercises", comment: "") : result
     }
-    
+
 }
 
 struct TemplateCell_Previews: PreviewProvider {

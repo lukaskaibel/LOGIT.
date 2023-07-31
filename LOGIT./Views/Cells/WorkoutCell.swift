@@ -8,20 +8,22 @@
 import SwiftUI
 
 struct WorkoutCell: View {
-    
+
     // MARK: Variables
-    
+
     @ObservedObject var workout: Workout
-    
+
     // MARK: Body
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))")
-                        .font(.footnote.weight(.medium))
-                        .foregroundColor(.secondaryLabel)
+                    Text(
+                        "\(workout.date?.description(.short) ?? "")  ·  \(workout.numberOfSetGroups) \(NSLocalizedString("exercise" + "\(workout.numberOfSetGroups == 1 ? "" : "s")", comment: ""))"
+                    )
+                    .font(.footnote.weight(.medium))
+                    .foregroundColor(.secondaryLabel)
                     Text(workout.name ?? NSLocalizedString("noName", comment: ""))
                         .font(.title3.weight(.bold))
                         .foregroundColor(.primary)
@@ -45,9 +47,9 @@ struct WorkoutCell: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     // MARK: - Computed UI Properties
-    
+
     private var exercisesString: String {
         var result = ""
         for exercise in workout.exercises {
@@ -57,7 +59,7 @@ struct WorkoutCell: View {
         }
         return result.isEmpty ? " " : result
     }
-    
+
 }
 
 struct WorkoutCell_Previews: PreviewProvider {

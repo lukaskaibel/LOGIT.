@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct ExerciseHeader: View {
-    
+
     // MARK: - Parameters
-    
+
     let exercise: Exercise?
     let secondaryExercise: Exercise?
     let noExerciseAction: () -> Void
     let noSecondaryExerciseAction: (() -> Void)?
     let isSuperSet: Bool
     let navigationToDetailEnabled: Bool
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let exercise = exercise {
@@ -50,9 +50,14 @@ struct ExerciseHeader: View {
                         .font(.body.weight(.medium))
                         .padding(.leading)
                     if let secondaryExercise = secondaryExercise {
-                        NavigationLink(destination: ExerciseDetailScreen(exercise: secondaryExercise)) {
+                        NavigationLink(
+                            destination: ExerciseDetailScreen(exercise: secondaryExercise)
+                        ) {
                             HStack(spacing: 3) {
-                                Text(secondaryExercise.name ?? NSLocalizedString("noName", comment: ""))
+                                Text(
+                                    secondaryExercise.name
+                                        ?? NSLocalizedString("noName", comment: "")
+                                )
                                 if navigationToDetailEnabled {
                                     NavigationChevron()
                                         .foregroundColor(.secondaryLabel)

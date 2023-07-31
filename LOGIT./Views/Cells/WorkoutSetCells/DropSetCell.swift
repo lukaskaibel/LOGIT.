@@ -8,24 +8,25 @@
 import SwiftUI
 
 struct DropSetCell: View {
-        
+
     // MARK: - Environment
-    
+
     @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
-    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary: [WorkoutSet:TemplateSet]
+    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
+        [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     @ObservedObject var dropSet: DropSet
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack {
             if let indexInWorkout = indexInWorkout {
-                ForEach(0..<(dropSet.repetitions?.count ?? 0), id:\.self) { index in
+                ForEach(0..<(dropSet.repetitions?.count ?? 0), id: \.self) { index in
                     HStack {
                         IntegerField(
                             placeholder: repetitionsPlaceholder(for: dropSet).value(at: index) ?? 0,
@@ -45,9 +46,15 @@ struct DropSetCell: View {
                         )
                         IntegerField(
                             placeholder: weightsPlaceholder(for: dropSet).value(at: index) ?? 0,
-                            value: Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)),
+                            value: Int64(
+                                convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)
+                            ),
                             setValue: {
-                                dropSet.weights?.replaceValue(at: index, with: convertWeightForStoring(Int64($0)))
+                                dropSet.weights?
+                                    .replaceValue(
+                                        at: index,
+                                        with: convertWeightForStoring(Int64($0))
+                                    )
                                 setWorkoutEndDate(.now)
                             },
                             maxDigits: 4,
@@ -64,21 +71,27 @@ struct DropSetCell: View {
             }
         }
     }
-    
+
     // MARK: - Supporting Methods
-    
+
     private var indexInWorkout: Int? {
         dropSet.workout?.sets.firstIndex(of: dropSet)
     }
-    
+
     private func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet
+        else {
+            return [0]
+        }
         return templateDropSet.repetitions?.map { $0 } ?? .emptyList
     }
-    
+
     private func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet else { return [0] }
+        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet
+        else {
+            return [0]
+        }
         return templateDropSet.weights?.map { Int64(convertWeightForDisplaying($0)) } ?? .emptyList
     }
-    
+
 }

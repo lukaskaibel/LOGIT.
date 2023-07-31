@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct OnDeleteModifier: ViewModifier {
-    
+
     let action: () -> Void
-    
+
     @State var offset: CGSize = .zero
     @State var initialOffset: CGSize = .zero
     @State var contentWidth: CGFloat = 0.0
     @State var willDeleteIfReleased = false
-   
+
     func body(content: Content) -> some View {
         content
             .background(
@@ -27,8 +27,9 @@ struct OnDeleteModifier: ViewModifier {
                             .foregroundColor(.white)
                             .font(.title2.bold())
                             .layoutPriority(-1)
-                    }.frame(width: -offset.width)
-                        .clipped()
+                    }
+                    .frame(width: -offset.width)
+                    .clipped()
                     .offset(x: geometry.size.width)
                     .onAppear {
                         contentWidth = geometry.size.width
@@ -42,7 +43,7 @@ struct OnDeleteModifier: ViewModifier {
                 }
             )
             .offset(x: offset.width, y: 0)
-            .gesture (
+            .gesture(
                 DragGesture()
                     .onChanged { gesture in
                         if gesture.translation.width + initialOffset.width <= 0 {
@@ -70,28 +71,27 @@ struct OnDeleteModifier: ViewModifier {
             )
             .animation(.interactiveSpring())
     }
-    
+
     private func delete() {
         offset.width = -contentWidth
         action()
     }
-    
+
     private func hapticFeedback() {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
     }
-    
+
     //MARK: Constants
-    
+
     let deletionDistance = CGFloat(200)
     let halfDeletionDistance = CGFloat(50)
     let tappableDeletionWidth = CGFloat(100)
-    
-    
+
 }
 
 extension View {
-    
+
     func onDelete(disabled: Bool = false, perform action: @escaping () -> Void) -> some View {
         Group {
             if disabled {
@@ -101,5 +101,5 @@ extension View {
             }
         }
     }
-    
+
 }

@@ -12,7 +12,7 @@ struct SectionHeaderModifier2: ViewModifier {
         content
             .font(.title2.weight(.bold))
             .foregroundColor(.label)
-   }
+    }
 }
 
 struct SectionHeaderSecondaryModifier: ViewModifier {

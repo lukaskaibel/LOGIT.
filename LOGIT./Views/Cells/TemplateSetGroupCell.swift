@@ -8,31 +8,31 @@
 import SwiftUI
 
 struct TemplateSetGroupCell: View {
-        
+
     // MARK: - Environment
-    
+
     @Environment(\.canEdit) var canEdit: Bool
     @EnvironmentObject var database: Database
-    
+
     // MARK: - Parameters
-    
+
     @ObservedObject var setGroup: TemplateSetGroup
-    
+
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
     @Binding var sheetType: TemplateEditorScreen.SheetType?
     @Binding var isReordering: Bool
-    
+
     let supplementaryText: String?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack(spacing: SECTION_HEADER_SPACING) {
             header
             if !isReordering {
                 VStack(spacing: CELL_PADDING) {
                     VStack(spacing: CELL_SPACING) {
-                        ForEach(setGroup.sets, id:\.objectID) { templateSet in
+                        ForEach(setGroup.sets, id: \.objectID) { templateSet in
                             TemplateSetCell(
                                 templateSet: templateSet,
                                 focusedIntegerFieldIndex: $focusedIntegerFieldIndex
@@ -57,7 +57,7 @@ struct TemplateSetGroupCell: View {
                         } label: {
                             Label(
                                 NSLocalizedString("addSet", comment: ""),
-                                  systemImage: "plus.circle.fill"
+                                systemImage: "plus.circle.fill"
                             )
                             .secondaryBigButton()
                         }
@@ -67,9 +67,9 @@ struct TemplateSetGroupCell: View {
         }
         .accentColor(setGroup.exercise?.muscleGroup?.color ?? .accentColor)
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var header: some View {
         HStack {
             VStack(alignment: .leading, spacing: 0) {
@@ -84,13 +84,19 @@ struct TemplateSetGroupCell: View {
                     noExerciseAction: {
                         sheetType = .exerciseSelection(
                             exercise: setGroup.exercise,
-                            setExercise: { setGroup.exercise = $0; database.refreshObjects()}
+                            setExercise: {
+                                setGroup.exercise = $0
+                                database.refreshObjects()
+                            }
                         )
                     },
                     noSecondaryExerciseAction: {
                         sheetType = .exerciseSelection(
                             exercise: setGroup.secondaryExercise,
-                            setExercise: { setGroup.secondaryExercise = $0; database.refreshObjects() }
+                            setExercise: {
+                                setGroup.secondaryExercise = $0
+                                database.refreshObjects()
+                            }
                         )
                     },
                     isSuperSet: setGroup.setType == .superSet,
@@ -105,51 +111,85 @@ struct TemplateSetGroupCell: View {
         .font(.title3.weight(.bold))
         .foregroundColor(.label)
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var menu: some View {
         Menu {
             Section {
-                Button(role: .destructive, action: {
-                    withAnimation {
-                        database.delete(setGroup)
+                Button(
+                    role: .destructive,
+                    action: {
+                        withAnimation {
+                            database.delete(setGroup)
+                        }
                     }
-                }) {
+                ) {
                     Label(NSLocalizedString("remove", comment: ""), systemImage: "xmark.circle")
                 }
                 if let exercise = setGroup.exercise {
                     Button {
-                        sheetType = .exerciseSelection(exercise: exercise, setExercise: { setGroup.exercise = $0 })
+                        sheetType = .exerciseSelection(
+                            exercise: exercise,
+                            setExercise: { setGroup.exercise = $0 }
+                        )
                     } label: {
-                        Label(NSLocalizedString("replaceExercise", comment: ""), systemImage: "arrow.triangle.2.circlepath")
+                        Label(
+                            NSLocalizedString("replaceExercise", comment: ""),
+                            systemImage: "arrow.triangle.2.circlepath"
+                        )
                     }
                 }
-                if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
+                if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise
+                {
                     Button {
-                        sheetType = .exerciseSelection(exercise: secondaryExercise, setExercise: { setGroup.secondaryExercise = $0 })
+                        sheetType = .exerciseSelection(
+                            exercise: secondaryExercise,
+                            setExercise: { setGroup.secondaryExercise = $0 }
+                        )
                     } label: {
-                        Label(NSLocalizedString("replaceSecondaryExercise", comment: ""), systemImage: "arrow.triangle.2.circlepath")
+                        Label(
+                            NSLocalizedString("replaceSecondaryExercise", comment: ""),
+                            systemImage: "arrow.triangle.2.circlepath"
+                        )
                     }
                 }
                 Button {
                     isReordering.toggle()
                 } label: {
-                    Label(NSLocalizedString(isReordering ? "reorderingDone" : "reorderExercises", comment: ""), systemImage: "arrow.up.arrow.down")
+                    Label(
+                        NSLocalizedString(
+                            isReordering ? "reorderingDone" : "reorderExercises",
+                            comment: ""
+                        ),
+                        systemImage: "arrow.up.arrow.down"
+                    )
                 }
             }
             Section {
-                Button { database.convertSetGroupToStandardSets(setGroup) } label: {
-                    Label(NSLocalizedString("standard", comment: ""),
-                          systemImage: setGroup.setType == .standard ? "checkmark" : "")
+                Button {
+                    database.convertSetGroupToStandardSets(setGroup)
+                } label: {
+                    Label(
+                        NSLocalizedString("standard", comment: ""),
+                        systemImage: setGroup.setType == .standard ? "checkmark" : ""
+                    )
                 }
-                Button { database.convertSetGroupToSuperSet(setGroup) } label: {
-                    Label(NSLocalizedString("superSet", comment: ""),
-                          systemImage: setGroup.setType == .superSet ? "checkmark" : "")
+                Button {
+                    database.convertSetGroupToSuperSet(setGroup)
+                } label: {
+                    Label(
+                        NSLocalizedString("superSet", comment: ""),
+                        systemImage: setGroup.setType == .superSet ? "checkmark" : ""
+                    )
                 }
-                Button { database.convertSetGroupToDropSets(setGroup) } label: {
-                    Label(NSLocalizedString("dropSet", comment: ""),
-                          systemImage: setGroup.setType == .dropSet ? "checkmark" : "")
+                Button {
+                    database.convertSetGroupToDropSets(setGroup)
+                } label: {
+                    Label(
+                        NSLocalizedString("dropSet", comment: ""),
+                        systemImage: setGroup.setType == .dropSet ? "checkmark" : ""
+                    )
                 }
             } header: {
                 Text(NSLocalizedString("setType", comment: ""))
@@ -158,10 +198,8 @@ struct TemplateSetGroupCell: View {
             Image(systemName: "ellipsis")
         }
     }
-    
+
 }
-
-
 
 struct TemplateSetGroupCell_Previews: PreviewProvider {
     static var previews: some View {
@@ -200,7 +238,7 @@ struct TemplateSetGroupCell_Previews: PreviewProvider {
                     .padding()
                     .canEdit(false)
                 }
-                
+
             }
         }
         .environmentObject(Database.preview)

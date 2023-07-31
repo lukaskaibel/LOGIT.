@@ -8,33 +8,37 @@
 import SwiftUI
 
 struct StartWorkoutScreen: View {
-    
+
     enum FullScreenCoverType: Identifiable {
         case workoutRecorder(template: Template?)
-        var id: Int { switch self { case .workoutRecorder: return 0 } }
+        var id: Int {
+            switch self {
+            case .workoutRecorder: return 0
+            }
+        }
     }
-    
+
     enum SheetType: Identifiable {
         case templateDetail(template: Template)
         var id: UUID { UUID() }
     }
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
 
     // MARK: - State
-    
+
     private struct TemplateSelection: Identifiable {
         let id = UUID()
         let value: Template?
     }
-    
+
     @State private var sheetType: SheetType? = nil
     @State private var fullScreenCoverType: FullScreenCoverType? = nil
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
@@ -57,7 +61,8 @@ struct StartWorkoutScreen: View {
         .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
         .fullScreenCover(item: $fullScreenCoverType) { type in
             switch type {
-            case let .workoutRecorder(template): WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
+            case let .workoutRecorder(template):
+                WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
             }
         }
         .sheet(item: $sheetType) { type in
@@ -76,9 +81,9 @@ struct StartWorkoutScreen: View {
             }
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var chooseTemplateText: some View {
         Text(NSLocalizedString("chooseTemplateText", comment: ""))
             .foregroundColor(.secondaryLabel)
@@ -86,7 +91,7 @@ struct StartWorkoutScreen: View {
             .padding(.top)
             .frame(maxWidth: .infinity, alignment: .center)
     }
-    
+
     private var withoutTemplateButton: some View {
         Button {
             fullScreenCoverType = .workoutRecorder(template: nil)
@@ -95,9 +100,9 @@ struct StartWorkoutScreen: View {
                 .bigButton()
         }
     }
-    
+
     private var templateList: some View {
-        ForEach(database.getTemplates(), id:\.objectID) { template in
+        ForEach(database.getTemplates(), id: \.objectID) { template in
             Button {
                 fullScreenCoverType = .workoutRecorder(template: template)
             } label: {
@@ -124,7 +129,7 @@ struct StartWorkoutScreen: View {
                 .frame(height: 200)
         }
     }
-    
+
 }
 
 struct WorkoutRecorderStartScreen_Previews: PreviewProvider {

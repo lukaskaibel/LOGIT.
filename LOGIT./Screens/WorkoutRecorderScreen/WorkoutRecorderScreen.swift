@@ -11,55 +11,59 @@ import OSLog
 import SwiftUI
 import UIKit
 
-
 struct WorkoutRecorderScreen: View {
 
     enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
         case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
-        var id: Int { switch self { case .exerciseDetail: return 0; case .exerciseSelection: return 1 } }
+        var id: Int {
+            switch self {
+            case .exerciseDetail: return 0
+            case .exerciseSelection: return 1
+            }
+        }
     }
-    
+
     // MARK: - AppStorage
-    
+
     @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
     @AppStorage("timerIsMuted") var timerIsMuted: Bool = false
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
     @Environment(\.goHome) var goHome
-    
+
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @StateObject var workout: Workout
-    @State internal var workoutSetTemplateSetDictionary = [WorkoutSet:TemplateSet]()
-    
+    @State internal var workoutSetTemplateSetDictionary = [WorkoutSet: TemplateSet]()
+
     @State internal var isEditing: Bool = false
     @State internal var editMode: EditMode = .inactive
-    
+
     @StateObject var chronograph = Chronograph()
     @State internal var isShowingChronoView = false
     @State private var shouldShowChronoViewAgainWhenPossible = false
     @State private var isShowingChronoInHeader = false
     @State private var shouldFlash = false
     @State private var timerSound: AVAudioPlayer?
-    
+
     @State private var isShowingFinishConfirmation = false
     @State internal var sheetType: SheetType?
-    
+
     @State internal var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     // MARK: - Variables
-    
+
     let template: Template?
-    
+
     // MARK: - Body
-        
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -68,18 +72,25 @@ struct WorkoutRecorderScreen: View {
                         Spacer(minLength: 90)
                             .listRowInsets(EdgeInsets())
                             .listRowSeparator(.hidden)
-                        ForEach(workout.setGroups, id:\.objectID) { setGroup in
+                        ForEach(workout.setGroups, id: \.objectID) { setGroup in
                             WorkoutSetGroupCell(
                                 setGroup: setGroup,
                                 focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
                                 sheetType: $sheetType,
                                 isReordering: $isEditing,
-                                supplementaryText: "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.setType.description)"
+                                supplementaryText:
+                                    "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.setType.description)"
                             )
                             .padding(CELL_PADDING)
                             .tileStyle()
-                            .padding(.top, workout.setGroups.first == setGroup ? 0 : CELL_SPACING / 2)
-                            .padding(.bottom, workout.setGroups.last == setGroup ? 0 : CELL_SPACING / 2)
+                            .padding(
+                                .top,
+                                workout.setGroups.first == setGroup ? 0 : CELL_SPACING / 2
+                            )
+                            .padding(
+                                .bottom,
+                                workout.setGroups.last == setGroup ? 0 : CELL_SPACING / 2
+                            )
                             .padding(.horizontal)
                             .buttonStyle(.plain)
                         }
@@ -98,7 +109,7 @@ struct WorkoutRecorderScreen: View {
                         )
                         .padding(.horizontal)
                         .padding(.top, 90)
-                        
+
                         AddExerciseButton
                             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                             .padding(.horizontal)
@@ -106,7 +117,7 @@ struct WorkoutRecorderScreen: View {
                     }
                     .scrollIndicators(.hidden)
                 }
-                
+
                 Header
                     .frame(maxHeight: .infinity, alignment: .top)
             }
@@ -136,38 +147,52 @@ struct WorkoutRecorderScreen: View {
                         ExerciseDetailScreen(exercise: exercise)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(NSLocalizedString("dismiss", comment: "")) { sheetType = nil }
+                                    Button(NSLocalizedString("dismiss", comment: "")) {
+                                        sheetType = nil
+                                    }
                                 }
                             }
                             .tag("detail")
                     case let .exerciseSelection(exercise, setExercise):
-                        ExerciseSelectionScreen(selectedExercise: exercise, setExercise: setExercise)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(NSLocalizedString("cancel", comment: ""), role: .cancel) { sheetType = nil }
+                        ExerciseSelectionScreen(
+                            selectedExercise: exercise,
+                            setExercise: setExercise
+                        )
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {
+                                    sheetType = nil
                                 }
                             }
-                            .tag("selection")
+                        }
+                        .tag("selection")
                     }
                 }
             }
             .confirmationDialog(
                 Text(
-                    workout.allSetsHaveEntries ? NSLocalizedString("finishWorkoutConfimation", comment: "") :
-                    !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                    NSLocalizedString("deleteSetsWithoutEntries", comment: "")
+                    workout.allSetsHaveEntries
+                        ? NSLocalizedString("finishWorkoutConfimation", comment: "")
+                        : !workout.hasEntries
+                            ? NSLocalizedString("noEntriesConfirmation", comment: "")
+                            : NSLocalizedString("deleteSetsWithoutEntries", comment: "")
                 ),
                 isPresented: $isShowingFinishConfirmation,
                 titleVisibility: .visible
             ) {
                 Button(
-                    workout.allSetsHaveEntries ? NSLocalizedString("finishWorkout", comment: "") :
-                    !workout.hasEntries ? NSLocalizedString("noEntriesConfirmation", comment: "") :
-                    NSLocalizedString("deleteSets", comment: "")
+                    workout.allSetsHaveEntries
+                        ? NSLocalizedString("finishWorkout", comment: "")
+                        : !workout.hasEntries
+                            ? NSLocalizedString("noEntriesConfirmation", comment: "")
+                            : NSLocalizedString("deleteSets", comment: "")
                 ) {
                     workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
-                    if workout.isEmpty { database.delete(workout, saveContext: true) }
-                    else { saveWorkout() }
+                    if workout.isEmpty {
+                        database.delete(workout, saveContext: true)
+                    } else {
+                        saveWorkout()
+                    }
                     dismiss()
                     goHome()
                 }
@@ -185,7 +210,9 @@ struct WorkoutRecorderScreen: View {
                 isShowingChronoView = shouldShowChronoViewAgainWhenPossible
                 shouldShowChronoViewAgainWhenPossible = false
             } else {
-                shouldShowChronoViewAgainWhenPossible = shouldShowChronoViewAgainWhenPossible ? shouldShowChronoViewAgainWhenPossible : isShowingChronoView
+                shouldShowChronoViewAgainWhenPossible =
+                    shouldShowChronoViewAgainWhenPossible
+                    ? shouldShowChronoViewAgainWhenPossible : isShowingChronoView
                 isShowingChronoView = false
             }
             withAnimation {
@@ -196,7 +223,7 @@ struct WorkoutRecorderScreen: View {
             editMode = newValue ? .active : .inactive
         }
         .onAppear {
-            chronograph.onTimerFired =  {
+            chronograph.onTimerFired = {
                 shouldFlash = true
                 if !timerIsMuted {
                     playTimerSound()
@@ -214,10 +241,10 @@ struct WorkoutRecorderScreen: View {
         }
         .scrollDismissesKeyboard(.interactively)
         #if targetEnvironment(simulator)
-        .statusBarHidden(true)
+            .statusBarHidden(true)
         #endif
     }
-    
+
     private var Header: some View {
         VStack(spacing: 0) {
             VStack(spacing: 5) {
@@ -228,12 +255,18 @@ struct WorkoutRecorderScreen: View {
                     }
                 }
                 HStack {
-                    TextField(Workout.getStandardName(for: Date()), text: workoutName, axis: .vertical)
-                        .lineLimit(2)
-                        .foregroundColor(.label)
-                        .font(.title2.weight(.bold))
+                    TextField(
+                        Workout.getStandardName(for: Date()),
+                        text: workoutName,
+                        axis: .vertical
+                    )
+                    .lineLimit(2)
+                    .foregroundColor(.label)
+                    .font(.title2.weight(.bold))
                     Spacer()
-                    ProgressCircleButton(progress: workout.setGroups.count > 0 ? progressInWorkout : 0.0) {
+                    ProgressCircleButton(
+                        progress: workout.setGroups.count > 0 ? progressInWorkout : 0.0
+                    ) {
                         if !workout.hasEntries {
                             deleteWorkout()
                             dismiss()
@@ -251,43 +284,48 @@ struct WorkoutRecorderScreen: View {
             Divider()
         }
     }
-    
+
     internal var TimeStringView: some View {
         Text(remainingChronoTimeString)
             .foregroundColor(chronograph.status == .running ? .accentColor : .secondaryLabel)
             .font(.body.weight(.semibold).monospacedDigit())
     }
-    
+
     private var AddExerciseButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            sheetType = .exerciseSelection(exercise: nil, setExercise: { exercise in
-                database.newWorkoutSetGroup(createFirstSetAutomatically: true,
-                                            exercise: exercise,
-                                            workout: workout)
-                database.refreshObjects()
-            })
+            sheetType = .exerciseSelection(
+                exercise: nil,
+                setExercise: { exercise in
+                    database.newWorkoutSetGroup(
+                        createFirstSetAutomatically: true,
+                        exercise: exercise,
+                        workout: workout
+                    )
+                    database.refreshObjects()
+                }
+            )
         } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                 .bigButton()
         }
     }
-    
+
     // MARK: - Supporting Methods / Computed Properties
-    
+
     private var workoutName: Binding<String> {
         Binding(get: { workout.name ?? "" }, set: { workout.name = $0 })
     }
-    
+
     private func moveSetGroups(from source: IndexSet, to destination: Int) {
         workout.setGroups.move(fromOffsets: source, toOffset: destination)
         database.refreshObjects()
     }
-    
+
     private var progressInWorkout: Float {
         Float((workout.sets.filter { $0.hasEntry }).count) / Float(workout.sets.count)
     }
-    
+
     internal func indexInSetGroup(for workoutSet: WorkoutSet) -> Int? {
         for setGroup in workout.setGroups {
             if let index = setGroup.index(of: workoutSet) {
@@ -296,12 +334,12 @@ struct WorkoutRecorderScreen: View {
         }
         return nil
     }
-    
+
     internal var selectedWorkoutSet: WorkoutSet? {
         guard let focusedIndex = focusedIntegerFieldIndex else { return nil }
         return workout.sets.value(at: focusedIndex.primary)
     }
-    
+
     internal func toggleCopyPrevious(for workoutSet: WorkoutSet) {
         if workoutSet.hasEntry {
             workoutSet.clearEntries()
@@ -311,7 +349,7 @@ struct WorkoutRecorderScreen: View {
         }
         database.refreshObjects()
     }
-    
+
     internal func toggleSetCompleted(for workoutSet: WorkoutSet) {
         if let templateSet = workoutSetTemplateSetDictionary[workoutSet] {
             if workoutSet.hasEntry {
@@ -322,53 +360,92 @@ struct WorkoutRecorderScreen: View {
             database.refreshObjects()
         }
     }
-    
+
     internal func nextIntegerFieldIndex() -> IntegerField.Index? {
         guard let focusedIndex = focusedIntegerFieldIndex,
-                let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary) else { return nil }
+            let focusedWorkoutSet = workout.sets.value(at: focusedIndex.primary)
+        else { return nil }
         if let _ = focusedWorkoutSet as? StandardSet {
             guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
-            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
+            return IntegerField.Index(
+                primary: focusedIndex.primary + 1,
+                secondary: 0,
+                tertiary: focusedIndex.tertiary
+            )
         } else if let _ = focusedWorkoutSet as? SuperSet {
-            guard focusedIndex.secondary == 1 else { return IntegerField.Index(primary: focusedIndex.primary,
-                                                                               secondary: 1,
-                                                                               tertiary: focusedIndex.tertiary) }
-            guard focusedIndex.primary + 1 < workout.sets.count else  { return nil }
-            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
-        } else if let dropSet = focusedWorkoutSet as? DropSet {
-            if focusedIndex.secondary + 1 < dropSet.numberOfDrops {
-                return IntegerField.Index(primary: focusedIndex.primary, secondary: focusedIndex.secondary + 1, tertiary: focusedIndex.tertiary)
+            guard focusedIndex.secondary == 1 else {
+                return IntegerField.Index(
+                    primary: focusedIndex.primary,
+                    secondary: 1,
+                    tertiary: focusedIndex.tertiary
+                )
             }
             guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
-            return IntegerField.Index(primary: focusedIndex.primary + 1, secondary: 0, tertiary: focusedIndex.tertiary)
+            return IntegerField.Index(
+                primary: focusedIndex.primary + 1,
+                secondary: 0,
+                tertiary: focusedIndex.tertiary
+            )
+        } else if let dropSet = focusedWorkoutSet as? DropSet {
+            if focusedIndex.secondary + 1 < dropSet.numberOfDrops {
+                return IntegerField.Index(
+                    primary: focusedIndex.primary,
+                    secondary: focusedIndex.secondary + 1,
+                    tertiary: focusedIndex.tertiary
+                )
+            }
+            guard focusedIndex.primary + 1 < workout.sets.count else { return nil }
+            return IntegerField.Index(
+                primary: focusedIndex.primary + 1,
+                secondary: 0,
+                tertiary: focusedIndex.tertiary
+            )
         }
         return nil
     }
-    
+
     internal func previousIntegerFieldIndex() -> IntegerField.Index? {
         guard let focusedIndex = focusedIntegerFieldIndex else { return nil }
-        guard focusedIndex.secondary == 0 else { return IntegerField.Index(primary: focusedIndex.primary,
-                                                                           secondary: focusedIndex.secondary - 1,
-                                                                           tertiary: focusedIndex.tertiary) }
+        guard focusedIndex.secondary == 0 else {
+            return IntegerField.Index(
+                primary: focusedIndex.primary,
+                secondary: focusedIndex.secondary - 1,
+                tertiary: focusedIndex.tertiary
+            )
+        }
         guard focusedIndex.primary > 0 else { return nil }
         let previousSet = workout.sets.value(at: focusedIndex.primary - 1)
         if let _ = previousSet as? StandardSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: focusedIndex.secondary, tertiary: focusedIndex.tertiary)
+            return IntegerField.Index(
+                primary: focusedIndex.primary - 1,
+                secondary: focusedIndex.secondary,
+                tertiary: focusedIndex.tertiary
+            )
         } else if let _ = previousSet as? SuperSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: 1, tertiary: focusedIndex.tertiary)
+            return IntegerField.Index(
+                primary: focusedIndex.primary - 1,
+                secondary: 1,
+                tertiary: focusedIndex.tertiary
+            )
         } else if let dropSet = previousSet as? DropSet {
-            return IntegerField.Index(primary: focusedIndex.primary - 1, secondary: dropSet.numberOfDrops - 1 , tertiary: focusedIndex.tertiary)
+            return IntegerField.Index(
+                primary: focusedIndex.primary - 1,
+                secondary: dropSet.numberOfDrops - 1,
+                tertiary: focusedIndex.tertiary
+            )
         }
         return nil
     }
-    
-    private func updateWorkout(with template: Template){
+
+    private func updateWorkout(with template: Template) {
         template.workouts.append(workout)
         workout.name = template.name
         for templateSetGroup in template.setGroups {
-            let setGroup = database.newWorkoutSetGroup(createFirstSetAutomatically: false,
-                                                       exercise: templateSetGroup.exercise,
-                                                       workout: workout)
+            let setGroup = database.newWorkoutSetGroup(
+                createFirstSetAutomatically: false,
+                exercise: templateSetGroup.exercise,
+                workout: workout
+            )
             templateSetGroup.sets
                 .forEach { templateSet in
                     if let templateStandardSet = templateSet as? TemplateStandardSet {
@@ -378,14 +455,17 @@ struct WorkoutRecorderScreen: View {
                         let dropSet = database.newDropSet(from: templateDropSet, setGroup: setGroup)
                         workoutSetTemplateSetDictionary[dropSet] = templateDropSet
                     } else if let templateSuperSet = templateSet as? TemplateSuperSet {
-                        let superSet = database.newSuperSet(from: templateSuperSet, setGroup: setGroup)
+                        let superSet = database.newSuperSet(
+                            from: templateSuperSet,
+                            setGroup: setGroup
+                        )
                         workoutSetTemplateSetDictionary[superSet] = templateSuperSet
                     }
                 }
         }
         database.refreshObjects()
     }
-    
+
     private func saveWorkout() {
         if workout.name?.isEmpty ?? true {
             workout.name = Workout.getStandardName(for: workout.date!)
@@ -397,12 +477,12 @@ struct WorkoutRecorderScreen: View {
         }
         database.save()
     }
-    
+
     private func deleteWorkout() {
         workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
         database.delete(workout, saveContext: true)
     }
-    
+
     private func playTimerSound() {
         guard let url = Bundle.main.url(forResource: "timer", withExtension: "wav") else { return }
         do {
@@ -416,11 +496,11 @@ struct WorkoutRecorderScreen: View {
             print()
         }
     }
-    
+
     private var remainingChronoTimeString: String {
         "\(Int(chronograph.seconds)/60 / 10 % 6 )\(Int(chronograph.seconds)/60 % 10):\(Int(chronograph.seconds) % 60 / 10)\(Int(chronograph.seconds) % 60 % 10)"
     }
-    
+
 }
 
 struct WorkoutRecorderView_Previews: PreviewProvider {

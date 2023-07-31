@@ -8,7 +8,7 @@
 import Foundation
 
 extension Database {
-  
+
     public func addSet(to setGroup: WorkoutSetGroup) {
         let lastSet = setGroup.sets.last
         if let _ = lastSet as? DropSet {
@@ -20,7 +20,7 @@ extension Database {
         }
         refreshObjects()
     }
-    
+
     public func addSet(to templateSetGroup: TemplateSetGroup) {
         let lastSet = templateSetGroup.sets.last
         if let _ = lastSet as? TemplateDropSet {
@@ -32,5 +32,5 @@ extension Database {
         }
         refreshObjects()
     }
-    
+
 }

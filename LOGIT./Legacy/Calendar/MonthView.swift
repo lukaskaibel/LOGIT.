@@ -24,7 +24,7 @@ struct MonthView<DateView>: View where DateView: View {
     private var weeks: [Date] {
         guard
             let monthInterval = calendar.dateInterval(of: .month, for: month)
-            else { return [] }
+        else { return [] }
         return calendar.generateDates(
             inside: monthInterval,
             matching: DateComponents(hour: 0, minute: 0, second: 0, weekday: calendar.firstWeekday)
@@ -58,7 +58,9 @@ struct WeekView<DateView>: View where DateView: View {
     }
 
     private var days: [Date] {
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: week) else { return [] }
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: week) else {
+            return []
+        }
         return calendar.generateDates(
             inside: weekInterval,
             matching: DateComponents(hour: 0, minute: 0, second: 0)

@@ -8,15 +8,15 @@
 import Foundation
 
 extension TemplateSetGroup {
-    
+
     enum SetType: String {
         case standard, superSet, dropSet
-        
+
         var description: String {
             NSLocalizedString(self.rawValue, comment: "")
         }
     }
-    
+
     public var sets: [TemplateSet] {
         get {
             return (setOrder ?? .emptyList)
@@ -27,7 +27,7 @@ extension TemplateSetGroup {
             sets_ = NSSet(array: newValue)
         }
     }
-    
+
     private var exercises: [Exercise] {
         get {
             return (exerciseOrder ?? .emptyList)
@@ -38,7 +38,7 @@ extension TemplateSetGroup {
             exercises_ = NSSet(array: newValue)
         }
     }
-    
+
     public var exercise: Exercise? {
         get { exercises.first }
         set {
@@ -50,7 +50,7 @@ extension TemplateSetGroup {
             }
         }
     }
-    
+
     public var secondaryExercise: Exercise? {
         get { exercises.value(at: 1) }
         set {
@@ -64,7 +64,7 @@ extension TemplateSetGroup {
             }
         }
     }
-    
+
     var setType: SetType {
         let firstSet = sets.first
         if let _ = firstSet as? TemplateDropSet {
@@ -75,9 +75,9 @@ extension TemplateSetGroup {
             return .standard
         }
     }
-    
+
     func index(of set: TemplateSet) -> Int? {
         sets.firstIndex(of: set)
     }
-    
+
 }

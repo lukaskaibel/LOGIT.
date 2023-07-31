@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct OnSwipeDownModifier: ViewModifier {
     let onSwipeDown: () -> Void
 

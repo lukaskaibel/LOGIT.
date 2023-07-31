@@ -12,7 +12,7 @@ struct TileModifier: ViewModifier {
         content
             .background(Color.secondaryBackground)
             .cornerRadius(20)
-   }    
+    }
 }
 
 struct SecondaryTileModifier: ViewModifier {
@@ -20,7 +20,7 @@ struct SecondaryTileModifier: ViewModifier {
         content
             .background(Color.tertiaryBackground)
             .cornerRadius(15)
-   }
+    }
 }
 
 extension View {

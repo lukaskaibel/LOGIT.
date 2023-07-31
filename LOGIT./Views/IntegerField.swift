@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct IntegerField: View {
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.canEdit) var canEdit: Bool
-    
+
     // MARK: - Parameters
-    
+
     let placeholder: Int64
     let value: Int64
     let setValue: (_ newValue: Int64) -> Void
@@ -22,13 +22,13 @@ struct IntegerField: View {
     let index: Index
     @Binding var focusedIntegerFieldIndex: Index?
     var unit: String? = "kg"
-    
+
     // MARK: - State
-    
+
     @FocusState private var isFocused: Bool
 
     // MARK: - Body
-    
+
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             Group {
@@ -62,9 +62,9 @@ struct IntegerField: View {
         }
         .frame(minWidth: 100, alignment: .trailing)
     }
-    
+
     // MARK: - Computed Properties
-    
+
     var valueAsStringBinding: Binding<String> {
         Binding<String>(
             get: { value == 0 ? "" : String(String(value).prefix(maxDigits ?? .max)) },
@@ -77,20 +77,20 @@ struct IntegerField: View {
             }
         )
     }
-    
+
     struct Index: Equatable {
         let primary: Int
         var secondary: Int = 0
         var tertiary: Int = 0
-        
-        static func ==(lhs: Index, rhs: Index) -> Bool {
-            lhs.primary == rhs.primary && lhs.secondary == rhs.secondary && lhs.tertiary == rhs.tertiary
-        }
-        
-    }
-    
-}
 
+        static func == (lhs: Index, rhs: Index) -> Bool {
+            lhs.primary == rhs.primary && lhs.secondary == rhs.secondary
+                && lhs.tertiary == rhs.tertiary
+        }
+
+    }
+
+}
 
 struct IntegerField_Previews: PreviewProvider {
     static var previews: some View {

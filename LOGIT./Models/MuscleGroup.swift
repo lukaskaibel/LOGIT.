@@ -8,15 +8,15 @@
 import SwiftUI
 
 enum MuscleGroup: String, Identifiable, CaseIterable {
-    
+
     case chest, triceps, shoulders, biceps, back, legs, abdominals, cardio
 
     var id: String { self.rawValue }
-    
+
     var description: String {
         NSLocalizedString(self.rawValue, comment: "")
     }
-    
+
     var color: Color {
         switch self {
         case .chest: return .green
@@ -29,5 +29,5 @@ enum MuscleGroup: String, Identifiable, CaseIterable {
         case .cardio: return .gray
         }
     }
-    
+
 }

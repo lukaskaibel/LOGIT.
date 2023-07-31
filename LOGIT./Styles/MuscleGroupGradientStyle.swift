@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct MuscleGroupGradientModifier: ViewModifier {
-    
+
     let muscleGroups: [MuscleGroup]
-    
+
     func body(content: Content) -> some View {
         content
-            .foregroundStyle(.linearGradient(
-                colors: muscleGroups.isEmpty ? [.accentColor] : muscleGroups.map { $0.color },
-                startPoint: .bottomLeading,
-                endPoint: .topTrailing)
+            .foregroundStyle(
+                .linearGradient(
+                    colors: muscleGroups.isEmpty ? [.accentColor] : muscleGroups.map { $0.color },
+                    startPoint: .bottomLeading,
+                    endPoint: .topTrailing
+                )
             )
     }
 }

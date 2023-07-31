@@ -8,30 +8,31 @@
 import SwiftUI
 
 struct WorkoutListScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var sortingKey: Database.WorkoutSortingKey = .date
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
-                ForEach(groupedWorkouts.indices, id:\.self) { index in
+                ForEach(groupedWorkouts.indices, id: \.self) { index in
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         Text(header(for: index))
                             .sectionHeaderStyle2()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: CELL_SPACING) {
-                            ForEach(groupedWorkouts.value(at: index) ?? [], id:\.objectID) { workout in
+                            ForEach(groupedWorkouts.value(at: index) ?? [], id: \.objectID) {
+                                workout in
                                 NavigationLink(value: workout) {
                                     WorkoutCell(workout: workout)
                                         .padding(CELL_PADDING)
@@ -48,8 +49,10 @@ struct WorkoutListScreen: View {
             .padding(.horizontal)
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
-        .searchable(text: $searchedText,
-                    prompt: NSLocalizedString("searchWorkouts", comment: ""))
+        .searchable(
+            text: $searchedText,
+            prompt: NSLocalizedString("searchWorkouts", comment: "")
+        )
         .navigationTitle(NSLocalizedString("workouts", comment: ""))
         .navigationDestination(for: Workout.self) { selectedWorkout in
             WorkoutDetailScreen(
@@ -57,7 +60,7 @@ struct WorkoutListScreen: View {
                 canNavigateToTemplate: true
             )
         }
-        .toolbar  {
+        .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Section {
@@ -69,20 +72,25 @@ struct WorkoutListScreen: View {
                         }
                     }
                 } label: {
-                    Label(NSLocalizedString(sortingKey == .name ? "name" : "date", comment: ""), systemImage: "arrow.up.arrow.down")
+                    Label(
+                        NSLocalizedString(sortingKey == .name ? "name" : "date", comment: ""),
+                        systemImage: "arrow.up.arrow.down"
+                    )
                 }
             }
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var groupedWorkouts: [[Workout]] {
-        database.getGroupedWorkouts(withNameIncluding: searchedText,
-                                    groupedBy: sortingKey,
-                                    usingMuscleGroup: selectedMuscleGroup)
+        database.getGroupedWorkouts(
+            withNameIncluding: searchedText,
+            groupedBy: sortingKey,
+            usingMuscleGroup: selectedMuscleGroup
+        )
     }
-    
+
     private func header(for index: Int) -> String {
         switch sortingKey {
         case .date:
@@ -95,7 +103,7 @@ struct WorkoutListScreen: View {
             return String(groupedWorkouts.value(at: index)?.first?.name?.first ?? " ").capitalized
         }
     }
-    
+
 }
 
 struct AllWorkoutsView_Previews: PreviewProvider {

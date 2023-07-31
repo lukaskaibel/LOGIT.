@@ -8,26 +8,28 @@
 import SwiftUI
 
 struct ChronoView: View {
-    
+
     // MARK: - Properties
-    
+
     @ObservedObject var chronograph: Chronograph
-    
+
     @State private var selectedTimerDurationIndex = 0
-    
+
     // MARK: - Constants
-    
-    private let timerValues = [0, 10, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 480, 540, 600]
+
+    private let timerValues = [
+        0, 10, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 480, 540, 600,
+    ]
     private let opacityOfTimeWhenPaused = 0.7
-    
+
     // MARK: - Computed Properties
-    
+
     private var remainingTimeString: String {
         "\(Int(chronograph.seconds)/60 / 10 % 6 )\(Int(chronograph.seconds)/60 % 10):\(Int(chronograph.seconds) % 60 / 10)\(Int(chronograph.seconds) % 60 % 10)"
     }
-    
+
     // MARK: - View
-    
+
     var body: some View {
         VStack(spacing: 10) {
             pickerView
@@ -39,7 +41,11 @@ struct ChronoView: View {
                 }
                 Text(remainingTimeString)
                     .font(.system(size: 70, weight: .light).monospacedDigit())
-                    .foregroundColor(.accentColor.opacity(chronograph.status == .paused ? opacityOfTimeWhenPaused : 1.0))
+                    .foregroundColor(
+                        .accentColor.opacity(
+                            chronograph.status == .paused ? opacityOfTimeWhenPaused : 1.0
+                        )
+                    )
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                 if chronograph.mode == .timer {
@@ -49,9 +55,9 @@ struct ChronoView: View {
         }
         .padding()
     }
-    
+
     // MARK: - Subviews
-    
+
     private var pickerView: some View {
         Picker("Select Timer or Stopwatch", selection: $chronograph.mode) {
             Image(systemName: "timer")
@@ -61,7 +67,7 @@ struct ChronoView: View {
         }
         .pickerStyle(.segmented)
     }
-    
+
     private var controlButtons: some View {
         HStack {
             Button {
@@ -80,7 +86,9 @@ struct ChronoView: View {
                     .clipShape(Circle())
             }
             .disabled(chronograph.mode == .timer && chronograph.seconds == 0)
-            if chronograph.mode == .stopwatch && chronograph.status != .idle || chronograph.mode == .timer && chronograph.status == .paused {
+            if chronograph.mode == .stopwatch && chronograph.status != .idle
+                || chronograph.mode == .timer && chronograph.status == .paused
+            {
                 Button {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     chronograph.cancel()
@@ -98,11 +106,15 @@ struct ChronoView: View {
             }
         }
     }
-    
+
     private var timerIncreaseButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            guard let firstLargerTimerValueIndex = timerValues.firstIndex(where: { $0 >= Int(chronograph.seconds) }), firstLargerTimerValueIndex > 0 else { return }
+            guard
+                let firstLargerTimerValueIndex = timerValues.firstIndex(where: {
+                    $0 >= Int(chronograph.seconds)
+                }), firstLargerTimerValueIndex > 0
+            else { return }
             chronograph.seconds = TimeInterval(timerValues[firstLargerTimerValueIndex - 1]) + 0.99
         } label: {
             Image(systemName: "minus")
@@ -115,11 +127,15 @@ struct ChronoView: View {
                 .clipShape(Circle())
         }
     }
-    
+
     private var timerDecreaseButton: some View {
         Button {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            guard let firstLargerTimerValueIndex = timerValues.firstIndex(where: { $0 > Int(chronograph.seconds) }), firstLargerTimerValueIndex > 0 else { return }
+            guard
+                let firstLargerTimerValueIndex = timerValues.firstIndex(where: {
+                    $0 > Int(chronograph.seconds)
+                }), firstLargerTimerValueIndex > 0
+            else { return }
             chronograph.seconds = TimeInterval(timerValues[firstLargerTimerValueIndex]) + 0.99
         } label: {
             Image(systemName: "plus")
@@ -132,7 +148,7 @@ struct ChronoView: View {
                 .clipShape(Circle())
         }
     }
-    
+
 }
 
 struct TimerView_Previews: PreviewProvider {

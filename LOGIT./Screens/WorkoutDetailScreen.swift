@@ -5,33 +5,33 @@
 //  Created by Lukas Kaibel on 20.12.21.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct WorkoutDetailScreen: View {
-    
+
     enum SheetType: Int, Identifiable {
         case newTemplateFromWorkout, templateDetail
         var id: Int { self.rawValue }
     }
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    
+
     // MARK: - State
-    
+
     @State private var isShowingDeleteWorkoutAlert: Bool = false
     @State private var sheetType: SheetType? = nil
-    
+
     // MARK: - Variables
-    
+
     let workout: Workout
     let canNavigateToTemplate: Bool
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
@@ -85,16 +85,21 @@ struct WorkoutDetailScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(role: .destructive, action: {
-                    isShowingDeleteWorkoutAlert = true
-                }) {
+                Button(
+                    role: .destructive,
+                    action: {
+                        isShowingDeleteWorkoutAlert = true
+                    }
+                ) {
                     Image(systemName: "trash")
                 }
             }
         }
-        .confirmationDialog(NSLocalizedString("deleteWorkoutDescription", comment: ""),
-                            isPresented: $isShowingDeleteWorkoutAlert,
-                            titleVisibility: .visible) {
+        .confirmationDialog(
+            NSLocalizedString("deleteWorkoutDescription", comment: ""),
+            isPresented: $isShowingDeleteWorkoutAlert,
+            titleVisibility: .visible
+        ) {
             Button(NSLocalizedString("deleteWorkout", comment: ""), role: .destructive) {
                 database.delete(workout, saveContext: true)
                 dismiss()
@@ -102,23 +107,28 @@ struct WorkoutDetailScreen: View {
         }
         .sheet(item: $sheetType) { type in
             switch type {
-            case .newTemplateFromWorkout: TemplateEditorScreen(template: database.newTemplate(from: workout),
-                                                             isEditingExistingTemplate: false)
+            case .newTemplateFromWorkout:
+                TemplateEditorScreen(
+                    template: database.newTemplate(from: workout),
+                    isEditingExistingTemplate: false
+                )
             case .templateDetail:
                 NavigationStack {
                     TemplateDetailScreen(template: workout.template!)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
-                                Button(NSLocalizedString("navBack", comment: "")) { sheetType = nil }
+                                Button(NSLocalizedString("navBack", comment: "")) {
+                                    sheetType = nil
+                                }
                             }
                         }
                 }
             }
         }
     }
-        
+
     // MARK: - Supporting Views
-    
+
     private var workoutHeader: some View {
         VStack(alignment: .leading) {
             Text(workout.date?.description(.long) ?? "")
@@ -138,7 +148,7 @@ struct WorkoutDetailScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var workoutInfo: some View {
         VStack(spacing: 10) {
             HStack {
@@ -147,14 +157,16 @@ struct WorkoutDetailScreen: View {
                     Text("\(workout.date?.timeString ?? "")")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: workout.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
                     Text("\(workoutDurationString)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: workout.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack {
                 VStack(alignment: .leading) {
@@ -162,33 +174,36 @@ struct WorkoutDetailScreen: View {
                     Text("\(workout.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: workout.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
                     Text("\(workout.numberOfSets)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
                         .muscleGroupGradientStyle(for: workout.muscleGroups)
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
-    
+
     private var setsPerMuscleGroup: some View {
         PieGraph(
             items: workout.muscleGroupOccurances.map {
-                PieGraph.Item(title: $0.0.rawValue.capitalized,
-                              amount: $0.1,
-                              color: $0.0.color,
-                              isSelected: false
+                PieGraph.Item(
+                    title: $0.0.rawValue.capitalized,
+                    amount: $0.1,
+                    color: $0.0.color,
+                    isSelected: false
                 )
             }
         )
     }
-    
+
     private var templateButton: some View {
         Button {
-                sheetType = workout.template != nil ? .templateDetail : .newTemplateFromWorkout
+            sheetType = workout.template != nil ? .templateDetail : .newTemplateFromWorkout
         } label: {
             HStack {
                 if workout.template == nil {
@@ -196,10 +211,13 @@ struct WorkoutDetailScreen: View {
                         .foregroundColor(.accentColor)
                         .font(.body.weight(.medium))
                 }
-                Text(workout.template?.name ?? NSLocalizedString("newTemplateFromWorkout", comment: ""))
-                    .fontWeight(.medium)
-                    .lineLimit(1)
-                    .foregroundColor(.accentColor)
+                Text(
+                    workout.template?.name
+                        ?? NSLocalizedString("newTemplateFromWorkout", comment: "")
+                )
+                .fontWeight(.medium)
+                .lineLimit(1)
+                .foregroundColor(.accentColor)
                 if workout.template != nil {
                     Spacer()
                     NavigationChevron()
@@ -211,16 +229,17 @@ struct WorkoutDetailScreen: View {
             .contentShape(Rectangle())
         }
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var workoutDurationString: String {
         guard let start = workout.date, let end = workout.endDate else { return "0:00" }
         let hours = Calendar.current.dateComponents([.hour], from: start, to: end).hour ?? 0
-        let minutes = (Calendar.current.dateComponents([.minute], from: start, to: end).minute ?? 0) % 60
+        let minutes =
+            (Calendar.current.dateComponents([.minute], from: start, to: end).minute ?? 0) % 60
         return "\(hours):\(minutes < 10 ? "0" : "")\(minutes)"
     }
-    
+
 }
 
 struct WorkoutDetailView_Previews: PreviewProvider {

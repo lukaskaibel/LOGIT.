@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension WorkoutRecorderScreen {
-    
+
     internal var ToolbarItemsBottomBar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
@@ -28,15 +28,22 @@ extension WorkoutRecorderScreen {
                 }
             }
             Spacer()
-            Text("\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))")
-                .font(.caption)
+            Text(
+                "\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))"
+            )
+            .font(.caption)
             Spacer()
-            Button(isEditing ? NSLocalizedString("done", comment: "") : NSLocalizedString("edit", comment: "")) {
+            Button(
+                isEditing
+                    ? NSLocalizedString("done", comment: "")
+                    : NSLocalizedString("edit", comment: "")
+            ) {
                 isEditing.toggle()
-            }.disabled(workout.numberOfSetGroups == 0)
+            }
+            .disabled(workout.numberOfSetGroups == 0)
         }
     }
-    
+
     internal var ToolbarItemsKeyboard: some ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
             Spacer()
@@ -53,10 +60,17 @@ extension WorkoutRecorderScreen {
                         toggleCopyPrevious(for: workoutSet)
                     } label: {
                         Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
-                            .foregroundColor(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry ? Color.placeholder : .primary)
+                            .foregroundColor(
+                                !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
+                                    && !workoutSet.hasEntry
+                                    ? Color.placeholder : .primary
+                            )
                             .keyboardToolbarButtonStyle()
                     }
-                    .disabled(!(workoutSet.previousSetInSetGroup?.hasEntry ?? false) && !workoutSet.hasEntry)
+                    .disabled(
+                        !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
+                            && !workoutSet.hasEntry
+                    )
                 }
             }
             HStack(spacing: 0) {
@@ -65,7 +79,9 @@ extension WorkoutRecorderScreen {
                     focusedIntegerFieldIndex = previousIntegerFieldIndex()
                 } label: {
                     Image(systemName: "chevron.up")
-                        .foregroundColor(previousIntegerFieldIndex() == nil ? Color.placeholder : .label)
+                        .foregroundColor(
+                            previousIntegerFieldIndex() == nil ? Color.placeholder : .label
+                        )
                         .keyboardToolbarButtonStyle()
                 }
                 .disabled(previousIntegerFieldIndex() == nil)
@@ -74,7 +90,9 @@ extension WorkoutRecorderScreen {
                     focusedIntegerFieldIndex = nextIntegerFieldIndex()
                 } label: {
                     Image(systemName: "chevron.down")
-                        .foregroundColor(nextIntegerFieldIndex() == nil ? Color.placeholder : .label)
+                        .foregroundColor(
+                            nextIntegerFieldIndex() == nil ? Color.placeholder : .label
+                        )
                         .keyboardToolbarButtonStyle()
                 }
                 .disabled(nextIntegerFieldIndex() == nil)
@@ -88,5 +106,5 @@ extension WorkoutRecorderScreen {
             Spacer()
         }
     }
-    
+
 }

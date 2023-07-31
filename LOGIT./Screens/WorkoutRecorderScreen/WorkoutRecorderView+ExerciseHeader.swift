@@ -8,8 +8,5 @@
 import SwiftUI
 
 extension WorkoutRecorderView {
-    
-    
 
-    
 }
