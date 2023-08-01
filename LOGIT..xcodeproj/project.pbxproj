@@ -21,6 +21,10 @@
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
+		7934B5BE2A7860FB00A93030 /* CreateTemplateMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7934B5BD2A7860FB00A93030 /* CreateTemplateMenu.swift */; };
+		7934B5C02A78695E00A93030 /* TemplateExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7934B5BF2A78695E00A93030 /* TemplateExtractor.swift */; };
+		7934B5C32A786E6C00A93030 /* OpenAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7934B5C22A786E6C00A93030 /* OpenAI.swift */; };
+		7934B5C72A7871CF00A93030 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7934B5C62A7871CF00A93030 /* Secrets.swift */; };
 		793CB8A82975BB1B00140D2B /* IntegerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793CB8A72975BB1B00140D2B /* IntegerField.swift */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
 		79488DD72A7558B2005C485D /* EnvironmentValues+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79488DD62A7558B2005C485D /* EnvironmentValues+.swift */; };
@@ -134,6 +138,10 @@
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		792F9740280AC65D0032761C /* Database+EntityCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityCreation.swift"; sourceTree = "<group>"; };
+		7934B5BD2A7860FB00A93030 /* CreateTemplateMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTemplateMenu.swift; sourceTree = "<group>"; };
+		7934B5BF2A78695E00A93030 /* TemplateExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateExtractor.swift; sourceTree = "<group>"; };
+		7934B5C22A786E6C00A93030 /* OpenAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAI.swift; sourceTree = "<group>"; };
+		7934B5C62A7871CF00A93030 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		793CB8A72975BB1B00140D2B /* IntegerField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerField.swift; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
 		79488DD62A7558B2005C485D /* EnvironmentValues+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+.swift"; sourceTree = "<group>"; };
@@ -271,6 +279,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7934B5C12A786E2D00A93030 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				7934B5C22A786E6C00A93030 /* OpenAI.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		79488DDC2A756AA4005C485D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -319,6 +335,7 @@
 		79488DF32A770FA2005C485D /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				7934B5C62A7871CF00A93030 /* Secrets.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -330,6 +347,7 @@
 				798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */,
 				795D6E6227F50E6A00A71807 /* Timer.swift */,
 				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
+				7934B5BF2A78695E00A93030 /* TemplateExtractor.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -447,6 +465,7 @@
 			children = (
 				79488DDC2A756AA4005C485D /* Cells */,
 				794DAC622A320919006F0168 /* ChronoView.swift */,
+				7934B5BD2A7860FB00A93030 /* CreateTemplateMenu.swift */,
 				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
 				7967D57C2811886700B30D03 /* Graphs */,
@@ -504,6 +523,7 @@
 				801CDC482688BD9D00BB653D /* Extentions */,
 				79488DF12A770D17005C485D /* Legacy */,
 				794DAC662A320F9C006F0168 /* Models */,
+				7934B5C12A786E2D00A93030 /* Networking */,
 				7919C5FE2A742EA500F35493 /* Modifiers */,
 				79A4E33327E9EBED0089001F /* Screens */,
 				790E8F092A48B27E00EA1430 /* Sounds */,
@@ -614,6 +634,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79A4E33627E9ED730089001F /* HomeScreen.swift in Sources */,
+				7934B5BE2A7860FB00A93030 /* CreateTemplateMenu.swift in Sources */,
 				7975E3B327CED8E5000BA25B /* Array+.swift in Sources */,
 				79488DE82A76F014005C485D /* TemplateSuperSetCell.swift in Sources */,
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
@@ -627,7 +648,9 @@
 				79407A8B2772380C004F32A3 /* UnitView.swift in Sources */,
 				7955EEB427FDD8820010693C /* StartWorkoutScreen.swift in Sources */,
 				79488DE72A76F012005C485D /* TemplateStandardSetCell.swift in Sources */,
+				7934B5C32A786E6C00A93030 /* OpenAI.swift in Sources */,
 				79A27AF8283D8F6A000A8EF7 /* TemplateSuperSet+.swift in Sources */,
+				7934B5C72A7871CF00A93030 /* Secrets.swift in Sources */,
 				79CD8BEC28240E010052D83C /* Calendar+.swift in Sources */,
 				7962583E29341122003AC2AC /* ExerciseHeader.swift in Sources */,
 				79746709277136FE006518F0 /* WorkoutDetailScreen.swift in Sources */,
@@ -690,6 +713,7 @@
 				79488DEC2A770C7D005C485D /* EmptyPlaceholderModifier.swift in Sources */,
 				797EF7E629292E32003C2266 /* MuscleGroupsDetailScreen.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
+				7934B5C02A78695E00A93030 /* TemplateExtractor.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,
 				79DB259E2914229B00ADDF24 /* Database+EntityEdit.swift in Sources */,
 				795A48812A6899A10008A458 /* Chronograph.swift in Sources */,

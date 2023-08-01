@@ -77,6 +77,7 @@ struct TemplateListScreen: View {
                         systemImage: "arrow.up.arrow.down"
                     )
                 }
+                CreateTemplateMenu()
                 Button(action: {
                     showingTemplateCreation = true
                 }) {
