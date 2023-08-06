@@ -16,6 +16,8 @@ class Database: ObservableObject {
     static let preview = Database(isPreview: true)
 
     private let container: NSPersistentContainer
+    
+    private let TEMPORARY_OBJECT_IDS_KEY = "temporaryObjectIds"
 
     // MARK: - Init
 
@@ -53,6 +55,12 @@ class Database: ObservableObject {
             }
         }
     }
+    
+    func refreshObjects() {
+        context.refreshAllObjects()
+    }
+    
+    // MARK: - Object Access / Manipulation
 
     func object(with objectID: NSManagedObjectID) -> NSManagedObject {
         context.object(with: objectID)
@@ -89,9 +97,47 @@ class Database: ObservableObject {
             save()
         }
     }
-
-    func refreshObjects() {
-        context.refreshAllObjects()
+    
+    // MARK: - Temporary Objects
+    
+    func flagAsTemporary(_ object: NSManagedObject) {
+        var temporaryObjectIds: [String]
+        if let previousTemporaryObjectIds = UserDefaults.standard.array(forKey: TEMPORARY_OBJECT_IDS_KEY) as? [String] {
+            temporaryObjectIds = previousTemporaryObjectIds
+        } else {
+            temporaryObjectIds = [String]()
+        }
+        temporaryObjectIds.append(object.objectID.uriRepresentation().absoluteString)
+        UserDefaults.standard.setValue(temporaryObjectIds, forKey: TEMPORARY_OBJECT_IDS_KEY)
     }
+
+    func unflagAsTemporary(_ object: NSManagedObject) {
+        guard var temporaryObjectIds = UserDefaults.standard.array(forKey: TEMPORARY_OBJECT_IDS_KEY) as? [String] else { return }
+        temporaryObjectIds = temporaryObjectIds.filter { $0 != object.objectID.uriRepresentation().absoluteString }
+        UserDefaults.standard.setValue(temporaryObjectIds, forKey: TEMPORARY_OBJECT_IDS_KEY)
+    }
+
+    func isTemporaryObject(_ object: NSManagedObject) -> Bool {
+        guard let temporaryObjectIds = UserDefaults.standard.array(forKey: TEMPORARY_OBJECT_IDS_KEY) as? [String] else { return false }
+        let objectIDString = object.objectID.uriRepresentation().absoluteString
+        return temporaryObjectIds.contains { $0 == objectIDString }
+    }
+
+    func deleteAllTemporaryObjects() {
+        guard let temporaryObjectIds = UserDefaults.standard.array(forKey: TEMPORARY_OBJECT_IDS_KEY) as? [String] else { return }
+
+        let coordinator = container.persistentStoreCoordinator
+
+        for uriString in temporaryObjectIds {
+            if let url = URL(string: uriString), let objectID = coordinator.managedObjectID(forURIRepresentation: url) {
+                if let object = try? context.existingObject(with: objectID) {
+                    delete(object)
+                }
+            }
+        }
+        
+        UserDefaults.standard.setValue([String](), forKey: TEMPORARY_OBJECT_IDS_KEY)
+    }
+
 
 }

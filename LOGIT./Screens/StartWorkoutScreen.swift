@@ -46,9 +46,12 @@ struct StartWorkoutScreen: View {
                     .padding(.horizontal)
                     .padding(.vertical, 30)
                 VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text(NSLocalizedString("myTemplates", comment: ""))
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text(NSLocalizedString("myTemplates", comment: ""))
+                            .sectionHeaderStyle2()
+                        Spacer()
+                        CreateTemplateMenu()
+                    }
                     LazyVStack(spacing: CELL_SPACING) {
                         templateList
                     }

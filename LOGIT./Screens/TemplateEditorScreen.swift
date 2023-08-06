@@ -119,6 +119,8 @@ struct TemplateEditorScreen: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(NSLocalizedString("save", comment: "")) {
+                        template.exercises.forEach { database.unflagAsTemporary($0) }
+                        database.unflagAsTemporary(template)
                         database.save()
                         dismiss()
                     }
@@ -127,11 +129,8 @@ struct TemplateEditorScreen: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(NSLocalizedString("cancel", comment: "")) {
-                        if !isEditingExistingTemplate {
-                            template.sets.forEach { database.delete($0) }
-                            template.workouts.forEach { $0.template = nil }
-                            database.delete(template, saveContext: true)
-                        }
+                        database.deleteAllTemporaryObjects()
+                        database.save()
                         dismiss()
                     }
                 }

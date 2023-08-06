@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55F89780B925B62D1E06523A /* Pods_LOGIT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22040B8B5D5971A78B9E3A04 /* Pods_LOGIT.framework */; };
 		790130A9291C4B9B00EF8955 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 790130A8291C4B9B00EF8955 /* Launch Screen.storyboard */; };
 		7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7907B5A4280B73E7003E5515 /* Database+Preview.swift */; };
 		7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7907FDE9289E99B1006AF271 /* CloudKit.framework */; };
@@ -54,6 +55,8 @@
 		7962583E29341122003AC2AC /* ExerciseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583D29341122003AC2AC /* ExerciseHeader.swift */; };
 		7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */; };
 		796D611927E53AB400E15F01 /* ExerciseEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */; };
+		79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */; };
+		79702C6C2A7D356100F19EF3 /* ExerciseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C6B2A7D356100F19EF3 /* ExerciseService.swift */; };
 		79746709277136FE006518F0 /* WorkoutDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailScreen.swift */; };
 		7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */; };
 		7975E3B327CED8E5000BA25B /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7975E3B227CED8E5000BA25B /* Array+.swift */; };
@@ -67,6 +70,10 @@
 		79898A8027F7B02100935E05 /* TemplateEditorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79898A7F27F7B02100935E05 /* TemplateEditorScreen.swift */; };
 		79898A8627F7BE4A00935E05 /* TemplateSetGroup+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79898A8527F7BE4A00935E05 /* TemplateSetGroup+.swift */; };
 		79898A8827F86DC800935E05 /* Template+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79898A8727F86DC800935E05 /* Template+.swift */; };
+		798BDC132A79A7DC00EAA75D /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798BDC122A79A7DC00EAA75D /* Secrets.swift */; };
+		798BDC232A79A9D800EAA75D /* TemplateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798BDC222A79A9D800EAA75D /* TemplateService.swift */; };
+		798BDC252A79AB4900EAA75D /* CreateTemplateMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */; };
+		798BDC282A7BCD1800EAA75D /* TextProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798BDC272A7BCD1800EAA75D /* TextProcessing.swift */; };
 		798CEE6D280DC7CE00114FEE /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */; };
 		798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FBF802925571900A5F7F0 /* NavigationChevron.swift */; };
 		799AAF2C2787831900C8BF0C /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */; };
@@ -89,6 +96,7 @@
 		79DB25A02914382400ADDF24 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB259F2914382400ADDF24 /* UIConstants.swift */; };
 		79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */; };
 		79E2E60429132C46003845BC /* Database+SetConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E60329132C46003845BC /* Database+SetConvert.swift */; };
+		79E8490A2A7EA28100C0DF95 /* ExerciseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */; };
 		79F2D1222800CD0C00197E0A /* TemplateDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */; };
 		79F7E0FE27E67578006D4354 /* ExerciseListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E0FD27E67578006D4354 /* ExerciseListScreen.swift */; };
 		79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E10227E68FAC006D4354 /* SegmentedBarChart.swift */; };
@@ -108,6 +116,16 @@
 		80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F9C34A2704C4F000B6EBF2 /* Date+.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		79E8490B2A7EA28100C0DF95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8065AA632686667F00F53A5A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8065AA6A2686667F00F53A5A;
+			remoteInfo = LOGIT;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		792D523927F1160A00B08813 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -122,6 +140,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		22040B8B5D5971A78B9E3A04 /* Pods_LOGIT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LOGIT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LOGIT.release.xcconfig"; path = "Target Support Files/Pods-LOGIT/Pods-LOGIT.release.xcconfig"; sourceTree = "<group>"; };
 		790130A8291C4B9B00EF8955 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7907B5A4280B73E7003E5515 /* Database+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Preview.swift"; sourceTree = "<group>"; };
 		7907FDE8289E99A5006AF271 /* LOGIT..entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LOGIT..entitlements; sourceTree = "<group>"; };
@@ -172,6 +192,8 @@
 		7962583D29341122003AC2AC /* ExerciseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHeader.swift; sourceTree = "<group>"; };
 		7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupSelector.swift; sourceTree = "<group>"; };
 		796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEditScreen.swift; sourceTree = "<group>"; };
+		79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateGenerationScreen.swift; sourceTree = "<group>"; };
+		79702C6B2A7D356100F19EF3 /* ExerciseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseService.swift; sourceTree = "<group>"; };
 		79746708277136FE006518F0 /* WorkoutDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailScreen.swift; sourceTree = "<group>"; };
 		7975E3AE27CED6DE000BA25B /* WorkoutSetGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutSetGroup+.swift"; sourceTree = "<group>"; };
 		7975E3B227CED8E5000BA25B /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
@@ -185,6 +207,10 @@
 		79898A7F27F7B02100935E05 /* TemplateEditorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditorScreen.swift; sourceTree = "<group>"; };
 		79898A8527F7BE4A00935E05 /* TemplateSetGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateSetGroup+.swift"; sourceTree = "<group>"; };
 		79898A8727F86DC800935E05 /* Template+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Template+.swift"; sourceTree = "<group>"; };
+		798BDC122A79A7DC00EAA75D /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Secrets.swift; path = LOGIT./Secrets.swift; sourceTree = SOURCE_ROOT; };
+		798BDC222A79A9D800EAA75D /* TemplateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateService.swift; sourceTree = "<group>"; };
+		798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTemplateMenu.swift; sourceTree = "<group>"; };
+		798BDC272A7BCD1800EAA75D /* TextProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProcessing.swift; sourceTree = "<group>"; };
 		798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
 		798FBF802925571900A5F7F0 /* NavigationChevron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationChevron.swift; sourceTree = "<group>"; };
 		799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
@@ -206,6 +232,8 @@
 		79DB259F2914382400ADDF24 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityFetch.swift"; sourceTree = "<group>"; };
 		79E2E60329132C46003845BC /* Database+SetConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+SetConvert.swift"; sourceTree = "<group>"; };
+		79E849072A7EA28000C0DF95 /* LOGITTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOGITTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseServiceTests.swift; sourceTree = "<group>"; };
 		79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetailScreen.swift; sourceTree = "<group>"; };
 		79F7E0FD27E67578006D4354 /* ExerciseListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListScreen.swift; sourceTree = "<group>"; };
 		79F7E10227E68FAC006D4354 /* SegmentedBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedBarChart.swift; sourceTree = "<group>"; };
@@ -214,7 +242,7 @@
 		801CDC4B2688BDC800BB653D /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		8033F98D27072B0600EC707A /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		8058F49E268D2503006A94AC /* Workout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Workout+.swift"; sourceTree = "<group>"; };
-		8065AA6B2686667F00F53A5A /* LOGIT..app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LOGIT..app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8065AA6B2686667F00F53A5A /* LOGIT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LOGIT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8065AA6E2686667F00F53A5A /* LOGITApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOGITApp.swift; sourceTree = "<group>"; };
 		8065AA722686668100F53A5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8065AA7A2686668100F53A5A /* WorkoutDiary.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WorkoutDiary.xcdatamodel; sourceTree = "<group>"; };
@@ -226,20 +254,38 @@
 		80E9FAEE26FE152100C670D5 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		80ED028F2764D94200D59B75 /* ExerciseSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionScreen.swift; sourceTree = "<group>"; };
 		80F9C34A2704C4F000B6EBF2 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LOGIT.debug.xcconfig"; path = "Target Support Files/Pods-LOGIT/Pods-LOGIT.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		79E849042A7EA28000C0DF95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8065AA682686667F00F53A5A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */,
+				55F89780B925B62D1E06523A /* Pods_LOGIT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52E873A688862B4BE19F439F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */,
+				785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		790E8F092A48B27E00EA1430 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +321,7 @@
 			children = (
 				7907FDE9289E99B1006AF271 /* CloudKit.framework */,
 				792D522B27F1160800B08813 /* SwiftUI.framework */,
+				22040B8B5D5971A78B9E3A04 /* Pods_LOGIT.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -328,6 +375,7 @@
 		79488DF32A770FA2005C485D /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				798BDC122A79A7DC00EAA75D /* Secrets.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -374,6 +422,16 @@
 			path = SupportingViews;
 			sourceTree = "<group>";
 		};
+		798BDC262A7BCCE300EAA75D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				79702C6B2A7D356100F19EF3 /* ExerciseService.swift */,
+				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
+				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		79A4E33227E9EBA20089001F /* Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +462,7 @@
 				79511D062925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift */,
 				79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */,
 				79898A7F27F7B02100935E05 /* TemplateEditorScreen.swift */,
+				79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */,
 				7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */,
 				79746708277136FE006518F0 /* WorkoutDetailScreen.swift */,
 				8084604A276662A000E0D0D0 /* WorkoutListScreen.swift */,
@@ -464,6 +523,7 @@
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
 				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
+				798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */,
 				797EF7E729293222003C2266 /* TitleUnitView.swift */,
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				79488DDA2A755C52005C485D /* WorkoutSetGroupList.swift */,
@@ -471,6 +531,14 @@
 				792156D12A955DD40010A0FC /* TipView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		79E849082A7EA28000C0DF95 /* LOGITTests */ = {
+			isa = PBXGroup;
+			children = (
+				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
+			);
+			path = LOGITTests;
 			sourceTree = "<group>";
 		};
 		801CDC482688BD9D00BB653D /* Extentions */ = {
@@ -489,15 +557,18 @@
 			isa = PBXGroup;
 			children = (
 				8065AA6D2686667F00F53A5A /* LOGIT. */,
+				79E849082A7EA28000C0DF95 /* LOGITTests */,
 				792D522827F1160800B08813 /* Frameworks */,
 				8065AA6C2686667F00F53A5A /* Products */,
+				52E873A688862B4BE19F439F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
 		8065AA6C2686667F00F53A5A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8065AA6B2686667F00F53A5A /* LOGIT..app */,
+				8065AA6B2686667F00F53A5A /* LOGIT.app */,
+				79E849072A7EA28000C0DF95 /* LOGITTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -520,6 +591,7 @@
 				79A4E33327E9EBED0089001F /* Screens */,
 				790E8F092A48B27E00EA1430 /* Sounds */,
 				7988FBB12A7307B500E4FE54 /* Styles */,
+				798BDC262A7BCCE300EAA75D /* Utilities */,
 				79D570D42779F9AE0005E006 /* Views */,
 			);
 			path = LOGIT.;
@@ -528,25 +600,43 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8065AA6A2686667F00F53A5A /* LOGIT. */ = {
+		79E849062A7EA28000C0DF95 /* LOGITTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8065AA7F2686668100F53A5A /* Build configuration list for PBXNativeTarget "LOGIT." */;
+			buildConfigurationList = 79E8490F2A7EA28100C0DF95 /* Build configuration list for PBXNativeTarget "LOGITTests" */;
 			buildPhases = (
+				79E849032A7EA28000C0DF95 /* Sources */,
+				79E849042A7EA28000C0DF95 /* Frameworks */,
+				79E849052A7EA28000C0DF95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				79E8490C2A7EA28100C0DF95 /* PBXTargetDependency */,
+			);
+			name = LOGITTests;
+			productName = LOGITTests;
+			productReference = 79E849072A7EA28000C0DF95 /* LOGITTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8065AA6A2686667F00F53A5A /* LOGIT */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8065AA7F2686668100F53A5A /* Build configuration list for PBXNativeTarget "LOGIT" */;
+			buildPhases = (
+				48FBC04DC0C27F9D8BA1907E /* [CP] Check Pods Manifest.lock */,
 				8065AA672686667F00F53A5A /* Sources */,
 				8065AA682686667F00F53A5A /* Frameworks */,
 				8065AA692686667F00F53A5A /* Resources */,
 				792D523927F1160A00B08813 /* Embed Foundation Extensions */,
 				790091622A772B2000FAE34E /* Swift-Format Script */,
+				A1776E91983DE385FD1B11E9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = LOGIT.;
-			packageProductDependencies = (
-			);
+			name = LOGIT;
 			productName = WorkoutDiary;
-			productReference = 8065AA6B2686667F00F53A5A /* LOGIT..app */;
+			productReference = 8065AA6B2686667F00F53A5A /* LOGIT.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -556,15 +646,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1330;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					79E849062A7EA28000C0DF95 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 8065AA6A2686667F00F53A5A;
+					};
 					8065AA6A2686667F00F53A5A = {
 						CreatedOnToolsVersion = 12.5;
 					};
 				};
 			};
-			buildConfigurationList = 8065AA662686667F00F53A5A /* Build configuration list for PBXProject "LOGIT." */;
+			buildConfigurationList = 8065AA662686667F00F53A5A /* Build configuration list for PBXProject "LOGIT" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -574,18 +668,24 @@
 				de,
 			);
 			mainGroup = 8065AA622686667F00F53A5A;
-			packageReferences = (
-			);
 			productRefGroup = 8065AA6C2686667F00F53A5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8065AA6A2686667F00F53A5A /* LOGIT. */,
+				8065AA6A2686667F00F53A5A /* LOGIT */,
+				79E849062A7EA28000C0DF95 /* LOGITTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		79E849052A7EA28000C0DF95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8065AA692686667F00F53A5A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -600,6 +700,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		48FBC04DC0C27F9D8BA1907E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LOGIT-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		790091622A772B2000FAE34E /* Swift-Format Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -618,9 +740,34 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#export PATH=\"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/.build/debug:$PATH\"\n#if which swift-format >/dev/null; then\n#    swift-format format --configuration \"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/myConfiguration.json\" -i -r \"${PROJECT_DIR}\"\n#else\n#    echo \"warning: swift-format not installed\"\n#fi\n";
 		};
+		A1776E91983DE385FD1B11E9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		79E849032A7EA28000C0DF95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79E8490A2A7EA28100C0DF95 /* ExerciseServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8065AA672686667F00F53A5A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -629,6 +776,7 @@
 				7975E3B327CED8E5000BA25B /* Array+.swift in Sources */,
 				792156D22A955DD40010A0FC /* TipView.swift in Sources */,
 				79488DE82A76F014005C485D /* TemplateSuperSetCell.swift in Sources */,
+				798BDC252A79AB4900EAA75D /* CreateTemplateMenu.swift in Sources */,
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
 				791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */,
 				793CB8A82975BB1B00140D2B /* IntegerField.swift in Sources */,
@@ -664,6 +812,7 @@
 				797EF7E829293222003C2266 /* TitleUnitView.swift in Sources */,
 				7988FBB72A73391600E4FE54 /* ButtonStyle.swift in Sources */,
 				7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */,
+				798BDC132A79A7DC00EAA75D /* Secrets.swift in Sources */,
 				8084604B276662A000E0D0D0 /* WorkoutListScreen.swift in Sources */,
 				7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */,
 				79488DEE2A770CB9005C485D /* OnSwipeDownModifier.swift in Sources */,
@@ -672,6 +821,7 @@
 				80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */,
 				79A637D72A39E2A1002A1F20 /* FlashView.swift in Sources */,
+				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,
 				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,
@@ -680,6 +830,7 @@
 				7955EEAE27FDC2F30010693C /* TemplateListScreen.swift in Sources */,
 				792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */,
 				795D6E6327F50E6A00A71807 /* Timer.swift in Sources */,
+				79702C6C2A7D356100F19EF3 /* ExerciseService.swift in Sources */,
 				79898A7C27F71BE500935E05 /* WorkoutDurationView.swift in Sources */,
 				8033F98E27072B0600EC707A /* SettingsScreen.swift in Sources */,
 				7988FBB32A7307D800E4FE54 /* TileStyle.swift in Sources */,
@@ -701,11 +852,13 @@
 				795BFA3028384C07005E59FE /* TemplateSet+.swift in Sources */,
 				79A934E127C7F16100ED9321 /* WorkoutRecorderScreen.swift in Sources */,
 				79488DF02A770CE4005C485D /* KeyboardToolbarButtonStyle.swift in Sources */,
+				798BDC282A7BCD1800EAA75D /* TextProcessing.swift in Sources */,
 				79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */,
 				79488DEC2A770C7D005C485D /* EmptyPlaceholderModifier.swift in Sources */,
 				7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */,
 				797EF7E629292E32003C2266 /* MuscleGroupsDetailScreen.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
+				798BDC232A79A9D800EAA75D /* TemplateService.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,
 				79DB259E2914229B00ADDF24 /* Database+EntityEdit.swift in Sources */,
 				795A48812A6899A10008A458 /* Chronograph.swift in Sources */,
@@ -724,6 +877,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		79E8490C2A7EA28100C0DF95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8065AA6A2686667F00F53A5A /* LOGIT */;
+			targetProxy = 79E8490B2A7EA28100C0DF95 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		794C3C462804AD1A003CB9F1 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -737,6 +898,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		79E8490D2A7EA28100C0DF95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S2F6F7JZ8C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kaibel.LOGITTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LOGIT.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LOGIT";
+			};
+			name = Debug;
+		};
+		79E8490E2A7EA28100C0DF95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S2F6F7JZ8C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kaibel.LOGITTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LOGIT.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LOGIT";
+			};
+			name = Release;
+		};
 		8065AA7D2686668100F53A5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -857,6 +1058,7 @@
 		};
 		8065AA802686668100F53A5A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -888,6 +1090,7 @@
 		};
 		8065AA812686668100F53A5A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -918,7 +1121,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8065AA662686667F00F53A5A /* Build configuration list for PBXProject "LOGIT." */ = {
+		79E8490F2A7EA28100C0DF95 /* Build configuration list for PBXNativeTarget "LOGITTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79E8490D2A7EA28100C0DF95 /* Debug */,
+				79E8490E2A7EA28100C0DF95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8065AA662686667F00F53A5A /* Build configuration list for PBXProject "LOGIT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8065AA7D2686668100F53A5A /* Debug */,
@@ -927,7 +1139,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8065AA7F2686668100F53A5A /* Build configuration list for PBXNativeTarget "LOGIT." */ = {
+		8065AA7F2686668100F53A5A /* Build configuration list for PBXNativeTarget "LOGIT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8065AA802686668100F53A5A /* Debug */,

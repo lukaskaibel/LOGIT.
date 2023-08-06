@@ -91,11 +91,7 @@ struct TemplateListScreen: View {
                         systemImage: "arrow.up.arrow.down"
                     )
                 }
-                Button(action: {
-                    showingTemplateCreation = true
-                }) {
-                    Image(systemName: "plus")
-                }
+                CreateTemplateMenu()
             }
         }
         .popover(isPresented: $showingTemplateCreation) {
