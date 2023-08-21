@@ -19,7 +19,7 @@ struct MuscleGroupSelector: View {
                     .padding(.vertical, 8)
                     .padding(.horizontal, 15)
                     .foregroundStyle(
-                        (selectedMuscleGroup == nil ? Color.white : .accentColor).gradient
+                        (selectedMuscleGroup == nil ? Color.background : .label).gradient
                     )
                     .background(
                         (selectedMuscleGroup == nil ? Color.accentColor : .accentColorBackground)

@@ -59,7 +59,7 @@ struct SegmentedBarChart: View {
                     Text(item.x)
                         .foregroundColor(
                             selectedItemIndex == items.firstIndex(of: item)!
-                                ? .white : .secondaryLabel
+                                ? Color.background : .secondaryLabel
                         )
                         .font(
                             .footnote.weight(
@@ -70,7 +70,7 @@ struct SegmentedBarChart: View {
                         .padding(.horizontal, 5)
                         .background(
                             selectedItemIndex == items.firstIndex(of: item)!
-                                ? Color.accentColor : .clear
+                                ? Color.primary : .clear
                         )
                         .clipShape(Capsule())
                         .frame(maxWidth: .infinity)
@@ -126,17 +126,17 @@ struct SegmentedBarChart: View {
 
 }
 
-/*
-struct TargetPerWeekView_Previews: PreviewProvider {
-    static var previews: some View {
-        SegmentedBarChart(items: [("Jan", 0), ("Feb", 0), ("Mar", 6), ("Apr", 6), ("May", 2)]
-                            .map { SegmentedBarChart.Item(x: $0.0,
-                                                         y: $0.1,
-                                                         barColor: $0.1 >= 3,
-                                                         isSelected: $0.1 == "May") },
-                          hLines: [SegmentedBarChart.HLine(title: "Target",
-                                                           y: 3, color: .accentColor)])
-            .frame(height: 200)
-    }
-}
-*/
+//
+//struct TargetPerWeekView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SegmentedBarChart(items: [("Jan", 0), ("Feb", 0), ("Mar", 6), ("Apr", 6), ("May", 2)]
+//                            .map { SegmentedBarChart.Item(x: $0.0,
+//                                                         y: $0.1,
+//                                                         barColor: $0.1 >= 3,
+//                                                         isSelected: $0.1 == "May") },
+//                          hLines: [SegmentedBarChart.HLine(title: "Target",
+//                                                           y: 3, color: .accentColor)])
+//            .frame(height: 200)
+//    }
+//}
+

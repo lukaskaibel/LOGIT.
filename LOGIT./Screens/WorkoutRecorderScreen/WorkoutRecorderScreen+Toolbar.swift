@@ -47,63 +47,73 @@ extension WorkoutRecorderScreen {
     internal var ToolbarItemsKeyboard: some ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
             Spacer()
-            if let workoutSet = selectedWorkoutSet {
-                if let _ = workoutSetTemplateSetDictionary[workoutSet] {
-                    Button {
-                        toggleSetCompleted(for: workoutSet)
-                    } label: {
-                        Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "checkmark")")
-                            .keyboardToolbarButtonStyle()
+            if !isFocusingTitleTextfield {
+                if let workoutSet = selectedWorkoutSet {
+                    if let _ = workoutSetTemplateSetDictionary[workoutSet] {
+                        Button {
+                            toggleSetCompleted(for: workoutSet)
+                        } label: {
+                            Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "checkmark")")
+                                .keyboardToolbarButtonStyle()
+                        }
+                    } else {
+                        Button {
+                            toggleCopyPrevious(for: workoutSet)
+                        } label: {
+                            Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
+                                .foregroundColor(
+                                    !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
+                                        && !workoutSet.hasEntry
+                                        ? Color.placeholder : .primary
+                                )
+                                .keyboardToolbarButtonStyle()
+                        }
+                        .disabled(
+                            !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
+                                && !workoutSet.hasEntry
+                        )
                     }
-                } else {
+                }
+                HStack(spacing: 0) {
                     Button {
-                        toggleCopyPrevious(for: workoutSet)
+                        UISelectionFeedbackGenerator().selectionChanged()
+                        focusedIntegerFieldIndex = previousIntegerFieldIndex()
                     } label: {
-                        Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
+                        Image(systemName: "chevron.up")
                             .foregroundColor(
-                                !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
-                                    && !workoutSet.hasEntry
-                                    ? Color.placeholder : .primary
+                                previousIntegerFieldIndex() == nil ? Color.placeholder : .label
                             )
                             .keyboardToolbarButtonStyle()
                     }
-                    .disabled(
-                        !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
-                            && !workoutSet.hasEntry
-                    )
+                    .disabled(previousIntegerFieldIndex() == nil)
+                    Button {
+                        UISelectionFeedbackGenerator().selectionChanged()
+                        focusedIntegerFieldIndex = nextIntegerFieldIndex()
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .foregroundColor(
+                                nextIntegerFieldIndex() == nil ? Color.placeholder : .label
+                            )
+                            .keyboardToolbarButtonStyle()
+                    }
+                    .disabled(nextIntegerFieldIndex() == nil)
                 }
-            }
-            HStack(spacing: 0) {
-                Button {
-                    UISelectionFeedbackGenerator().selectionChanged()
-                    focusedIntegerFieldIndex = previousIntegerFieldIndex()
-                } label: {
-                    Image(systemName: "chevron.up")
-                        .foregroundColor(
-                            previousIntegerFieldIndex() == nil ? Color.placeholder : .label
-                        )
-                        .keyboardToolbarButtonStyle()
-                }
-                .disabled(previousIntegerFieldIndex() == nil)
-                Button {
-                    UISelectionFeedbackGenerator().selectionChanged()
-                    focusedIntegerFieldIndex = nextIntegerFieldIndex()
-                } label: {
-                    Image(systemName: "chevron.down")
-                        .foregroundColor(
-                            nextIntegerFieldIndex() == nil ? Color.placeholder : .label
-                        )
-                        .keyboardToolbarButtonStyle()
-                }
-                .disabled(nextIntegerFieldIndex() == nil)
             }
             Button {
-                focusedIntegerFieldIndex = nil
+                if isFocusingTitleTextfield {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isFocusingTitleTextfield = false
+                    }
+                } else {
+                    focusedIntegerFieldIndex = nil
+                }
             } label: {
                 Image(systemName: "keyboard.chevron.compact.down")
                     .keyboardToolbarButtonStyle()
             }
-            Spacer()
+            if !isFocusingTitleTextfield {
+                Spacer()
+            }
         }
     }
 

@@ -31,40 +31,25 @@ struct HomeScreen: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: SECTION_SPACING) {
-                    VStack(spacing: SECTION_HEADER_SPACING) {
-                        HStack(alignment: .lastTextBaseline) {
-                            Text("Workout Target")
-                                .sectionHeaderStyle2()
-                            Spacer()
-                            Text("Per Week")
-                                .sectionHeaderSecondaryStyle()
-                        }
+                    header
+                        .padding([.horizontal, .top])
+                    
+                    Button {
+                        navigateToTarget = true
+                    } label: {
                         targetWorkoutsView
                             .tileStyle()
                             .contentShape(Rectangle())
-                            .highPriorityGesture(
-                                TapGesture()
-                                    .onEnded {
-                                        navigateToTarget = true
-                                    }
-                            )
                     }
                     .padding(.horizontal)
 
-                    VStack(spacing: SECTION_HEADER_SPACING) {
-                        HStack(alignment: .lastTextBaseline) {
-                            Text("Muscle Groups")
-                                .sectionHeaderStyle2()
-                            Spacer()
-                            Text("Last 10 Workouts")
-                                .sectionHeaderSecondaryStyle()
-                        }
+                    Button {
+                        navigateToMuscleGroupDetail = true
+                    } label: {
                         muscleGroupPercentageView
+                            .padding(CELL_PADDING)
                             .tileStyle()
                             .contentShape(Rectangle())
-                            .onTapGesture {
-                                navigateToMuscleGroupDetail = true
-                            }
                     }
                     .padding(.horizontal)
 
@@ -97,7 +82,6 @@ struct HomeScreen: View {
                 .padding(.top)
             }
             .scrollIndicators(.hidden)
-            .navigationTitle("LOGIT.")
             .navigationDestination(isPresented: $navigateToTarget) {
                 TargetPerWeekDetailScreen()
             }
@@ -114,9 +98,65 @@ struct HomeScreen: View {
             }
         }
     }
+    
+    // MARK: - Supporting Views
+    
+    private var header: some View {
+        VStack(alignment: .leading) {
+            Text(Date.now.formatted(date: .long, time: .omitted))
+                .screenHeaderTertiaryStyle()
+            Text("LOGIT.")
+                .screenHeaderStyle()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var targetWorkoutsView: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(
+                        "Last Workout - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
+                    )
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(Color.secondaryLabel)
+                    Text("Workout Target")
+                        .sectionHeaderStyle2()
+                    Text("\(targetPerWeek) / Week")
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                NavigationChevron()
+                    .foregroundColor(.secondaryLabel)
+            }
+            TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
+            .frame(height: 170)
+            .overlay {
+                if workouts.isEmpty {
+                    Text(NSLocalizedString("noData", comment: ""))
+                        .font(.title3.weight(.medium))
+                        .foregroundColor(.placeholder)
+                }
+            }
+        }
+        .padding(CELL_PADDING)
+    }
 
     private var muscleGroupPercentageView: some View {
-        HStack {
+        VStack {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Muscle Groups")
+                        .sectionHeaderStyle2()
+                    Text("Last 10 Workouts")
+                        .font(.system(.body, design: .rounded, weight: .bold))
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                NavigationChevron()
+                    .foregroundColor(.secondaryLabel)
+            }
             PieGraph(
                 items:
                     getOverallMuscleGroupOccurances()
@@ -130,65 +170,7 @@ struct HomeScreen: View {
                     },
                 showZeroValuesInLegend: true
             )
-            Spacer()
-            NavigationChevron()
-                .foregroundColor(.secondaryLabel)
         }
-        .padding(CELL_PADDING)
-    }
-
-    private var targetWorkoutsView: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    HStack(spacing: 2) {
-                        Image(systemName: "target")
-                        Text(NSLocalizedString("target", comment: ""))
-                    }
-                    UnitView(
-                        value: "\(targetPerWeek)",
-                        unit: "/" + NSLocalizedString("week", comment: "")
-                    )
-                    .foregroundStyle(Color.accentColor.gradient)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                Divider()
-                VStack(alignment: .leading) {
-                    HStack(spacing: 2) {
-                        Image(systemName: "calendar")
-                        Text(NSLocalizedString("Last", comment: ""))
-                    }
-                    Text(
-                        "\(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
-                    )
-                    .font(.system(.title3, design: .rounded, weight: .semibold))
-                    .foregroundStyle(Color.accentColor.gradient)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                NavigationChevron()
-                    .foregroundColor(.secondaryLabel)
-            }
-            SegmentedBarChart(
-                items: workoutsPerWeekChartItems(),
-                hLines: [
-                    SegmentedBarChart.HLine(
-                        title: NSLocalizedString("target", comment: ""),
-                        y: targetPerWeek,
-                        color: .accentColor
-                    )
-                ],
-                selectedItemIndex: .constant(4)
-            )
-            .frame(height: 170)
-            .overlay {
-                if workouts.isEmpty {
-                    Text(NSLocalizedString("noData", comment: ""))
-                        .font(.title3.weight(.medium))
-                        .foregroundColor(.placeholder)
-                }
-            }
-        }
-        .padding(CELL_PADDING)
     }
 
     // MARK: - Supportings Methods
@@ -199,44 +181,6 @@ struct HomeScreen: View {
 
     var recentWorkouts: [Workout] {
         Array(database.getWorkouts(sortedBy: .date).prefix(3))
-    }
-
-    func workoutsPerWeekChartItems(numberOfWeeks: Int = 5) -> [SegmentedBarChart.Item] {
-        var result = [SegmentedBarChart.Item]()
-        for i in 0..<numberOfWeeks {
-            if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date())
-            {
-                let numberOfWorkoutsInWeek =
-                    database.getWorkouts(
-                        for: .weekOfYear,
-                        including: iteratedDay
-                    )
-                    .count
-                result.append(
-                    SegmentedBarChart.Item(
-                        x: getFirstDayOfWeekString(for: iteratedDay),
-                        y: numberOfWorkoutsInWeek,
-                        barColor: numberOfWorkoutsInWeek >= targetPerWeek
-                            ? .accentColor.translucentBackground
-                            : .accentColor.secondaryTranslucentBackground
-                    )
-                )
-
-            }
-        }
-        return result.reversed()
-    }
-
-    func getFirstDayOfWeekString(for date: Date) -> String {
-        let firstDayOfWeek = Calendar.current
-            .dateComponents(
-                [.calendar, .yearForWeekOfYear, .weekOfYear],
-                from: date
-            )
-            .date!
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM."
-        return formatter.string(from: firstDayOfWeek)
     }
 
     var lastTenWorkouts: [Workout] {

@@ -14,6 +14,25 @@ extension Database {
     enum WorkoutSortingKey: String {
         case date, name
     }
+    
+    enum WorkoutGroupingKey: Equatable {
+        case date(calendarComponent: Calendar.Component), name
+        
+        static func ==(lhs: WorkoutGroupingKey, rhs: WorkoutGroupingKey) -> Bool {
+            switch lhs {
+            case .name:
+                switch rhs {
+                case .name: return true
+                case .date: return false
+                }
+            case .date:
+                switch rhs {
+                case .name: return false
+                case .date: return true
+                }
+            }
+        }
+    }
 
     func getWorkouts(
         withNameIncluding filteredText: String = "",
@@ -52,21 +71,21 @@ extension Database {
 
     func getGroupedWorkouts(
         withNameIncluding filteredText: String = "",
-        groupedBy sortingKey: WorkoutSortingKey = .date,
+        groupedBy groupingKey: WorkoutGroupingKey = .name,
         usingMuscleGroup muscleGroup: MuscleGroup? = nil
     ) -> [[Workout]] {
         var result = [[Workout]]()
         getWorkouts(
             withNameIncluding: filteredText,
-            sortedBy: sortingKey,
+            sortedBy: groupingKey == .name ? .name : .date,
             usingMuscleGroup: muscleGroup
         )
         .forEach { workout in
-            switch sortingKey {
-            case .date:
+            switch groupingKey {
+            case .date(let component):
                 if let lastDate = result.last?.last?.date,
                     let workoutDate = workout.date,
-                    Calendar.current.isDate(lastDate, equalTo: workoutDate, toGranularity: .month)
+                    Calendar.current.isDate(lastDate, equalTo: workoutDate, toGranularity: component)
                 {
                     result[result.count - 1].append(workout)
                 } else {

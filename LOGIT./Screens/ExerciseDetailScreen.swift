@@ -101,10 +101,10 @@ struct ExerciseDetailScreen: View {
     private var header: some View {
         VStack(alignment: .leading) {
             Text(exercise.name ?? "")
-                .font(.largeTitle.weight(.bold))
+                .screenHeaderStyle()
                 .lineLimit(2)
             Text(exercise.muscleGroup?.description.capitalized ?? "")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
+                .screenHeaderSecondaryStyle()
                 .foregroundStyle((exercise.muscleGroup?.color ?? .clear).gradient)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -167,11 +167,7 @@ struct ExerciseDetailScreen: View {
                             )
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
-                            .symbol {
-                                Circle()
-                                    .fill((exercise.muscleGroup?.color ?? .accentColor).gradient)
-                                    .frame(width: 10)
-                            }
+                            .symbol(by: .value("Weight", "Weight"))
                         }
                         .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
                         PointMark(
@@ -209,11 +205,8 @@ struct ExerciseDetailScreen: View {
                             )
                             .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                             .interpolationMethod(.catmullRom)
-                            .symbol {
-                                Circle()
-                                    .fill((exercise.muscleGroup?.color ?? .accentColor).gradient)
-                                    .frame(width: 10)
-                            }
+                            .symbol(by: .value("Repetitions", "Repetitions"))
+
                         }
                         .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
                         PointMark(

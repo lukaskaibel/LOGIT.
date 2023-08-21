@@ -132,15 +132,14 @@ struct WorkoutDetailScreen: View {
     private var workoutHeader: some View {
         VStack(alignment: .leading) {
             Text(workout.date?.description(.long) ?? "")
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
+                .screenHeaderTertiaryStyle()
             Text(workout.name ?? "")
-                .font(.largeTitle.weight(.bold))
+                .screenHeaderStyle()
                 .lineLimit(2)
             HStack {
                 ForEach(workout.muscleGroups) { muscleGroup in
                     Text(muscleGroup.description)
-                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .screenHeaderSecondaryStyle()
                         .foregroundStyle(muscleGroup.color.gradient)
                         .lineLimit(1)
                 }

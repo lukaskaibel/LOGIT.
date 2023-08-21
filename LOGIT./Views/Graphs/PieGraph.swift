@@ -53,7 +53,6 @@ struct PieGraph<CenterView: View>: View {
 
                     }
                 }
-                Spacer()
             }
             ZStack {
                 Circle()
@@ -75,11 +74,6 @@ struct PieGraph<CenterView: View>: View {
                     centerView
                 }
             }
-            .frame(
-                maxWidth: hideLegend ? .infinity : 100,
-                minHeight: 100,
-                maxHeight: hideLegend ? .infinity : 100
-            )
             .padding(configuration == .small ? 5 : 15)
         }
     }
@@ -88,6 +82,7 @@ struct PieGraph<CenterView: View>: View {
     private func itemView(for item: Item) -> some View {
         VStack(alignment: .leading) {
             Text(item.title)
+                .foregroundColor(.primary)
             UnitView(value: "\(percentage(for: item))", unit: "%")
                 .foregroundStyle((item.amount > 0 ? item.color : .placeholder).gradient)
         }
@@ -141,10 +136,10 @@ struct PieGraph_Previews: PreviewProvider {
                 PieGraph.Item(title: "Abs", amount: 1, color: .cyan, isSelected: false),
                 PieGraph.Item(title: "Legs", amount: 2, color: .red, isSelected: false),
             ],
-            configuration: .small,
+            configuration: .normal,
             centerView: Text("3")
         )
-        .frame(height: 40)
+        .frame(height: 200)
         .tileStyle()
         .padding()
     }

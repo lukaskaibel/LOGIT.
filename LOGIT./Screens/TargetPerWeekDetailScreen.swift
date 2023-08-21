@@ -19,7 +19,7 @@ struct TargetPerWeekDetailScreen: View {
 
     // MARK: - State
 
-    @State private var selectedIndexInWeekGroup: Int = 4
+    @State private var selectedIndexInWeekGroup: Int? = 0
     @State private var isShowingWorkoutDetail: Bool = false
     @State private var selectedWorkout: Workout? = nil
 
@@ -28,34 +28,9 @@ struct TargetPerWeekDetailScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
-                VStack {
-                    HStack {
-                        HStack(alignment: .lastTextBaseline, spacing: 0) {
-                            Text(NSLocalizedString("target", comment: ""))
-                                .font(.largeTitle.weight(.bold))
-                            Text("/" + NSLocalizedString("week", comment: ""))
-                                .fontWeight(.bold)
-                        }
-                        .padding(.bottom)
-                        Spacer()
-                        Picker("", selection: $targetPerWeek) {
-                            ForEach(1..<10, id: \.self) { i in
-                                Text(String(i)).tag(i)
-                                    .font(.title)
-                            }
-                        }
-                    }
-                    SegmentedBarChart(
-                        items: workoutsPerWeekChartItems(),
-                        hLines: [
-                            SegmentedBarChart.HLine(
-                                title: NSLocalizedString("target", comment: ""),
-                                y: targetPerWeek,
-                                color: .accentColor
-                            )
-                        ],
-                        selectedItemIndex: $selectedIndexInWeekGroup
-                    )
+                header
+                    .padding([.horizontal, .top])
+                TargetPerWeekView(selectedWeeksFromNowIndex: $selectedIndexInWeekGroup)
                     .frame(height: 200)
                     .overlay {
                         if workouts.isEmpty {
@@ -64,7 +39,19 @@ struct TargetPerWeekDetailScreen: View {
                                 .foregroundColor(.secondaryLabel)
                         }
                     }
+                    .padding(.horizontal, 20)
+                HStack {
+                    Text(NSLocalizedString("targetPerWeek", comment: ""))
+                    Spacer()
+                    Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $targetPerWeek) {
+                        ForEach(1..<10, id: \.self) { i in
+                            Text(String(i)).tag(i)
+                        }
+                    }
+                    .fontWeight(.bold)
                 }
+                .padding(CELL_PADDING)
+                .tileStyle()
                 .padding(.horizontal)
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     HStack(alignment: .lastTextBaseline) {
@@ -76,7 +63,7 @@ struct TargetPerWeekDetailScreen: View {
                             .textCase(.none)
                     }
                     LazyVStack(spacing: CELL_SPACING) {
-                        ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup), id: \.objectID) {
+                        ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0), id: \.objectID) {
                             workout in
                             WorkoutCell(workout: workout)
                                 .padding(CELL_PADDING)
@@ -87,7 +74,7 @@ struct TargetPerWeekDetailScreen: View {
                                     isShowingWorkoutDetail = true
                                 }
                         }
-                        .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup)) {
+                        .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0)) {
                             Text(NSLocalizedString("noWorkoutsInWeek", comment: ""))
                                 .frame(maxWidth: .infinity)
                         }
@@ -104,6 +91,19 @@ struct TargetPerWeekDetailScreen: View {
             }
         }
     }
+    
+    // MARK: - Supporting Views
+    
+    private var header: some View {
+        VStack(alignment: .leading) {
+            Text(NSLocalizedString("target", comment: ""))
+                .screenHeaderStyle()
+            Text("\(targetPerWeek) / \(NSLocalizedString("week", comment: ""))")
+                .screenHeaderSecondaryStyle()
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 
     // MARK: - Supporting Methods
 
@@ -116,38 +116,10 @@ struct TargetPerWeekDetailScreen: View {
             for: .weekOfYear,
             including: Calendar.current.date(
                 byAdding: .weekOfYear,
-                value: -(4 - index),
-                to: Date()
+                value: index - 1,
+                to: .now
             )!
         )
-    }
-
-    func workoutsPerWeekChartItems(numberOfWeeks: Int = 5) -> [SegmentedBarChart.Item] {
-        var result = [SegmentedBarChart.Item]()
-        for i in 0..<numberOfWeeks {
-            if let iteratedDay = Calendar.current.date(byAdding: .weekOfYear, value: -i, to: Date())
-            {
-                let numberOfWorkoutsInWeek =
-                    database.getWorkouts(
-                        for: .weekOfYear,
-                        including: iteratedDay
-                    )
-                    .count
-                result.append(
-                    SegmentedBarChart.Item(
-                        x: getFirstDayOfWeekString(for: iteratedDay),
-                        y: numberOfWorkoutsInWeek,
-                        barColor: i == (4 - selectedIndexInWeekGroup)
-                            ? .accentColor
-                            : numberOfWorkoutsInWeek >= targetPerWeek
-                                ? .accentColor.translucentBackground
-                                : .accentColor.secondaryTranslucentBackground
-                    )
-                )
-
-            }
-        }
-        return result.reversed()
     }
 
     func getFirstDayOfWeekString(for date: Date) -> String {

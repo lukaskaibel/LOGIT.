@@ -57,6 +57,8 @@ struct WorkoutRecorderScreen: View {
     @State internal var sheetType: SheetType?
 
     @State internal var focusedIntegerFieldIndex: IntegerField.Index?
+    
+    @FocusState internal var isFocusingTitleTextfield: Bool
 
     // MARK: - Variables
 
@@ -137,8 +139,8 @@ struct WorkoutRecorderScreen: View {
             .toolbar(.hidden, for: .navigationBar)
             .environment(\.editMode, $editMode)
             .toolbar {
-                ToolbarItemsKeyboard
                 ToolbarItemsBottomBar
+                ToolbarItemsKeyboard
             }
             .fullScreenCover(item: $sheetType) { type in
                 NavigationStack {
@@ -260,6 +262,7 @@ struct WorkoutRecorderScreen: View {
                         text: workoutName,
                         axis: .vertical
                     )
+                    .focused($isFocusingTitleTextfield)
                     .lineLimit(2)
                     .foregroundColor(.label)
                     .font(.title2.weight(.bold))

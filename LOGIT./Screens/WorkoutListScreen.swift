@@ -15,7 +15,7 @@ struct WorkoutListScreen: View {
 
     // MARK: - State
 
-    @State private var sortingKey: Database.WorkoutSortingKey = .date
+    @State private var groupingKey: Database.WorkoutGroupingKey = .date(calendarComponent: .month)
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
 
@@ -64,16 +64,16 @@ struct WorkoutListScreen: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Section {
-                        Button(action: { sortingKey = .name }) {
+                        Button(action: { groupingKey = .name }) {
                             Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
                         }
-                        Button(action: { sortingKey = .date }) {
+                        Button(action: { groupingKey = .date(calendarComponent: .month) }) {
                             Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
                         }
                     }
                 } label: {
                     Label(
-                        NSLocalizedString(sortingKey == .name ? "name" : "date", comment: ""),
+                        NSLocalizedString(groupingKey == .name ? "name" : "date", comment: ""),
                         systemImage: "arrow.up.arrow.down"
                     )
                 }
@@ -86,13 +86,13 @@ struct WorkoutListScreen: View {
     private var groupedWorkouts: [[Workout]] {
         database.getGroupedWorkouts(
             withNameIncluding: searchedText,
-            groupedBy: sortingKey,
+            groupedBy: groupingKey,
             usingMuscleGroup: selectedMuscleGroup
         )
     }
 
     private func header(for index: Int) -> String {
-        switch sortingKey {
+        switch groupingKey {
         case .date:
             guard let date = groupedWorkouts.value(at: index)?.first?.date else { return "" }
             let formatter = DateFormatter()

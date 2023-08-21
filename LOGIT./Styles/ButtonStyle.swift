@@ -11,10 +11,10 @@ struct BigButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(.body, design: .rounded, weight: .bold))
-            .foregroundColor(.accentColor)
+            .foregroundColor(.background)
             .frame(maxWidth: .infinity)
             .padding(20)
-            .background(Color.accentColor.secondaryTranslucentBackground)
+            .background(Color.accentColor)
             .listRowBackground(Color.clear)
             .cornerRadius(20)
     }

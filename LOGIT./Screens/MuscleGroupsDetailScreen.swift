@@ -24,9 +24,9 @@ struct MuscleGroupsDetailScreen: View {
             LazyVStack(spacing: SECTION_SPACING) {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("muscleGroups", comment: ""))
-                        .font(.largeTitle.weight(.bold))
+                        .screenHeaderStyle()
                     Text(NSLocalizedString("lastTenWorkouts", comment: ""))
-                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .screenHeaderSecondaryStyle()
                         .foregroundColor(.secondaryLabel)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
