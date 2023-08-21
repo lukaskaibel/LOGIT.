@@ -10,7 +10,7 @@ import SwiftUI
 struct TemplateEditorScreen: View {
 
     enum SheetType: Identifiable {
-        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
+        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void, forSecondary: Bool)
         case exerciseDetail(exercise: Exercise)
         var id: Int {
             switch self {
@@ -157,10 +157,11 @@ struct TemplateEditorScreen: View {
             .sheet(item: $sheetType) { style in
                 NavigationStack {
                     switch style {
-                    case let .exerciseSelection(exercise, setExercise):
+                    case let .exerciseSelection(exercise, setExercise, forSecondary):
                         ExerciseSelectionScreen(
                             selectedExercise: exercise,
-                            setExercise: setExercise
+                            setExercise: setExercise,
+                            forSecondary: forSecondary
                         )
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
@@ -200,7 +201,8 @@ struct TemplateEditorScreen: View {
                         template: template
                     )
                     database.refreshObjects()
-                }
+                },
+                forSecondary: false
             )
         } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")

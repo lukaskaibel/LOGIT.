@@ -33,11 +33,28 @@ struct SecondaryBigButtonModifier: ViewModifier {
     }
 }
 
+struct SelectionButtonModifier: ViewModifier {
+    
+    let isSelected: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(isSelected ? Color.background : .accentColor)
+            .padding(3)
+            .background(isSelected ? Color.accentColor.opacity(0.9) : .clear)
+            .cornerRadius(8)
+
+    }
+}
+
 extension View {
     func bigButton() -> some View {
         modifier(BigButtonModifier())
     }
     func secondaryBigButton() -> some View {
         modifier(SecondaryBigButtonModifier())
+    }
+    func selectionButtonStyle(isSelected: Bool) -> some View {
+        modifier(SelectionButtonModifier(isSelected: isSelected))
     }
 }

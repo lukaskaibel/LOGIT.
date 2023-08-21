@@ -144,17 +144,19 @@ struct TemplateDetailScreen: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("exercises", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(template.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: template.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(template.sets.count)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: template.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }

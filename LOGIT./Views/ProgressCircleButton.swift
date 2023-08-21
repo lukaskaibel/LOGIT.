@@ -21,7 +21,7 @@ struct ProgressCircleButton: View {
             Image(systemName: (progress == 0.0 ? "xmark" : "checkmark"))
                 .font(.body.weight(.bold))
                 .foregroundColor(
-                    progress == 0.0 ? .secondaryLabel : progress == 1.0 ? .white : .accentColor
+                    progress == 0.0 ? .secondaryLabel : progress == 1.0 ? .background : .accentColor
                 )
                 .padding(8)
                 .background(

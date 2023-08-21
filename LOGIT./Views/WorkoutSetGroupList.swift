@@ -27,6 +27,7 @@ struct WorkoutSetGroupList: View {
                 )
                 .padding(CELL_PADDING)
                 .tileStyle()
+                .id(setGroup)
             }
         }
     }

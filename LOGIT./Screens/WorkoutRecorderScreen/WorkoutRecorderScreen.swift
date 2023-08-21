@@ -15,7 +15,7 @@ struct WorkoutRecorderScreen: View {
 
     enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
-        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void)
+        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void, forSecondary: Bool)
         var id: Int {
             switch self {
             case .exerciseDetail: return 0
@@ -102,22 +102,45 @@ struct WorkoutRecorderScreen: View {
                     }
                     .listStyle(.plain)
                 } else {
-                    ScrollView {
-                        WorkoutSetGroupList(
-                            workout: workout,
-                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
-                            sheetType: $sheetType,
-                            isReordering: $isEditing
-                        )
-                        .padding(.horizontal)
-                        .padding(.top, 90)
+                    ScrollViewReader { scrollable in
+                        ScrollView {
+                            WorkoutSetGroupList(
+                                workout: workout,
+                                focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                                sheetType: $sheetType,
+                                isReordering: $isEditing
+                            )
+                            .padding(.horizontal)
+                            .padding(.top, 90)
 
-                        AddExerciseButton
+                            Button {
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                sheetType = .exerciseSelection(
+                                    exercise: nil,
+                                    setExercise: { exercise in
+                                        database.newWorkoutSetGroup(
+                                            createFirstSetAutomatically: true,
+                                            exercise: exercise,
+                                            workout: workout
+                                        )
+                                        database.refreshObjects()
+                                        withAnimation {
+                                            scrollable.scrollTo(1, anchor: .bottom)
+                                        }
+                                    },
+                                    forSecondary: false
+                                )
+                            } label: {
+                                Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
+                                    .bigButton()
+                            }
                             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                             .padding(.horizontal)
                             .padding(.vertical, 30)
+                            .id(1)
+                        }
+                        .scrollIndicators(.hidden)
                     }
-                    .scrollIndicators(.hidden)
                 }
 
                 Header
@@ -155,10 +178,11 @@ struct WorkoutRecorderScreen: View {
                                 }
                             }
                             .tag("detail")
-                    case let .exerciseSelection(exercise, setExercise):
+                    case let .exerciseSelection(exercise, setExercise, forSecondary):
                         ExerciseSelectionScreen(
                             selectedExercise: exercise,
-                            setExercise: setExercise
+                            setExercise: setExercise,
+                            forSecondary: forSecondary
                         )
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
@@ -292,26 +316,6 @@ struct WorkoutRecorderScreen: View {
         Text(remainingChronoTimeString)
             .foregroundColor(chronograph.status == .running ? .accentColor : .secondaryLabel)
             .font(.body.weight(.semibold).monospacedDigit())
-    }
-
-    private var AddExerciseButton: some View {
-        Button {
-            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-            sheetType = .exerciseSelection(
-                exercise: nil,
-                setExercise: { exercise in
-                    database.newWorkoutSetGroup(
-                        createFirstSetAutomatically: true,
-                        exercise: exercise,
-                        workout: workout
-                    )
-                    database.refreshObjects()
-                }
-            )
-        } label: {
-            Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
-                .bigButton()
-        }
     }
 
     // MARK: - Supporting Methods / Computed Properties

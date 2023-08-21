@@ -87,7 +87,8 @@ struct TemplateSetGroupCell: View {
                             setExercise: {
                                 setGroup.exercise = $0
                                 database.refreshObjects()
-                            }
+                            },
+                            forSecondary: false
                         )
                     },
                     noSecondaryExerciseAction: {
@@ -96,7 +97,8 @@ struct TemplateSetGroupCell: View {
                             setExercise: {
                                 setGroup.secondaryExercise = $0
                                 database.refreshObjects()
-                            }
+                            },
+                            forSecondary: true
                         )
                     },
                     isSuperSet: setGroup.setType == .superSet,
@@ -131,7 +133,8 @@ struct TemplateSetGroupCell: View {
                     Button {
                         sheetType = .exerciseSelection(
                             exercise: exercise,
-                            setExercise: { setGroup.exercise = $0 }
+                            setExercise: { setGroup.exercise = $0 },
+                            forSecondary: false
                         )
                     } label: {
                         Label(
@@ -145,7 +148,8 @@ struct TemplateSetGroupCell: View {
                     Button {
                         sheetType = .exerciseSelection(
                             exercise: secondaryExercise,
-                            setExercise: { setGroup.secondaryExercise = $0 }
+                            setExercise: { setGroup.secondaryExercise = $0 },
+                            forSecondary: true
                         )
                     } label: {
                         Label(
@@ -177,6 +181,13 @@ struct TemplateSetGroupCell: View {
                 }
                 Button {
                     database.convertSetGroupToSuperSet(setGroup)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        sheetType = .exerciseSelection(
+                            exercise: setGroup.secondaryExercise,
+                            setExercise: { setGroup.secondaryExercise = $0 },
+                            forSecondary: true
+                        )
+                    }
                 } label: {
                     Label(
                         NSLocalizedString("superSet", comment: ""),

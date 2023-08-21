@@ -36,6 +36,7 @@ struct ExerciseSelectionScreen: View {
 
     let selectedExercise: Exercise?
     let setExercise: (Exercise) -> Void
+    let forSecondary: Bool
 
     // MARK: - Body
 
@@ -63,7 +64,7 @@ struct ExerciseSelectionScreen: View {
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .edgesIgnoringSafeArea(.bottom)
-        .navigationTitle(NSLocalizedString("chooseExercise", comment: ""))
+        .navigationTitle(NSLocalizedString("choose\(forSecondary ? "Secondary" : "")Exercise", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
         .searchable(
             text: $searchedText,
@@ -152,7 +153,7 @@ struct ExerciseSelectionScreen: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionScreen(selectedExercise: nil, setExercise: { _ in })
+            ExerciseSelectionScreen(selectedExercise: nil, setExercise: { _ in }, forSecondary: false)
         }
         .environmentObject(Database.preview)
     }

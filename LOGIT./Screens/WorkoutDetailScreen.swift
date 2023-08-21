@@ -153,34 +153,38 @@ struct WorkoutDetailScreen: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("starttime", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(workout.date?.timeString ?? "")")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: workout.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("duration", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(workoutDurationString)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: workout.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack {
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("exercises", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(workout.numberOfSetGroups)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: workout.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Divider()
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("sets", comment: ""))
+                        .foregroundColor(.secondary)
                     Text("\(workout.numberOfSets)")
                         .font(.system(.title3, design: .rounded, weight: .semibold))
-                        .muscleGroupGradientStyle(for: workout.muscleGroups)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -207,7 +211,6 @@ struct WorkoutDetailScreen: View {
             HStack {
                 if workout.template == nil {
                     Image(systemName: "plus")
-                        .foregroundColor(.accentColor)
                         .font(.body.weight(.medium))
                 }
                 Text(
@@ -216,11 +219,9 @@ struct WorkoutDetailScreen: View {
                 )
                 .fontWeight(.medium)
                 .lineLimit(1)
-                .foregroundColor(.accentColor)
                 if workout.template != nil {
                     Spacer()
                     NavigationChevron()
-                        .foregroundColor(.accentColor)
                 } else {
                     Spacer()
                 }

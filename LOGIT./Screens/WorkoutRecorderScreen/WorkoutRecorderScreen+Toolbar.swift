@@ -21,10 +21,7 @@ extension WorkoutRecorderScreen {
                     TimeStringView
                 } else {
                     Image(systemName: "timer")
-                        .foregroundStyle(isShowingChronoView ? .white : .accentColor)
-                        .padding(3)
-                        .background(isShowingChronoView ? Color.accentColor.opacity(0.9) : .clear)
-                        .cornerRadius(8)
+                        .selectionButtonStyle(isSelected: isShowingChronoView)
                 }
             }
             Spacer()
@@ -33,12 +30,9 @@ extension WorkoutRecorderScreen {
             )
             .font(.caption)
             Spacer()
-            Button(
-                isEditing
-                    ? NSLocalizedString("done", comment: "")
-                    : NSLocalizedString("edit", comment: "")
-            ) {
-                isEditing.toggle()
+            Button { isEditing.toggle() } label: {
+                Image(systemName: "arrow.up.arrow.down")
+                    .selectionButtonStyle(isSelected: isEditing)
             }
             .disabled(workout.numberOfSetGroups == 0)
         }

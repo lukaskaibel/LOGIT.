@@ -28,6 +28,7 @@
 "cardio" = "Ausdauer";
 "chest" = "Brust";
 "chooseExercise" = "Übung auswählen";
+"chooseSecondaryExercise" = "Zweite Übung auswählen";
 "chooseTemplateText" = "Vorlage auswählen oder leeres Workout starten";
 "completed" = "Geschafft";
 "continue" = "Weiter";

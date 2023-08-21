@@ -28,6 +28,7 @@
 "cardio" = "Cardio";
 "chest" = "Chest";
 "chooseExercise" = "Choose Exercise";
+"chooseSecondaryExercise" = "Choose Secondary Exercise";
 "chooseTemplateText" = "Choose a template or start an empty workout";
 "completed" = "Completed";
 "continue" = "Continue";
