@@ -18,6 +18,7 @@
 		791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556429EC768100902352 /* WorkoutSetCell.swift */; };
 		791F556929EC768100902352 /* DropSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556529EC768100902352 /* DropSetCell.swift */; };
 		791F556A29EC768100902352 /* SuperSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556629EC768100902352 /* SuperSetCell.swift */; };
+		792156D02A9539530010A0FC /* TileHeaderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792156CF2A9539530010A0FC /* TileHeaderStyle.swift */; };
 		7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
@@ -132,6 +133,7 @@
 		791F556429EC768100902352 /* WorkoutSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetCell.swift; sourceTree = "<group>"; };
 		791F556529EC768100902352 /* DropSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSetCell.swift; sourceTree = "<group>"; };
 		791F556629EC768100902352 /* SuperSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperSetCell.swift; sourceTree = "<group>"; };
+		792156CF2A9539530010A0FC /* TileHeaderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileHeaderStyle.swift; sourceTree = "<group>"; };
 		7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetPerWeekView.swift; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 				79488DE92A76FB4E005C485D /* MuscleGroupGradientStyle.swift */,
 				79FF2BAF2A8A71C200548661 /* ScreenHeaderStyle.swift */,
 				7988FBB42A7309A000E4FE54 /* SectionHeaderStyle.swift */,
+				792156CF2A9539530010A0FC /* TileHeaderStyle.swift */,
 				7988FBB22A7307D800E4FE54 /* TileStyle.swift */,
 			);
 			path = Styles;
@@ -643,6 +646,7 @@
 				794DAC632A320919006F0168 /* ChronoView.swift in Sources */,
 				79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */,
 				80ED02902764D94200D59B75 /* ExerciseSelectionScreen.swift in Sources */,
+				792156D02A9539530010A0FC /* TileHeaderStyle.swift in Sources */,
 				79E2E60429132C46003845BC /* Database+SetConvert.swift in Sources */,
 				7988FBB52A7309A000E4FE54 /* SectionHeaderStyle.swift in Sources */,
 				79D570D8277B4C520005E006 /* BarGraph.swift in Sources */,
