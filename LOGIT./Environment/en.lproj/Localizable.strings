@@ -34,6 +34,7 @@
 "continue" = "Continue";
 "continueWorkout" = "Continue Workout";
 "create" = "Create";
+"createExercise" = "Create Exercise";
 "createTemplate" = "Create Template";
 
 // MARK: - D
@@ -120,14 +121,20 @@
 "noData" = "No Data";
 "noEntriesConfirmation" = "This workout has no entries. Discard it?";
 "noExercises" = "No Exercises";
+"noExercisesTip" = "Exercise Library 🏋️";
+"noExercisesTipDescription" = "Craft your personal Exercise library and categorize by muscle group. Click below to start adding your first Exercise!";
 "noHistory" = "No History";
 "noName" = "No Name";
 "noon" = "Noon";
 "normalset" = "Normal";
 "noTemplates" = "No Templates";
+"noTemplatesTip" = "Plan Ahead 📋";
+"noTemplatesTipDescription" = "Use Templates to organize and plan your workouts in advance. Click below to create your first workout Template!";
 "now" = "Now";
 "noWorkouts" = "No Workouts";
 "noWorkoutsInWeek" = "No Workouts in Week";
+"noWorkoutsTip" = "Lets Work-Out 💪";
+"noWorkoutsTipDescription" = "You haven't logged any Workouts in LOGIT yet. Start your journey by clicking the button below to record your first Workout!";
 
 // MARK: - O
 

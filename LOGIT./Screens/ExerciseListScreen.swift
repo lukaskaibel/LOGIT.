@@ -18,6 +18,7 @@ struct ExerciseListScreen: View {
     @State private var searchedText = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingAddExercise = false
+    @State private var isShowingNoExercisesTip = false
 
     // MARK: - Body
 
@@ -25,6 +26,15 @@ struct ExerciseListScreen: View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                if isShowingNoExercisesTip {
+                    TipView(title: NSLocalizedString("noExercisesTip", comment: ""),
+                            description: NSLocalizedString("noExercisesTipDescription", comment: ""),
+                            buttonAction: .init(title: NSLocalizedString("createExercise", comment: ""), action: { showingAddExercise = true }),
+                            isShown: $isShowingNoExercisesTip)
+                    .padding(CELL_PADDING)
+                    .tileStyle()
+                    .padding(.horizontal)
+                }
                 ForEach(groupedExercises) { group in
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         Text(getLetter(for: group))
@@ -47,15 +57,18 @@ struct ExerciseListScreen: View {
                             }
                         }
                     }
+                    .padding(.horizontal)
                 }
                 .emptyPlaceholder(groupedExercises) {
                     Text(NSLocalizedString("noExercises", comment: ""))
                 }
             }
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
-            .padding(.horizontal)
         }
         .searchable(text: $searchedText)
+        .onAppear {
+            isShowingNoExercisesTip = groupedExercises.isEmpty
+        }
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Exercise.self) { selectedExercise in

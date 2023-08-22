@@ -19,6 +19,7 @@ struct TemplateListScreen: View {
     @State private var sortingKey: Database.TemplateSortingKey = .name
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingTemplateCreation = false
+    @State private var isShowingNoTemplatesTip = false
 
     // MARK: - Body
 
@@ -26,6 +27,15 @@ struct TemplateListScreen: View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                if isShowingNoTemplatesTip {
+                    TipView(
+                        title: NSLocalizedString("noTemplatesTip", comment: ""),
+                        description: NSLocalizedString("noTemplatesTipDescription", comment: ""),
+                        buttonAction: .init(title: NSLocalizedString("createTemplate", comment: ""), action: { showingTemplateCreation = true }), isShown: $isShowingNoTemplatesTip)
+                    .padding(CELL_PADDING)
+                    .tileStyle()
+                    .padding(.horizontal)
+                }
                 ForEach(groupedTemplates.indices, id: \.self) { index in
                     VStack(spacing: CELL_SPACING) {
                         Text(header(for: index))
@@ -53,6 +63,9 @@ struct TemplateListScreen: View {
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .searchable(text: $searchedText)
+        .onAppear {
+            isShowingNoTemplatesTip = groupedTemplates.isEmpty
+        }
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Template.self) { selectedTemplate in
             TemplateDetailScreen(template: selectedTemplate)

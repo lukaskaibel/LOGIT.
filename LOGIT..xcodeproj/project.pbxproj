@@ -19,6 +19,7 @@
 		791F556929EC768100902352 /* DropSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556529EC768100902352 /* DropSetCell.swift */; };
 		791F556A29EC768100902352 /* SuperSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556629EC768100902352 /* SuperSetCell.swift */; };
 		792156D02A9539530010A0FC /* TileHeaderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792156CF2A9539530010A0FC /* TileHeaderStyle.swift */; };
+		792156D22A955DD40010A0FC /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792156D12A955DD40010A0FC /* TipView.swift */; };
 		7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
@@ -134,6 +135,7 @@
 		791F556529EC768100902352 /* DropSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSetCell.swift; sourceTree = "<group>"; };
 		791F556629EC768100902352 /* SuperSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperSetCell.swift; sourceTree = "<group>"; };
 		792156CF2A9539530010A0FC /* TileHeaderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileHeaderStyle.swift; sourceTree = "<group>"; };
+		792156D12A955DD40010A0FC /* TipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipView.swift; sourceTree = "<group>"; };
 		7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetPerWeekView.swift; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				79488DDA2A755C52005C485D /* WorkoutSetGroupList.swift */,
 				7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */,
+				792156D12A955DD40010A0FC /* TipView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 			files = (
 				79A4E33627E9ED730089001F /* HomeScreen.swift in Sources */,
 				7975E3B327CED8E5000BA25B /* Array+.swift in Sources */,
+				792156D22A955DD40010A0FC /* TipView.swift in Sources */,
 				79488DE82A76F014005C485D /* TemplateSuperSetCell.swift in Sources */,
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
 				791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */,

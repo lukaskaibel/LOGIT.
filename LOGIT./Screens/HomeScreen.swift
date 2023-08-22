@@ -24,6 +24,8 @@ struct HomeScreen: View {
     @State private var navigateToMuscleGroupDetail: Bool = false
     @State private var navigateToWorkoutList: Bool = false
     @State private var selectedWorkout: Workout?
+    @State private var showNoWorkoutTip = false
+    @State private var isShowingWorkoutRecorder = false
 
     // MARK: - Body
 
@@ -34,24 +36,31 @@ struct HomeScreen: View {
                     header
                         .padding([.horizontal, .top])
                     
-                    Button {
-                        navigateToTarget = true
-                    } label: {
-                        targetWorkoutsView
-                            .tileStyle()
-                            .contentShape(Rectangle())
-                    }
-                    .padding(.horizontal)
+                    if !workouts.isEmpty {
+                        Button {
+                            navigateToTarget = true
+                        } label: {
+                            targetWorkoutsView
+                                .tileStyle()
+                                .contentShape(Rectangle())
+                        }
+                        .padding(.horizontal)
 
-                    Button {
-                        navigateToMuscleGroupDetail = true
-                    } label: {
-                        muscleGroupPercentageView
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                            .contentShape(Rectangle())
+                        Button {
+                            navigateToMuscleGroupDetail = true
+                        } label: {
+                            muscleGroupPercentageView
+                                .padding(CELL_PADDING)
+                                .tileStyle()
+                                .contentShape(Rectangle())
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    
+                    if showNoWorkoutTip {
+                        noWorkoutTip
+                            .padding(.horizontal)
+                    }
 
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         HStack {
@@ -81,7 +90,13 @@ struct HomeScreen: View {
                 .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                 .padding(.top)
             }
+            .onAppear {
+                showNoWorkoutTip = workouts.isEmpty
+            }
             .scrollIndicators(.hidden)
+            .fullScreenCover(isPresented: $isShowingWorkoutRecorder) {
+                WorkoutRecorderScreen(workout: database.newWorkout(), template: nil)
+            }
             .navigationDestination(isPresented: $navigateToTarget) {
                 TargetPerWeekDetailScreen()
             }
@@ -118,13 +133,11 @@ struct HomeScreen: View {
                     Text(
                         "Last Workout - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
                     )
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(Color.secondaryLabel)
+                    .tileHeaderTertiaryStyle()
                     Text("Workout Target")
-                        .sectionHeaderStyle2()
+                        .tileHeaderStyle()
                     Text("\(targetPerWeek) / Week")
-                        .font(.system(.body, design: .rounded, weight: .bold))
-                        .foregroundColor(.secondary)
+                        .tileHeaderSecondaryStyle()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 NavigationChevron()
@@ -148,10 +161,9 @@ struct HomeScreen: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Muscle Groups")
-                        .sectionHeaderStyle2()
+                        .tileHeaderStyle()
                     Text("Last 10 Workouts")
-                        .font(.system(.body, design: .rounded, weight: .bold))
-                        .foregroundColor(.secondary)
+                        .tileHeaderSecondaryStyle()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 NavigationChevron()
@@ -171,6 +183,17 @@ struct HomeScreen: View {
                 showZeroValuesInLegend: true
             )
         }
+    }
+    
+    private var noWorkoutTip: some View {
+        TipView(
+            title: NSLocalizedString("noWorkoutsTip", comment: ""),
+            description: NSLocalizedString("noWorkoutsTipDescription", comment: ""),
+            buttonAction: .init(title: NSLocalizedString("startWorkout", comment: ""),
+                                action: { isShowingWorkoutRecorder = true }),
+            isShown: $showNoWorkoutTip)
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
 
     // MARK: - Supportings Methods
