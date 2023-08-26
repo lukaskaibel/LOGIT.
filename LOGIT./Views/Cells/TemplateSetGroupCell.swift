@@ -206,6 +206,7 @@ struct TemplateSetGroupCell: View {
             }
         } label: {
             Image(systemName: "ellipsis")
+                .padding(.vertical)
         }
     }
 
