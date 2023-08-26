@@ -38,15 +38,16 @@ struct WorkoutListScreen: View {
                                         .padding(CELL_PADDING)
                                         .tileStyle()
                                 }
+                                .buttonStyle(TileButtonStyle())
                             }
                         }
                     }
+                    .padding(.horizontal)
                 }
                 .emptyPlaceholder(groupedWorkouts) {
                     Text(NSLocalizedString("noWorkouts", comment: ""))
                 }
             }
-            .padding(.horizontal)
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .searchable(
@@ -54,6 +55,7 @@ struct WorkoutListScreen: View {
             prompt: NSLocalizedString("searchWorkouts", comment: "")
         )
         .navigationTitle(NSLocalizedString("workouts", comment: ""))
+        .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Workout.self) { selectedWorkout in
             WorkoutDetailScreen(
                 workout: selectedWorkout,

@@ -23,7 +23,7 @@ struct TileHeaderSecondaryModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(.body, design: .rounded, weight: .bold))
-            .foregroundColor(color ?? .label)
+            .foregroundColor(color ?? .secondaryLabel)
     }
 }
 

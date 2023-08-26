@@ -36,22 +36,21 @@ struct WorkoutDetailScreen: View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 workoutHeader
+                
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("overview", comment: ""))
                         .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    workoutInfo
-                        .padding(CELL_PADDING)
-                        .tileStyle()
+                    VStack(spacing: CELL_SPACING) {
+                        workoutInfo
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                        setsPerMuscleGroup
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                    }
                 }
-                VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text(NSLocalizedString("muscleGroups", comment: ""))
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    setsPerMuscleGroup
-                        .padding(CELL_PADDING)
-                        .tileStyle()
-                }
+                
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("exercises", comment: ""))
                         .sectionHeaderStyle2()
@@ -64,19 +63,20 @@ struct WorkoutDetailScreen: View {
                     )
                     .canEdit(false)
                 }
+                
                 if canNavigateToTemplate {
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         Text(NSLocalizedString("template", comment: ""))
                             .sectionHeaderStyle2()
                             .frame(maxWidth: .infinity, alignment: .leading)
                         templateButton
-                            .bigButton()
                         Text(NSLocalizedString("templateExplanation", comment: ""))
                             .font(.footnote)
                             .foregroundColor(.secondaryLabel)
                             .padding(.vertical, 10)
                             .padding(.horizontal)
                     }
+                    .buttonStyle(BigButtonStyle())
                 }
             }
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
@@ -192,16 +192,21 @@ struct WorkoutDetailScreen: View {
     }
 
     private var setsPerMuscleGroup: some View {
-        PieGraph(
-            items: workout.muscleGroupOccurances.map {
-                PieGraph.Item(
-                    title: $0.0.rawValue.capitalized,
-                    amount: $0.1,
-                    color: $0.0.color,
-                    isSelected: false
-                )
-            }
-        )
+        VStack(alignment: .leading) {
+            Text(NSLocalizedString("muscleGroups", comment: ""))
+                .tileHeaderStyle()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            PieGraph(
+                items: workout.muscleGroupOccurances.map {
+                    PieGraph.Item(
+                        title: $0.0.rawValue.capitalized,
+                        amount: $0.1,
+                        color: $0.0.color,
+                        isSelected: false
+                    )
+                }
+            )
+        }
     }
 
     private var templateButton: some View {

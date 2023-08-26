@@ -114,7 +114,6 @@ struct WorkoutRecorderScreen: View {
                             .padding(.top, 90)
 
                             Button {
-                                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                                 sheetType = .exerciseSelection(
                                     exercise: nil,
                                     setExercise: { exercise in
@@ -132,8 +131,8 @@ struct WorkoutRecorderScreen: View {
                                 )
                             } label: {
                                 Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
-                                    .bigButton()
                             }
+                            .buttonStyle(BigButtonStyle())
                             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                             .padding(.horizontal)
                             .padding(.vertical, 30)
@@ -277,6 +276,8 @@ struct WorkoutRecorderScreen: View {
                 HStack {
                     WorkoutDurationView()
                     if isShowingChronoInHeader {
+                        Divider()
+                            .frame(height: 20)
                         TimeStringView
                     }
                 }
@@ -313,9 +314,12 @@ struct WorkoutRecorderScreen: View {
     }
 
     internal var TimeStringView: some View {
-        Text(remainingChronoTimeString)
-            .foregroundColor(chronograph.status == .running ? .accentColor : .secondaryLabel)
-            .font(.body.weight(.semibold).monospacedDigit())
+        HStack {
+            Image(systemName: chronograph.mode == .timer ? "timer" : "stopwatch")
+            Text(remainingChronoTimeString)
+        }
+        .foregroundColor(chronograph.status == .running ? .accentColor : .secondaryLabel)
+        .font(.body.weight(.semibold).monospacedDigit())
     }
 
     // MARK: - Supporting Methods / Computed Properties

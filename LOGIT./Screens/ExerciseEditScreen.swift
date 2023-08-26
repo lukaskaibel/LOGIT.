@@ -44,57 +44,27 @@ struct ExerciseEditScreen: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    HStack {
-                        ColorMeter(items: [
-                            ColorMeter.Item(
-                                color: muscleGroup.color,
-                                amount: 1
-                            )
-                        ])
-                        TextField(
-                            NSLocalizedString("exerciseName", comment: ""),
-                            text: $exerciseName
-                        )
-                        .focused($nameFieldIsFocused)
-                        .font(.body.weight(.semibold))
-                        .padding(.vertical, 5)
-                    }
+            VStack(spacing: SECTION_SPACING) {
+                TextField(
+                    NSLocalizedString("exerciseName", comment: ""),
+                    text: $exerciseName
+                )
+                    .focused($nameFieldIsFocused)
+                    .font(.body.weight(.bold))
                     .padding(CELL_PADDING)
                     .tileStyle()
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets())
-                } footer: {
-                    Text(NSLocalizedString("exerciseNameDescription", comment: ""))
+                    .padding(.horizontal)
+                    .padding(.top, 30)
+                
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("selectMuscleGroup", comment: ""))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+                    MuscleGroupSelector(selectedMuscleGroup: optionalMuscleGroupBinding, canBeNil: false)
                 }
-                Section(content: {
-                    HStack {
-                        Text(NSLocalizedString("muscleGroup", comment: ""))
-                        Spacer()
-                        Menu {
-                            Picker(
-                                NSLocalizedString("muscleGroup", comment: ""),
-                                selection: $muscleGroup
-                            ) {
-                                ForEach(MuscleGroup.allCases) { muscleGroup in
-                                    Text(muscleGroup.description).tag(muscleGroup)
-                                        .foregroundColor(muscleGroup.color)
-                                }
-                            }
-                            .labelsHidden()
-                        } label: {
-                            HStack {
-                                Text(muscleGroup.description)
-                                    .font(.system(.body, design: .rounded, weight: .semibold))
-                                Image(systemName: "chevron.up.chevron.down")
-                            }
-                            .foregroundColor(muscleGroup.color)
-                        }
-                    }
-                })
+                Spacer()
             }
-            .listStyle(.insetGrouped)
             .navigationTitle(
                 exerciseToEdit != nil
                     ? "\(NSLocalizedString("edit", comment: "")) \(NSLocalizedString("exercise", comment: ""))"
@@ -161,6 +131,13 @@ struct ExerciseEditScreen: View {
         database.save()
         dismiss()
         onEditFinished?(exercise)
+    }
+    
+    private var optionalMuscleGroupBinding: Binding<MuscleGroup?> {
+        Binding(
+            get: { muscleGroup },
+            set: { muscleGroup = $0 ?? muscleGroup }
+        )
     }
 
 }

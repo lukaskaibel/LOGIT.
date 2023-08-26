@@ -44,6 +44,7 @@ struct HomeScreen: View {
                                 .tileStyle()
                                 .contentShape(Rectangle())
                         }
+                        .buttonStyle(TileButtonStyle())
                         .padding(.horizontal)
 
                         Button {
@@ -54,6 +55,7 @@ struct HomeScreen: View {
                                 .tileStyle()
                                 .contentShape(Rectangle())
                         }
+                        .buttonStyle(TileButtonStyle())
                         .padding(.horizontal)
                     }
                     
@@ -79,6 +81,7 @@ struct HomeScreen: View {
                                         .padding(CELL_PADDING)
                                         .tileStyle()
                                 }
+                                .buttonStyle(TileButtonStyle())
                             }
                             .emptyPlaceholder(recentWorkouts) {
                                 Text("No Workouts")

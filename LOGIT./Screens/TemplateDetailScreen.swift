@@ -34,17 +34,14 @@ struct TemplateDetailScreen: View {
                     Text(NSLocalizedString("overview", comment: ""))
                         .sectionHeaderStyle2()
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    templateInfo
-                        .padding(CELL_PADDING)
-                        .tileStyle()
-                }
-                VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text(NSLocalizedString("muscleGroups", comment: ""))
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    setsPerMuscleGroup
-                        .padding(CELL_PADDING)
-                        .tileStyle()
+                    VStack(spacing: CELL_SPACING) {
+                        templateInfo
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                        setsPerMuscleGroup
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                    }
                 }
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("exercises", comment: ""))
@@ -164,16 +161,21 @@ struct TemplateDetailScreen: View {
     }
 
     private var setsPerMuscleGroup: some View {
-        PieGraph(
-            items: template.muscleGroupOccurances.map {
-                PieGraph.Item(
-                    title: $0.0.rawValue.capitalized,
-                    amount: $0.1,
-                    color: $0.0.color,
-                    isSelected: false
-                )
-            }
-        )
+        VStack(alignment: .leading) {
+            Text(NSLocalizedString("muscleGroups", comment: ""))
+                .tileHeaderStyle()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            PieGraph(
+                items: template.muscleGroupOccurances.map {
+                    PieGraph.Item(
+                        title: $0.0.rawValue.capitalized,
+                        amount: $0.1,
+                        color: $0.0.color,
+                        isSelected: false
+                    )
+                }
+            )
+        }
     }
 
     private var exercisesList: some View {
@@ -201,6 +203,7 @@ struct TemplateDetailScreen: View {
             }
             .padding(CELL_PADDING)
             .tileStyle()
+            .buttonStyle(TileButtonStyle())
         }
     }
 

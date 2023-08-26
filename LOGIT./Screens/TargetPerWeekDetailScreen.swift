@@ -65,14 +65,16 @@ struct TargetPerWeekDetailScreen: View {
                     LazyVStack(spacing: CELL_SPACING) {
                         ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0), id: \.objectID) {
                             workout in
-                            WorkoutCell(workout: workout)
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    selectedWorkout = workout
-                                    isShowingWorkoutDetail = true
-                                }
+                            Button {
+                                selectedWorkout = workout
+                                isShowingWorkoutDetail = true
+                            } label: {
+                                WorkoutCell(workout: workout)
+                                    .padding(CELL_PADDING)
+                                    .tileStyle()
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(TileButtonStyle())
                         }
                         .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0)) {
                             Text(NSLocalizedString("noWorkoutsInWeek", comment: ""))
@@ -116,7 +118,7 @@ struct TargetPerWeekDetailScreen: View {
             for: .weekOfYear,
             including: Calendar.current.date(
                 byAdding: .weekOfYear,
-                value: index - 1,
+                value: index,
                 to: .now
             )!
         )

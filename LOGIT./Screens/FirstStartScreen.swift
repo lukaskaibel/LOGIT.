@@ -42,7 +42,7 @@ struct FirstStartScreen: View {
             if setupStage == .start {
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("letsGetStarted", comment: "")) 💪")
-                        .sectionHeaderStyle2()
+                        .tileHeaderStyle()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(NSLocalizedString("letsGetStartedDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
@@ -59,7 +59,7 @@ struct FirstStartScreen: View {
             } else if setupStage == .weightUnit {
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weightUnit", comment: "")) ⚖️")
-                        .font(.title3.weight(.semibold))
+                        .tileHeaderStyle()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(NSLocalizedString("weightUnitDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
@@ -87,7 +87,7 @@ struct FirstStartScreen: View {
             } else {
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text("\(NSLocalizedString("weeklyTarget", comment: "")) 🗓")
-                        .font(.title3.weight(.semibold))
+                        .tileHeaderStyle()
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(NSLocalizedString("weeklyTargetDescription", comment: ""))
                         .foregroundColor(.secondaryLabel)
@@ -143,13 +143,8 @@ struct FirstStartScreen: View {
                                 : NSLocalizedString("continue", comment: "")
                     )
                 }
-                .foregroundColor(.accentColor)
-                .font(.title3.weight(.bold))
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.accentColor.opacity(0.2))
-            .cornerRadius(15)
+            .buttonStyle(BigButtonStyle())
             .padding(.bottom, 50)
         }
         .padding()

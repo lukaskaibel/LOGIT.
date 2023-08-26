@@ -31,6 +31,7 @@ struct ExerciseSelectionScreen: View {
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup?
     @State private var sheetType: SheetType?
+    @State private var isShowingNoExercisesTip = false
 
     // MARK: - Binding
 
@@ -44,6 +45,15 @@ struct ExerciseSelectionScreen: View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                if isShowingNoExercisesTip {
+                    TipView(title: NSLocalizedString("noExercisesTip", comment: ""),
+                            description: NSLocalizedString("noExercisesTipDescription", comment: ""),
+                            buttonAction: .init(title: NSLocalizedString("createExercise", comment: ""), action: { sheetType = .addExercise }),
+                            isShown: $isShowingNoExercisesTip)
+                    .padding(CELL_PADDING)
+                    .tileStyle()
+                    .padding(.horizontal)
+                }
                 ForEach(
                     database.getGroupedExercises(
                         withNameIncluding: searchedText,
@@ -66,6 +76,9 @@ struct ExerciseSelectionScreen: View {
         .edgesIgnoringSafeArea(.bottom)
         .navigationTitle(NSLocalizedString("choose\(forSecondary ? "Secondary" : "")Exercise", comment: ""))
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            isShowingNoExercisesTip = database.getExercises().isEmpty
+        }
         .searchable(
             text: $searchedText,
             placement: .navigationBarDrawer(displayMode: .always),
@@ -132,7 +145,7 @@ struct ExerciseSelectionScreen: View {
                             Image(systemName: "info.circle")
                                 .font(.title3)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(TileButtonStyle())
                         .foregroundColor(exercise.muscleGroup?.color)
                     }
                     .padding(CELL_PADDING)

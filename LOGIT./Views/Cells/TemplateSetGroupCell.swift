@@ -48,19 +48,18 @@ struct TemplateSetGroupCell: View {
                             .secondaryTileStyle()
                         }
                     }
-                    if canEdit {
+                    if canEdit && !isReordering {
                         Button {
                             withAnimation(.interactiveSpring()) {
                                 database.addSet(to: setGroup)
                             }
-                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                         } label: {
                             Label(
                                 NSLocalizedString("addSet", comment: ""),
                                 systemImage: "plus.circle.fill"
                             )
-                            .secondaryBigButton()
                         }
+                        .buttonStyle(SecondaryBigButtonStyle())
                     }
                 }
             }

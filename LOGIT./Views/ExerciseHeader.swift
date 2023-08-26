@@ -26,6 +26,7 @@ struct ExerciseHeader: View {
                 NavigationLink(destination: ExerciseDetailScreen(exercise: exercise)) {
                     HStack(spacing: 3) {
                         Text(exercise.name ?? NSLocalizedString("noName", comment: ""))
+                            .foregroundColor(.label)
                         if navigationToDetailEnabled {
                             NavigationChevron()
                                 .foregroundColor(.secondaryLabel)

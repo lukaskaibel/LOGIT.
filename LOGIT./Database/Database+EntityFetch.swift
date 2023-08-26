@@ -150,6 +150,15 @@ extension Database {
                 || ($0 as? SuperSet)?.secondaryExercise == exercise
         }
     }
+    
+    func getWorkoutSets(with exercise: Exercise? = nil, onlyHighest attribute: WorkoutSet.Attribute, in calendarComponent: Calendar.Component) -> [WorkoutSet] {
+        Array(Dictionary(grouping: getWorkoutSets(with: exercise), by: { workoutSet -> Date in
+            let components = Calendar.current.dateComponents([calendarComponent], from: workoutSet.workout?.date ?? Date())
+            return Calendar.current.date(from: components) ?? Date()
+        }).values)
+        .compactMap { workoutSetsInWeek in workoutSetsInWeek.max { $0.max(attribute) < $1.max(attribute) } }
+        .sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now }
+    }
 
     // MARK: - Exercise Fetch
 

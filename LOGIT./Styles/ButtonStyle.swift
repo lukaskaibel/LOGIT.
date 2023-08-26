@@ -7,9 +7,12 @@
 
 import SwiftUI
 
-struct BigButtonModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
+private let MIN_BUTTON_SCALE: CGFloat = 0.97
+private let SCALE_ANIMATION_TIME: CGFloat = 0.2
+
+struct BigButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
             .font(.system(.body, design: .rounded, weight: .bold))
             .foregroundColor(.background)
             .frame(maxWidth: .infinity)
@@ -17,12 +20,19 @@ struct BigButtonModifier: ViewModifier {
             .background(Color.accentColor)
             .listRowBackground(Color.clear)
             .cornerRadius(20)
+            .scaleEffect(configuration.isPressed ? MIN_BUTTON_SCALE : 1.0)
+            .onChange(of: configuration.isPressed) { isPressed in
+                if isPressed {
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                }
+            }
+            .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)
     }
 }
 
-struct SecondaryBigButtonModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
+struct SecondaryBigButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
             .font(.system(.body, design: .rounded, weight: .bold))
             .foregroundColor(.accentColor)
             .frame(maxWidth: .infinity)
@@ -30,31 +40,72 @@ struct SecondaryBigButtonModifier: ViewModifier {
             .background(Color.accentColor.secondaryTranslucentBackground)
             .listRowBackground(Color.clear)
             .cornerRadius(15)
+            .scaleEffect(configuration.isPressed ? MIN_BUTTON_SCALE : 1.0)
+            .onChange(of: configuration.isPressed) { isPressed in
+                if isPressed {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }
+            }
+            .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)
     }
 }
 
-struct SelectionButtonModifier: ViewModifier {
+struct SelectionButtonStyle: ButtonStyle {
     
     let isSelected: Bool
     
-    func body(content: Content) -> some View {
-        content
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
             .foregroundStyle(isSelected ? Color.background : .accentColor)
             .padding(3)
             .background(isSelected ? Color.accentColor.opacity(0.9) : .clear)
             .cornerRadius(8)
-
+            .onChange(of: configuration.isPressed) { isPressed in
+                if isPressed {
+                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                }
+            }
     }
 }
 
-extension View {
-    func bigButton() -> some View {
-        modifier(BigButtonModifier())
+struct CapsuleButtonStyle: ButtonStyle {
+    
+    let color: Color?
+    let isSelected: Bool
+    
+    init(color: Color? = nil, isSelected: Bool) {
+        self.color = color
+        self.isSelected = isSelected
     }
-    func secondaryBigButton() -> some View {
-        modifier(SecondaryBigButtonModifier())
-    }
-    func selectionButtonStyle(isSelected: Bool) -> some View {
-        modifier(SelectionButtonModifier(isSelected: isSelected))
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(.headline, design: .rounded, weight: .semibold))
+            .padding(.vertical, 8)
+            .padding(.horizontal, 15)
+            .foregroundStyle(
+                (isSelected ? Color.background : (color ?? .label)).gradient
+            )
+            .background(
+                ((color ?? .accentColor).opacity(isSelected ? 1.0 : 0.2))
+                    .gradient
+            )
+            .clipShape(Capsule())
+            .scaleEffect(configuration.isPressed ? MIN_BUTTON_SCALE : 1.0)
+            .onChange(of: configuration.isPressed) { isPressed in
+                if isPressed {
+                    UISelectionFeedbackGenerator().selectionChanged()
+                }
+            }
+            .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)
     }
 }
+
+struct TileButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? MIN_BUTTON_SCALE : 1.0)
+            .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)
+    }
+}
+

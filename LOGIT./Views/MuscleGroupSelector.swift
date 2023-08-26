@@ -10,36 +10,27 @@ import SwiftUI
 struct MuscleGroupSelector: View {
 
     @Binding var selectedMuscleGroup: MuscleGroup?
+    let canBeNil: Bool
+    
+    init(selectedMuscleGroup: Binding<MuscleGroup?>, canBeNil: Bool = true) {
+        self._selectedMuscleGroup = selectedMuscleGroup
+        self.canBeNil = canBeNil
+    }
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                Button(NSLocalizedString("all", comment: "")) { selectedMuscleGroup = nil }
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 15)
-                    .foregroundStyle(
-                        (selectedMuscleGroup == nil ? Color.background : .label).gradient
-                    )
-                    .background(
-                        (selectedMuscleGroup == nil ? Color.accentColor : .accentColorBackground)
-                            .gradient
-                    )
-                    .clipShape(Capsule())
+                if canBeNil {
+                    Button(NSLocalizedString("all", comment: "")) {
+                        selectedMuscleGroup = nil
+                    }
+                    .buttonStyle(CapsuleButtonStyle(isSelected: selectedMuscleGroup == nil))
+                }
                 ForEach(MuscleGroup.allCases) { muscleGroup in
-                    Button(muscleGroup.description) { selectedMuscleGroup = muscleGroup }
-                        .font(.system(.headline, design: .rounded, weight: .semibold))
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 15)
-                        .foregroundStyle(
-                            (selectedMuscleGroup == muscleGroup ? .white : muscleGroup.color)
-                                .gradient
-                        )
-                        .background(
-                            muscleGroup.color.opacity(selectedMuscleGroup == muscleGroup ? 1 : 0.1)
-                                .gradient
-                        )
-                        .clipShape(Capsule())
+                    Button(muscleGroup.description) {
+                        selectedMuscleGroup = muscleGroup
+                    }
+                    .buttonStyle(CapsuleButtonStyle(color: muscleGroup.color, isSelected: selectedMuscleGroup == muscleGroup))
                 }
             }
             .padding(.horizontal)

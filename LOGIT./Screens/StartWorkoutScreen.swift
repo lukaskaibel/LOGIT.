@@ -97,8 +97,8 @@ struct StartWorkoutScreen: View {
             fullScreenCoverType = .workoutRecorder(template: nil)
         } label: {
             Text(NSLocalizedString("startEmpty", comment: ""))
-                .bigButton()
         }
+        .buttonStyle(BigButtonStyle())
     }
 
     private var templateList: some View {
@@ -122,6 +122,7 @@ struct StartWorkoutScreen: View {
                 .padding(CELL_PADDING)
                 .tileStyle()
             }
+            .buttonStyle(TileButtonStyle())
         }
         .emptyPlaceholder(database.getTemplates()) {
             Text(NSLocalizedString("noTemplates", comment: ""))

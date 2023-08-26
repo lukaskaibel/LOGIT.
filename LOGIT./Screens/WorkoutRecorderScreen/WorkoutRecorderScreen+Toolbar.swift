@@ -12,7 +12,6 @@ extension WorkoutRecorderScreen {
     internal var ToolbarItemsBottomBar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                 withAnimation {
                     isShowingChronoView.toggle()
                 }
@@ -20,10 +19,10 @@ extension WorkoutRecorderScreen {
                 if !isShowingChronoView && chronograph.status != .idle {
                     TimeStringView
                 } else {
-                    Image(systemName: "timer")
-                        .selectionButtonStyle(isSelected: isShowingChronoView)
+                    Image(systemName: chronograph.mode == .timer ? "timer" : "stopwatch")
                 }
             }
+            .buttonStyle(SelectionButtonStyle(isSelected: isShowingChronoView))
             Spacer()
             Text(
                 "\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))"
@@ -32,9 +31,9 @@ extension WorkoutRecorderScreen {
             Spacer()
             Button { isEditing.toggle() } label: {
                 Image(systemName: "arrow.up.arrow.down")
-                    .selectionButtonStyle(isSelected: isEditing)
             }
             .disabled(workout.numberOfSetGroups == 0)
+            .buttonStyle(SelectionButtonStyle(isSelected: isEditing))
         }
     }
 

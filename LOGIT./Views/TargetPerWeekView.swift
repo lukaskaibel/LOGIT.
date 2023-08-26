@@ -48,7 +48,7 @@ struct TargetPerWeekView: View {
             AxisMarks(preset: .aligned, values: .stride(by: 1)) { value in
                 if let weeksFromNow = value.as(Int.self) {
                     AxisValueLabel(
-                        weekDescription(Calendar.current.date(byAdding: .weekOfYear, value: weeksFromNow, to: .now)!)
+                        weekDescription(Calendar.current.date(byAdding: .weekOfYear, value: weeksFromNow, to: .now)!.startOfWeek!)
                     )
                         .font(.caption.weight(.bold))
                         .foregroundStyle(weeksFromNow == (selectedWeeksFromNowIndex ?? 0) ? Color.primary : Color.secondary)
@@ -66,6 +66,9 @@ struct TargetPerWeekView: View {
                             .foregroundColor(.clear)
                             .contentShape(Rectangle())
                             .onTapGesture {
+                                if index != selectedWeeksFromNowIndex {
+                                    UISelectionFeedbackGenerator().selectionChanged()
+                                }
                                 selectedWeeksFromNowIndex = index
                             }
                     }

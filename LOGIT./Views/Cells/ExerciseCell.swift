@@ -22,7 +22,7 @@ struct ExerciseCell: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(
-                NSLocalizedString("lastUsed", comment: "") + ": "
+                NSLocalizedString("lastUsed", comment: "") + " - "
                     + (lastUsed?.description(.short) ?? NSLocalizedString("never", comment: ""))
             )
             .font(.footnote.weight(.medium))

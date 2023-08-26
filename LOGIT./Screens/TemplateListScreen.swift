@@ -52,6 +52,7 @@ struct TemplateListScreen: View {
                                 .padding(CELL_PADDING)
                                 .tileStyle()
                             }
+                            .buttonStyle(TileButtonStyle())
                         }
                     }
                 }

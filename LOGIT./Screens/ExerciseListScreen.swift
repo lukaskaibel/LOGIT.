@@ -54,6 +54,7 @@ struct ExerciseListScreen: View {
                                     .padding(CELL_PADDING)
                                     .tileStyle()
                                 }
+                                .buttonStyle(TileButtonStyle())
                             }
                         }
                     }

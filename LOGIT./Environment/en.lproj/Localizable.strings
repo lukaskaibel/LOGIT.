@@ -14,12 +14,14 @@
 "addSet" = "Add Set";
 "afternoon" = "Afternoon";
 "all" = "All";
+"allTime" = "All Time";
 "alreadyExists" = "already exists.";
 "ascending" = "Ascending";
 
 // MARK: - B
 
 "back" = "Back";
+"bestPerDay" = "Best per Day";
 "biceps" = "Biceps";
 
 // MARK: - C
@@ -171,6 +173,7 @@
 "sec" = "sec";
 "selectDuration" = "Select Duration";
 "selectExercise" = "Select Exercise";
+"selectMuscleGroup" = "Select Muscle Group";
 "set" = "Set";
 "sets" = "Sets";
 "setType" = "Set Type";

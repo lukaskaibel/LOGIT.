@@ -53,14 +53,13 @@ struct WorkoutSetGroupCell: View {
                             withAnimation(.interactiveSpring()) {
                                 database.addSet(to: setGroup)
                             }
-                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                         } label: {
                             Label(
                                 NSLocalizedString("addSet", comment: ""),
                                 systemImage: "plus.circle.fill"
                             )
-                            .secondaryBigButton()
                         }
+                        .buttonStyle(SecondaryBigButtonStyle())
                     }
                 }
             }
@@ -106,7 +105,7 @@ struct WorkoutSetGroupCell: View {
                 )
             }
             Spacer()
-            if canEdit {
+            if canEdit && !isReordering {
                 menu
             }
         }

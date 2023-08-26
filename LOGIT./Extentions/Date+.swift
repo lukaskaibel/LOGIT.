@@ -9,12 +9,12 @@ import Foundation
 
 extension Date {
 
-    var weekOfYear: DateInterval? {
-        Calendar.current.dateInterval(of: .weekOfYear, for: self)
+    var startOfWeek: Date? {
+        Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self))
     }
 
     func inSameWeekOfYear(as date: Date) -> Bool {
-        return self.weekOfYear == date.weekOfYear
+        return self.startOfWeek == date.startOfWeek
     }
 
     func description(_ style: DateFormatter.Style) -> String {

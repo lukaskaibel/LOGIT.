@@ -55,7 +55,14 @@ extension Workout {
     }
 
     var muscleGroups: [MuscleGroup] {
-        Array(Set(exercises.compactMap { $0.muscleGroup }))
+        let uniqueMuscleGroups = Array(Set(exercises.compactMap { $0.muscleGroup }))
+        return uniqueMuscleGroups.sorted {
+            guard let leftIndex = MuscleGroup.allCases.firstIndex(of: $0),
+                  let rightIndex = MuscleGroup.allCases.firstIndex(of: $1) else {
+                return false
+            }
+            return leftIndex < rightIndex
+        }
     }
 
     var primaryMuscleGroup: MuscleGroup? {

@@ -38,6 +38,7 @@ struct ExerciseDetailScreen: View {
             LazyVStack(spacing: SECTION_SPACING) {
                 header
                     .padding(.horizontal)
+                
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("overview", comment: ""))
                         .sectionHeaderStyle2()
@@ -55,6 +56,7 @@ struct ExerciseDetailScreen: View {
                     }
                 }
                 .padding(.horizontal)
+                
                 setGroupList
                     .padding(.horizontal)
             }
@@ -117,34 +119,45 @@ struct ExerciseDetailScreen: View {
     }
 
     private var exerciseInfo: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(NSLocalizedString("maxReps", comment: ""))
-                UnitView(
-                    value: String(personalBest(for: .repetitions)),
-                    unit: NSLocalizedString("rps", comment: "")
-                )
-                .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
+        VStack {
+            Text(NSLocalizedString("personalBest", comment: ""))
+                .tileHeaderStyle()
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("repetitions", comment: ""))
+                    UnitView(
+                        value: String(personalBest(for: .repetitions)),
+                        unit: NSLocalizedString("rps", comment: "")
+                    )
+                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("weight", comment: ""))
+                    UnitView(
+                        value: String(personalBest(for: .weight)),
+                        unit: WeightUnit.used.rawValue.capitalized
+                    )
+                    .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            Divider()
-            VStack(alignment: .leading) {
-                Text(NSLocalizedString("maxWeight", comment: ""))
-                UnitView(
-                    value: String(personalBest(for: .weight)),
-                    unit: WeightUnit.used.rawValue.capitalized
-                )
-                .foregroundStyle((exercise.muscleGroup?.color ?? .label).gradient)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     private var weightGraph: some View {
-        VStack {
-            Text(NSLocalizedString("weight", comment: ""))
-                .tileHeaderStyle()
-                .frame(maxWidth: .infinity, alignment: .leading)
+        let weightGraphSets = setsForExercise(withHeighest: .weight, withoutZeroWeights: true)
+        return VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("weight", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("bestPerDay", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             Chart {
                 if selectedTimeSpanForWeight != .allTime || !firstPerformedOverOneYearAgo {
                     PointMark(
@@ -161,12 +174,12 @@ struct ExerciseDetailScreen: View {
                     )
                     .foregroundStyle(.clear)
                 }
-                ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
+                ForEach(weightGraphSets) { workoutSet in
                     LineMark(
                         x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
                         y: .value(
                             "Weight",
-                            convertWeightForDisplaying(max(.weight, in: workoutSet))
+                            convertWeightForDisplaying(workoutSet.max(.weight))
                         )
                     )
                     .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
@@ -194,9 +207,13 @@ struct ExerciseDetailScreen: View {
     
     private var repetitionsGraph: some View {
         VStack {
-            Text(NSLocalizedString("repetitions", comment: ""))
-                .tileHeaderStyle()
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("repetitions", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("bestPerDay", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             Chart {
                 if selectedTimeSpanForRepetitions != .allTime || !firstPerformedOverOneYearAgo {
                     PointMark(
@@ -213,10 +230,10 @@ struct ExerciseDetailScreen: View {
                     )
                     .foregroundStyle(.clear)
                 }
-                ForEach(setsForExercise(withoutZeroWeights: true)) { workoutSet in
+                ForEach(setsForExercise(withHeighest: .repetitions, withoutZeroWeights: true)) { workoutSet in
                     LineMark(
                         x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                        y: .value("Weight", max(.repetitions, in: workoutSet))
+                        y: .value("Weight", workoutSet.max(.repetitions))
                     )
                     .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
                     .interpolationMethod(.catmullRom)
@@ -231,7 +248,6 @@ struct ExerciseDetailScreen: View {
                 .foregroundStyle(.clear)
             }
             .chartLegend(.hidden)
-            .chartYScale(domain: 0...(personalBest(for: .repetitions) + 20))
             Picker("Calendar Component", selection: $selectedTimeSpanForRepetitions) {
                 Text(NSLocalizedString("threeMonths", comment: "")).tag(TimeSpan.threeMonths)
                 Text(NSLocalizedString("year", comment: "")).tag(TimeSpan.year)
@@ -280,7 +296,7 @@ struct ExerciseDetailScreen: View {
         database.getWorkoutSets(with: exercise)
             .map {
                 attribute == .repetitions
-                    ? max(.repetitions, in: $0) : convertWeightForDisplaying(max(.weight, in: $0))
+                ? $0.max(.repetitions) : convertWeightForDisplaying($0.max(.weight))
             }
             .max() ?? 0
     }
@@ -318,12 +334,13 @@ struct ExerciseDetailScreen: View {
     }
 
     private func setsForExercise(
+        withHeighest attribute: WorkoutSet.Attribute,
         withoutZeroRepetitions: Bool = false,
         withoutZeroWeights: Bool = false
     ) -> [WorkoutSet] {
-        database.getWorkoutSets(with: exercise)
-            .filter { !withoutZeroRepetitions || max(.repetitions, in: $0) > 0 }
-            .filter { !withoutZeroWeights || max(.weight, in: $0) > 0 }
+        database.getWorkoutSets(with: exercise, onlyHighest: attribute, in: .day)
+            .filter { !withoutZeroRepetitions || $0.max(.repetitions) > 0 }
+            .filter { !withoutZeroWeights || $0.max(.weight) > 0 }
     }
 
     private var groupedWorkoutSetGroups: [[WorkoutSetGroup]] {

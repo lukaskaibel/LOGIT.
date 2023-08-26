@@ -191,7 +191,6 @@ struct TemplateEditorScreen: View {
 
     private var addExerciseButton: some View {
         Button {
-            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             sheetType = .exerciseSelection(
                 exercise: nil,
                 setExercise: { exercise in
@@ -206,8 +205,8 @@ struct TemplateEditorScreen: View {
             )
         } label: {
             Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
-                .bigButton()
         }
+        .buttonStyle(BigButtonStyle())
     }
 
     // MARK: - Computed Properties

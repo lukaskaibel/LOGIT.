@@ -33,6 +33,31 @@ extension WorkoutSet {
         setGroup?.exercise?.muscleGroup == muscleGroup
             || setGroup?.secondaryExercise?.muscleGroup == muscleGroup
     }
+    
+    func max(_ attribute: WorkoutSet.Attribute) -> Int {
+        if let standardSet = self as? StandardSet {
+            return Int(attribute == .repetitions ? standardSet.repetitions : standardSet.weight)
+        }
+        if let dropSet = self as? DropSet {
+            return Int(
+                (attribute == .repetitions ? dropSet.repetitions : dropSet.weights)?.max() ?? 0
+            )
+        }
+        if let superSet = self as? SuperSet {
+            if superSet.setGroup?.exercise == exercise {
+                return Int(
+                    attribute == .repetitions
+                        ? superSet.repetitionsFirstExercise : superSet.weightFirstExercise
+                )
+            } else {
+                return Int(
+                    attribute == .repetitions
+                        ? superSet.repetitionsSecondExercise : superSet.weightSecondExercise
+                )
+            }
+        }
+        return 0
+    }
 
     public var isSuperSet: Bool { (self as? SuperSet) != nil }
     public var isDropSet: Bool { (self as? DropSet) != nil }
