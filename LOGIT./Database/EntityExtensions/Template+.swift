@@ -68,14 +68,6 @@ extension Template {
     }
 
     var muscleGroups: [MuscleGroup] {
-        Array(Set(exercises.compactMap { $0.muscleGroup }))
-    }
-
-    var primaryMuscleGroup: MuscleGroup? {
-        (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
-    }
-
-    var muscleGroupOccurances: [(MuscleGroup, Int)] {
         let uniqueMuscleGroups = Array(Set(exercises.compactMap { $0.muscleGroup }))
         return uniqueMuscleGroups.sorted {
             guard let leftIndex = MuscleGroup.allCases.firstIndex(of: $0),
@@ -84,6 +76,20 @@ extension Template {
             }
             return leftIndex < rightIndex
         }
+    }
+
+    var primaryMuscleGroup: MuscleGroup? {
+        (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
+    }
+
+    var muscleGroupOccurances: [(MuscleGroup, Int)] {
+        Array(
+            sets
+                .compactMap({ $0.exercise?.muscleGroup })
+                .reduce(into: [:]) { $0[$1, default: 0] += 1 }
+                .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
+        )
+        .sorted { $0.key.rawValue < $1.key.rawValue }
     }
 
     private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
