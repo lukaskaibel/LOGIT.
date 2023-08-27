@@ -76,13 +76,14 @@ extension Template {
     }
 
     var muscleGroupOccurances: [(MuscleGroup, Int)] {
-        Array(
-            sets
-                .compactMap({ $0.exercise?.muscleGroup })
-                .reduce(into: [:]) { $0[$1, default: 0] += 1 }
-                .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
-        )
-        .sorted { $0.key.rawValue < $1.key.rawValue }
+        let uniqueMuscleGroups = Array(Set(exercises.compactMap { $0.muscleGroup }))
+        return uniqueMuscleGroups.sorted {
+            guard let leftIndex = MuscleGroup.allCases.firstIndex(of: $0),
+                  let rightIndex = MuscleGroup.allCases.firstIndex(of: $1) else {
+                return false
+            }
+            return leftIndex < rightIndex
+        }
     }
 
     private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
