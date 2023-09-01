@@ -47,9 +47,9 @@ struct TemplateGenerationScreen: View {
                 dismiss()
             } label: {
                 Text("Cancel")
-                    .bigButton()
                     .padding()
             }
+            .buttonStyle(BigButtonStyle())
             .padding(.bottom, 50)
         }
     }
