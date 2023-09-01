@@ -47,10 +47,10 @@ struct TemplateGenerationScreen: View {
                 dismiss()
             } label: {
                 Text("Cancel")
-                    .padding()
             }
             .buttonStyle(BigButtonStyle())
             .padding(.bottom, 50)
+            .padding(.horizontal)
         }
     }
 }

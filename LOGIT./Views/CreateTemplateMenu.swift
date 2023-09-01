@@ -20,7 +20,7 @@ struct CreateTemplateMenu: View {
     @State private var workoutImage: UIImage?
     
     @State private var isShowingPhotosPicker = false
-    @State private var isShowingTemplateEditorOrExtractingTemplate = false
+    @State private var isShowingTemplateGenerationScreen = false
     @State private var isShowingCreationFailedAlert = false
     
     @State private var newTemplate: Template?
@@ -48,14 +48,11 @@ struct CreateTemplateMenu: View {
             }
             Text("Make sure the selected image contains a workout.")
         }
-        .onChange(of: isShowingTemplateEditorOrExtractingTemplate) { newValue in
-            guard !newValue else { return }
-            newTemplate = nil
-        }
         .onChange(of: photoPickerItem) { _ in
             Task {
                 if let data = try? await photoPickerItem?.loadTransferable(type: Data.self) {
                     if let uiImage = UIImage(data: data) {
+                        Logger().info("CreateTemplateMenu: Image picked")
                         workoutImage = uiImage
                         return
                     }
@@ -69,31 +66,31 @@ struct CreateTemplateMenu: View {
                 isShowingCreationFailedAlert = true
                 return
             }
-            isShowingTemplateEditorOrExtractingTemplate = true
+            isShowingTemplateGenerationScreen = true
             templateExtraction = templateExtractor.createTemplate(from: image)
                 .sink(receiveCompletion: { completion in
+                    isShowingTemplateGenerationScreen = false
                     switch completion {
                     case .finished:
                         break
                     case .failure(let error):
-                        isShowingTemplateEditorOrExtractingTemplate = false
                         isShowingCreationFailedAlert = true
                         Logger().error("CreateTemplateMenu: Creating template from image failed: \(error.localizedDescription)")
                     }
                 }, receiveValue: { template in
+                    Logger().info("CreateTemplateMenu: Extracted template: \(template)")
                     newTemplate = template
                 })
         }
         .photosPicker(isPresented: $isShowingPhotosPicker, selection: $photoPickerItem, photoLibrary: .shared())
-        .sheet(isPresented: $isShowingTemplateEditorOrExtractingTemplate) {
-            if let template = newTemplate {
-                TemplateEditorScreen(
-                    template: template,
-                    isEditingExistingTemplate: false
-                )
-            } else {
-                TemplateGenerationScreen(templateExtration: $templateExtraction)
-            }
+        .sheet(item: $newTemplate) { template in
+            TemplateEditorScreen(
+                template: template,
+                isEditingExistingTemplate: false
+            )
+        }
+        .sheet(isPresented: $isShowingTemplateGenerationScreen) {
+            TemplateGenerationScreen(templateExtration: $templateExtraction)
         }
     }
 }

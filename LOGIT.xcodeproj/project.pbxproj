@@ -96,11 +96,11 @@
 		79DB25A02914382400ADDF24 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB259F2914382400ADDF24 /* UIConstants.swift */; };
 		79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */; };
 		79E2E60429132C46003845BC /* Database+SetConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E60329132C46003845BC /* Database+SetConvert.swift */; };
-		79E8490A2A7EA28100C0DF95 /* ExerciseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */; };
 		79F2D1222800CD0C00197E0A /* TemplateDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */; };
 		79F7E0FE27E67578006D4354 /* ExerciseListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E0FD27E67578006D4354 /* ExerciseListScreen.swift */; };
 		79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E10227E68FAC006D4354 /* SegmentedBarChart.swift */; };
 		79FF2BB02A8A71C200548661 /* ScreenHeaderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FF2BAF2A8A71C200548661 /* ScreenHeaderStyle.swift */; };
+		79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */; };
 		8010137B284791AB00309279 /* PieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8010137A284791AB00309279 /* PieGraph.swift */; };
 		801CDC4C2688BDC800BB653D /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801CDC4B2688BDC800BB653D /* Color+.swift */; };
 		8033F98E27072B0600EC707A /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8033F98D27072B0600EC707A /* SettingsScreen.swift */; };
@@ -764,7 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79E8490A2A7EA28100C0DF95 /* ExerciseServiceTests.swift in Sources */,
+				79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
