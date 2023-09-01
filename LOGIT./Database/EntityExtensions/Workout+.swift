@@ -42,6 +42,9 @@ extension Workout {
             if let exercise = setGroup.exercise {
                 result.append(exercise)
             }
+            if setGroup.setType == .superSet, let secondaryExercise = setGroup.secondaryExercise {
+                result.append(secondaryExercise)
+            }
         }
         return result
     }

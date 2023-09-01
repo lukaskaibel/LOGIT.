@@ -112,6 +112,7 @@ struct WorkoutRecorderScreen: View {
                             )
                             .padding(.horizontal)
                             .padding(.top, 90)
+                            .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
 
                             Button {
                                 sheetType = .exerciseSelection(
