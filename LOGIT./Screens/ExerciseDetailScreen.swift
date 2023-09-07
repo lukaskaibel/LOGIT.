@@ -22,8 +22,8 @@ struct ExerciseDetailScreen: View {
 
     // MARK: - State
 
-    @State private var selectedTimeSpanForWeight: TimeSpan = .threeMonths
-    @State private var selectedTimeSpanForRepetitions: TimeSpan = .threeMonths
+    @State private var selectedTimeSpanForWeight: DateLineChart.DateDomain = .threeMonths
+    @State private var selectedTimeSpanForRepetitions: DateLineChart.DateDomain = .threeMonths
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
 
@@ -149,8 +149,7 @@ struct ExerciseDetailScreen: View {
     }
 
     private var weightGraph: some View {
-        let weightGraphSets = setsForExercise(withHeighest: .weight, withoutZeroWeights: true)
-        return VStack {
+        VStack {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("weight", comment: ""))
                     .tileHeaderStyle()
@@ -158,47 +157,18 @@ struct ExerciseDetailScreen: View {
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            Chart {
-                if selectedTimeSpanForWeight != .allTime || !firstPerformedOverOneYearAgo {
-                    PointMark(
-                        x: .value(
-                            "Day",
-                            Calendar.current.date(
-                                byAdding: selectedTimeSpanForWeight == .threeMonths ? .month : .year,
-                                value: -(selectedTimeSpanForWeight == .threeMonths ? 3 : 1),
-                                to: .now
-                            )!,
-                            unit: .day
-                        ),
-                        y: .value("Weight", 0)
-                    )
-                    .foregroundStyle(.clear)
-                }
-                ForEach(weightGraphSets) { workoutSet in
-                    LineMark(
-                        x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                        y: .value(
-                            "Weight",
-                            convertWeightForDisplaying(workoutSet.max(.weight))
-                        )
-                    )
-                    .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
-                    .interpolationMethod(.catmullRom)
-                    .symbol(by: .value("Weight", "Weight"))
-                }
-                .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
-                PointMark(
-                    x: .value("Day", Date.now),
-                    y: .value("Weight", 0)
-                )
-                .foregroundStyle(.clear)
+            DateLineChart(dateDomain: selectedTimeSpanForWeight) {
+                setsForExercise(withHeighest: .weight, withoutZeroWeights: true)
+                    .map { .init(
+                        date: $0.setGroup!.workout!.date!,
+                        value: convertWeightForDisplaying($0.max(.weight))
+                    ) }
             }
-            .chartLegend(.hidden)
-            .chartYScale(domain: 0...(personalBest(for: .weight) + 20))
+            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
             Picker("Calendar Component", selection: $selectedTimeSpanForWeight) {
-                Text(NSLocalizedString("threeMonths", comment: "")).tag(TimeSpan.threeMonths)
-                Text(NSLocalizedString("year", comment: "")).tag(TimeSpan.year)
-                Text(NSLocalizedString("all", comment: "")).tag(TimeSpan.allTime)
+                Text(NSLocalizedString("threeMonths", comment: "")).tag(DateLineChart.DateDomain.threeMonths)
+                Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)
+                Text(NSLocalizedString("all", comment: "")).tag(DateLineChart.DateDomain.allTime)
             }
             .pickerStyle(.segmented)
             .padding(.top)
@@ -214,44 +184,18 @@ struct ExerciseDetailScreen: View {
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            Chart {
-                if selectedTimeSpanForRepetitions != .allTime || !firstPerformedOverOneYearAgo {
-                    PointMark(
-                        x: .value(
-                            "Day",
-                            Calendar.current.date(
-                                byAdding: selectedTimeSpanForRepetitions == .threeMonths ? .month : .year,
-                                value: -(selectedTimeSpanForRepetitions == .threeMonths ? 3 : 1),
-                                to: .now
-                            )!,
-                            unit: .day
-                        ),
-                        y: .value("Weight", 0)
-                    )
-                    .foregroundStyle(.clear)
-                }
-                ForEach(setsForExercise(withHeighest: .repetitions, withoutZeroWeights: true)) { workoutSet in
-                    LineMark(
-                        x: .value("Day", workoutSet.setGroup!.workout!.date!, unit: .day),
-                        y: .value("Weight", workoutSet.max(.repetitions))
-                    )
-                    .foregroundStyle((exercise.muscleGroup?.color ?? .accentColor).gradient)
-                    .interpolationMethod(.catmullRom)
-                    .symbol(by: .value("Repetitions", "Repetitions"))
-                    
-                }
-                .foregroundStyle(exercise.muscleGroup?.color ?? .accentColor)
-                PointMark(
-                    x: .value("Day", Date.now),
-                    y: .value("Weight", 0)
-                )
-                .foregroundStyle(.clear)
+            DateLineChart(dateDomain: selectedTimeSpanForRepetitions) {
+                setsForExercise(withHeighest: .repetitions, withoutZeroWeights: true)
+                    .map { .init(
+                        date: $0.setGroup!.workout!.date!,
+                        value: $0.max(.repetitions)
+                    ) }
             }
-            .chartLegend(.hidden)
+            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
             Picker("Calendar Component", selection: $selectedTimeSpanForRepetitions) {
-                Text(NSLocalizedString("threeMonths", comment: "")).tag(TimeSpan.threeMonths)
-                Text(NSLocalizedString("year", comment: "")).tag(TimeSpan.year)
-                Text(NSLocalizedString("all", comment: "")).tag(TimeSpan.allTime)
+                Text(NSLocalizedString("threeMonths", comment: "")).tag(DateLineChart.DateDomain.threeMonths)
+                Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)
+                Text(NSLocalizedString("all", comment: "")).tag(DateLineChart.DateDomain.allTime)
             }
             .pickerStyle(.segmented)
             .padding(.top)

@@ -85,6 +85,7 @@
 		79A637D92A3A0157002A1F20 /* WorkoutRecorderScreen+Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A637D82A3A0157002A1F20 /* WorkoutRecorderScreen+Toolbar.swift */; };
 		79A934E127C7F16100ED9321 /* WorkoutRecorderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A934E027C7F16100ED9321 /* WorkoutRecorderScreen.swift */; };
 		79B70BF32803031B0012EAAD /* TemplateStandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */; };
+		79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */; };
 		79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CAF79C27E1426600A1711C /* WeightUnit.swift */; };
 		79CD8BE528240A020052D83C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE428240A020052D83C /* CalendarView.swift */; };
 		79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE928240B0A0052D83C /* MonthView.swift */; };
@@ -221,6 +222,7 @@
 		79A637D82A3A0157002A1F20 /* WorkoutRecorderScreen+Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorkoutRecorderScreen+Toolbar.swift"; sourceTree = "<group>"; };
 		79A934E027C7F16100ED9321 /* WorkoutRecorderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecorderScreen.swift; sourceTree = "<group>"; };
 		79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateStandardSet+.swift"; sourceTree = "<group>"; };
+		79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLineChart.swift; sourceTree = "<group>"; };
 		79CAF79C27E1426600A1711C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
 		79CD8BE428240A020052D83C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		79CD8BE928240B0A0052D83C /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 		79488DF12A770D17005C485D /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
+				79D570D7277B4C520005E006 /* BarGraph.swift */,
 				79F7E10227E68FAC006D4354 /* SegmentedBarChart.swift */,
 				79CD8BE628240A9B0052D83C /* Calendar */,
 				794E64FD28EE3A69003AACDD /* ColorMeter.swift */,
@@ -394,7 +397,6 @@
 		7967D57C2811886700B30D03 /* Graphs */ = {
 			isa = PBXGroup;
 			children = (
-				79D570D7277B4C520005E006 /* BarGraph.swift */,
 				8010137A284791AB00309279 /* PieGraph.swift */,
 			);
 			path = Graphs;
@@ -516,6 +518,7 @@
 			children = (
 				79488DDC2A756AA4005C485D /* Cells */,
 				794DAC622A320919006F0168 /* ChronoView.swift */,
+				79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */,
 				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
 				7967D57C2811886700B30D03 /* Graphs */,
@@ -855,6 +858,7 @@
 				798BDC282A7BCD1800EAA75D /* TextProcessing.swift in Sources */,
 				79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */,
 				79488DEC2A770C7D005C485D /* EmptyPlaceholderModifier.swift in Sources */,
+				79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */,
 				7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */,
 				797EF7E629292E32003C2266 /* MuscleGroupsDetailScreen.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
