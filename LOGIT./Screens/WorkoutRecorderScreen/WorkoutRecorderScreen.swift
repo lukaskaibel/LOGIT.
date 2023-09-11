@@ -43,9 +43,6 @@ struct WorkoutRecorderScreen: View {
     @StateObject var workout: Workout
     @State internal var workoutSetTemplateSetDictionary = [WorkoutSet: TemplateSet]()
 
-    @State internal var isEditing: Bool = false
-    @State internal var editMode: EditMode = .inactive
-
     @StateObject var chronograph = Chronograph()
     @State internal var isShowingChronoView = false
     @State private var shouldShowChronoViewAgainWhenPossible = false
@@ -69,78 +66,44 @@ struct WorkoutRecorderScreen: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                if isEditing {
-                    List {
-                        Spacer(minLength: 90)
-                            .listRowInsets(EdgeInsets())
-                            .listRowSeparator(.hidden)
-                        ForEach(workout.setGroups, id: \.objectID) { setGroup in
-                            WorkoutSetGroupCell(
-                                setGroup: setGroup,
-                                focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
-                                sheetType: $sheetType,
-                                isReordering: $isEditing,
-                                supplementaryText:
-                                    "\(workout.setGroups.firstIndex(of: setGroup)! + 1) / \(workout.setGroups.count)  ·  \(setGroup.setType.description)"
-                            )
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                            .padding(
-                                .top,
-                                workout.setGroups.first == setGroup ? 0 : CELL_SPACING / 2
-                            )
-                            .padding(
-                                .bottom,
-                                workout.setGroups.last == setGroup ? 0 : CELL_SPACING / 2
-                            )
-                            .padding(.horizontal)
-                            .buttonStyle(.plain)
-                        }
-                        .onMove(perform: moveSetGroups)
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
-                    }
-                    .listStyle(.plain)
-                } else {
-                    ScrollViewReader { scrollable in
-                        ScrollView {
-                            WorkoutSetGroupList(
-                                workout: workout,
-                                focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
-                                sheetType: $sheetType,
-                                isReordering: $isEditing
-                            )
-                            .padding(.horizontal)
-                            .padding(.top, 90)
-                            .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
+                ScrollViewReader { scrollable in
+                    ScrollView {
+                        WorkoutSetGroupList(
+                            workout: workout,
+                            focusedIntegerFieldIndex: $focusedIntegerFieldIndex,
+                            sheetType: $sheetType,
+                            canReorder: true
+                        )
+                        .padding(.horizontal)
+                        .padding(.top, 90)
+                        .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
 
-                            Button {
-                                sheetType = .exerciseSelection(
-                                    exercise: nil,
-                                    setExercise: { exercise in
-                                        database.newWorkoutSetGroup(
-                                            createFirstSetAutomatically: true,
-                                            exercise: exercise,
-                                            workout: workout
-                                        )
-                                        database.refreshObjects()
-                                        withAnimation {
-                                            scrollable.scrollTo(1, anchor: .bottom)
-                                        }
-                                    },
-                                    forSecondary: false
-                                )
-                            } label: {
-                                Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
-                            }
-                            .buttonStyle(BigButtonStyle())
-                            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
-                            .padding(.horizontal)
-                            .padding(.vertical, 30)
-                            .id(1)
+                        Button {
+                            sheetType = .exerciseSelection(
+                                exercise: nil,
+                                setExercise: { exercise in
+                                    database.newWorkoutSetGroup(
+                                        createFirstSetAutomatically: true,
+                                        exercise: exercise,
+                                        workout: workout
+                                    )
+                                    database.refreshObjects()
+                                    withAnimation {
+                                        scrollable.scrollTo(1, anchor: .bottom)
+                                    }
+                                },
+                                forSecondary: false
+                            )
+                        } label: {
+                            Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
                         }
-                        .scrollIndicators(.hidden)
+                        .buttonStyle(BigButtonStyle())
+                        .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
+                        .padding(.horizontal)
+                        .padding(.vertical, 30)
+                        .id(1)
                     }
+                    .scrollIndicators(.hidden)
                 }
 
                 Header
@@ -160,7 +123,6 @@ struct WorkoutRecorderScreen: View {
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
-            .environment(\.editMode, $editMode)
             .toolbar {
                 ToolbarItemsBottomBar
                 ToolbarItemsKeyboard
@@ -244,9 +206,6 @@ struct WorkoutRecorderScreen: View {
             withAnimation {
                 isShowingChronoInHeader = chronograph.status != .idle && newValue != nil
             }
-        }
-        .onChange(of: isEditing) { newValue in
-            editMode = newValue ? .active : .inactive
         }
         .onAppear {
             chronograph.onTimerFired = {

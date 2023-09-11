@@ -29,11 +29,6 @@ extension WorkoutRecorderScreen {
             )
             .font(.caption)
             Spacer()
-            Button { isEditing.toggle() } label: {
-                Image(systemName: "arrow.up.arrow.down")
-            }
-            .disabled(workout.numberOfSetGroups == 0)
-            .buttonStyle(SelectionButtonStyle(isSelected: isEditing))
         }
     }
 

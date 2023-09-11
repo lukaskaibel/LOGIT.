@@ -86,6 +86,7 @@
 		79A934E127C7F16100ED9321 /* WorkoutRecorderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A934E027C7F16100ED9321 /* WorkoutRecorderScreen.swift */; };
 		79B70BF32803031B0012EAAD /* TemplateStandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */; };
 		79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */; };
+		79B7F2A92AA9E1A20090B785 /* ReorderableForEach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */; };
 		79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CAF79C27E1426600A1711C /* WeightUnit.swift */; };
 		79CD8BE528240A020052D83C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE428240A020052D83C /* CalendarView.swift */; };
 		79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE928240B0A0052D83C /* MonthView.swift */; };
@@ -223,6 +224,7 @@
 		79A934E027C7F16100ED9321 /* WorkoutRecorderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutRecorderScreen.swift; sourceTree = "<group>"; };
 		79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateStandardSet+.swift"; sourceTree = "<group>"; };
 		79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLineChart.swift; sourceTree = "<group>"; };
+		79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableForEach.swift; sourceTree = "<group>"; };
 		79CAF79C27E1426600A1711C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
 		79CD8BE428240A020052D83C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		79CD8BE928240B0A0052D83C /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -518,6 +520,7 @@
 			children = (
 				79488DDC2A756AA4005C485D /* Cells */,
 				794DAC622A320919006F0168 /* ChronoView.swift */,
+				798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */,
 				79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */,
 				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
@@ -526,12 +529,12 @@
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
 				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
-				798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */,
+				79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */,
+				7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */,
+				792156D12A955DD40010A0FC /* TipView.swift */,
 				797EF7E729293222003C2266 /* TitleUnitView.swift */,
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
 				79488DDA2A755C52005C485D /* WorkoutSetGroupList.swift */,
-				7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */,
-				792156D12A955DD40010A0FC /* TipView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -813,6 +816,7 @@
 				798CEE6D280DC7CE00114FEE /* MuscleGroup.swift in Sources */,
 				7919C5FD2A7410FB00F35493 /* WorkoutSetGroupCell.swift in Sources */,
 				797EF7E829293222003C2266 /* TitleUnitView.swift in Sources */,
+				79B7F2A92AA9E1A20090B785 /* ReorderableForEach.swift in Sources */,
 				7988FBB72A73391600E4FE54 /* ButtonStyle.swift in Sources */,
 				7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */,
 				798BDC132A79A7DC00EAA75D /* Secrets.swift in Sources */,

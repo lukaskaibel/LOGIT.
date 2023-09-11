@@ -59,7 +59,7 @@ struct WorkoutDetailScreen: View {
                         workout: workout,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
-                        isReordering: .constant(false)
+                        canReorder: false
                     )
                     .canEdit(false)
                 }

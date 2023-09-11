@@ -30,8 +30,7 @@ struct TemplateEditorScreen: View {
 
     @StateObject var template: Template
 
-    @State private var editMode: EditMode = .inactive
-    @State private var isEditing: Bool = false
+    @State private var isReordering: Bool = false
     @State private var sheetType: SheetType? = nil
 
     // MARK: - Parameters
@@ -42,70 +41,37 @@ struct TemplateEditorScreen: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if isEditing {
-                    List {
-                        ForEach(template.setGroups, id: \.objectID) { setGroup in
+            ScrollView {
+                VStack {
+                    TextField(
+                        NSLocalizedString("title", comment: ""),
+                        text: templateName,
+                        axis: .vertical
+                    )
+                    .font(.largeTitle.weight(.bold))
+                    .lineLimit(2)
+                    .padding(.vertical)
+
+                    VStack(spacing: SECTION_SPACING) {
+                        ReorderableForEach($template.setGroups, isReordering: $isReordering, onOrderChanged: { database.refreshObjects() }) { setGroup in
                             TemplateSetGroupCell(
                                 setGroup: setGroup,
                                 focusedIntegerFieldIndex: .constant(nil),
                                 sheetType: $sheetType,
-                                isReordering: $isEditing,
+                                isReordering: $isReordering,
                                 supplementaryText:
                                     "\(template.setGroups.firstIndex(of: setGroup)! + 1) / \(template.setGroups.count)  ·  \(setGroup.setType.description)"
                             )
                             .padding(CELL_PADDING)
                             .tileStyle()
-                            .padding(
-                                .top,
-                                template.setGroups.first == setGroup ? 0 : CELL_SPACING / 2
-                            )
-                            .padding(
-                                .bottom,
-                                template.setGroups.last == setGroup ? 0 : CELL_SPACING / 2
-                            )
-                            .padding(.horizontal)
-                            .buttonStyle(.plain)
                         }
-                        .onMove(perform: moveSetGroups)
-                        .listRowInsets(EdgeInsets())
-                        .listRowSeparator(.hidden)
                     }
-                    .listStyle(.plain)
-                } else {
-                    ScrollView {
-                        VStack {
-                            TextField(
-                                NSLocalizedString("title", comment: ""),
-                                text: templateName,
-                                axis: .vertical
-                            )
-                            .font(.largeTitle.weight(.bold))
-                            .lineLimit(2)
-                            .padding(.vertical)
 
-                            VStack(spacing: SECTION_SPACING) {
-                                ForEach(template.setGroups, id: \.objectID) { setGroup in
-                                    TemplateSetGroupCell(
-                                        setGroup: setGroup,
-                                        focusedIntegerFieldIndex: .constant(nil),
-                                        sheetType: $sheetType,
-                                        isReordering: $isEditing,
-                                        supplementaryText:
-                                            "\(template.setGroups.firstIndex(of: setGroup)! + 1) / \(template.setGroups.count)  ·  \(setGroup.setType.description)"
-                                    )
-                                    .padding(CELL_PADDING)
-                                    .tileStyle()
-                                }
-                            }
-
-                            addExerciseButton
-                                .padding(.vertical, 30)
-                        }
-                        .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
-                        .padding(.horizontal)
-                    }
+                    addExerciseButton
+                        .padding(.vertical, 30)
                 }
+                .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
+                .padding(.horizontal)
             }
             .scrollIndicators(.hidden)
             .interactiveDismissDisabled()
@@ -115,7 +81,6 @@ struct TemplateEditorScreen: View {
                     : NSLocalizedString("newTemplate", comment: "")
             )
             .navigationBarTitleDisplayMode(.inline)
-            .environment(\.editMode, $editMode)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(NSLocalizedString("save", comment: "")) {
@@ -135,22 +100,10 @@ struct TemplateEditorScreen: View {
                     }
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
                     Text(
                         "\(template.setGroups.count) \(NSLocalizedString("exercise\(template.setGroups.count == 1 ? "" : "s")", comment: ""))"
                     )
                     .font(.caption)
-                    Spacer()
-                    Button(
-                        isEditing
-                            ? NSLocalizedString("done", comment: "")
-                            : NSLocalizedString("edit", comment: "")
-                    ) {
-                        isEditing.toggle()
-                        editMode = isEditing ? .active : .inactive
-                    }
-                    .disabled(template.numberOfSetGroups == 0)
-                    .font(.body.weight(.medium))
                 }
             }
             .sheet(item: $sheetType) { style in
