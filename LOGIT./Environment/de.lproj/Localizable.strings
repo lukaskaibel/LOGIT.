@@ -21,7 +21,9 @@
 // MARK: - B
 
 "back" = "Rücken";
-"bestPerDay" = "Bestes pro Tag";
+"bestPerDay" = "Höchstes pro Tag";
+"bestWeightPerDay" = "Höchstes Gewicht pro Tag";
+"bestRepetitionsPerDay" = "Höchste Wdh. pro Tag";
 "biceps" = "Bizeps";
 
 // MARK: - C
@@ -106,6 +108,7 @@
 "morning" = "Morgen";
 "muscleGroup" = "Muskelgruppe";
 "muscleGroups" = "Muskelgruppen";
+"muscleGroupsInLastTen" = "Muskelgruppen Übersicht";
 "myTemplates" = "Meine Vorlagen";
 
 // MARK: - N
@@ -235,6 +238,7 @@
 "weightUnit" = "Gewichts Einheit";
 "weightUnitDescription" = "Wähle deine bevorzugte Einheit aus.";
 "welcomeTo" = "Willkommen bei";
+"widget" = "Widget";
 "workouts" = "Workouts";
 "workoutTarget" = "Workout Ziel";
 

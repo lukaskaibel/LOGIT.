@@ -17,6 +17,7 @@ struct HomeScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject var overviewController: OverviewController
 
     // MARK: - State
 
@@ -36,34 +37,22 @@ struct HomeScreen: View {
                     header
                         .padding([.horizontal, .top])
                     
-                    if !workouts.isEmpty {
-                        Button {
-                            navigateToTarget = true
-                        } label: {
-                            targetWorkoutsView
-                                .tileStyle()
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(TileButtonStyle())
-                        .padding(.horizontal)
-
-                        Button {
-                            navigateToMuscleGroupDetail = true
-                        } label: {
-                            muscleGroupPercentageView
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                                .contentShape(Rectangle())
-                        }
-                        .buttonStyle(TileButtonStyle())
-                        .padding(.horizontal)
-                    }
-                    
                     if showNoWorkoutTip {
                         noWorkoutTip
                             .padding(.horizontal)
                     }
-
+                    
+                    OverviewView(collection: overviewController.homeScreenOverviewItemCollection) { item in
+                        Group {
+                            switch item.type {
+                            case .targetPerWeek: targetWorkoutsView
+                            case .muscleGroupsInLastTen: muscleGroupPercentageView
+                            default: EmptyView()
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         HStack {
                             Text(NSLocalizedString("recentWorkouts", comment: ""))
@@ -130,62 +119,77 @@ struct HomeScreen: View {
     }
     
     private var targetWorkoutsView: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(
-                        "Last Workout - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
-                    )
-                    .tileHeaderTertiaryStyle()
-                    Text("Workout Target")
-                        .tileHeaderStyle()
-                    Text("\(targetPerWeek) / Week")
-                        .tileHeaderSecondaryStyle()
+        Button {
+            navigateToTarget = true
+        } label: {
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(
+                            "Last Workout - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
+                        )
+                        .tileHeaderTertiaryStyle()
+                        Text("Workout Target")
+                            .tileHeaderStyle()
+                        Text("\(targetPerWeek) / Week")
+                            .tileHeaderSecondaryStyle()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    NavigationChevron()
+                        .foregroundColor(.secondaryLabel)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                NavigationChevron()
-                    .foregroundColor(.secondaryLabel)
-            }
-            TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
-            .frame(height: 170)
-            .overlay {
-                if workouts.isEmpty {
-                    Text(NSLocalizedString("noData", comment: ""))
-                        .font(.title3.weight(.medium))
-                        .foregroundColor(.placeholder)
+                TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
+                .frame(height: 170)
+                .overlay {
+                    if workouts.isEmpty {
+                        Text(NSLocalizedString("noData", comment: ""))
+                            .font(.title3.weight(.medium))
+                            .foregroundColor(.placeholder)
+                    }
                 }
             }
+            .padding(CELL_PADDING)
+            .tileStyle()
+            .contentShape(Rectangle())
         }
-        .padding(CELL_PADDING)
+        .buttonStyle(TileButtonStyle())
     }
 
     private var muscleGroupPercentageView: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Muscle Groups")
-                        .tileHeaderStyle()
-                    Text("Last 10 Workouts")
-                        .tileHeaderSecondaryStyle()
+        Button {
+            navigateToMuscleGroupDetail = true
+        } label: {
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Muscle Groups")
+                            .tileHeaderStyle()
+                        Text("Last 10 Workouts")
+                            .tileHeaderSecondaryStyle()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    NavigationChevron()
+                        .foregroundColor(.secondaryLabel)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                NavigationChevron()
-                    .foregroundColor(.secondaryLabel)
+                PieGraph(
+                    items:
+                        getOverallMuscleGroupOccurances()
+                        .map {
+                            PieGraph.Item(
+                                title: $0.0.description.capitalized,
+                                amount: $0.1,
+                                color: $0.0.color,
+                                isSelected: false
+                            )
+                        },
+                    showZeroValuesInLegend: true
+                )
             }
-            PieGraph(
-                items:
-                    getOverallMuscleGroupOccurances()
-                    .map {
-                        PieGraph.Item(
-                            title: $0.0.description.capitalized,
-                            amount: $0.1,
-                            color: $0.0.color,
-                            isSelected: false
-                        )
-                    },
-                showZeroValuesInLegend: true
-            )
+            .padding(CELL_PADDING)
+            .tileStyle()
+            .contentShape(Rectangle())
         }
+        .buttonStyle(TileButtonStyle())
     }
     
     private var noWorkoutTip: some View {

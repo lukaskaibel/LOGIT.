@@ -19,6 +19,7 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
+    @EnvironmentObject var overviewController: OverviewController
 
     // MARK: - State
 
@@ -35,24 +36,18 @@ struct ExerciseDetailScreen: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: SECTION_SPACING) {
+            VStack(spacing: SECTION_SPACING) {
                 header
                     .padding(.horizontal)
                 
-                VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text(NSLocalizedString("overview", comment: ""))
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    VStack(spacing: CELL_SPACING) {
-                        exerciseInfo
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                        weightGraph
-                            .padding(CELL_PADDING)
-                            .tileStyle()
-                        repetitionsGraph
-                            .padding(CELL_PADDING)
-                            .tileStyle()
+                OverviewView(collection: overviewController.exerciseDetailOverviewItemCollection) { item in
+                    Group {
+                        switch item.type {
+                        case .personalBest: exerciseInfo
+                        case .bestWeightPerDay: weightGraph
+                        case .bestRepetitionsPerDay: repetitionsGraph
+                        default: EmptyView()
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -60,6 +55,7 @@ struct ExerciseDetailScreen: View {
                 setGroupList
                     .padding(.horizontal)
             }
+            .animation(.easeInOut)
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -117,6 +113,31 @@ struct ExerciseDetailScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    
+//    private var overviewViewItems: Binding<[OverviewView.Item<AnyView>]> {
+//        Binding(
+//            get: {
+//                (overviewController.exerciseDetailOverviewItemCollection?.items ?? [])!
+//                    .compactMap { overviewItem -> OverviewView.Item<AnyView>? in
+//                        if overviewItem.id == OverviewController.ExerciseDetailItems.personalBest.rawValue {
+//                            return OverviewView.Item<AnyView>(
+//                                id: overviewItem.id!,
+//                                name: NSLocalizedString(overviewItem.id!, comment: ""),
+//                                content: AnyView(exerciseInfo),
+//                                isAdded: overviewItem.isAdded
+//                            )
+//                        }
+//                        return nil
+//                    }
+//            },
+//            set: { newValue in
+//                newValue
+//                    .
+//
+//            }
+//        )
+//
+//    }
 
     private var exerciseInfo: some View {
         VStack {
@@ -146,6 +167,8 @@ struct ExerciseDetailScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
 
     private var weightGraph: some View {
@@ -173,6 +196,8 @@ struct ExerciseDetailScreen: View {
             .pickerStyle(.segmented)
             .padding(.top)
         }
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
     
     private var repetitionsGraph: some View {
@@ -200,6 +225,8 @@ struct ExerciseDetailScreen: View {
             .pickerStyle(.segmented)
             .padding(.top)
         }
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
 
     private var setGroupList: some View {

@@ -22,6 +22,8 @@
 
 "back" = "Back";
 "bestPerDay" = "Best per Day";
+"bestWeightPerDay" = "Best Weight per Day";
+"bestRepetitionsPerDay" = "Best Reps per Day";
 "biceps" = "Biceps";
 
 // MARK: - C
@@ -106,6 +108,7 @@
 "morning" = "Morning";
 "muscleGroup" = "Muscle Group";
 "muscleGroups" = "Muscle Groups";
+"muscleGroupsInLastTen" = "Muscle Group Overview";
 "myTemplates" = "My Templates";
 
 // MARK: - N
@@ -233,6 +236,7 @@
 "weightUnit" = "Weight Unit";
 "weightUnitDescription" = "Select the unit you want to use throughout the app.";
 "welcomeTo" = "Welcome to";
+"widget" = "Widget";
 "workouts" = "Workouts";
 "workoutTarget" = "Workout target";
 

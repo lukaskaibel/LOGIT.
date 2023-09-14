@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+public var isProUser = false
+
 private struct WorkoutSetTemplateSetDictionaryKey: EnvironmentKey {
     static let defaultValue: [WorkoutSet: TemplateSet] = [WorkoutSet: TemplateSet]()
 }

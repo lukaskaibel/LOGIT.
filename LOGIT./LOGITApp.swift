@@ -22,8 +22,10 @@ struct LOGIT: App {
 
     #if targetEnvironment(simulator)
         @StateObject private var database = Database.preview
+        @StateObject private var overviewController = OverviewController.preview
     #else
         @StateObject private var database = Database.shared
+        @StateObject private var overviewController = OverviewController.shared
     #endif
     @State private var selectedTab: TabType = .home
 
@@ -99,6 +101,7 @@ struct LOGIT: App {
                     .tag(TabType.settings)
                 }
                 .environmentObject(database)
+                .environmentObject(overviewController)
                 .environment(\.goHome, { selectedTab = .home })
                 .preferredColorScheme(.dark)
                 #if targetEnvironment(simulator)

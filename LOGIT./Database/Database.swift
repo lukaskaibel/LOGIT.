@@ -23,6 +23,7 @@ class Database: ObservableObject {
 
     init(isPreview: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "LOGIT")
+        
         if isPreview {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
