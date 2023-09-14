@@ -66,6 +66,7 @@ struct TemplateEditorScreen: View {
                             .tileStyle()
                         }
                     }
+                    .animation(.interactiveSpring())
 
                     addExerciseButton
                         .padding(.vertical, 30)

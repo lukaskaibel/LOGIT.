@@ -51,7 +51,6 @@ struct ReorderableForEach<Content: View, Item: Reorderable>: View {
             ForEach(items) { item in
                 content(item)
                     .id(item.id)
-                    .opacity(item == draggedItem ? 0 : 1)
                     .contentShape(Rectangle())
                     .onDrag {
                         draggedItem = item
@@ -68,7 +67,12 @@ struct ReorderableForEach<Content: View, Item: Reorderable>: View {
                             )
                     )
             }
-            .animation(.interactiveSpring())
+            .simultaneousGesture(
+                TapGesture()
+                    .onEnded {
+                        draggedItem = nil
+                    }
+            )
             .onChange(of: draggedItem) { value in
                 isReordering = value != nil
             }

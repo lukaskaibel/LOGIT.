@@ -49,13 +49,17 @@ struct OverviewView<Content: View>: View {
                 }
             }
             VStack(spacing: CELL_SPACING) {
-                ReorderableForEach($collection.items) { item in
+                ReorderableForEach(
+                    $collection.items,
+                    onOrderChanged: { overviewController.save() }
+                ) { item in
                     if item.isAdded {
                         content(item)
                             .transition(.scale)
                     }
                 }
             }
+            .animation(.interactiveSpring())
         }
         .sheet(isPresented: $isShowingUpgradeToPro) {
             UpgradeToProScreen()

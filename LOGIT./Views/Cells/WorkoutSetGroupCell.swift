@@ -52,6 +52,7 @@ struct WorkoutSetGroupCell: View {
                             .secondaryTileStyle()
                         }
                     }
+                    .animation(.interactiveSpring())
                     if canEdit {
                         Button {
                             withAnimation(.interactiveSpring()) {

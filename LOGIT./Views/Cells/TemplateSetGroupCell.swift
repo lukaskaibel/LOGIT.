@@ -52,6 +52,7 @@ struct TemplateSetGroupCell: View {
                             .secondaryTileStyle()
                         }
                     }
+                    .animation(.interactiveSpring())
                     if canEdit && !isReordering {
                         Button {
                             withAnimation(.interactiveSpring()) {

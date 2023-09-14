@@ -78,7 +78,7 @@ struct IntegerField: View {
         )
     }
 
-    struct Index: Equatable {
+    struct Index: Equatable, Hashable {
         let primary: Int
         var secondary: Int = 0
         var tertiary: Int = 0
@@ -86,6 +86,12 @@ struct IntegerField: View {
         static func == (lhs: Index, rhs: Index) -> Bool {
             lhs.primary == rhs.primary && lhs.secondary == rhs.secondary
                 && lhs.tertiary == rhs.tertiary
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(primary)
+            hasher.combine(secondary)
+            hasher.combine(tertiary)
         }
 
     }

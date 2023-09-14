@@ -42,6 +42,7 @@ struct WorkoutSetGroupList: View {
                 .id(setGroup)
             }
         }
+        .animation(.interactiveSpring())
     }
 }
 
