@@ -24,6 +24,8 @@
 		7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */; };
 		792A3FEA2AB3138C00C6A097 /* OverviewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */; };
 		792A3FEC2AB34EB400C6A097 /* UpgradeToProScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */; };
+		792A3FF12AB36FC400C6A097 /* DateBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FF02AB36FC400C6A097 /* DateBarChart.swift */; };
+		792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FF22AB478F000C6A097 /* DatabaseTests.swift */; };
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
@@ -167,6 +169,8 @@
 		7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetPerWeekView.swift; sourceTree = "<group>"; };
 		792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewControllerTests.swift; sourceTree = "<group>"; };
 		792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeToProScreen.swift; sourceTree = "<group>"; };
+		792A3FF02AB36FC400C6A097 /* DateBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBarChart.swift; sourceTree = "<group>"; };
+		792A3FF22AB478F000C6A097 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		792D522B27F1160800B08813 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
@@ -314,9 +318,9 @@
 		7919C5FE2A742EA500F35493 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */,
 				79488DD82A755AEB005C485D /* CanEditModifier.swift */,
 				79488DEB2A770C7D005C485D /* EmptyPlaceholderModifier.swift */,
+				7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */,
 				79488DED2A770CB9005C485D /* OnSwipeDownModifier.swift */,
 			);
 			path = Modifiers;
@@ -443,12 +447,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		7967D57C2811886700B30D03 /* Graphs */ = {
+		7967D57C2811886700B30D03 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				792A3FF02AB36FC400C6A097 /* DateBarChart.swift */,
+				79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */,
 				8010137A284791AB00309279 /* PieGraph.swift */,
+				7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */,
 			);
-			path = Graphs;
+			path = Charts;
 			sourceTree = "<group>";
 		};
 		7988FBB12A7307B500E4FE54 /* Styles */ = {
@@ -569,17 +576,15 @@
 				79488DDC2A756AA4005C485D /* Cells */,
 				794DAC622A320919006F0168 /* ChronoView.swift */,
 				798BDC242A79AB4900EAA75D /* CreateTemplateMenu.swift */,
-				79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */,
 				7962583D29341122003AC2AC /* ExerciseHeader.swift */,
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
-				7967D57C2811886700B30D03 /* Graphs */,
+				7967D57C2811886700B30D03 /* Charts */,
 				793CB8A72975BB1B00140D2B /* IntegerField.swift */,
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
 				7960313C2AAFB5BC00C2CF7B /* OverviewView.swift */,
 				7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */,
 				79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */,
-				7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */,
 				792156D12A955DD40010A0FC /* TipView.swift */,
 				797EF7E729293222003C2266 /* TitleUnitView.swift */,
 				79407A8A2772380C004F32A3 /* UnitView.swift */,
@@ -591,6 +596,7 @@
 		79E849082A7EA28000C0DF95 /* LOGITTests */ = {
 			isa = PBXGroup;
 			children = (
+				792A3FF22AB478F000C6A097 /* DatabaseTests.swift */,
 				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
 				792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */,
 			);
@@ -813,6 +819,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */,
 				792A3FEA2AB3138C00C6A097 /* OverviewControllerTests.swift in Sources */,
 				79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */,
 			);
@@ -888,6 +895,7 @@
 				79898A7C27F71BE500935E05 /* WorkoutDurationView.swift in Sources */,
 				8033F98E27072B0600EC707A /* SettingsScreen.swift in Sources */,
 				7988FBB32A7307D800E4FE54 /* TileStyle.swift in Sources */,
+				792A3FF12AB36FC400C6A097 /* DateBarChart.swift in Sources */,
 				807FC47F268A909D00169820 /* Exercise+.swift in Sources */,
 				79488DDB2A755C52005C485D /* WorkoutSetGroupList.swift in Sources */,
 				79A637D92A3A0157002A1F20 /* WorkoutRecorderScreen+Toolbar.swift in Sources */,

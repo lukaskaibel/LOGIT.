@@ -146,6 +146,7 @@
 "ok" = "Ok";
 "oldestFirst" = "Oldest First";
 "one" = "One";
+"overallSets" = "Overall Sets";
 "overview" = "Overview";
 
 // MARK: - P
@@ -153,6 +154,7 @@
 "performed" = "Performed";
 "personalBest" = "Personal Best";
 "perWeek" = "per week";
+"PerWeek" = "Per Week";
 "preventAutoLock" = "Prevent Auto-Lock";
 "preventAutoLockDescription" = "Keeps screen active during workout.";
 "profile" = "Profile";
@@ -179,6 +181,7 @@
 "selectMuscleGroup" = "Select Muscle Group";
 "set" = "Set";
 "sets" = "Sets";
+"setsPerWeek" = "Overall Sets per Week";
 "setType" = "Set Type";
 "settings" = "Settings";
 "seven" = "Seven";

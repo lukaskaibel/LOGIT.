@@ -152,12 +152,39 @@ extension Database {
     }
     
     func getWorkoutSets(with exercise: Exercise? = nil, onlyHighest attribute: WorkoutSet.Attribute, in calendarComponent: Calendar.Component) -> [WorkoutSet] {
-        Array(Dictionary(grouping: getWorkoutSets(with: exercise), by: { workoutSet -> Date in
-            let components = Calendar.current.dateComponents([calendarComponent], from: workoutSet.workout?.date ?? Date())
-            return Calendar.current.date(from: components) ?? Date()
-        }).values)
-        .compactMap { workoutSetsInWeek in workoutSetsInWeek.max { $0.max(attribute) < $1.max(attribute) } }
-        .sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now }
+        var result = [[WorkoutSet]]()
+        getWorkoutSets(with: exercise)
+            .forEach { workoutSet in
+                if let lastDate = result.last?.last?.workout?.date,
+                    let setGroupDate = workoutSet.workout?.date,
+                    Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: calendarComponent)
+                {
+                    result[result.count - 1].append(workoutSet)
+                } else {
+                    result.append([workoutSet])
+                }
+            }
+        return result
+            .compactMap { workoutSetsInWeek in workoutSetsInWeek.max { $0.max(attribute) < $1.max(attribute) } }
+            .sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now }
+    }
+    
+    func getGroupedWorkoutsSets(with exercise: Exercise? = nil, in calendarComponent: Calendar.Component) -> [[WorkoutSet]] {
+        var result = [[WorkoutSet]]()
+        getWorkoutSets(with: exercise)
+            .forEach { workoutSet in
+                if let lastDate = result.last?.last?.workout?.date,
+                    let setGroupDate = workoutSet.workout?.date,
+                    Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: calendarComponent)
+                {
+                    result[result.count - 1].append(workoutSet)
+                } else {
+                    result.append([workoutSet])
+                }
+            }
+        return result
+            .map { $0.sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now } }
+            .sorted { $0.first?.workout?.date ?? .now < $1.first?.workout?.date ?? .now }
     }
 
     // MARK: - Exercise Fetch

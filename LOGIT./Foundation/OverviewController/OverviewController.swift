@@ -29,57 +29,48 @@ class OverviewController: ObservableObject {
         database.save()
     }
     
+    private func createItemIfNotExisting(with id: String, for collection: OverviewItemCollection, isAdded: Bool) {
+        guard !collection.items.map({ $0.type }).contains(where: { $0.rawValue == id }) else { return }
+        let item = OverviewItem(context: database.context)
+        item.id = id
+        item.isAdded = isAdded
+        collection.items.append(item)
+    }
+    
     var exerciseDetailOverviewItemCollection: OverviewItemCollection {
         let predicate = NSPredicate(format: "id == %@", OverviewItemCollection.CollectionType.exerciseDetail.rawValue)
-        if let collection = database.fetch(OverviewItemCollection.self, predicate: predicate).first as? OverviewItemCollection {
-            return collection
-        } else {
-            let collection = OverviewItemCollection(context: database.context)
-            collection.id = OverviewItemCollection.CollectionType.exerciseDetail.rawValue
-            
-            let personalBest = OverviewItem(context: database.context)
-            personalBest.id = OverviewItem.ItemType.personalBest.rawValue
-            personalBest.isAdded = true
-            collection.items.append(personalBest)
-            
-            let bestWeightPerDay = OverviewItem(context: database.context)
-            bestWeightPerDay.id = OverviewItem.ItemType.bestWeightPerDay.rawValue
-            bestWeightPerDay.isAdded = false
-            collection.items.append(bestWeightPerDay)
-            
-            let bestRepetitionsPerDay = OverviewItem(context: database.context)
-            bestRepetitionsPerDay.id = OverviewItem.ItemType.bestRepetitionsPerDay.rawValue
-            bestRepetitionsPerDay.isAdded = false
-            collection.items.append(bestRepetitionsPerDay)
-            
-            save()
-            
-            return collection
+        var collection = database.fetch(OverviewItemCollection.self, predicate: predicate).first as? OverviewItemCollection
+        
+        if collection == nil {
+            collection = OverviewItemCollection(context: database.context)
+            collection!.id = OverviewItemCollection.CollectionType.exerciseDetail.rawValue
         }
+        
+        createItemIfNotExisting(with: OverviewItem.ItemType.personalBest.rawValue, for: collection!, isAdded: true)
+        createItemIfNotExisting(with: OverviewItem.ItemType.bestWeightPerDay.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(with: OverviewItem.ItemType.bestRepetitionsPerDay.rawValue, for: collection!, isAdded: false)
+            
+        save()
+        
+        return collection!
     }
     
     var homeScreenOverviewItemCollection: OverviewItemCollection {
         let predicate = NSPredicate(format: "id == %@", OverviewItemCollection.CollectionType.homeScreen.rawValue)
-        if let collection = database.fetch(OverviewItemCollection.self, predicate: predicate).first as? OverviewItemCollection {
-            return collection
-        } else {
-            let collection = OverviewItemCollection(context: database.context)
-            collection.id = OverviewItemCollection.CollectionType.homeScreen.rawValue
-            
-            let targetPerWeek = OverviewItem(context: database.context)
-            targetPerWeek.id = OverviewItem.ItemType.targetPerWeek.rawValue
-            targetPerWeek.isAdded = true
-            collection.items.append(targetPerWeek)
-            
-            let muscleGroupsInLastTen = OverviewItem(context: database.context)
-            muscleGroupsInLastTen.id = OverviewItem.ItemType.muscleGroupsInLastTen.rawValue
-            muscleGroupsInLastTen.isAdded = false
-            collection.items.append(muscleGroupsInLastTen)
-            
-            save()
-            
-            return collection
+        var collection = database.fetch(OverviewItemCollection.self, predicate: predicate).first as? OverviewItemCollection
+        
+        if collection == nil {
+            collection = OverviewItemCollection(context: database.context)
+            collection!.id = OverviewItemCollection.CollectionType.homeScreen.rawValue
         }
+        
+        createItemIfNotExisting(with: OverviewItem.ItemType.targetPerWeek.rawValue, for: collection!, isAdded: true)
+        createItemIfNotExisting(with: OverviewItem.ItemType.muscleGroupsInLastTen.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(with: OverviewItem.ItemType.setsPerWeek.rawValue, for: collection!, isAdded: false)
+            
+        save()
+        
+        return collection!
     }
     
 }

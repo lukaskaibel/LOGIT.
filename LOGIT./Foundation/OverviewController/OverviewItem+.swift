@@ -11,7 +11,7 @@ extension OverviewItem {
     
     enum ItemType: String, CaseIterable {
         case personalBest, bestWeightPerDay, bestRepetitionsPerDay
-        case targetPerWeek, muscleGroupsInLastTen
+        case targetPerWeek, muscleGroupsInLastTen, setsPerWeek
     }
     
     var type: ItemType {
@@ -26,6 +26,7 @@ extension OverviewItem {
             
         case .targetPerWeek: return false
         case .muscleGroupsInLastTen: return true
+        case .setsPerWeek: return true
         }
     }
     

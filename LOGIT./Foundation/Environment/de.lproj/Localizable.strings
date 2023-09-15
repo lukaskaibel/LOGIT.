@@ -147,6 +147,7 @@
 "ok" = "Ok";
 "oldestFirst" = "Älteste zuerst";
 "one" = "Eins";
+"overallSets" = "Gesamte Sätze";
 "overview" = "Überblick";
 
 // MARK: - P
@@ -154,6 +155,7 @@
 "performed" = "Ausführungen:";
 "personalBest" = "Persönliche Bestleistung";
 "perWeek" = "pro Woche";
+"PerWeek" = "Pro Woche";
 "preventAutoLock" = "Bildschirmsperre verhindern";
 "preventAutoLockDescription" = "Verhindert das Abschalten des Bildschirms während des Training.";
 "profile" = "Profil";
@@ -180,6 +182,7 @@
 "selectMuscleGroup" = "Muskelgruppe auswählen";
 "set" = "Satz";
 "sets" = "Sätze";
+"setsPerWeek" = "Gesamte Sätze pro Woche";
 "setType" = "Satz Art";
 "setTimer" = "Timer starten";
 "settings" = "Einstellungen";

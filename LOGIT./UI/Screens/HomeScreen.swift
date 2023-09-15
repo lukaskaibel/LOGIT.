@@ -47,6 +47,7 @@ struct HomeScreen: View {
                             switch item.type {
                             case .targetPerWeek: targetWorkoutsView
                             case .muscleGroupsInLastTen: muscleGroupPercentageView
+                            case .setsPerWeek: setsPerWeek
                             default: EmptyView()
                             }
                         }
@@ -162,9 +163,9 @@ struct HomeScreen: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Muscle Groups")
+                        Text(NSLocalizedString("muscleGroups", comment: ""))
                             .tileHeaderStyle()
-                        Text("Last 10 Workouts")
+                        Text(NSLocalizedString("lastTenWorkouts", comment: ""))
                             .tileHeaderSecondaryStyle()
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -190,6 +191,26 @@ struct HomeScreen: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(TileButtonStyle())
+    }
+    
+    private var setsPerWeek: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("overallSets", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("PerWeek", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            DateBarChart(dateUnit: .weekOfYear) {
+                database.getGroupedWorkoutsSets(in: .weekOfYear)
+                    .map {
+                        DateBarChart.Item(date: ($0.first?.workout?.date)!, value: $0.count)
+                    }
+            }
+        }
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
     
     private var noWorkoutTip: some View {
