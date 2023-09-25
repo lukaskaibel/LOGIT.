@@ -336,5 +336,6 @@ struct ExerciseDetailView_Previews: PreviewProvider {
             ExerciseDetailScreen(exercise: Database.preview.getExercises().first!)
         }
         .environmentObject(Database.preview)
+        .environmentObject(OverviewController.preview)
     }
 }

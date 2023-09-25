@@ -10,6 +10,7 @@
 // MARK: - A
 
 "abdominals" = "Abs";
+"add" = "Add";
 "addExercise" = "Add Exercise";
 "addSet" = "Add Set";
 "afternoon" = "Afternoon";
@@ -25,9 +26,11 @@
 "bestWeightPerDay" = "Best Weight per Day";
 "bestRepetitionsPerDay" = "Best Reps per Day";
 "biceps" = "Biceps";
+"bodyweight" = "Bodyweight";
 
 // MARK: - C
 
+"calories" = "Calories";
 "cancel" = "Cancel";
 "cardio" = "Cardio";
 "chest" = "Chest";
@@ -104,6 +107,7 @@
 
 "maxReps" = "Max Reps";
 "maxWeight" = "Max Weight";
+"measurements" = "Measurements";
 "monthly" = "Monthly";
 "morning" = "Morning";
 "muscleGroup" = "Muscle Group";
@@ -129,6 +133,7 @@
 "noExercisesTip" = "Exercise Library 🏋️";
 "noExercisesTipDescription" = "Craft your personal Exercise library and categorize by muscle group. Click below to start adding your first Exercise!";
 "noHistory" = "No History";
+"noMeasurements" = "No Measurements";
 "noName" = "No Name";
 "noon" = "Noon";
 "normalset" = "Normal";
@@ -153,6 +158,7 @@
 
 "performed" = "Performed";
 "personalBest" = "Personal Best";
+"perDay" = "per Day";
 "perWeek" = "per week";
 "PerWeek" = "Per Week";
 "preventAutoLock" = "Prevent Auto-Lock";
@@ -188,6 +194,7 @@
 "shoulders" = "Shoulders";
 "showAll" = "Show All";
 "showDetails" = "Show Details";
+"showMeasurements" = "Show Measurements";
 "six" = "Six";
 "sortBy" = "Sort by";
 "standard" = "Standard";

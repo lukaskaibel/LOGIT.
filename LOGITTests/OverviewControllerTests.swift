@@ -15,16 +15,16 @@ final class OverviewControllerTests: XCTestCase {
     func testExerciseDetailOverviewItemCollection() {
         let items = overviewController.exerciseDetailOverviewItemCollection.items
         let types = items.map { $0.type }
-        XCTAssertEqual(types.contains(OverviewItem.ItemType.personalBest), true, "OverviewItem 'personalBest' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItem.ItemType.bestWeightPerDay), true, "OverviewItem 'bestWeightPerDay' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItem.ItemType.bestRepetitionsPerDay), true, "OverviewItem 'bestRepetitionsPerDay' not in collection.items.")
+        XCTAssertEqual(types.contains(OverviewItemType.personalBest), true, "OverviewItem 'personalBest' not in collection.items.")
+        XCTAssertEqual(types.contains(OverviewItemType.bestWeightPerDay), true, "OverviewItem 'bestWeightPerDay' not in collection.items.")
+        XCTAssertEqual(types.contains(OverviewItemType.bestRepetitionsPerDay), true, "OverviewItem 'bestRepetitionsPerDay' not in collection.items.")
     }
     
     func testHomeScreenOverviewItemCollection() {
         let items = overviewController.homeScreenOverviewItemCollection.items
         let types = items.map { $0.type }
-        XCTAssertEqual(types.contains(OverviewItem.ItemType.targetPerWeek), true, "OverviewItem 'targetPerWeek' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItem.ItemType.muscleGroupsInLastTen), true, "OverviewItem 'muscleGroupsInLastTen' not in collection.items.")
+        XCTAssertEqual(types.contains(OverviewItemType.targetPerWeek), true, "OverviewItem 'targetPerWeek' not in collection.items.")
+        XCTAssertEqual(types.contains(OverviewItemType.muscleGroupsInLastTen), true, "OverviewItem 'muscleGroupsInLastTen' not in collection.items.")
     }
 
 }

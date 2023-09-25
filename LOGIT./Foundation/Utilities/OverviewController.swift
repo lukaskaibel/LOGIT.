@@ -12,25 +12,27 @@ import OSLog
 
 class OverviewController: ObservableObject {
     
-    // MARK: - Constants
+    // MARK: - Statics
 
     static let shared = OverviewController()
     static let preview = OverviewController(isPreview: true)
+    
+    // MARK: - Constants
 
     private let database: Database
 
     // MARK: - Init
     
     init(isPreview: Bool = false) {
-        database = isPreview ? Database.preview : Database.shared
+        database = isPreview ? Database.preview : .shared
     }
     
     func save() {
         database.save()
     }
     
-    private func createItemIfNotExisting(with id: String, for collection: OverviewItemCollection, isAdded: Bool) {
-        guard !collection.items.map({ $0.type }).contains(where: { $0.rawValue == id }) else { return }
+    private func createItemIfNotExisting(withId id: String, for collection: OverviewItemCollection, isAdded: Bool) {
+        guard !collection.items.map({ $0.id }).contains(where: { $0 == id }) else { return }
         let item = OverviewItem(context: database.context)
         item.id = id
         item.isAdded = isAdded
@@ -46,9 +48,9 @@ class OverviewController: ObservableObject {
             collection!.id = OverviewItemCollection.CollectionType.exerciseDetail.rawValue
         }
         
-        createItemIfNotExisting(with: OverviewItem.ItemType.personalBest.rawValue, for: collection!, isAdded: true)
-        createItemIfNotExisting(with: OverviewItem.ItemType.bestWeightPerDay.rawValue, for: collection!, isAdded: false)
-        createItemIfNotExisting(with: OverviewItem.ItemType.bestRepetitionsPerDay.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.personalBest.rawValue, for: collection!, isAdded: true)
+        createItemIfNotExisting(withId: OverviewItemType.bestWeightPerDay.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.bestRepetitionsPerDay.rawValue, for: collection!, isAdded: false)
             
         save()
         
@@ -64,9 +66,11 @@ class OverviewController: ObservableObject {
             collection!.id = OverviewItemCollection.CollectionType.homeScreen.rawValue
         }
         
-        createItemIfNotExisting(with: OverviewItem.ItemType.targetPerWeek.rawValue, for: collection!, isAdded: true)
-        createItemIfNotExisting(with: OverviewItem.ItemType.muscleGroupsInLastTen.rawValue, for: collection!, isAdded: false)
-        createItemIfNotExisting(with: OverviewItem.ItemType.setsPerWeek.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.targetPerWeek.rawValue, for: collection!, isAdded: true)
+        createItemIfNotExisting(withId: OverviewItemType.muscleGroupsInLastTen.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.setsPerWeek.rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.measurement(.bodyWeight).rawValue, for: collection!, isAdded: false)
+        createItemIfNotExisting(withId: OverviewItemType.measurement(.calories).rawValue, for: collection!, isAdded: false)
             
         save()
         

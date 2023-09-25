@@ -48,6 +48,7 @@ struct HomeScreen: View {
                             case .targetPerWeek: targetWorkoutsView
                             case .muscleGroupsInLastTen: muscleGroupPercentageView
                             case .setsPerWeek: setsPerWeek
+                            case .measurement(let measurementType): measurementView(forType: measurementType)
                             default: EmptyView()
                             }
                         }
@@ -74,7 +75,7 @@ struct HomeScreen: View {
                                 .buttonStyle(TileButtonStyle())
                             }
                             .emptyPlaceholder(recentWorkouts) {
-                                Text("No Workouts")
+                                Text(NSLocalizedString("noWorkouts", comment: ""))
                             }
                         }
                     }
@@ -213,6 +214,13 @@ struct HomeScreen: View {
         .tileStyle()
     }
     
+    @ViewBuilder
+    private func measurementView(forType measurementType: MeasurementEntryType) -> some View {
+        MeasurementEntryView(measurementType: measurementType)
+            .padding(CELL_PADDING)
+            .tileStyle()
+    }
+    
     private var noWorkoutTip: some View {
         TipView(
             title: NSLocalizedString("noWorkoutsTip", comment: ""),
@@ -266,5 +274,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen()
             .environmentObject(Database.preview)
+            .environmentObject(OverviewController.preview)
+            .environmentObject(MeasurementEntryController.preview)
     }
 }

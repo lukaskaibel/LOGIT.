@@ -10,6 +10,7 @@
 // MARK: - A
 
 "abdominals" = "Bauch";
+"add" = "Hinzufügen";
 "addExercise" = "Übung hinzufügen";
 "addSet" = "Satz hinzufügen";
 "afternoon" = "Nachmittag";
@@ -25,9 +26,11 @@
 "bestWeightPerDay" = "Höchstes Gewicht pro Tag";
 "bestRepetitionsPerDay" = "Höchste Wdh. pro Tag";
 "biceps" = "Bizeps";
+"bodyweight" = "Körpergewicht";
 
 // MARK: - C
 
+"calories" = "Kalorien";
 "cancel" = "Abbrechen";
 "cardio" = "Ausdauer";
 "chest" = "Brust";
@@ -104,6 +107,7 @@
 
 "maxReps" = "Max Wdh";
 "maxWeight" = "Max Gewicht";
+"measurements" = "Messungen";
 "monthly" = "Monatlich";
 "morning" = "Morgen";
 "muscleGroup" = "Muskelgruppe";
@@ -129,6 +133,7 @@
 "noExercisesTip" = "Übungsbibliothek 🏋️";
 "noExercisesTipDescription" = "Erstelle deine persönliche Übungsbibliothek und kategorisiere nach Muskelgruppen. Klicke unten, um deine erste Übung hinzuzufügen!";
 "noHistory" = "Keine Ausführungen";
+"noMeasurements" = "Keine Messungen";
 "noName" = "Ohne Namen";
 "noon" = "Mittag";
 "normalset" = "Normal";
@@ -154,6 +159,7 @@
 
 "performed" = "Ausführungen:";
 "personalBest" = "Persönliche Bestleistung";
+"perDay" = "pro Tag";
 "perWeek" = "pro Woche";
 "PerWeek" = "Pro Woche";
 "preventAutoLock" = "Bildschirmsperre verhindern";
@@ -190,6 +196,7 @@
 "shoulders" = "Schultern";
 "showAll" = "Alle anzeigen";
 "showDetails" = "Details anzeigen";
+"showMeasurements" = "Messungen anzeigen";
 "six" = "Sechs";
 "sortBy" = "Sortieren nach";
 "standard" = "Standard";

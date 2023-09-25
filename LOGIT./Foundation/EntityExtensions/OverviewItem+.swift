@@ -1,0 +1,85 @@
+//
+//  OverviewItem+.swift
+//  LOGIT
+//
+//  Created by Lukas Kaibel on 12.09.23.
+//
+
+import Foundation
+
+extension OverviewItem {
+    
+    var type: OverviewItemType {
+        OverviewItemType(rawValue: id!)!
+    }
+    
+    var isProFeature: Bool {
+        switch self.type {
+        case .personalBest: return false
+        case .bestWeightPerDay: return true
+        case .bestRepetitionsPerDay: return true
+        case .measurement(_): return true
+            
+        case .targetPerWeek: return false
+        case .muscleGroupsInLastTen: return true
+        case .setsPerWeek: return true
+        }
+    }
+    
+}
+
+enum OverviewItemType {
+    case personalBest, bestWeightPerDay, bestRepetitionsPerDay, measurement(MeasurementEntryType)
+    case targetPerWeek, muscleGroupsInLastTen, setsPerWeek
+    
+    init?(rawValue: String) {
+        if rawValue.hasPrefix("measurement") {
+            let measurementValue = String(rawValue.dropFirst("measurement".count)).lowercased()
+            if let measurementType = MeasurementEntryType(rawValue: measurementValue) {
+                self = .measurement(measurementType)
+                return
+            }
+        }
+        switch rawValue {
+        case "personalBest":
+            self = .personalBest
+        case "bestWeightPerDay":
+            self = .bestWeightPerDay
+        case "bestRepetitionsPerDay":
+            self = .bestRepetitionsPerDay
+        case "targetPerWeek":
+            self = .targetPerWeek
+        case "muscleGroupsInLastTen":
+            self = .muscleGroupsInLastTen
+        case "setsPerWeek":
+            self = .setsPerWeek
+        default:
+            return nil
+        }
+    }
+    
+    var rawValue: String {
+        switch self {
+        case .personalBest:
+            return "personalBest"
+        case .bestWeightPerDay:
+            return "bestWeightPerDay"
+        case .bestRepetitionsPerDay:
+            return "bestRepetitionsPerDay"
+        case .targetPerWeek:
+            return "targetPerWeek"
+        case .muscleGroupsInLastTen:
+            return "muscleGroupsInLastTen"
+        case .setsPerWeek:
+            return "setsPerWeek"
+        case .measurement(let measurementType):
+            return "measurement" + measurementType.rawValue.capitalized
+        }
+    }
+}
+
+extension OverviewItemType: Equatable {
+    static func == (lhs: OverviewItemType, rhs: OverviewItemType) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+}

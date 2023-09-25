@@ -95,6 +95,10 @@
 		79B70BF32803031B0012EAAD /* TemplateStandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */; };
 		79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */; };
 		79B7F2A92AA9E1A20090B785 /* ReorderableForEach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */; };
+		79C07B2A2AB8AE65000BF879 /* MeasurementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B292AB8AE65000BF879 /* MeasurementView.swift */; };
+		79C07B2C2ABA47D9000BF879 /* MeasurementEntry+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2B2ABA47D9000BF879 /* MeasurementEntry+.swift */; };
+		79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2D2ABA535F000BF879 /* MeasurementController.swift */; };
+		79C07B302ABA566E000BF879 /* MeasurementEntryControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */; };
 		79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CAF79C27E1426600A1711C /* WeightUnit.swift */; };
 		79CD8BE528240A020052D83C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE428240A020052D83C /* CalendarView.swift */; };
 		79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE928240B0A0052D83C /* MonthView.swift */; };
@@ -242,6 +246,10 @@
 		79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateStandardSet+.swift"; sourceTree = "<group>"; };
 		79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLineChart.swift; sourceTree = "<group>"; };
 		79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableForEach.swift; sourceTree = "<group>"; };
+		79C07B292AB8AE65000BF879 /* MeasurementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementView.swift; sourceTree = "<group>"; };
+		79C07B2B2ABA47D9000BF879 /* MeasurementEntry+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeasurementEntry+.swift"; sourceTree = "<group>"; };
+		79C07B2D2ABA535F000BF879 /* MeasurementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementController.swift; sourceTree = "<group>"; };
+		79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementEntryControllerTests.swift; sourceTree = "<group>"; };
 		79CAF79C27E1426600A1711C /* WeightUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnit.swift; sourceTree = "<group>"; };
 		79CD8BE428240A020052D83C /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		79CD8BE928240B0A0052D83C /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -345,20 +353,9 @@
 				79488DF22A770DFD005C485D /* Environment */,
 				801CDC482688BD9D00BB653D /* Extentions */,
 				794DAC662A320F9C006F0168 /* Models */,
-				792A3FEE2AB36C5300C6A097 /* OverviewController */,
 				798BDC262A7BCCE300EAA75D /* Utilities */,
 			);
 			path = Foundation;
-			sourceTree = "<group>";
-		};
-		792A3FEE2AB36C5300C6A097 /* OverviewController */ = {
-			isa = PBXGroup;
-			children = (
-				7960313E2AAFC74C00C2CF7B /* OverviewController.swift */,
-				796031402AB0ABF200C2CF7B /* OverviewItem+.swift */,
-				796031422AB0AEAD00C2CF7B /* OverviewItemCollection+.swift */,
-			);
-			path = OverviewController;
 			sourceTree = "<group>";
 		};
 		792A3FEF2AB36E7700C6A097 /* UI */ = {
@@ -485,6 +482,8 @@
 			children = (
 				795A48802A6899A10008A458 /* Chronograph.swift */,
 				79702C6B2A7D356100F19EF3 /* ExerciseService.swift */,
+				79C07B2D2ABA535F000BF879 /* MeasurementController.swift */,
+				7960313E2AAFC74C00C2CF7B /* OverviewController.swift */,
 				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
 				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
 			);
@@ -545,6 +544,9 @@
 			children = (
 				795D9B8A282EC34B00866C06 /* DropSet+.swift */,
 				807FC47E268A909D00169820 /* Exercise+.swift */,
+				79C07B2B2ABA47D9000BF879 /* MeasurementEntry+.swift */,
+				796031402AB0ABF200C2CF7B /* OverviewItem+.swift */,
+				796031422AB0AEAD00C2CF7B /* OverviewItemCollection+.swift */,
 				806C4FF92688B46400A9B01D /* StandardSet+.swift */,
 				79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */,
 				79881EC52831675000BD06CF /* TemplateDropSet+.swift */,
@@ -580,6 +582,7 @@
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
 				7967D57C2811886700B30D03 /* Charts */,
 				793CB8A72975BB1B00140D2B /* IntegerField.swift */,
+				79C07B292AB8AE65000BF879 /* MeasurementView.swift */,
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
 				7960313C2AAFB5BC00C2CF7B /* OverviewView.swift */,
@@ -598,6 +601,7 @@
 			children = (
 				792A3FF22AB478F000C6A097 /* DatabaseTests.swift */,
 				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
+				79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */,
 				792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */,
 			);
 			path = LOGITTests;
@@ -819,6 +823,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79C07B302ABA566E000BF879 /* MeasurementEntryControllerTests.swift in Sources */,
 				792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */,
 				792A3FEA2AB3138C00C6A097 /* OverviewControllerTests.swift in Sources */,
 				79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */,
@@ -837,6 +842,7 @@
 				792DAB7527EB9AD30062C20D /* Int+.swift in Sources */,
 				7960313D2AAFB5BC00C2CF7B /* OverviewView.swift in Sources */,
 				791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */,
+				79C07B2C2ABA47D9000BF879 /* MeasurementEntry+.swift in Sources */,
 				793CB8A82975BB1B00140D2B /* IntegerField.swift in Sources */,
 				792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */,
 				8010137B284791AB00309279 /* PieGraph.swift in Sources */,
@@ -885,6 +891,7 @@
 				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,
 				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
+				79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,
 				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,
 				8058F49F268D2503006A94AC /* Workout+.swift in Sources */,
@@ -898,6 +905,7 @@
 				792A3FF12AB36FC400C6A097 /* DateBarChart.swift in Sources */,
 				807FC47F268A909D00169820 /* Exercise+.swift in Sources */,
 				79488DDB2A755C52005C485D /* WorkoutSetGroupList.swift in Sources */,
+				79C07B2A2AB8AE65000BF879 /* MeasurementView.swift in Sources */,
 				79A637D92A3A0157002A1F20 /* WorkoutRecorderScreen+Toolbar.swift in Sources */,
 				79488DEA2A76FB4E005C485D /* MuscleGroupGradientStyle.swift in Sources */,
 				79488DD72A7558B2005C485D /* EnvironmentValues+.swift in Sources */,
@@ -1136,7 +1144,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LOGIT;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1167,7 +1175,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LOGIT./Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LOGIT;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

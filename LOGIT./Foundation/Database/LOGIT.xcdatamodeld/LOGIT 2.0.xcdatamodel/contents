@@ -13,6 +13,12 @@
         <relationship name="setGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WorkoutSetGroup" inverseName="exercises_" inverseEntity="WorkoutSetGroup"/>
         <relationship name="templateSetGroups_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TemplateSetGroup" inverseName="exercises_" inverseEntity="TemplateSetGroup"/>
     </entity>
+    <entity name="MeasurementEntry" representedClassName="MeasurementEntry" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type_" optional="YES" attributeType="String"/>
+        <attribute name="value_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="OverviewItem" representedClassName="OverviewItem" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="isAdded" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
