@@ -26,6 +26,7 @@
 "bestWeightPerDay" = "Höchstes Gewicht pro Tag";
 "bestRepetitionsPerDay" = "Höchste Wdh. pro Tag";
 "biceps" = "Bizeps";
+"bodyParts" = "Körperteile";
 "bodyweight" = "Körpergewicht";
 
 // MARK: - C
@@ -40,6 +41,7 @@
 "completed" = "Geschafft";
 "continue" = "Weiter";
 "continueWorkout" = "Workout fortführen";
+"coreMetrics" = "Basis";
 "create" = "Create";
 "createExercise" = "Übung erstellen";
 "createTemplate" = "Vorlage erstellen";
@@ -99,6 +101,7 @@
 
 "lastTenWorkouts" = "Letzte 10 Workouts";
 "lastUsed" = "Zuletzt benutzt";
+"lastWorkout" = "Letztes Workout";
 "legs" = "Beine";
 "letsGetStarted" = "Los gehts";
 "letsGetStartedDescription" = "Bevor du trainieren kannst müssen wir ein kurzen Set-Up machen.";
@@ -107,6 +110,21 @@
 
 "maxReps" = "Max Wdh";
 "maxWeight" = "Max Gewicht";
+"measurementBodyweight" = "Körpergewicht";
+"measurementCalories" = "Kalorien";
+"measurementLengthChest" = "Brust";
+"measurementLengthHips" = "Hüfte";
+"measurementLengthBicepsLeft" = "Bizeps Links";
+"measurementLengthCalfLeft" = "Wade Links";
+"measurementLengthForearmLeft" = "Unterarm Links";
+"measurementLengthThighLeft" = "Oberschenkel Links";
+"measurementLengthNeck" = "Hals";
+"measurementLengthBicepsRight" = "Bizeps Rechts";
+"measurementLengthCalfRight" = "Wade Rechts";
+"measurementLengthForearmRight" = "Unterarm Rechts";
+"measurementLengthThighRight" = "Oberschenkel Rechts";
+"measurementLengthShoulders" = "Schultern";
+"measurementLengthWaist" = "Taille";
 "measurements" = "Messungen";
 "monthly" = "Monatlich";
 "morning" = "Morgen";
@@ -141,6 +159,7 @@
 "noTemplatesTip" = "Plane voraus 📋";
 "noTemplatesTipDescription" = "Nutze Vorlagen, um deine Workouts im Voraus zu organisieren und zu planen. Klicke unten, um deine erste Workout-Vorlage zu erstellen!";
 "now" = "Jetzt";
+"noWidgetsAdded" = "Keine Widgets hinzugefügt";
 "noWorkouts" = "Keine Workouts";
 "noWorkoutsInWeek" = "Keine Workouts in der Woche";
 "noWorkoutsTip" = "Lass uns trainieren 💪";

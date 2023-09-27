@@ -19,7 +19,7 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    @EnvironmentObject var overviewController: OverviewController
+    @EnvironmentObject var overviewController: WidgetController
 
     // MARK: - State
 
@@ -40,7 +40,10 @@ struct ExerciseDetailScreen: View {
                 header
                     .padding(.horizontal)
                 
-                OverviewView(collection: overviewController.exerciseDetailOverviewItemCollection) { item in
+                WidgetCollectionView(
+                    title: NSLocalizedString("overview", comment: ""),
+                    collection: overviewController.exerciseDetailWidgetCollection
+                ) { item in
                     Group {
                         switch item.type {
                         case .personalBest: exerciseInfo
@@ -114,13 +117,13 @@ struct ExerciseDetailScreen: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-//    private var overviewViewItems: Binding<[OverviewView.Item<AnyView>]> {
+//    private var overviewViewItems: Binding<[WidgetCollectionView.Item<AnyView>]> {
 //        Binding(
 //            get: {
-//                (overviewController.exerciseDetailOverviewItemCollection?.items ?? [])!
-//                    .compactMap { overviewItem -> OverviewView.Item<AnyView>? in
+//                (overviewController.exerciseDetailWidgetCollection?.items ?? [])!
+//                    .compactMap { overviewItem -> WidgetCollectionView.Item<AnyView>? in
 //                        if overviewItem.id == OverviewController.ExerciseDetailItems.personalBest.rawValue {
-//                            return OverviewView.Item<AnyView>(
+//                            return WidgetCollectionView.Item<AnyView>(
 //                                id: overviewItem.id!,
 //                                name: NSLocalizedString(overviewItem.id!, comment: ""),
 //                                content: AnyView(exerciseInfo),
@@ -336,6 +339,6 @@ struct ExerciseDetailView_Previews: PreviewProvider {
             ExerciseDetailScreen(exercise: Database.preview.getExercises().first!)
         }
         .environmentObject(Database.preview)
-        .environmentObject(OverviewController.preview)
+        .environmentObject(WidgetController.preview)
     }
 }

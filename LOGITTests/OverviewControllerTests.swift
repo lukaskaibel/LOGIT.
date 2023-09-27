@@ -10,21 +10,21 @@ import XCTest
 
 final class OverviewControllerTests: XCTestCase {
 
-    private let overviewController = OverviewController.preview
+    private let overviewController = WidgetController.preview
 
-    func testExerciseDetailOverviewItemCollection() {
-        let items = overviewController.exerciseDetailOverviewItemCollection.items
+    func testExerciseDetailWidgetCollection() {
+        let items = overviewController.exerciseDetailWidgetCollection.items
         let types = items.map { $0.type }
-        XCTAssertEqual(types.contains(OverviewItemType.personalBest), true, "OverviewItem 'personalBest' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItemType.bestWeightPerDay), true, "OverviewItem 'bestWeightPerDay' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItemType.bestRepetitionsPerDay), true, "OverviewItem 'bestRepetitionsPerDay' not in collection.items.")
+        XCTAssertEqual(types.contains(WidgetType.personalBest), true, "Widget 'personalBest' not in collection.items.")
+        XCTAssertEqual(types.contains(WidgetType.bestWeightPerDay), true, "Widget 'bestWeightPerDay' not in collection.items.")
+        XCTAssertEqual(types.contains(WidgetType.bestRepetitionsPerDay), true, "Widget 'bestRepetitionsPerDay' not in collection.items.")
     }
     
-    func testHomeScreenOverviewItemCollection() {
-        let items = overviewController.homeScreenOverviewItemCollection.items
+    func testHomeScreenWidgetCollection() {
+        let items = overviewController.homeScreenWidgetCollection.items
         let types = items.map { $0.type }
-        XCTAssertEqual(types.contains(OverviewItemType.targetPerWeek), true, "OverviewItem 'targetPerWeek' not in collection.items.")
-        XCTAssertEqual(types.contains(OverviewItemType.muscleGroupsInLastTen), true, "OverviewItem 'muscleGroupsInLastTen' not in collection.items.")
+        XCTAssertEqual(types.contains(WidgetType.targetPerWeek), true, "Widget 'targetPerWeek' not in collection.items.")
+        XCTAssertEqual(types.contains(WidgetType.muscleGroupsInLastTen), true, "Widget 'muscleGroupsInLastTen' not in collection.items.")
     }
 
 }

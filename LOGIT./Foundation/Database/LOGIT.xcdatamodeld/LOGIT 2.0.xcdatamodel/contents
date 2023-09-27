@@ -19,16 +19,6 @@
         <attribute name="type_" optional="YES" attributeType="String"/>
         <attribute name="value_" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="OverviewItem" representedClassName="OverviewItem" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="isAdded" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OverviewItemCollection" inverseName="items_" inverseEntity="OverviewItemCollection"/>
-    </entity>
-    <entity name="OverviewItemCollection" representedClassName="OverviewItemCollection" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="itemOrder" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="[String]"/>
-        <relationship name="items_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OverviewItem" inverseName="collection" inverseEntity="OverviewItem"/>
-    </entity>
     <entity name="StandardSet" representedClassName="StandardSet" parentEntity="WorkoutSet" syncable="YES" codeGenerationType="class">
         <attribute name="repetitions" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -71,6 +61,16 @@
         <attribute name="repetitionsSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weightFirstExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weightSecondExercise" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Widget" representedClassName="Widget" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isAdded" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WidgetCollection" inverseName="items_" inverseEntity="WidgetCollection"/>
+    </entity>
+    <entity name="WidgetCollection" representedClassName="WidgetCollection" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="itemOrder" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="[String]"/>
+        <relationship name="items_" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Widget" inverseName="collection" inverseEntity="Widget"/>
     </entity>
     <entity name="Workout" representedClassName="Workout" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" defaultDateTimeInterval="646345140" usesScalarValueType="NO"/>

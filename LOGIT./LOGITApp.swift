@@ -22,11 +22,11 @@ struct LOGIT: App {
 
     #if targetEnvironment(simulator)
         @StateObject private var database = Database.preview
-        @StateObject private var overviewController = OverviewController.preview
+        @StateObject private var overviewController = WidgetController.preview
         @StateObject private var measurementController = MeasurementEntryController.preview
     #else
         @StateObject private var database = Database.shared
-        @StateObject private var overviewController = OverviewController.shared
+        @StateObject private var overviewController = WidgetController.shared
         @StateObject private var measurementController = MeasurementEntryController.shared
     #endif
     @State private var selectedTab: TabType = .home
@@ -82,12 +82,12 @@ struct LOGIT: App {
                     }
                     .tag(TabType.startWorkout)
                     NavigationStack {
-                        ExerciseListScreen()
+                        MeasurementsScreen()
                     }
                     .tabItem {
                         Label(
-                            NSLocalizedString("exercises", comment: ""),
-                            image: "LOGIT"
+                            NSLocalizedString("measurements", comment: ""),
+                            systemImage: "ruler"
                         )
                     }
                     .tag(TabType.exercises)

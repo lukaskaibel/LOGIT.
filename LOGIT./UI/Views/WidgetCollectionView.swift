@@ -1,5 +1,5 @@
 //
-//  OverviewView.swift
+//  WidgetCollectionView.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 11.09.23.
@@ -7,19 +7,20 @@
 
 import SwiftUI
 
-struct OverviewView<Content: View>: View {
+struct WidgetCollectionView<Content: View>: View {
     
-    @EnvironmentObject var overviewController: OverviewController
+    @EnvironmentObject var overviewController: WidgetController
     
-    @ObservedObject var collection: OverviewItemCollection
-    let content: (OverviewItem) -> Content
+    let title: String
+    @ObservedObject var collection: WidgetCollection
+    let content: (Widget) -> Content
     
     @State private var isShowingUpgradeToPro = false
     
     var body: some View {
         VStack(spacing: SECTION_HEADER_SPACING) {
             HStack {
-                Text(NSLocalizedString("overview", comment: ""))
+                Text(title)
                     .sectionHeaderStyle2()
                 Spacer()
                 Menu {
@@ -45,7 +46,7 @@ struct OverviewView<Content: View>: View {
                         }
                     }
                 } label: {
-                    Label("Widget", systemImage: "plus")
+                    Image(systemName: "plus")
                 }
             }
             VStack(spacing: CELL_SPACING) {
@@ -58,6 +59,9 @@ struct OverviewView<Content: View>: View {
                             .transition(.scale)
                     }
                 }
+            }
+            .emptyPlaceholder(collection.items.filter { $0.isAdded }) {
+                Text(NSLocalizedString("noWidgetsAdded", comment: ""))
             }
             .animation(.interactiveSpring())
         }
@@ -72,7 +76,7 @@ struct OverviewView<Content: View>: View {
 
 //private struct PreviewWrapperView: View {
 //
-//    @State private var items: [OverviewView.Item] = [.init(id: "1", name: "1", content: AnyView(Text("1")), isAdded: false), .init(id: "2", name: "2", content: AnyView(Text("2")), isAdded: true), .init(id: "3", name: "3", content: AnyView(Text("3")), isAdded: false)]
+//    @State private var items: [WidgetCollectionView.Item] = [.init(id: "1", name: "1", content: AnyView(Text("1")), isAdded: false), .init(id: "2", name: "2", content: AnyView(Text("2")), isAdded: true), .init(id: "3", name: "3", content: AnyView(Text("3")), isAdded: false)]
 //
 //    var body: some View {
 //        OverviewView(items: $items)

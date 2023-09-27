@@ -21,7 +21,7 @@ extension MeasurementEntry {
     var value: Int {
         get {
             switch type {
-            case .bodyWeight: return convertWeightForDisplaying(value_)
+            case .bodyweight: return convertWeightForDisplaying(value_)
             case .percentage, .calories: return Int(value_ / 1000)
             case .length: return Int(value_ / 10)
             case .none: return Int(value_)
@@ -29,7 +29,7 @@ extension MeasurementEntry {
         }
         set {
             switch type {
-            case .bodyWeight: value_ = convertWeightForStoring(Int64(newValue))
+            case .bodyweight: value_ = convertWeightForStoring(Int64(newValue))
             case .percentage, .calories: value_ = Int64(newValue * 1000)
             case .length: value_ = Int64(newValue * 10)
             case .none: value_ = Int64(newValue)
@@ -40,22 +40,22 @@ extension MeasurementEntry {
 }
 
 enum MeasurementEntryType {
-    case bodyWeight
+    case bodyweight
     case percentage
     case calories
     case length(LengthMeasurementEntryType)
     
     init?(rawValue: String) {
         if rawValue.hasPrefix("length") {
-            let lengthValue = String(rawValue.dropFirst("length".count)).lowercased()
-            if let lengthType = LengthMeasurementEntryType(rawValue: lengthValue) {
+            let lengthMeasurementTypeRaw = String(rawValue.dropFirst("length".count)).firstLetterLowercased
+            if let lengthType = LengthMeasurementEntryType(rawValue: lengthMeasurementTypeRaw) {
                 self = .length(lengthType)
                 return
             }
         }
         switch rawValue {
         case "bodyweight":
-            self = .bodyWeight
+            self = .bodyweight
         case "percentage":
             self = .percentage
         case "calories":
@@ -67,20 +67,20 @@ enum MeasurementEntryType {
     
     var rawValue: String {
         switch self {
-        case .bodyWeight:
+        case .bodyweight:
             return "bodyweight"
         case .percentage:
             return "percentage"
         case .calories:
             return "calories"
         case .length(let lengthType):
-            return "length" + lengthType.rawValue.capitalized
+            return "length" + lengthType.rawValue.firstLetterUppercased
         }
     }
     
     var unit: String {
         switch self {
-        case .bodyWeight:
+        case .bodyweight:
             return WeightUnit.used.rawValue
         case .percentage:
             return "%"
@@ -98,6 +98,6 @@ extension MeasurementEntryType: Equatable {
     }
 }
 
-enum LengthMeasurementEntryType: String {
-    case neck, shoulders, chest, leftBiceps, rightBiceps, leftForearm, rightForearm, waist, hips, leftThigh, rightThigh, leftCalf, rightCalf
+enum LengthMeasurementEntryType: String, CaseIterable {
+    case neck, shoulders, chest, bicepsLeft, bicepsRight, forearmLeft, forearmRight, waist, hips, thighLeft, thighRight, calfLeft, calfRight
 }

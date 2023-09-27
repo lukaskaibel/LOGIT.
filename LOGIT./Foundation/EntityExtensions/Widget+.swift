@@ -1,5 +1,5 @@
 //
-//  OverviewItem+.swift
+//  Widget+.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 12.09.23.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension OverviewItem {
+extension Widget {
     
-    var type: OverviewItemType {
-        OverviewItemType(rawValue: id!)!
+    var type: WidgetType {
+        return WidgetType(rawValue: id!)!
     }
     
     var isProFeature: Bool {
@@ -28,13 +28,13 @@ extension OverviewItem {
     
 }
 
-enum OverviewItemType {
+enum WidgetType {
     case personalBest, bestWeightPerDay, bestRepetitionsPerDay, measurement(MeasurementEntryType)
     case targetPerWeek, muscleGroupsInLastTen, setsPerWeek
     
     init?(rawValue: String) {
         if rawValue.hasPrefix("measurement") {
-            let measurementValue = String(rawValue.dropFirst("measurement".count)).lowercased()
+            let measurementValue = String(rawValue.dropFirst("measurement".count)).firstLetterLowercased
             if let measurementType = MeasurementEntryType(rawValue: measurementValue) {
                 self = .measurement(measurementType)
                 return
@@ -73,13 +73,13 @@ enum OverviewItemType {
         case .setsPerWeek:
             return "setsPerWeek"
         case .measurement(let measurementType):
-            return "measurement" + measurementType.rawValue.capitalized
+            return "measurement" + measurementType.rawValue.firstLetterUppercased
         }
     }
 }
 
-extension OverviewItemType: Equatable {
-    static func == (lhs: OverviewItemType, rhs: OverviewItemType) -> Bool {
+extension WidgetType: Equatable {
+    static func == (lhs: WidgetType, rhs: WidgetType) -> Bool {
         lhs.rawValue == rhs.rawValue
     }
 }

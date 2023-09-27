@@ -34,7 +34,7 @@ struct MeasurementEntryView: View {
                         Spacer()
                     }
                     VStack(alignment: .leading) {
-                        Text(NSLocalizedString(measurementType.rawValue, comment: ""))
+                        Text(NSLocalizedString("measurement" + measurementType.rawValue.firstLetterUppercased, comment: ""))
                             .tileHeaderStyle()
                         if !isAddingMeasurementEntry {
                             Text(measurementType.unit.uppercased() + " " + NSLocalizedString("perDay", comment: ""))
@@ -93,6 +93,9 @@ struct MeasurementEntryView: View {
                         measurementController.getMeasurementEntries(ofType: measurementType)
                             .map { .init(date: $0.date ?? .now, value: $0.value) }
                     }
+                    .noDataPlaceholder(measurementController.getMeasurementEntries(ofType: measurementType)) {
+                        Text(NSLocalizedString("noMeasurements", comment: ""))
+                    }
                     Button {
                         isShowingMeasurementEntryList = true
                     } label: {
@@ -110,7 +113,7 @@ struct MeasurementEntryView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         VStack(alignment: .leading) {
-                            Text(NSLocalizedString(measurementType.rawValue, comment: ""))
+                            Text(NSLocalizedString("measurement" + measurementType.rawValue.firstLetterUppercased, comment: ""))
                                 .screenHeaderStyle()
                             Text(NSLocalizedString("measurements", comment: ""))
                                 .foregroundColor(.secondary)
@@ -146,6 +149,7 @@ struct MeasurementEntryView: View {
                     }
                     .padding(.horizontal)
                 }
+                .navigationBarTitleDisplayMode(.inline)
             }
         }
         .frame(height: 250)
@@ -160,7 +164,7 @@ struct MeasurementEntryView: View {
 struct MeasurementEntryView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            MeasurementEntryView(measurementType: .bodyWeight)
+            MeasurementEntryView(measurementType: .bodyweight)
                 .padding(CELL_PADDING)
                 .tileStyle()
                 .environmentObject(Database.preview)

@@ -26,6 +26,7 @@
 "bestWeightPerDay" = "Best Weight per Day";
 "bestRepetitionsPerDay" = "Best Reps per Day";
 "biceps" = "Biceps";
+"bodyParts" = "Body Parts";
 "bodyweight" = "Bodyweight";
 
 // MARK: - C
@@ -40,6 +41,7 @@
 "completed" = "Completed";
 "continue" = "Continue";
 "continueWorkout" = "Continue Workout";
+"coreMetrics" = "Core Metrics";
 "create" = "Create";
 "createExercise" = "Create Exercise";
 "createTemplate" = "Create Template";
@@ -99,6 +101,7 @@
 
 "lastTenWorkouts" = "Last 10 Workouts";
 "lastUsed" = "Last used";
+"lastWorkout" = "Last Workout";
 "legs" = "Legs";
 "letsGetStarted" = "Let's get started";
 "letsGetStartedDescription" = "Before you can start working out we need to do a quick setup to optimise your experience.";
@@ -107,6 +110,21 @@
 
 "maxReps" = "Max Reps";
 "maxWeight" = "Max Weight";
+"measurementBodyweight" = "Bodyweight";
+"measurementCalories" = "Calories";
+"measurementLengthChest" = "Chest";
+"measurementLengthHips" = "Hips";
+"measurementLengthBicepsLeft" = "Biceps Left";
+"measurementLengthCalfLeft" = "Calf Left";
+"measurementLengthForearmLeft" = "Forearm Left";
+"measurementLengthThighLeft" = "Thigh Left";
+"measurementLengthNeck" = "Neck";
+"measurementLengthBicepsRight" = "Biceps Right";
+"measurementLengthCalfRight" = "Calf Right";
+"measurementLengthForearmRight" = "Forearm Right";
+"measurementLengthThighRight" = "Thigh Right";
+"measurementLengthShoulders" = "Shoulders";
+"measurementLengthWaist" = "Waist";
 "measurements" = "Measurements";
 "monthly" = "Monthly";
 "morning" = "Morning";
@@ -141,6 +159,7 @@
 "noTemplatesTip" = "Plan Ahead 📋";
 "noTemplatesTipDescription" = "Use Templates to organize and plan your workouts in advance. Click below to create your first workout Template!";
 "now" = "Now";
+"noWidgetsAdded" = "No Widgets Added";
 "noWorkouts" = "No Workouts";
 "noWorkoutsInWeek" = "No Workouts in Week";
 "noWorkoutsTip" = "Lets Work-Out 💪";

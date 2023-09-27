@@ -17,7 +17,7 @@ struct HomeScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
-    @EnvironmentObject var overviewController: OverviewController
+    @EnvironmentObject var overviewController: WidgetController
 
     // MARK: - State
 
@@ -42,7 +42,10 @@ struct HomeScreen: View {
                             .padding(.horizontal)
                     }
                     
-                    OverviewView(collection: overviewController.homeScreenOverviewItemCollection) { item in
+                    WidgetCollectionView(
+                        title: NSLocalizedString("overview", comment: ""),
+                        collection: overviewController.homeScreenWidgetCollection
+                    ) { item in
                         Group {
                             switch item.type {
                             case .targetPerWeek: targetWorkoutsView
@@ -128,12 +131,12 @@ struct HomeScreen: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(
-                            "Last Workout - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
+                            "\(NSLocalizedString("lastWorkout", comment: "")) - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
                         )
                         .tileHeaderTertiaryStyle()
-                        Text("Workout Target")
+                        Text(NSLocalizedString("workoutTarget", comment: ""))
                             .tileHeaderStyle()
-                        Text("\(targetPerWeek) / Week")
+                        Text("\(targetPerWeek) / \(NSLocalizedString("week", comment: ""))")
                             .tileHeaderSecondaryStyle()
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -274,7 +277,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen()
             .environmentObject(Database.preview)
-            .environmentObject(OverviewController.preview)
+            .environmentObject(WidgetController.preview)
             .environmentObject(MeasurementEntryController.preview)
     }
 }

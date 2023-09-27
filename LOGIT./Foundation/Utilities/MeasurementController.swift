@@ -69,7 +69,7 @@ class MeasurementEntryController: ObservableObject {
             currentWeight -= weightLoss
             
             // Add the measurement entry
-            addMeasurementEntry(ofType: .bodyWeight, value: currentWeight, onDate: currentDate)
+            addMeasurementEntry(ofType: .bodyweight, value: currentWeight, onDate: currentDate)
             
             // Randomly decide the next date (within a week, but not exactly 7 days every time)
             let randomDays = Int.random(in: 7...11)
