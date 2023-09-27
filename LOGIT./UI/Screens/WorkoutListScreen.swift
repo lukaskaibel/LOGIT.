@@ -54,7 +54,7 @@ struct WorkoutListScreen: View {
             text: $searchedText,
             prompt: NSLocalizedString("searchWorkouts", comment: "")
         )
-        .navigationTitle(NSLocalizedString("workouts", comment: ""))
+        .navigationTitle(NSLocalizedString("workoutHistory", comment: ""))
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Workout.self) { selectedWorkout in
             WorkoutDetailScreen(

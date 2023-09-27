@@ -62,12 +62,12 @@ struct LOGIT: App {
                         }
                         .tag(TabType.home)
                     NavigationStack {
-                        TemplateListScreen()
+                        WorkoutListScreen()
                     }
                     .tabItem {
                         Label(
-                            NSLocalizedString("templates", comment: ""),
-                            systemImage: "list.bullet.rectangle.portrait"
+                            NSLocalizedString("workoutHistory", comment: ""),
+                            systemImage: "clock"
                         )
                     }
                     .tag(TabType.templates)

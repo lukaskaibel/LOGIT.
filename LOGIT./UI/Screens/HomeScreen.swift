@@ -33,7 +33,7 @@ struct HomeScreen: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(spacing: SECTION_SPACING) {
+                VStack(spacing: SECTION_SPACING) {
                     header
                         .padding([.horizontal, .top])
                     
@@ -41,6 +41,43 @@ struct HomeScreen: View {
                         noWorkoutTip
                             .padding(.horizontal)
                     }
+                    
+                    VStack(spacing: 0) {
+                        NavigationLink(destination: ExerciseListScreen()) {
+                            HStack {
+                                HStack {
+                                    Image(systemName: "dumbbell")
+                                        .frame(width: 40)
+                                        .foregroundColor(.secondary)
+                                    Text(NSLocalizedString("exercises", comment: ""))
+                                }
+                                Spacer()
+                                NavigationChevron()
+                            }
+                            .padding(.trailing)
+                            .padding(.vertical, 12)
+                        }
+                        Divider()
+                            .padding(.leading, 45)
+                        NavigationLink(destination: TemplateListScreen()) {
+                            HStack {
+                                HStack {
+                                    Image(systemName: "list.bullet.rectangle.portrait")
+                                        .frame(width: 40)
+                                        .foregroundColor(.secondary)
+                                    Text(NSLocalizedString("templates", comment: ""))
+                                }
+                                Spacer()
+                                NavigationChevron()
+                            }
+                            .padding(.trailing)
+                            .padding(.vertical, 12)
+                        }
+                        Divider()
+                            .padding(.leading, 45)
+                    }
+                    .font(.title2)
+                    .padding(.leading)
                     
                     WidgetCollectionView(
                         title: NSLocalizedString("overview", comment: ""),
@@ -58,31 +95,31 @@ struct HomeScreen: View {
                     }
                     .padding(.horizontal)
                     
-                    VStack(spacing: SECTION_HEADER_SPACING) {
-                        HStack {
-                            Text(NSLocalizedString("recentWorkouts", comment: ""))
-                                .sectionHeaderStyle2()
-                                .fixedSize()
-                            Button(NSLocalizedString("showAll", comment: "")) {
-                                navigateToWorkoutList = true
-                            }
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                        VStack(spacing: CELL_SPACING) {
-                            ForEach(recentWorkouts, id: \.objectID) { workout in
-                                NavigationLink(value: workout) {
-                                    WorkoutCell(workout: workout)
-                                        .padding(CELL_PADDING)
-                                        .tileStyle()
-                                }
-                                .buttonStyle(TileButtonStyle())
-                            }
-                            .emptyPlaceholder(recentWorkouts) {
-                                Text(NSLocalizedString("noWorkouts", comment: ""))
-                            }
-                        }
-                    }
-                    .padding(.horizontal)
+//                    VStack(spacing: SECTION_HEADER_SPACING) {
+//                        HStack {
+//                            Text(NSLocalizedString("recentWorkouts", comment: ""))
+//                                .sectionHeaderStyle2()
+//                                .fixedSize()
+//                            Button(NSLocalizedString("showAll", comment: "")) {
+//                                navigateToWorkoutList = true
+//                            }
+//                            .frame(maxWidth: .infinity, alignment: .trailing)
+//                        }
+//                        VStack(spacing: CELL_SPACING) {
+//                            ForEach(recentWorkouts, id: \.objectID) { workout in
+//                                NavigationLink(value: workout) {
+//                                    WorkoutCell(workout: workout)
+//                                        .padding(CELL_PADDING)
+//                                        .tileStyle()
+//                                }
+//                                .buttonStyle(TileButtonStyle())
+//                            }
+//                            .emptyPlaceholder(recentWorkouts) {
+//                                Text(NSLocalizedString("noWorkouts", comment: ""))
+//                            }
+//                        }
+//                    }
+//                    .padding(.horizontal)
                 }
                 .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                 .padding(.top)
@@ -117,7 +154,7 @@ struct HomeScreen: View {
         VStack(alignment: .leading) {
             Text(Date.now.formatted(date: .long, time: .omitted))
                 .screenHeaderTertiaryStyle()
-            Text("LOGIT.")
+            Text("LOGIT")
                 .screenHeaderStyle()
         }
         .frame(maxWidth: .infinity, alignment: .leading)
