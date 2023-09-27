@@ -16,6 +16,7 @@ struct TemplateDetailScreen: View {
 
     // MARK: - State
 
+    @State private var selectedWorkout: Workout?
     @State private var showingTemplateInfoAlert = false
     @State private var showingDeletionAlert = false
     @State private var showingTemplateEditor = false
@@ -63,8 +64,8 @@ struct TemplateDetailScreen: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(for: Workout.self) { selectedWorkout in
-            WorkoutDetailScreen(workout: selectedWorkout, canNavigateToTemplate: false)
+        .navigationDestination(item: $selectedWorkout) { workout in
+            WorkoutDetailScreen(workout: workout, canNavigateToTemplate: false)
         }
         .navigationTitle(NSLocalizedString("template", comment: ""))
         .toolbar {
@@ -198,7 +199,9 @@ struct TemplateDetailScreen: View {
 
     private var workoutList: some View {
         ForEach(template.workouts, id: \.objectID) { workout in
-            NavigationLink(value: workout) {
+            Button {
+                selectedWorkout = workout
+            } label: {
                 WorkoutCell(workout: workout)
             }
             .padding(CELL_PADDING)

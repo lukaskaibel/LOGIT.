@@ -15,6 +15,7 @@ struct WorkoutListScreen: View {
 
     // MARK: - State
 
+    @State private var selectedWorkout: Workout?
     @State private var groupingKey: Database.WorkoutGroupingKey = .date(calendarComponent: .month)
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
@@ -33,7 +34,9 @@ struct WorkoutListScreen: View {
                         VStack(spacing: CELL_SPACING) {
                             ForEach(groupedWorkouts.value(at: index) ?? [], id: \.objectID) {
                                 workout in
-                                NavigationLink(value: workout) {
+                                Button {
+                                    selectedWorkout = workout
+                                } label: {
                                     WorkoutCell(workout: workout)
                                         .padding(CELL_PADDING)
                                         .tileStyle()
@@ -56,9 +59,9 @@ struct WorkoutListScreen: View {
         )
         .navigationTitle(NSLocalizedString("workoutHistory", comment: ""))
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: Workout.self) { selectedWorkout in
+        .navigationDestination(item: $selectedWorkout) { workout in
             WorkoutDetailScreen(
-                workout: selectedWorkout,
+                workout: workout,
                 canNavigateToTemplate: true
             )
         }
