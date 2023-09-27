@@ -51,9 +51,9 @@ struct SecondaryBigButtonStyle: ButtonStyle {
 }
 
 struct SelectionButtonStyle: ButtonStyle {
-    
+
     let isSelected: Bool
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundStyle(isSelected ? Color.background : .accentColor)
@@ -69,15 +69,15 @@ struct SelectionButtonStyle: ButtonStyle {
 }
 
 struct CapsuleButtonStyle: ButtonStyle {
-    
+
     let color: Color?
     let isSelected: Bool
-    
+
     init(color: Color? = nil, isSelected: Bool = true) {
         self.color = color
         self.isSelected = isSelected
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(.headline, design: .rounded, weight: .semibold))
@@ -108,4 +108,3 @@ struct TileButtonStyle: ButtonStyle {
             .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)
     }
 }
-

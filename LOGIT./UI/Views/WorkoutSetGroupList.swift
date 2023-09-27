@@ -8,27 +8,32 @@
 import SwiftUI
 
 struct WorkoutSetGroupList: View {
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
 
     // MARK: - Parameters
-    
+
     @ObservedObject var workout: Workout
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
     @Binding var sheetType: WorkoutRecorderScreen.SheetType?
     let canReorder: Bool
-    
+
     // MARK: - State
-    
+
     @State var isReordering = false
-    
+
     // MARK: - Body
 
     var body: some View {
         VStack(spacing: SECTION_SPACING) {
-            ReorderableForEach($workout.setGroups, canReorder: canReorder, isReordering: $isReordering, onOrderChanged: { database.refreshObjects() }) { setGroup in
+            ReorderableForEach(
+                $workout.setGroups,
+                canReorder: canReorder,
+                isReordering: $isReordering,
+                onOrderChanged: { database.refreshObjects() }
+            ) { setGroup in
                 WorkoutSetGroupCell(
                     setGroup: setGroup,
                     focusedIntegerFieldIndex: $focusedIntegerFieldIndex,

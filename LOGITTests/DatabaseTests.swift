@@ -6,12 +6,13 @@
 //
 
 import XCTest
+
 @testable import LOGIT
 
 final class DatabaseTests: XCTestCase {
 
     private let database = Database.preview
-    
+
     func testWorkoutSetsGroupedByCalendarComponent() {
         // Tests if there are workout sets with different weeks in the database to make sure that the following tests are correcty testing.
         let workoutSets = database.getWorkoutSets()
@@ -20,11 +21,13 @@ final class DatabaseTests: XCTestCase {
             return
         }
 
-        let firstSetWeekOfYear = Calendar.current.dateComponents([.weekOfYear], from: firstSetDate).weekOfYear
+        let firstSetWeekOfYear = Calendar.current.dateComponents([.weekOfYear], from: firstSetDate)
+            .weekOfYear
 
         var differentWeekFound = false
         for workoutSet in workoutSets {
-            let weekOfYear = Calendar.current.dateComponents([.weekOfYear], from: workoutSet.workout?.date ?? Date()).weekOfYear
+            let weekOfYear = Calendar.current
+                .dateComponents([.weekOfYear], from: workoutSet.workout?.date ?? Date()).weekOfYear
             if weekOfYear != firstSetWeekOfYear {
                 differentWeekFound = true
                 break
@@ -32,32 +35,58 @@ final class DatabaseTests: XCTestCase {
         }
 
         XCTAssertTrue(differentWeekFound, "All workout sets belong to the same week.")
-        
+
         // Test for .day component
         let groupedByDay = database.getGroupedWorkoutsSets(in: .day)
-        XCTAssertTrue(groupedByDay.count > 1, "Expected there two be workouts on at least 2 different days")
+        XCTAssertTrue(
+            groupedByDay.count > 1,
+            "Expected there two be workouts on at least 2 different days"
+        )
         for group in groupedByDay {
             let referenceDate = group.first?.workout?.date
-            let referenceComponents = Calendar.current.dateComponents([.day, .month, .year], from: referenceDate ?? Date())
+            let referenceComponents = Calendar.current.dateComponents(
+                [.day, .month, .year],
+                from: referenceDate ?? Date()
+            )
             for set in group {
                 let setDate = set.workout?.date
-                let setDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: setDate ?? Date())
-                
-                XCTAssertEqual(referenceComponents, setDateComponents, "Expected all sets in the group to belong to the same day")
+                let setDateComponents = Calendar.current.dateComponents(
+                    [.day, .month, .year],
+                    from: setDate ?? Date()
+                )
+
+                XCTAssertEqual(
+                    referenceComponents,
+                    setDateComponents,
+                    "Expected all sets in the group to belong to the same day"
+                )
             }
         }
-        
+
         // Test for .weekOfYear component
         let groupedByWeek = database.getGroupedWorkoutsSets(in: .weekOfYear)
-        XCTAssertTrue(groupedByWeek.count > 1, "Expected there to be workouts in at least 2 different weeks")
+        XCTAssertTrue(
+            groupedByWeek.count > 1,
+            "Expected there to be workouts in at least 2 different weeks"
+        )
         for group in groupedByWeek {
             let referenceDate = group.first?.workout?.date
-            let referenceComponents = Calendar.current.dateComponents([.weekOfYear, .year], from: referenceDate ?? Date())
+            let referenceComponents = Calendar.current.dateComponents(
+                [.weekOfYear, .year],
+                from: referenceDate ?? Date()
+            )
             for set in group {
                 let setDate = set.workout?.date
-                let setDateComponents = Calendar.current.dateComponents([.weekOfYear, .year], from: setDate ?? Date())
-                
-                XCTAssertEqual(referenceComponents, setDateComponents, "Expected all sets in the group to belong to the same week of the year")
+                let setDateComponents = Calendar.current.dateComponents(
+                    [.weekOfYear, .year],
+                    from: setDate ?? Date()
+                )
+
+                XCTAssertEqual(
+                    referenceComponents,
+                    setDateComponents,
+                    "Expected all sets in the group to belong to the same week of the year"
+                )
             }
         }
     }

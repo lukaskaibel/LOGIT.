@@ -8,33 +8,35 @@
 import Foundation
 
 extension Widget {
-    
+
     var type: WidgetType {
         return WidgetType(rawValue: id!)!
     }
-    
+
     var isProFeature: Bool {
         switch self.type {
         case .personalBest: return false
         case .bestWeightPerDay: return true
         case .bestRepetitionsPerDay: return true
         case .measurement(_): return true
-            
+
         case .targetPerWeek: return false
         case .muscleGroupsInLastTen: return true
         case .setsPerWeek: return true
         }
     }
-    
+
 }
 
 enum WidgetType {
-    case personalBest, bestWeightPerDay, bestRepetitionsPerDay, measurement(MeasurementEntryType)
+    case personalBest, bestWeightPerDay, bestRepetitionsPerDay
+    case measurement(MeasurementEntryType)
     case targetPerWeek, muscleGroupsInLastTen, setsPerWeek
-    
+
     init?(rawValue: String) {
         if rawValue.hasPrefix("measurement") {
-            let measurementValue = String(rawValue.dropFirst("measurement".count)).firstLetterLowercased
+            let measurementValue = String(rawValue.dropFirst("measurement".count))
+                .firstLetterLowercased
             if let measurementType = MeasurementEntryType(rawValue: measurementValue) {
                 self = .measurement(measurementType)
                 return
@@ -57,7 +59,7 @@ enum WidgetType {
             return nil
         }
     }
-    
+
     var rawValue: String {
         switch self {
         case .personalBest:

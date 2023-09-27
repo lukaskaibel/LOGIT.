@@ -15,7 +15,11 @@ struct WorkoutRecorderScreen: View {
 
     enum SheetType: Identifiable {
         case exerciseDetail(exercise: Exercise)
-        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void, forSecondary: Bool)
+        case exerciseSelection(
+            exercise: Exercise?,
+            setExercise: (Exercise) -> Void,
+            forSecondary: Bool
+        )
         var id: Int {
             switch self {
             case .exerciseDetail: return 0
@@ -54,7 +58,7 @@ struct WorkoutRecorderScreen: View {
     @State internal var sheetType: SheetType?
 
     @State internal var focusedIntegerFieldIndex: IntegerField.Index?
-    
+
     @FocusState internal var isFocusingTitleTextfield: Bool
 
     // MARK: - Variables
@@ -76,7 +80,10 @@ struct WorkoutRecorderScreen: View {
                         )
                         .padding(.horizontal)
                         .padding(.top, 90)
-                        .environment(\.workoutSetTemplateSetDictionary, workoutSetTemplateSetDictionary)
+                        .environment(
+                            \.workoutSetTemplateSetDictionary,
+                            workoutSetTemplateSetDictionary
+                        )
 
                         Button {
                             sheetType = .exerciseSelection(
@@ -95,7 +102,10 @@ struct WorkoutRecorderScreen: View {
                                 forSecondary: false
                             )
                         } label: {
-                            Label(NSLocalizedString("addExercise", comment: ""), systemImage: "plus.circle.fill")
+                            Label(
+                                NSLocalizedString("addExercise", comment: ""),
+                                systemImage: "plus.circle.fill"
+                            )
                         }
                         .buttonStyle(BigButtonStyle())
                         .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)

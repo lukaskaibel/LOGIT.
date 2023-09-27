@@ -11,7 +11,7 @@ struct MuscleGroupSelector: View {
 
     @Binding var selectedMuscleGroup: MuscleGroup?
     let canBeNil: Bool
-    
+
     init(selectedMuscleGroup: Binding<MuscleGroup?>, canBeNil: Bool = true) {
         self._selectedMuscleGroup = selectedMuscleGroup
         self.canBeNil = canBeNil
@@ -30,7 +30,12 @@ struct MuscleGroupSelector: View {
                     Button(muscleGroup.description) {
                         selectedMuscleGroup = muscleGroup
                     }
-                    .buttonStyle(CapsuleButtonStyle(color: muscleGroup.color, isSelected: selectedMuscleGroup == muscleGroup))
+                    .buttonStyle(
+                        CapsuleButtonStyle(
+                            color: muscleGroup.color,
+                            isSelected: selectedMuscleGroup == muscleGroup
+                        )
+                    )
                 }
             }
             .padding(.horizontal)

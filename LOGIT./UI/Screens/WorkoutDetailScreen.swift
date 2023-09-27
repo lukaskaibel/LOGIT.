@@ -36,7 +36,7 @@ struct WorkoutDetailScreen: View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 workoutHeader
-                
+
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("overview", comment: ""))
                         .sectionHeaderStyle2()
@@ -50,7 +50,7 @@ struct WorkoutDetailScreen: View {
                             .tileStyle()
                     }
                 }
-                
+
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("exercises", comment: ""))
                         .sectionHeaderStyle2()
@@ -63,7 +63,7 @@ struct WorkoutDetailScreen: View {
                     )
                     .canEdit(false)
                 }
-                
+
                 if canNavigateToTemplate {
                     VStack(spacing: SECTION_HEADER_SPACING) {
                         Text(NSLocalizedString("template", comment: ""))

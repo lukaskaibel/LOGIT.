@@ -49,19 +49,22 @@ struct ExerciseEditScreen: View {
                     NSLocalizedString("exerciseName", comment: ""),
                     text: $exerciseName
                 )
-                    .focused($nameFieldIsFocused)
-                    .font(.body.weight(.bold))
-                    .padding(CELL_PADDING)
-                    .tileStyle()
-                    .padding(.horizontal)
-                    .padding(.top, 30)
-                
+                .focused($nameFieldIsFocused)
+                .font(.body.weight(.bold))
+                .padding(CELL_PADDING)
+                .tileStyle()
+                .padding(.horizontal)
+                .padding(.top, 30)
+
                 VStack(alignment: .leading) {
                     Text(NSLocalizedString("selectMuscleGroup", comment: ""))
                         .fontWeight(.semibold)
                         .foregroundColor(.secondary)
                         .padding(.horizontal)
-                    MuscleGroupSelector(selectedMuscleGroup: optionalMuscleGroupBinding, canBeNil: false)
+                    MuscleGroupSelector(
+                        selectedMuscleGroup: optionalMuscleGroupBinding,
+                        canBeNil: false
+                    )
                 }
                 Spacer()
             }
@@ -132,7 +135,7 @@ struct ExerciseEditScreen: View {
         dismiss()
         onEditFinished?(exercise)
     }
-    
+
     private var optionalMuscleGroupBinding: Binding<MuscleGroup?> {
         Binding(
             get: { muscleGroup },

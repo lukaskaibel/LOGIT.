@@ -139,4 +139,3 @@ struct SegmentedBarChart: View {
 //            .frame(height: 200)
 //    }
 //}
-

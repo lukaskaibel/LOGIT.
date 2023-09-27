@@ -11,21 +11,21 @@ import PhotosUI
 import SwiftUI
 
 struct CreateTemplateMenu: View {
-    
+
     @EnvironmentObject private var database: Database
-    
+
     @StateObject private var templateExtractor = TemplateService()
-    
+
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var workoutImage: UIImage?
-    
+
     @State private var isShowingPhotosPicker = false
     @State private var isShowingTemplateGenerationScreen = false
     @State private var isShowingCreationFailedAlert = false
-    
+
     @State private var newTemplate: Template?
     @State private var templateExtraction: AnyCancellable?
-    
+
     var body: some View {
         Menu {
             Button {
@@ -57,7 +57,7 @@ struct CreateTemplateMenu: View {
                         return
                     }
                 }
-                
+
                 Logger().warning("CreateTemplateMenu: Loading image failed")
             }
         }
@@ -68,21 +68,31 @@ struct CreateTemplateMenu: View {
             }
             isShowingTemplateGenerationScreen = true
             templateExtraction = templateExtractor.createTemplate(from: image)
-                .sink(receiveCompletion: { completion in
-                    isShowingTemplateGenerationScreen = false
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        isShowingCreationFailedAlert = true
-                        Logger().error("CreateTemplateMenu: Creating template from image failed: \(error.localizedDescription)")
+                .sink(
+                    receiveCompletion: { completion in
+                        isShowingTemplateGenerationScreen = false
+                        switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            isShowingCreationFailedAlert = true
+                            Logger()
+                                .error(
+                                    "CreateTemplateMenu: Creating template from image failed: \(error.localizedDescription)"
+                                )
+                        }
+                    },
+                    receiveValue: { template in
+                        Logger().info("CreateTemplateMenu: Extracted template: \(template)")
+                        newTemplate = template
                     }
-                }, receiveValue: { template in
-                    Logger().info("CreateTemplateMenu: Extracted template: \(template)")
-                    newTemplate = template
-                })
+                )
         }
-        .photosPicker(isPresented: $isShowingPhotosPicker, selection: $photoPickerItem, photoLibrary: .shared())
+        .photosPicker(
+            isPresented: $isShowingPhotosPicker,
+            selection: $photoPickerItem,
+            photoLibrary: .shared()
+        )
         .sheet(item: $newTemplate) { template in
             TemplateEditorScreen(
                 template: template,

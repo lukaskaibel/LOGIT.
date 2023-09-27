@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct WidgetCollectionView<Content: View>: View {
-    
+
     @EnvironmentObject var overviewController: WidgetController
-    
+
     let title: String
     @ObservedObject var collection: WidgetCollection
     let content: (Widget) -> Content
-    
+
     @State private var isShowingUpgradeToPro = false
-    
+
     var body: some View {
         VStack(spacing: SECTION_HEADER_SPACING) {
             HStack {
@@ -70,7 +70,7 @@ struct WidgetCollectionView<Content: View>: View {
             UpgradeToProScreen()
         }
     }
-    
+
 }
 
 // MARK: - Preview

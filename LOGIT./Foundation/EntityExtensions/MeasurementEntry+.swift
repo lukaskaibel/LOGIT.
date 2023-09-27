@@ -8,7 +8,7 @@
 import Foundation
 
 extension MeasurementEntry {
- 
+
     var type: MeasurementEntryType? {
         get {
             MeasurementEntryType(rawValue: type_ ?? "")
@@ -17,7 +17,7 @@ extension MeasurementEntry {
             type_ = newValue?.rawValue
         }
     }
-    
+
     var value: Int {
         get {
             switch type {
@@ -36,7 +36,7 @@ extension MeasurementEntry {
             }
         }
     }
-    
+
 }
 
 enum MeasurementEntryType {
@@ -44,10 +44,11 @@ enum MeasurementEntryType {
     case percentage
     case calories
     case length(LengthMeasurementEntryType)
-    
+
     init?(rawValue: String) {
         if rawValue.hasPrefix("length") {
-            let lengthMeasurementTypeRaw = String(rawValue.dropFirst("length".count)).firstLetterLowercased
+            let lengthMeasurementTypeRaw = String(rawValue.dropFirst("length".count))
+                .firstLetterLowercased
             if let lengthType = LengthMeasurementEntryType(rawValue: lengthMeasurementTypeRaw) {
                 self = .length(lengthType)
                 return
@@ -64,7 +65,7 @@ enum MeasurementEntryType {
             return nil
         }
     }
-    
+
     var rawValue: String {
         switch self {
         case .bodyweight:
@@ -77,7 +78,7 @@ enum MeasurementEntryType {
             return "length" + lengthType.rawValue.firstLetterUppercased
         }
     }
-    
+
     var unit: String {
         switch self {
         case .bodyweight:
@@ -93,11 +94,12 @@ enum MeasurementEntryType {
 }
 
 extension MeasurementEntryType: Equatable {
-    static func ==(lhs: MeasurementEntryType, rhs: MeasurementEntryType) -> Bool {
+    static func == (lhs: MeasurementEntryType, rhs: MeasurementEntryType) -> Bool {
         lhs.rawValue == rhs.rawValue
     }
 }
 
 enum LengthMeasurementEntryType: String, CaseIterable {
-    case neck, shoulders, chest, bicepsLeft, bicepsRight, forearmLeft, forearmRight, waist, hips, thighLeft, thighRight, calfLeft, calfRight
+    case neck, shoulders, chest, bicepsLeft, bicepsRight, forearmLeft, forearmRight, waist, hips,
+        thighLeft, thighRight, calfLeft, calfRight
 }

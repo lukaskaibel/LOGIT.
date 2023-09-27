@@ -12,9 +12,10 @@ extension String {
         guard !isEmpty else { return self }
         return first!.lowercased() + dropFirst()
     }
-    
+
     var firstLetterUppercased: String {
-        return self.replacingOccurrences(of: "(?<=.)([A-Z])", with: " $1", options: .regularExpression)
+        return
+            self.replacingOccurrences(of: "(?<=.)([A-Z])", with: " $1", options: .regularExpression)
             .capitalized
             .replacingOccurrences(of: " ", with: "")
     }

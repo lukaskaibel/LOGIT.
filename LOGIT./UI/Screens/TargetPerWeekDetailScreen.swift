@@ -43,7 +43,10 @@ struct TargetPerWeekDetailScreen: View {
                 HStack {
                     Text(NSLocalizedString("targetPerWeek", comment: ""))
                     Spacer()
-                    Picker(NSLocalizedString("targetPerWeek", comment: ""), selection: $targetPerWeek) {
+                    Picker(
+                        NSLocalizedString("targetPerWeek", comment: ""),
+                        selection: $targetPerWeek
+                    ) {
                         ForEach(1..<10, id: \.self) { i in
                             Text(String(i)).tag(i)
                         }
@@ -63,7 +66,10 @@ struct TargetPerWeekDetailScreen: View {
                             .textCase(.none)
                     }
                     LazyVStack(spacing: CELL_SPACING) {
-                        ForEach(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0), id: \.objectID) {
+                        ForEach(
+                            workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0),
+                            id: \.objectID
+                        ) {
                             workout in
                             Button {
                                 selectedWorkout = workout
@@ -93,9 +99,9 @@ struct TargetPerWeekDetailScreen: View {
             }
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var header: some View {
         VStack(alignment: .leading) {
             Text(NSLocalizedString("target", comment: ""))

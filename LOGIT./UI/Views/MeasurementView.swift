@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct MeasurementEntryView: View {
-    
+
     @EnvironmentObject var measurementController: MeasurementEntryController
-    
+
     let measurementType: MeasurementEntryType
-    
+
     @State private var isAddingMeasurementEntry = false
     @State private var isShowingMeasurementEntryList = false
-    
+
     @State private var newMeasurementDate: Date = .now
     @State private var newMeasurementValue: Int?
-    
+
     var body: some View {
         ZStack {
             Color.secondaryBackground
@@ -34,11 +34,19 @@ struct MeasurementEntryView: View {
                         Spacer()
                     }
                     VStack(alignment: .leading) {
-                        Text(NSLocalizedString("measurement" + measurementType.rawValue.firstLetterUppercased, comment: ""))
-                            .tileHeaderStyle()
+                        Text(
+                            NSLocalizedString(
+                                "measurement" + measurementType.rawValue.firstLetterUppercased,
+                                comment: ""
+                            )
+                        )
+                        .tileHeaderStyle()
                         if !isAddingMeasurementEntry {
-                            Text(measurementType.unit.uppercased() + " " + NSLocalizedString("perDay", comment: ""))
-                                .tileHeaderSecondaryStyle()
+                            Text(
+                                measurementType.unit.uppercased() + " "
+                                    + NSLocalizedString("perDay", comment: "")
+                            )
+                            .tileHeaderSecondaryStyle()
                         }
                     }
                     Spacer()
@@ -46,7 +54,11 @@ struct MeasurementEntryView: View {
                         Button(NSLocalizedString("add", comment: "")) {
                             if let value = newMeasurementValue {
                                 resetNewMeasurementEntries()
-                                measurementController.addMeasurementEntry(ofType: measurementType, value: value, onDate: newMeasurementDate)
+                                measurementController.addMeasurementEntry(
+                                    ofType: measurementType,
+                                    value: value,
+                                    onDate: newMeasurementDate
+                                )
                             }
                             withAnimation {
                                 isAddingMeasurementEntry = false
@@ -69,8 +81,12 @@ struct MeasurementEntryView: View {
                     Spacer()
                     VStack(alignment: .leading) {
                         HStack {
-                            DatePicker("Day of Measurement", selection: $newMeasurementDate, displayedComponents: [.date])
-                                .labelsHidden()
+                            DatePicker(
+                                "Day of Measurement",
+                                selection: $newMeasurementDate,
+                                displayedComponents: [.date]
+                            )
+                            .labelsHidden()
                             Spacer()
                             IntegerField(
                                 placeholder: 0,
@@ -93,7 +109,9 @@ struct MeasurementEntryView: View {
                         measurementController.getMeasurementEntries(ofType: measurementType)
                             .map { .init(date: $0.date ?? .now, value: $0.value) }
                     }
-                    .noDataPlaceholder(measurementController.getMeasurementEntries(ofType: measurementType)) {
+                    .noDataPlaceholder(
+                        measurementController.getMeasurementEntries(ofType: measurementType)
+                    ) {
                         Text(NSLocalizedString("noMeasurements", comment: ""))
                     }
                     Button {
@@ -113,15 +131,22 @@ struct MeasurementEntryView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         VStack(alignment: .leading) {
-                            Text(NSLocalizedString("measurement" + measurementType.rawValue.firstLetterUppercased, comment: ""))
-                                .screenHeaderStyle()
+                            Text(
+                                NSLocalizedString(
+                                    "measurement" + measurementType.rawValue.firstLetterUppercased,
+                                    comment: ""
+                                )
+                            )
+                            .screenHeaderStyle()
                             Text(NSLocalizedString("measurements", comment: ""))
                                 .foregroundColor(.secondary)
                                 .screenHeaderSecondaryStyle()
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: CELL_SPACING) {
-                            ForEach(measurementController.getMeasurementEntries(ofType: measurementType)) { measurementEntry in
+                            ForEach(
+                                measurementController.getMeasurementEntries(ofType: measurementType)
+                            ) { measurementEntry in
                                 HStack {
                                     Text(measurementEntry.date?.description(.short) ?? "No Date")
                                     Spacer()
@@ -137,13 +162,17 @@ struct MeasurementEntryView: View {
                                 .padding(CELL_PADDING)
                                 .onDelete {
                                     withAnimation {
-                                        measurementController.deleteMeasurementEntry(measurementEntry)
+                                        measurementController.deleteMeasurementEntry(
+                                            measurementEntry
+                                        )
                                     }
                                 }
                                 .tileStyle()
                             }
                         }
-                        .emptyPlaceholder(measurementController.getMeasurementEntries(ofType: measurementType)) {
+                        .emptyPlaceholder(
+                            measurementController.getMeasurementEntries(ofType: measurementType)
+                        ) {
                             Text(NSLocalizedString("noMeasurements", comment: ""))
                         }
                     }
@@ -154,7 +183,7 @@ struct MeasurementEntryView: View {
         }
         .frame(height: 250)
     }
-    
+
     private func resetNewMeasurementEntries() {
         newMeasurementDate = .now
         newMeasurementValue = nil

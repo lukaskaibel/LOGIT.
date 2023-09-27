@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct TileHeaderModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -17,9 +16,9 @@ struct TileHeaderModifier: ViewModifier {
 }
 
 struct TileHeaderSecondaryModifier: ViewModifier {
-    
+
     let color: Color?
-    
+
     func body(content: Content) -> some View {
         content
             .font(.system(.body, design: .rounded, weight: .bold))

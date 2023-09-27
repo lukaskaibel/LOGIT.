@@ -10,7 +10,11 @@ import SwiftUI
 struct TemplateEditorScreen: View {
 
     enum SheetType: Identifiable {
-        case exerciseSelection(exercise: Exercise?, setExercise: (Exercise) -> Void, forSecondary: Bool)
+        case exerciseSelection(
+            exercise: Exercise?,
+            setExercise: (Exercise) -> Void,
+            forSecondary: Bool
+        )
         case exerciseDetail(exercise: Exercise)
         var id: Int {
             switch self {
@@ -53,7 +57,11 @@ struct TemplateEditorScreen: View {
                     .padding(.vertical)
 
                     VStack(spacing: SECTION_SPACING) {
-                        ReorderableForEach($template.setGroups, isReordering: $isReordering, onOrderChanged: { database.refreshObjects() }) { setGroup in
+                        ReorderableForEach(
+                            $template.setGroups,
+                            isReordering: $isReordering,
+                            onOrderChanged: { database.refreshObjects() }
+                        ) { setGroup in
                             TemplateSetGroupCell(
                                 setGroup: setGroup,
                                 focusedIntegerFieldIndex: .constant(nil),

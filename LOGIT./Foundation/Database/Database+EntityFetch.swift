@@ -14,11 +14,12 @@ extension Database {
     enum WorkoutSortingKey: String {
         case date, name
     }
-    
+
     enum WorkoutGroupingKey: Equatable {
-        case date(calendarComponent: Calendar.Component), name
-        
-        static func ==(lhs: WorkoutGroupingKey, rhs: WorkoutGroupingKey) -> Bool {
+        case date(calendarComponent: Calendar.Component)
+        case name
+
+        static func == (lhs: WorkoutGroupingKey, rhs: WorkoutGroupingKey) -> Bool {
             switch lhs {
             case .name:
                 switch rhs {
@@ -85,7 +86,11 @@ extension Database {
             case .date(let component):
                 if let lastDate = result.last?.last?.date,
                     let workoutDate = workout.date,
-                    Calendar.current.isDate(lastDate, equalTo: workoutDate, toGranularity: component)
+                    Calendar.current.isDate(
+                        lastDate,
+                        equalTo: workoutDate,
+                        toGranularity: component
+                    )
                 {
                     result[result.count - 1].append(workout)
                 } else {
@@ -150,39 +155,58 @@ extension Database {
                 || ($0 as? SuperSet)?.secondaryExercise == exercise
         }
     }
-    
-    func getWorkoutSets(with exercise: Exercise? = nil, onlyHighest attribute: WorkoutSet.Attribute, in calendarComponent: Calendar.Component) -> [WorkoutSet] {
+
+    func getWorkoutSets(
+        with exercise: Exercise? = nil,
+        onlyHighest attribute: WorkoutSet.Attribute,
+        in calendarComponent: Calendar.Component
+    ) -> [WorkoutSet] {
         var result = [[WorkoutSet]]()
         getWorkoutSets(with: exercise)
             .forEach { workoutSet in
                 if let lastDate = result.last?.last?.workout?.date,
                     let setGroupDate = workoutSet.workout?.date,
-                    Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: calendarComponent)
+                    Calendar.current.isDate(
+                        lastDate,
+                        equalTo: setGroupDate,
+                        toGranularity: calendarComponent
+                    )
                 {
                     result[result.count - 1].append(workoutSet)
                 } else {
                     result.append([workoutSet])
                 }
             }
-        return result
-            .compactMap { workoutSetsInWeek in workoutSetsInWeek.max { $0.max(attribute) < $1.max(attribute) } }
+        return
+            result
+            .compactMap { workoutSetsInWeek in
+                workoutSetsInWeek.max { $0.max(attribute) < $1.max(attribute) }
+            }
             .sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now }
     }
-    
-    func getGroupedWorkoutsSets(with exercise: Exercise? = nil, in calendarComponent: Calendar.Component) -> [[WorkoutSet]] {
+
+    func getGroupedWorkoutsSets(
+        with exercise: Exercise? = nil,
+        in calendarComponent: Calendar.Component
+    ) -> [[WorkoutSet]] {
         var result = [[WorkoutSet]]()
         getWorkoutSets(with: exercise)
             .forEach { workoutSet in
                 if let lastDate = result.last?.last?.workout?.date,
                     let setGroupDate = workoutSet.workout?.date,
-                    Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: calendarComponent)
+                    Calendar.current.isDate(
+                        lastDate,
+                        equalTo: setGroupDate,
+                        toGranularity: calendarComponent
+                    )
                 {
                     result[result.count - 1].append(workoutSet)
                 } else {
                     result.append([workoutSet])
                 }
             }
-        return result
+        return
+            result
             .map { $0.sorted { $0.workout?.date ?? .now < $1.workout?.date ?? .now } }
             .sorted { $0.first?.workout?.date ?? .now < $1.first?.workout?.date ?? .now }
     }

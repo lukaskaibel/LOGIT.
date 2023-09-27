@@ -46,10 +46,15 @@ struct ExerciseSelectionScreen: View {
             LazyVStack(spacing: SECTION_SPACING) {
                 MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
                 if isShowingNoExercisesTip {
-                    TipView(title: NSLocalizedString("noExercisesTip", comment: ""),
-                            description: NSLocalizedString("noExercisesTipDescription", comment: ""),
-                            buttonAction: .init(title: NSLocalizedString("createExercise", comment: ""), action: { sheetType = .addExercise }),
-                            isShown: $isShowingNoExercisesTip)
+                    TipView(
+                        title: NSLocalizedString("noExercisesTip", comment: ""),
+                        description: NSLocalizedString("noExercisesTipDescription", comment: ""),
+                        buttonAction: .init(
+                            title: NSLocalizedString("createExercise", comment: ""),
+                            action: { sheetType = .addExercise }
+                        ),
+                        isShown: $isShowingNoExercisesTip
+                    )
                     .padding(CELL_PADDING)
                     .tileStyle()
                     .padding(.horizontal)
@@ -74,7 +79,9 @@ struct ExerciseSelectionScreen: View {
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .edgesIgnoringSafeArea(.bottom)
-        .navigationTitle(NSLocalizedString("choose\(forSecondary ? "Secondary" : "")Exercise", comment: ""))
+        .navigationTitle(
+            NSLocalizedString("choose\(forSecondary ? "Secondary" : "")Exercise", comment: "")
+        )
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             isShowingNoExercisesTip = database.getExercises().isEmpty
@@ -166,7 +173,11 @@ struct ExerciseSelectionScreen: View {
 struct ExerciseSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseSelectionScreen(selectedExercise: nil, setExercise: { _ in }, forSecondary: false)
+            ExerciseSelectionScreen(
+                selectedExercise: nil,
+                setExercise: { _ in },
+                forSecondary: false
+            )
         }
         .environmentObject(Database.preview)
     }

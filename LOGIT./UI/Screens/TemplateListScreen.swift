@@ -32,7 +32,12 @@ struct TemplateListScreen: View {
                     TipView(
                         title: NSLocalizedString("noTemplatesTip", comment: ""),
                         description: NSLocalizedString("noTemplatesTipDescription", comment: ""),
-                        buttonAction: .init(title: NSLocalizedString("createTemplate", comment: ""), action: { showingTemplateCreation = true }), isShown: $isShowingNoTemplatesTip)
+                        buttonAction: .init(
+                            title: NSLocalizedString("createTemplate", comment: ""),
+                            action: { showingTemplateCreation = true }
+                        ),
+                        isShown: $isShowingNoTemplatesTip
+                    )
                     .padding(CELL_PADDING)
                     .tileStyle()
                     .padding(.horizontal)

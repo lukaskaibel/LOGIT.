@@ -87,7 +87,7 @@ struct IntegerField: View {
             lhs.primary == rhs.primary && lhs.secondary == rhs.secondary
                 && lhs.tertiary == rhs.tertiary
         }
-        
+
         func hash(into hasher: inout Hasher) {
             hasher.combine(primary)
             hasher.combine(secondary)

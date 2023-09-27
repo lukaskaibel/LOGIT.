@@ -815,7 +815,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#export PATH=\"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/.build/debug:$PATH\"\n#if which swift-format >/dev/null; then\n#    swift-format format --configuration \"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/myConfiguration.json\" -i -r \"${PROJECT_DIR}\"\n#else\n#    echo \"warning: swift-format not installed\"\n#fi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#export PATH=\"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/.build/debug:$PATH\"\n#if which swift-format >/dev/null; then\n    #swift-format format --configuration \"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/myConfiguration.json\" -i -r \"${PROJECT_DIR}\"\n#else\n  #  echo \"warning: swift-format not installed\"\n#fi\n";
 		};
 		A1776E91983DE385FD1B11E9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

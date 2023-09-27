@@ -21,11 +21,11 @@ struct TemplateSetGroupCell: View {
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
     @Binding var sheetType: TemplateEditorScreen.SheetType?
     @Binding var isReordering: Bool
-    
+
     let supplementaryText: String?
-    
+
     // MARK: - State
-    
+
     @State var isReorderingSets = false
 
     // MARK: - Body
@@ -36,7 +36,12 @@ struct TemplateSetGroupCell: View {
             if !isReordering {
                 VStack(spacing: CELL_PADDING) {
                     VStack(spacing: CELL_SPACING) {
-                        ReorderableForEach($setGroup.sets, canReorder: canEdit, isReordering: $isReorderingSets, onOrderChanged: { database.refreshObjects() }) { templateSet in
+                        ReorderableForEach(
+                            $setGroup.sets,
+                            canReorder: canEdit,
+                            isReordering: $isReorderingSets,
+                            onOrderChanged: { database.refreshObjects() }
+                        ) { templateSet in
                             TemplateSetCell(
                                 templateSet: templateSet,
                                 focusedIntegerFieldIndex: $focusedIntegerFieldIndex

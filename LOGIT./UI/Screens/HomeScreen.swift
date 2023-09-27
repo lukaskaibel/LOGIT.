@@ -9,7 +9,7 @@ import CoreData
 import SwiftUI
 
 struct HomeScreen: View {
-    
+
     enum NavigationDestinationType: Hashable {
         case targetPerWeek, muscleGroupsOverview, exerciseList, templateList
     }
@@ -38,12 +38,12 @@ struct HomeScreen: View {
                 VStack(spacing: SECTION_SPACING) {
                     header
                         .padding([.horizontal, .top])
-                    
+
                     if showNoWorkoutTip {
                         noWorkoutTip
                             .padding(.horizontal)
                     }
-                    
+
                     VStack(spacing: 0) {
                         Button {
                             navigationDestinationType = .exerciseList
@@ -84,7 +84,7 @@ struct HomeScreen: View {
                     }
                     .font(.title2)
                     .padding(.leading)
-                    
+
                     WidgetCollectionView(
                         title: NSLocalizedString("overview", comment: ""),
                         collection: overviewController.homeScreenWidgetCollection
@@ -94,38 +94,39 @@ struct HomeScreen: View {
                             case .targetPerWeek: targetWorkoutsView
                             case .muscleGroupsInLastTen: muscleGroupPercentageView
                             case .setsPerWeek: setsPerWeek
-                            case .measurement(let measurementType): measurementView(forType: measurementType)
+                            case .measurement(let measurementType):
+                                measurementView(forType: measurementType)
                             default: EmptyView()
                             }
                         }
                     }
                     .padding(.horizontal)
-                    
-//                    VStack(spacing: SECTION_HEADER_SPACING) {
-//                        HStack {
-//                            Text(NSLocalizedString("recentWorkouts", comment: ""))
-//                                .sectionHeaderStyle2()
-//                                .fixedSize()
-//                            Button(NSLocalizedString("showAll", comment: "")) {
-//                                navigateToWorkoutList = true
-//                            }
-//                            .frame(maxWidth: .infinity, alignment: .trailing)
-//                        }
-//                        VStack(spacing: CELL_SPACING) {
-//                            ForEach(recentWorkouts, id: \.objectID) { workout in
-//                                NavigationLink(value: workout) {
-//                                    WorkoutCell(workout: workout)
-//                                        .padding(CELL_PADDING)
-//                                        .tileStyle()
-//                                }
-//                                .buttonStyle(TileButtonStyle())
-//                            }
-//                            .emptyPlaceholder(recentWorkouts) {
-//                                Text(NSLocalizedString("noWorkouts", comment: ""))
-//                            }
-//                        }
-//                    }
-//                    .padding(.horizontal)
+
+                    //                    VStack(spacing: SECTION_HEADER_SPACING) {
+                    //                        HStack {
+                    //                            Text(NSLocalizedString("recentWorkouts", comment: ""))
+                    //                                .sectionHeaderStyle2()
+                    //                                .fixedSize()
+                    //                            Button(NSLocalizedString("showAll", comment: "")) {
+                    //                                navigateToWorkoutList = true
+                    //                            }
+                    //                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    //                        }
+                    //                        VStack(spacing: CELL_SPACING) {
+                    //                            ForEach(recentWorkouts, id: \.objectID) { workout in
+                    //                                NavigationLink(value: workout) {
+                    //                                    WorkoutCell(workout: workout)
+                    //                                        .padding(CELL_PADDING)
+                    //                                        .tileStyle()
+                    //                                }
+                    //                                .buttonStyle(TileButtonStyle())
+                    //                            }
+                    //                            .emptyPlaceholder(recentWorkouts) {
+                    //                                Text(NSLocalizedString("noWorkouts", comment: ""))
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    .padding(.horizontal)
                 }
                 .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                 .padding(.top)
@@ -142,14 +143,17 @@ struct HomeScreen: View {
                 case .exerciseList: ExerciseListScreen()
                 case .templateList: TemplateListScreen()
                 case .targetPerWeek: TargetPerWeekDetailScreen()
-                case .muscleGroupsOverview: MuscleGroupsDetailScreen(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
+                case .muscleGroupsOverview:
+                    MuscleGroupsDetailScreen(
+                        setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +)
+                    )
                 }
             }
         }
     }
-    
+
     // MARK: - Supporting Views
-    
+
     private var header: some View {
         VStack(alignment: .leading) {
             Text(Date.now.formatted(date: .long, time: .omitted))
@@ -159,7 +163,7 @@ struct HomeScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var targetWorkoutsView: some View {
         Button {
             navigationDestinationType = .targetPerWeek
@@ -181,14 +185,14 @@ struct HomeScreen: View {
                         .foregroundColor(.secondaryLabel)
                 }
                 TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
-                .frame(height: 170)
-                .overlay {
-                    if workouts.isEmpty {
-                        Text(NSLocalizedString("noData", comment: ""))
-                            .font(.title3.weight(.medium))
-                            .foregroundColor(.placeholder)
+                    .frame(height: 170)
+                    .overlay {
+                        if workouts.isEmpty {
+                            Text(NSLocalizedString("noData", comment: ""))
+                                .font(.title3.weight(.medium))
+                                .foregroundColor(.placeholder)
+                        }
                     }
-                }
             }
             .padding(CELL_PADDING)
             .tileStyle()
@@ -233,7 +237,7 @@ struct HomeScreen: View {
         }
         .buttonStyle(TileButtonStyle())
     }
-    
+
     private var setsPerWeek: some View {
         VStack {
             VStack(alignment: .leading) {
@@ -253,21 +257,24 @@ struct HomeScreen: View {
         .padding(CELL_PADDING)
         .tileStyle()
     }
-    
+
     @ViewBuilder
     private func measurementView(forType measurementType: MeasurementEntryType) -> some View {
         MeasurementEntryView(measurementType: measurementType)
             .padding(CELL_PADDING)
             .tileStyle()
     }
-    
+
     private var noWorkoutTip: some View {
         TipView(
             title: NSLocalizedString("noWorkoutsTip", comment: ""),
             description: NSLocalizedString("noWorkoutsTipDescription", comment: ""),
-            buttonAction: .init(title: NSLocalizedString("startWorkout", comment: ""),
-                                action: { isShowingWorkoutRecorder = true }),
-            isShown: $showNoWorkoutTip)
+            buttonAction: .init(
+                title: NSLocalizedString("startWorkout", comment: ""),
+                action: { isShowingWorkoutRecorder = true }
+            ),
+            isShown: $showNoWorkoutTip
+        )
         .padding(CELL_PADDING)
         .tileStyle()
     }

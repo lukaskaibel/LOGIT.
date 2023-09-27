@@ -23,9 +23,9 @@ struct WorkoutSetGroupCell: View {
     @Binding var isReordering: Bool
 
     let supplementaryText: String?
-    
+
     // MARK: - State
-    
+
     @State private var isReorderingSets = false
 
     // MARK: - Body
@@ -36,7 +36,12 @@ struct WorkoutSetGroupCell: View {
             if !isReordering {
                 VStack(spacing: CELL_PADDING) {
                     VStack(spacing: CELL_SPACING) {
-                        ReorderableForEach($setGroup.sets, canReorder: canEdit, isReordering: $isReorderingSets, onOrderChanged: { database.refreshObjects() }) { workoutSet in
+                        ReorderableForEach(
+                            $setGroup.sets,
+                            canReorder: canEdit,
+                            isReordering: $isReorderingSets,
+                            onOrderChanged: { database.refreshObjects() }
+                        ) { workoutSet in
                             WorkoutSetCell(
                                 workoutSet: workoutSet,
                                 focusedIntegerFieldIndex: $focusedIntegerFieldIndex

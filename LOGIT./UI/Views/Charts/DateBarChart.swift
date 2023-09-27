@@ -9,29 +9,29 @@ import Charts
 import SwiftUI
 
 struct DateBarChart: View {
-    
+
     struct Item: Identifiable {
         var id: String { "\(date)\(value)" }
         let date: Date
         let value: Int
     }
-    
+
     // MARK: - Constants
-    
+
     private let yValuePaddingRatio = 0.1
-    
+
     // MARK: - Properties
-    
+
     let dateUnit: Calendar.Component
     let items: [Item]
-    
+
     init(dateUnit: Calendar.Component, items: () -> [Item]) {
         self.dateUnit = dateUnit
         self.items = items()
     }
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         Chart {
             ForEach(items) { item in
@@ -55,12 +55,14 @@ struct DateBarChart: View {
                 }
             }
         }
-        .chartXScale(domain: [minXValue, (Calendar.current.date(byAdding: .day, value: 7, to: .now)?.startOfWeek)!])
+        .chartXScale(domain: [
+            minXValue, (Calendar.current.date(byAdding: .day, value: 7, to: .now)?.startOfWeek)!,
+        ])
         .chartYAxis(.hidden)
     }
-    
+
     // MARK: - Computed Properties
-    
+
     private var minXValue: Date {
         return Calendar.current.date(
             byAdding: dateUnit,
@@ -68,32 +70,35 @@ struct DateBarChart: View {
             to: .now
         )!
     }
-    
+
     private var maxYValue: Int {
         (items.map { $0.value }.max() ?? 1) + yValuePadding
     }
-    
+
     private var yValuePadding: Int {
         Int(ceil(Double(items.map { $0.value }.max() ?? 1) * yValuePaddingRatio))
     }
-    
+
     private func dateDescription(for date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = dateUnit == .day ? "DDD" : dateUnit == .weekOfYear ? "d.M." : dateUnit == .month ? "MMM" : "MMM YY"
+        formatter.dateFormat =
+            dateUnit == .day
+            ? "DDD" : dateUnit == .weekOfYear ? "d.M." : dateUnit == .month ? "MMM" : "MMM YY"
         return formatter.string(from: date).uppercased()
     }
-    
+
 }
 
 struct DateBarChart_Previews: PreviewProvider {
     static var previews: some View {
         DateBarChart(dateUnit: .weekOfYear) {
-            (1...11).map {
-                .init(
-                    date: Date().addingTimeInterval(-7882880 + 788288 * Double($0)),
-                    value: Int.random(in: 0...100)
-                )
-            }
+            (1...11)
+                .map {
+                    .init(
+                        date: Date().addingTimeInterval(-7_882_880 + 788288 * Double($0)),
+                        value: Int.random(in: 0...100)
+                    )
+                }
         }
         .frame(height: 250)
     }

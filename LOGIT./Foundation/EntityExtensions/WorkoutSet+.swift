@@ -33,7 +33,7 @@ extension WorkoutSet {
         setGroup?.exercise?.muscleGroup == muscleGroup
             || setGroup?.secondaryExercise?.muscleGroup == muscleGroup
     }
-    
+
     func max(_ attribute: WorkoutSet.Attribute) -> Int {
         if let standardSet = self as? StandardSet {
             return Int(attribute == .repetitions ? standardSet.repetitions : standardSet.weight)

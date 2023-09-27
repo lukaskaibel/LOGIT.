@@ -10,42 +10,42 @@ import SwiftUI
 public typealias Reorderable = Identifiable & Equatable
 
 struct ReorderableForEach<Content: View, Item: Reorderable>: View {
-    
+
     // MARK: - Constants
-    
+
     private let itemDragType = ".com.lukaskbl.itemDragType"
     private let allowedSecondsOutsideDropArea = 5.0
-    
+
     // MARK: - Properties
-    
+
     @Binding var items: [Item]
     let canReorder: Bool
     @Binding var isReordering: Bool
     let onOrderChanged: (() -> Void)?
     let content: (Item) -> Content
-    
+
     // MARK: - State
-    
+
     @State private var draggedItem: Item?
     @State private var isDraggingOnValidDropDestination = false
     @State private var stopDraggingTimer: Timer?
-    
+
     // MARK: - Init
-    
+
     init(
         _ items: Binding<[Item]>,
         canReorder: Bool = true,
         isReordering: Binding<Bool> = .constant(false),
         onOrderChanged: (() -> Void)? = nil,
-        @ViewBuilder content: @escaping (Item) -> Content)
-    {
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) {
         self._items = items
         self.canReorder = canReorder
         self._isReordering = isReordering
         self.onOrderChanged = onOrderChanged
         self.content = content
     }
-        
+
     var body: some View {
         if canReorder {
             ForEach(items) { item in
@@ -55,16 +55,20 @@ struct ReorderableForEach<Content: View, Item: Reorderable>: View {
                     .onDrag {
                         draggedItem = item
                         isDraggingOnValidDropDestination = true
-                        return NSItemProvider(item: "\(item.id)" as NSSecureCoding, typeIdentifier: itemDragType)
+                        return NSItemProvider(
+                            item: "\(item.id)" as NSSecureCoding,
+                            typeIdentifier: itemDragType
+                        )
                     }
-                    .onDrop(of: [itemDragType],
-                            delegate: DropViewDelegate(
-                                destinationItem: item,
-                                items: $items,
-                                draggedItem: $draggedItem,
-                                isDraggingOnValidDropDestination: $isDraggingOnValidDropDestination,
-                                onOrderChanged: onOrderChanged
-                            )
+                    .onDrop(
+                        of: [itemDragType],
+                        delegate: DropViewDelegate(
+                            destinationItem: item,
+                            items: $items,
+                            draggedItem: $draggedItem,
+                            isDraggingOnValidDropDestination: $isDraggingOnValidDropDestination,
+                            onOrderChanged: onOrderChanged
+                        )
                     )
             }
             .simultaneousGesture(
@@ -98,22 +102,22 @@ struct ReorderableForEach<Content: View, Item: Reorderable>: View {
 }
 
 struct DropViewDelegate<Item: Reorderable>: DropDelegate {
-    
+
     let destinationItem: Item
     @Binding var items: [Item]
     @Binding var draggedItem: Item?
     @Binding var isDraggingOnValidDropDestination: Bool
     let onOrderChanged: (() -> Void)?
-    
+
     func dropUpdated(info: DropInfo) -> DropProposal? {
         return DropProposal(operation: .move)
     }
-    
+
     func performDrop(info: DropInfo) -> Bool {
         draggedItem = nil
         return true
     }
-    
+
     func dropEntered(info: DropInfo) {
         isDraggingOnValidDropDestination = true
         // Swap Items
@@ -123,13 +127,16 @@ struct DropViewDelegate<Item: Reorderable>: DropDelegate {
                 let toIndex = items.firstIndex(of: destinationItem)
                 if let toIndex, fromIndex != toIndex {
                     UISelectionFeedbackGenerator().selectionChanged()
-                    self.items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: (toIndex > fromIndex ? (toIndex + 1) : toIndex))
+                    self.items.move(
+                        fromOffsets: IndexSet(integer: fromIndex),
+                        toOffset: (toIndex > fromIndex ? (toIndex + 1) : toIndex)
+                    )
                     onOrderChanged?()
                 }
             }
         }
     }
-    
+
     func dropExited(info: DropInfo) {
         isDraggingOnValidDropDestination = false
     }
@@ -138,14 +145,14 @@ struct DropViewDelegate<Item: Reorderable>: DropDelegate {
 // MARK: - Preview
 
 private struct PreviewWrapperView: View {
-    
+
     struct Item: Codable, Reorderable {
         var id: Int { value }
         let value: Int
     }
-    
+
     @State private var data = [1, 2, 3, 4, 5].map { Item(value: $0) }
-    
+
     var body: some View {
         VStack {
             ReorderableForEach($data) { item in

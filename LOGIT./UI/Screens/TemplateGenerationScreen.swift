@@ -9,17 +9,17 @@ import Combine
 import SwiftUI
 
 struct TemplateGenerationScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @Environment(\.dismiss) var dismiss
-    
+
     // MARK: - Parameters
-    
+
     @Binding var templateExtration: AnyCancellable?
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
@@ -32,7 +32,7 @@ struct TemplateGenerationScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .padding(.top, 20)
-            
+
             Spacer()
             VStack(spacing: 30) {
                 ProgressView()

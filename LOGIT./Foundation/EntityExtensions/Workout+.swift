@@ -61,7 +61,8 @@ extension Workout {
         let uniqueMuscleGroups = Array(Set(exercises.compactMap { $0.muscleGroup }))
         return uniqueMuscleGroups.sorted {
             guard let leftIndex = MuscleGroup.allCases.firstIndex(of: $0),
-                  let rightIndex = MuscleGroup.allCases.firstIndex(of: $1) else {
+                let rightIndex = MuscleGroup.allCases.firstIndex(of: $1)
+            else {
                 return false
             }
             return leftIndex < rightIndex

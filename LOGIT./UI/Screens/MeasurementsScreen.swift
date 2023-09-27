@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct MeasurementsScreen: View {
-    
+
     // MARK: - Environment
-    
+
     @EnvironmentObject var database: Database
     @EnvironmentObject var widgetController: WidgetController
     @EnvironmentObject var measurementController: MeasurementEntryController
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
-                WidgetCollectionView(title: NSLocalizedString("coreMetrics", comment: ""), collection: widgetController.baseMeasurementCollection) { widget in
+                WidgetCollectionView(
+                    title: NSLocalizedString("coreMetrics", comment: ""),
+                    collection: widgetController.baseMeasurementCollection
+                ) { widget in
                     Group {
                         switch widget.type {
                         case .measurement(let measurementType):
@@ -29,7 +32,10 @@ struct MeasurementsScreen: View {
                         }
                     }
                 }
-                WidgetCollectionView(title: NSLocalizedString("bodyParts", comment: ""), collection: widgetController.circumferenceMeasurementCollection) { widget in
+                WidgetCollectionView(
+                    title: NSLocalizedString("bodyParts", comment: ""),
+                    collection: widgetController.circumferenceMeasurementCollection
+                ) { widget in
                     Group {
                         switch widget.type {
                         case .measurement(let measurementType):

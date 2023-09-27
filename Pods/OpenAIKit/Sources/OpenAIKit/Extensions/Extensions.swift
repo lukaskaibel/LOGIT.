@@ -8,19 +8,19 @@
 import Foundation
 
 extension JSONDecoder {
-	static var aiDecoder: JSONDecoder {
-		let decoder = JSONDecoder()
-		decoder.keyDecodingStrategy = .convertFromSnakeCase
-		decoder.dateDecodingStrategy = .millisecondsSince1970
+    static var aiDecoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .millisecondsSince1970
 
-		return decoder
-	}
+        return decoder
+    }
 }
 
 extension JSONEncoder {
-	static var aiEncoder: JSONEncoder {
-		let encoder = JSONEncoder()
-		encoder.keyEncodingStrategy = .convertToSnakeCase
-		return encoder
-	}
+    static var aiEncoder: JSONEncoder {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        return encoder
+    }
 }

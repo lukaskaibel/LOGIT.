@@ -5,14 +5,12 @@
 //  Created by Lukas Kaibel on 27.09.23.
 //
 
-    
-
 import SwiftUI
 
 struct BlockedWithoutProModifier: ViewModifier {
 
     let blocked: Bool
-    
+
     @State private var isShowingUpgradeToProScreen = false
 
     func body(content: Content) -> some View {

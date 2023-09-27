@@ -39,7 +39,7 @@ struct ExerciseDetailScreen: View {
             VStack(spacing: SECTION_SPACING) {
                 header
                     .padding(.horizontal)
-                
+
                 WidgetCollectionView(
                     title: NSLocalizedString("overview", comment: ""),
                     collection: overviewController.exerciseDetailWidgetCollection
@@ -54,7 +54,7 @@ struct ExerciseDetailScreen: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 setGroupList
                     .padding(.horizontal)
             }
@@ -116,31 +116,31 @@ struct ExerciseDetailScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
-//    private var overviewViewItems: Binding<[WidgetCollectionView.Item<AnyView>]> {
-//        Binding(
-//            get: {
-//                (overviewController.exerciseDetailWidgetCollection?.items ?? [])!
-//                    .compactMap { overviewItem -> WidgetCollectionView.Item<AnyView>? in
-//                        if overviewItem.id == OverviewController.ExerciseDetailItems.personalBest.rawValue {
-//                            return WidgetCollectionView.Item<AnyView>(
-//                                id: overviewItem.id!,
-//                                name: NSLocalizedString(overviewItem.id!, comment: ""),
-//                                content: AnyView(exerciseInfo),
-//                                isAdded: overviewItem.isAdded
-//                            )
-//                        }
-//                        return nil
-//                    }
-//            },
-//            set: { newValue in
-//                newValue
-//                    .
-//
-//            }
-//        )
-//
-//    }
+
+    //    private var overviewViewItems: Binding<[WidgetCollectionView.Item<AnyView>]> {
+    //        Binding(
+    //            get: {
+    //                (overviewController.exerciseDetailWidgetCollection?.items ?? [])!
+    //                    .compactMap { overviewItem -> WidgetCollectionView.Item<AnyView>? in
+    //                        if overviewItem.id == OverviewController.ExerciseDetailItems.personalBest.rawValue {
+    //                            return WidgetCollectionView.Item<AnyView>(
+    //                                id: overviewItem.id!,
+    //                                name: NSLocalizedString(overviewItem.id!, comment: ""),
+    //                                content: AnyView(exerciseInfo),
+    //                                isAdded: overviewItem.isAdded
+    //                            )
+    //                        }
+    //                        return nil
+    //                    }
+    //            },
+    //            set: { newValue in
+    //                newValue
+    //                    .
+    //
+    //            }
+    //        )
+    //
+    //    }
 
     private var exerciseInfo: some View {
         VStack {
@@ -185,14 +185,17 @@ struct ExerciseDetailScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: selectedTimeSpanForWeight) {
                 setsForExercise(withHeighest: .weight, withoutZeroWeights: true)
-                    .map { .init(
-                        date: $0.setGroup!.workout!.date!,
-                        value: convertWeightForDisplaying($0.max(.weight))
-                    ) }
+                    .map {
+                        .init(
+                            date: $0.setGroup!.workout!.date!,
+                            value: convertWeightForDisplaying($0.max(.weight))
+                        )
+                    }
             }
             .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
             Picker("Calendar Component", selection: $selectedTimeSpanForWeight) {
-                Text(NSLocalizedString("threeMonths", comment: "")).tag(DateLineChart.DateDomain.threeMonths)
+                Text(NSLocalizedString("threeMonths", comment: ""))
+                    .tag(DateLineChart.DateDomain.threeMonths)
                 Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)
                 Text(NSLocalizedString("all", comment: "")).tag(DateLineChart.DateDomain.allTime)
             }
@@ -202,7 +205,7 @@ struct ExerciseDetailScreen: View {
         .padding(CELL_PADDING)
         .tileStyle()
     }
-    
+
     private var repetitionsGraph: some View {
         VStack {
             VStack(alignment: .leading) {
@@ -214,14 +217,17 @@ struct ExerciseDetailScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: selectedTimeSpanForRepetitions) {
                 setsForExercise(withHeighest: .repetitions, withoutZeroWeights: true)
-                    .map { .init(
-                        date: $0.setGroup!.workout!.date!,
-                        value: $0.max(.repetitions)
-                    ) }
+                    .map {
+                        .init(
+                            date: $0.setGroup!.workout!.date!,
+                            value: $0.max(.repetitions)
+                        )
+                    }
             }
             .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
             Picker("Calendar Component", selection: $selectedTimeSpanForRepetitions) {
-                Text(NSLocalizedString("threeMonths", comment: "")).tag(DateLineChart.DateDomain.threeMonths)
+                Text(NSLocalizedString("threeMonths", comment: ""))
+                    .tag(DateLineChart.DateDomain.threeMonths)
                 Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)
                 Text(NSLocalizedString("all", comment: "")).tag(DateLineChart.DateDomain.allTime)
             }
@@ -270,7 +276,7 @@ struct ExerciseDetailScreen: View {
         database.getWorkoutSets(with: exercise)
             .map {
                 attribute == .repetitions
-                ? $0.max(.repetitions) : convertWeightForDisplaying($0.max(.weight))
+                    ? $0.max(.repetitions) : convertWeightForDisplaying($0.max(.weight))
             }
             .max() ?? 0
     }
