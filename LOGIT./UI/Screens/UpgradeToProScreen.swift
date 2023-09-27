@@ -14,7 +14,7 @@ struct UpgradeToProScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
-                logitPro
+                LogitProLogo()
                     .font(.largeTitle)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
@@ -122,7 +122,7 @@ struct UpgradeToProScreen: View {
                     HStack {
                         Image(systemName: "crown.fill")
                         Text("Upgrade to")
-                        logitPro
+                        LogitProLogo()
                             .environment(\.colorScheme, .light)
                     }
                 }
@@ -140,17 +140,6 @@ struct UpgradeToProScreen: View {
                     .edgesIgnoringSafeArea(.bottom)
             }
             .frame(maxHeight: .infinity, alignment: .bottom)
-        }
-    }
-    
-    private var logitPro: some View {
-        HStack(spacing: 0) {
-            Text("LOGIT")
-                .foregroundColor(.primary)
-                .fontWeight(.bold)
-            Text("Pro")
-                .foregroundColor(.secondary)
-                .fontDesign(.rounded)
         }
     }
     

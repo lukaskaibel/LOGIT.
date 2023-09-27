@@ -42,6 +42,7 @@ struct MeasurementsScreen: View {
                 }
             }
             .padding(.horizontal)
+            .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
         .navigationTitle(NSLocalizedString("measurements", comment: ""))
     }
@@ -49,8 +50,11 @@ struct MeasurementsScreen: View {
 
 struct MeasurementsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MeasurementsScreen()
-            .environmentObject(Database.preview)
-            .environmentObject(WidgetController.preview)
+        NavigationStack {
+            MeasurementsScreen()
+                .environmentObject(Database.preview)
+                .environmentObject(WidgetController.preview)
+                .environmentObject(MeasurementEntryController.preview)
+        }
     }
 }

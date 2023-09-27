@@ -57,6 +57,7 @@ struct WidgetCollectionView<Content: View>: View {
                     if item.isAdded {
                         content(item)
                             .transition(.scale)
+                            .isBlockedWithoutPro(item.isProFeature)
                     }
                 }
             }

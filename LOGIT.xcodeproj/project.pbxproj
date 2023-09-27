@@ -87,6 +87,8 @@
 		798BDC282A7BCD1800EAA75D /* TextProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798BDC272A7BCD1800EAA75D /* TextProcessing.swift */; };
 		798CEE6D280DC7CE00114FEE /* MuscleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */; };
 		798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FBF802925571900A5F7F0 /* NavigationChevron.swift */; };
+		7996D0A52AC49CCA0028FF22 /* LogitProLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */; };
+		7996D0A72AC49E700028FF22 /* BlockedWithoutProModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */; };
 		799AAF2C2787831900C8BF0C /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */; };
 		79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */; };
 		79A27AF8283D8F6A000A8EF7 /* TemplateSuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */; };
@@ -242,6 +244,8 @@
 		798BDC272A7BCD1800EAA75D /* TextProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextProcessing.swift; sourceTree = "<group>"; };
 		798CEE6C280DC7CE00114FEE /* MuscleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroup.swift; sourceTree = "<group>"; };
 		798FBF802925571900A5F7F0 /* NavigationChevron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationChevron.swift; sourceTree = "<group>"; };
+		7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogitProLogo.swift; sourceTree = "<group>"; };
+		7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWithoutProModifier.swift; sourceTree = "<group>"; };
 		799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
 		79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SuperSet+.swift"; sourceTree = "<group>"; };
 		79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateSuperSet+.swift"; sourceTree = "<group>"; };
@@ -332,6 +336,7 @@
 		7919C5FE2A742EA500F35493 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
+				7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */,
 				79488DD82A755AEB005C485D /* CanEditModifier.swift */,
 				79488DEB2A770C7D005C485D /* EmptyPlaceholderModifier.swift */,
 				7954EE7E2AC449D900877D74 /* NoDataPlaceholderModifier.swift */,
@@ -590,6 +595,7 @@
 				79A637D62A39E2A1002A1F20 /* FlashView.swift */,
 				7967D57C2811886700B30D03 /* Charts */,
 				793CB8A72975BB1B00140D2B /* IntegerField.swift */,
+				7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */,
 				79C07B292AB8AE65000BF879 /* MeasurementView.swift */,
 				7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */,
 				798FBF802925571900A5F7F0 /* NavigationChevron.swift */,
@@ -889,6 +895,7 @@
 				7988FBB72A73391600E4FE54 /* ButtonStyle.swift in Sources */,
 				7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */,
 				792A3FEC2AB34EB400C6A097 /* UpgradeToProScreen.swift in Sources */,
+				7996D0A52AC49CCA0028FF22 /* LogitProLogo.swift in Sources */,
 				798BDC132A79A7DC00EAA75D /* Secrets.swift in Sources */,
 				8084604B276662A000E0D0D0 /* WorkoutListScreen.swift in Sources */,
 				7975E3AF27CED6DE000BA25B /* WorkoutSetGroup+.swift in Sources */,
@@ -896,6 +903,7 @@
 				8065AA7B2686668100F53A5A /* LOGIT.xcdatamodeld in Sources */,
 				7919C6002A742EB900F35493 /* OnDeleteModifier.swift in Sources */,
 				80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */,
+				7996D0A72AC49E700028FF22 /* BlockedWithoutProModifier.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */,
 				79A637D72A39E2A1002A1F20 /* FlashView.swift in Sources */,
 				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,

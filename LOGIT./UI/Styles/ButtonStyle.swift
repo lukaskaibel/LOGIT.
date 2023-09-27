@@ -73,7 +73,7 @@ struct CapsuleButtonStyle: ButtonStyle {
     let color: Color?
     let isSelected: Bool
     
-    init(color: Color? = nil, isSelected: Bool) {
+    init(color: Color? = nil, isSelected: Bool = true) {
         self.color = color
         self.isSelected = isSelected
     }
