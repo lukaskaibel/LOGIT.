@@ -31,8 +31,13 @@ extension DropSet {
         (repetitions?.reduce(0, +) ?? 0) > 0 || (weights?.reduce(0, +) ?? 0) > 0
     }
 
-    public override func clearEntries() {
-        repetitions = Array(repeating: 0, count: repetitions?.count ?? 0)
+    public override func clearEntries() { repetitions = Array(repeating: 0, count: repetitions?.count ?? 0)
+        
+        
+        
+        
+        
+        
         weights = Array(repeating: 0, count: weights?.count ?? 0)
     }
 
