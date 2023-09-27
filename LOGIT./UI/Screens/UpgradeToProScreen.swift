@@ -87,22 +87,9 @@ struct UpgradeToProScreen: View {
                     
                 }
                 
-                VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text("Pricing")
-                        .sectionHeaderStyle2()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack(alignment: .lastTextBaseline, spacing: 3) {
-                        Text("1.99")
-                            .font(.largeTitle.weight(.semibold))
-                        Text("€ / Month")
-                            .font(.title2.weight(.semibold))
-                    }
-                    .padding()
-                }
-                .padding(.horizontal)
-                
                 Spacer()
             }
+            .padding(.bottom, 200)
         }
         .overlay {
             VStack(spacing: 20) {

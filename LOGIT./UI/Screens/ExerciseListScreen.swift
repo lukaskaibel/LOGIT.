@@ -15,6 +15,7 @@ struct ExerciseListScreen: View {
 
     // MARK: - State
 
+    @State private var selectedExercise: Exercise?
     @State private var searchedText = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingAddExercise = false
@@ -42,7 +43,9 @@ struct ExerciseListScreen: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         VStack(spacing: CELL_SPACING) {
                             ForEach(group, id: \.objectID) { exercise in
-                                NavigationLink(value: exercise) {
+                                Button {
+                                    selectedExercise = exercise
+                                } label: {
                                     HStack {
                                         ExerciseCell(exercise: exercise)
                                         Spacer()
@@ -72,15 +75,15 @@ struct ExerciseListScreen: View {
         }
         .navigationTitle(NSLocalizedString("exercises", comment: "sports activity"))
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: Exercise.self) { selectedExercise in
-            ExerciseDetailScreen(exercise: selectedExercise)
-        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showingAddExercise.toggle() }) {
                     Image(systemName: "plus")
                 }
             }
+        }
+        .navigationDestination(item: $selectedExercise) { exercise in
+            ExerciseDetailScreen(exercise: exercise)
         }
         .sheet(isPresented: $showingAddExercise) {
             ExerciseEditScreen(initialMuscleGroup: selectedMuscleGroup ?? .chest)

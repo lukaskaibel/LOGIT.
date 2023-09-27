@@ -9,6 +9,10 @@ import CoreData
 import SwiftUI
 
 struct HomeScreen: View {
+    
+    enum NavigationDestinationType: Hashable {
+        case targetPerWeek, muscleGroupsOverview, exerciseList, templateList
+    }
 
     // MARK: - AppStorage
 
@@ -21,9 +25,7 @@ struct HomeScreen: View {
 
     // MARK: - State
 
-    @State private var navigateToTarget: Bool = false
-    @State private var navigateToMuscleGroupDetail: Bool = false
-    @State private var navigateToWorkoutList: Bool = false
+    @State private var navigationDestinationType: NavigationDestinationType?
     @State private var selectedWorkout: Workout?
     @State private var showNoWorkoutTip = false
     @State private var isShowingWorkoutRecorder = false
@@ -43,7 +45,9 @@ struct HomeScreen: View {
                     }
                     
                     VStack(spacing: 0) {
-                        NavigationLink(destination: ExerciseListScreen()) {
+                        Button {
+                            navigationDestinationType = .exerciseList
+                        } label: {
                             HStack {
                                 HStack {
                                     Image(systemName: "dumbbell")
@@ -59,7 +63,9 @@ struct HomeScreen: View {
                         }
                         Divider()
                             .padding(.leading, 45)
-                        NavigationLink(destination: TemplateListScreen()) {
+                        Button {
+                            navigationDestinationType = .templateList
+                        } label: {
                             HStack {
                                 HStack {
                                     Image(systemName: "list.bullet.rectangle.portrait")
@@ -131,19 +137,13 @@ struct HomeScreen: View {
             .fullScreenCover(isPresented: $isShowingWorkoutRecorder) {
                 WorkoutRecorderScreen(workout: database.newWorkout(), template: nil)
             }
-            .navigationDestination(isPresented: $navigateToTarget) {
-                TargetPerWeekDetailScreen()
-            }
-            .navigationDestination(isPresented: $navigateToMuscleGroupDetail) {
-                MuscleGroupsDetailScreen(
-                    setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +)
-                )
-            }
-            .navigationDestination(isPresented: $navigateToWorkoutList) {
-                WorkoutListScreen()
-            }
-            .navigationDestination(for: Workout.self) { selectedWorkout in
-                WorkoutDetailScreen(workout: selectedWorkout, canNavigateToTemplate: true)
+            .navigationDestination(item: $navigationDestinationType) { destination in
+                switch destination {
+                case .exerciseList: ExerciseListScreen()
+                case .templateList: TemplateListScreen()
+                case .targetPerWeek: TargetPerWeekDetailScreen()
+                case .muscleGroupsOverview: MuscleGroupsDetailScreen(setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +))
+                }
             }
         }
     }
@@ -162,7 +162,7 @@ struct HomeScreen: View {
     
     private var targetWorkoutsView: some View {
         Button {
-            navigateToTarget = true
+            navigationDestinationType = .targetPerWeek
         } label: {
             VStack {
                 HStack {
@@ -199,7 +199,7 @@ struct HomeScreen: View {
 
     private var muscleGroupPercentageView: some View {
         Button {
-            navigateToMuscleGroupDetail = true
+            navigationDestinationType = .muscleGroupsOverview
         } label: {
             VStack {
                 HStack {

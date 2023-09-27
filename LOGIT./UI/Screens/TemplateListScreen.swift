@@ -15,6 +15,7 @@ struct TemplateListScreen: View {
 
     // MARK: - State
 
+    @State private var navigateToTemplate: Template?
     @State private var searchedText = ""
     @State private var sortingKey: Database.TemplateSortingKey = .name
     @State private var selectedMuscleGroup: MuscleGroup? = nil
@@ -43,7 +44,9 @@ struct TemplateListScreen: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         ForEach(groupedTemplates.value(at: index) ?? [], id: \.objectID) {
                             template in
-                            NavigationLink(value: template) {
+                            Button {
+                                navigateToTemplate = template
+                            } label: {
                                 HStack {
                                     TemplateCell(template: template)
                                     NavigationChevron()
@@ -68,8 +71,8 @@ struct TemplateListScreen: View {
             isShowingNoTemplatesTip = groupedTemplates.isEmpty
         }
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: Template.self) { selectedTemplate in
-            TemplateDetailScreen(template: selectedTemplate)
+        .navigationDestination(item: $navigateToTemplate) { template in
+            TemplateDetailScreen(template: template)
         }
         .navigationTitle(NSLocalizedString("templates", comment: ""))
         .toolbar {

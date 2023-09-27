@@ -89,6 +89,7 @@
 		798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798FBF802925571900A5F7F0 /* NavigationChevron.swift */; };
 		7996D0A52AC49CCA0028FF22 /* LogitProLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */; };
 		7996D0A72AC49E700028FF22 /* BlockedWithoutProModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */; };
+		7996D0A92AC4C9F70028FF22 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A82AC4C9F70028FF22 /* View+.swift */; };
 		799AAF2C2787831900C8BF0C /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */; };
 		79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */; };
 		79A27AF8283D8F6A000A8EF7 /* TemplateSuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */; };
@@ -246,6 +247,7 @@
 		798FBF802925571900A5F7F0 /* NavigationChevron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationChevron.swift; sourceTree = "<group>"; };
 		7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogitProLogo.swift; sourceTree = "<group>"; };
 		7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWithoutProModifier.swift; sourceTree = "<group>"; };
+		7996D0A82AC4C9F70028FF22 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
 		79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SuperSet+.swift"; sourceTree = "<group>"; };
 		79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateSuperSet+.swift"; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 				80F9C34A2704C4F000B6EBF2 /* Date+.swift */,
 				792DAB7427EB9AD30062C20D /* Int+.swift */,
 				79283FD32AC4270B008DCCA1 /* String+.swift */,
+				7996D0A82AC4C9F70028FF22 /* View+.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -961,6 +964,7 @@
 				79488DD92A755AEB005C485D /* CanEditModifier.swift in Sources */,
 				796031432AB0AEAD00C2CF7B /* WidgetCollection+.swift in Sources */,
 				79488DE52A76F00C005C485D /* TemplateSetCell.swift in Sources */,
+				7996D0A92AC4C9F70028FF22 /* View+.swift in Sources */,
 				791F25A52AC1AE0800613793 /* MeasurementsScreen.swift in Sources */,
 				79CD8BE528240A020052D83C /* CalendarView.swift in Sources */,
 				79CD8BEE282540430052D83C /* WorkoutSet+.swift in Sources */,
