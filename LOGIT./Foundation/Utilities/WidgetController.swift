@@ -71,6 +71,11 @@ class WidgetController: ObservableObject {
             for: collection!,
             isAdded: false
         )
+        createWidgetIfNotExisting(
+            withId: WidgetType.volumePerDay.rawValue,
+            for: collection!,
+            isAdded: false
+        )
 
         save()
 

@@ -25,6 +25,8 @@ struct ExerciseDetailScreen: View {
 
     @State private var selectedTimeSpanForWeight: DateLineChart.DateDomain = .threeMonths
     @State private var selectedTimeSpanForRepetitions: DateLineChart.DateDomain = .threeMonths
+    @State private var selectedTimeSpanForVolume: DateLineChart.DateDomain = .threeMonths
+    @State private var selectedTimeSpanForSetsPerWeek: DateLineChart.DateDomain = .threeMonths
     @State private var showDeletionAlert = false
     @State private var showingEditExercise = false
 
@@ -49,6 +51,7 @@ struct ExerciseDetailScreen: View {
                         case .personalBest: exerciseInfo
                         case .bestWeightPerDay: weightGraph
                         case .bestRepetitionsPerDay: repetitionsGraph
+                        case .volumePerDay: volumePerDayGraph
                         default: EmptyView()
                         }
                     }
@@ -226,6 +229,38 @@ struct ExerciseDetailScreen: View {
             }
             .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
             Picker("Calendar Component", selection: $selectedTimeSpanForRepetitions) {
+                Text(NSLocalizedString("threeMonths", comment: ""))
+                    .tag(DateLineChart.DateDomain.threeMonths)
+                Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)
+                Text(NSLocalizedString("all", comment: "")).tag(DateLineChart.DateDomain.allTime)
+            }
+            .pickerStyle(.segmented)
+            .padding(.top)
+        }
+        .padding(CELL_PADDING)
+        .tileStyle()
+    }
+    
+    private var volumePerDayGraph: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("volume", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("perDay", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            DateLineChart(dateDomain: selectedTimeSpanForVolume) {
+                volume(for: exercise, per: .day)
+                    .map {
+                        return .init(
+                            date: $0.0,
+                            value: $0.1
+                        )
+                    }
+            }
+            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
+            Picker("Calendar Component", selection: $selectedTimeSpanForVolume) {
                 Text(NSLocalizedString("threeMonths", comment: ""))
                     .tag(DateLineChart.DateDomain.threeMonths)
                 Text(NSLocalizedString("year", comment: "")).tag(DateLineChart.DateDomain.year)

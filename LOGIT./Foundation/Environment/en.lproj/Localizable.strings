@@ -255,6 +255,9 @@
 "useDefaultExercises" = "Use Default Exercises";
 
 // MARK: - W
+"volume" = "Volume";
+
+// MARK: - W
 
 "week" = "Week";
 "weekly" = "Weekly";

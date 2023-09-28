@@ -257,6 +257,9 @@
 "useDefaultExercises" = "Standard Übungen benutzen";
 
 // MARK: - W
+"volume" = "Volumen";
+
+// MARK: - W
 
 "week" = "Woche";
 "weekly" = "Wöchentlich";

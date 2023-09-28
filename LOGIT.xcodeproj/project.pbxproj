@@ -90,6 +90,7 @@
 		7996D0A52AC49CCA0028FF22 /* LogitProLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */; };
 		7996D0A72AC49E700028FF22 /* BlockedWithoutProModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */; };
 		7996D0A92AC4C9F70028FF22 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0A82AC4C9F70028FF22 /* View+.swift */; };
+		7996D0AB2AC60C0E0028FF22 /* VolumeCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996D0AA2AC60C0E0028FF22 /* VolumeCalculations.swift */; };
 		799AAF2C2787831900C8BF0C /* ExerciseDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */; };
 		79A27AF6283D8F61000A8EF7 /* SuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */; };
 		79A27AF8283D8F6A000A8EF7 /* TemplateSuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */; };
@@ -248,6 +249,7 @@
 		7996D0A42AC49CCA0028FF22 /* LogitProLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogitProLogo.swift; sourceTree = "<group>"; };
 		7996D0A62AC49E700028FF22 /* BlockedWithoutProModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWithoutProModifier.swift; sourceTree = "<group>"; };
 		7996D0A82AC4C9F70028FF22 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
+		7996D0AA2AC60C0E0028FF22 /* VolumeCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeCalculations.swift; sourceTree = "<group>"; };
 		799AAF2B2787831900C8BF0C /* ExerciseDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailScreen.swift; sourceTree = "<group>"; };
 		79A27AF5283D8F61000A8EF7 /* SuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SuperSet+.swift"; sourceTree = "<group>"; };
 		79A27AF7283D8F6A000A8EF7 /* TemplateSuperSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateSuperSet+.swift"; sourceTree = "<group>"; };
@@ -500,6 +502,7 @@
 				7960313E2AAFC74C00C2CF7B /* WidgetController.swift */,
 				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
 				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
+				7996D0AA2AC60C0E0028FF22 /* VolumeCalculations.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -917,6 +920,7 @@
 				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,
 				8058F49F268D2503006A94AC /* Workout+.swift in Sources */,
 				7955EEAE27FDC2F30010693C /* TemplateListScreen.swift in Sources */,
+				7996D0AB2AC60C0E0028FF22 /* VolumeCalculations.swift in Sources */,
 				792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */,
 				795D6E6327F50E6A00A71807 /* Timer.swift in Sources */,
 				79702C6C2A7D356100F19EF3 /* ExerciseService.swift in Sources */,
