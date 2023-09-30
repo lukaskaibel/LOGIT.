@@ -115,6 +115,11 @@ class WidgetController: ObservableObject {
             for: collection!,
             isAdded: false
         )
+        createWidgetIfNotExisting(
+            withId: WidgetType.workoutsPerMonth.rawValue,
+            for: collection!,
+            isAdded: false
+        )
 
         save()
 

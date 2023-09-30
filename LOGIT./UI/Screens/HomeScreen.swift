@@ -94,8 +94,7 @@ struct HomeScreen: View {
                             case .targetPerWeek: targetWorkoutsView
                             case .muscleGroupsInLastTen: muscleGroupPercentageView
                             case .setsPerWeek: setsPerWeek
-                            case .measurement(let measurementType):
-                                measurementView(forType: measurementType)
+                            case .workoutsPerMonth: workoutsPerMonth
                             default: EmptyView()
                             }
                         }
@@ -259,11 +258,25 @@ struct HomeScreen: View {
         .tileStyle()
     }
 
-    @ViewBuilder
-    private func measurementView(forType measurementType: MeasurementEntryType) -> some View {
-        MeasurementEntryView(measurementType: measurementType)
-            .padding(CELL_PADDING)
-            .tileStyle()
+    private var workoutsPerMonth: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("workouts", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("PerMonth", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            DateBarChart(dateUnit: .month) {
+                database.getGroupedWorkouts(groupedBy: .date(calendarComponent: .month))
+                    .compactMap {
+                        guard let date = $0.first?.date else { return nil }
+                        return DateBarChart.Item(date: date, value: $0.count)
+                    }
+            }
+        }
+        .padding(CELL_PADDING)
+        .tileStyle()
     }
 
     private var noWorkoutTip: some View {
