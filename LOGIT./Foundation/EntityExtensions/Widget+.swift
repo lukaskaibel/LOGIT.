@@ -19,6 +19,7 @@ extension Widget {
         case .bestWeightPerDay: return true
         case .bestRepetitionsPerDay: return true
         case .volumePerDay: return true
+        case .exerciseSetsPerWeek: return true
         
         case .targetPerWeek: return false
         case .muscleGroupsInLastTen: return true
@@ -31,7 +32,7 @@ extension Widget {
 }
 
 enum WidgetType {
-    case personalBest, bestWeightPerDay, bestRepetitionsPerDay, volumePerDay
+    case personalBest, bestWeightPerDay, bestRepetitionsPerDay, volumePerDay, exerciseSetsPerWeek
     case measurement(MeasurementEntryType)
     case targetPerWeek, muscleGroupsInLastTen, setsPerWeek
 
@@ -53,6 +54,8 @@ enum WidgetType {
             self = .bestRepetitionsPerDay
         case "volumePerDay":
             self = .volumePerDay
+        case "exerciseSetsPerWeek":
+            self = .exerciseSetsPerWeek
             
         case "targetPerWeek":
             self = .targetPerWeek
@@ -75,6 +78,8 @@ enum WidgetType {
             return "bestRepetitionsPerDay"
         case .volumePerDay:
             return "volumePerDay"
+        case .exerciseSetsPerWeek:
+            return "exerciseSetsPerWeek"
             
         case .targetPerWeek:
             return "targetPerWeek"

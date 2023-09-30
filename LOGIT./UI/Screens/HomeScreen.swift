@@ -249,8 +249,9 @@ struct HomeScreen: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             DateBarChart(dateUnit: .weekOfYear) {
                 database.getGroupedWorkoutsSets(in: .weekOfYear)
-                    .map {
-                        DateBarChart.Item(date: ($0.first?.workout?.date)!, value: $0.count)
+                    .compactMap {
+                        guard let date = $0.first?.workout?.date else { return nil }
+                        return DateBarChart.Item(date: date, value: $0.count)
                     }
             }
         }

@@ -52,6 +52,7 @@ struct ExerciseDetailScreen: View {
                         case .bestWeightPerDay: weightGraph
                         case .bestRepetitionsPerDay: repetitionsGraph
                         case .volumePerDay: volumePerDayGraph
+                        case .exerciseSetsPerWeek: setsPerWeekGraph
                         default: EmptyView()
                         }
                     }
@@ -268,6 +269,28 @@ struct ExerciseDetailScreen: View {
             }
             .pickerStyle(.segmented)
             .padding(.top)
+        }
+        .padding(CELL_PADDING)
+        .tileStyle()
+    }
+    
+    private var setsPerWeekGraph: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("sets", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("perWeek", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            DateBarChart(dateUnit: .weekOfYear) {
+                database.getGroupedWorkoutsSets(with: exercise, in: .weekOfYear)
+                    .compactMap {
+                        guard let date = $0.first?.workout?.date else { return nil }
+                        return .init(date: date, value: $0.count)
+                    }
+            }
+            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
         }
         .padding(CELL_PADDING)
         .tileStyle()
