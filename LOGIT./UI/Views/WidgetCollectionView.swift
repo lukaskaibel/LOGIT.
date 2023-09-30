@@ -9,13 +9,21 @@ import SwiftUI
 
 struct WidgetCollectionView<Content: View>: View {
 
-    @EnvironmentObject var overviewController: WidgetController
+    @EnvironmentObject var database: Database
 
+    let type: WidgetCollection.CollectionType
     let title: String
-    @ObservedObject var collection: WidgetCollection
-    let content: (Widget) -> Content
-
+    let views: [WidgetView<Content>]
+    
+    @StateObject private var collection: WidgetCollection
     @State private var isShowingUpgradeToPro = false
+    
+    init(type: WidgetCollection.CollectionType, title: String, views: [WidgetView<Content>]) {
+        self.type = type
+        self.title = title
+        self.views = views
+        _collection = StateObject(wrappedValue: Self.createWidgetCollectionIfNotExisting(withId: type.rawValue))
+    }
 
     var body: some View {
         VStack(spacing: SECTION_HEADER_SPACING) {
@@ -29,7 +37,7 @@ struct WidgetCollectionView<Content: View>: View {
                         Button {
                             if canUseFeature {
                                 item.isAdded.toggle()
-                                overviewController.save()
+                                database.save()
                             } else {
                                 isShowingUpgradeToPro = true
                             }
@@ -52,10 +60,10 @@ struct WidgetCollectionView<Content: View>: View {
             VStack(spacing: CELL_SPACING) {
                 ReorderableForEach(
                     $collection.items,
-                    onOrderChanged: { overviewController.save() }
+                    onOrderChanged: { database.save() }
                 ) { item in
-                    if item.isAdded {
-                        content(item)
+                    if item.isAdded, let widgetView = views.first(where: { $0.type == item.type }) {
+                        widgetView
                             .transition(.scale)
                             .isBlockedWithoutPro(item.isProFeature)
                     }
@@ -66,11 +74,68 @@ struct WidgetCollectionView<Content: View>: View {
             }
             .animation(.interactiveSpring())
         }
+        .onAppear {
+            views.forEach { createWidgetIfNotExisting(
+                withId: $0.type.rawValue,
+                for: collection,
+                isAdded: $0.isAddedByDefault
+            ) }
+        }
         .sheet(isPresented: $isShowingUpgradeToPro) {
             UpgradeToProScreen()
         }
     }
+    
+    // MARK: - Supporting Methods
+    
+    func createWidgetIfNotExisting(
+        withId id: String,
+        for collection: WidgetCollection,
+        isAdded: Bool
+    ) {
+        guard !collection.items.map({ $0.id }).contains(where: { $0 == id }) else { return }
+        let item = Widget(context: database.context)
+        item.id = id
+        item.isAdded = isAdded
+        collection.items.append(item)
+    }
+    
+    @discardableResult
+    static func createWidgetCollectionIfNotExisting(withId id: String) -> WidgetCollection {
+        #if targetEnvironment(simulator)
+        let database = Database.preview
+        #else
+        let database = Database.shared
+        #endif
+        
+        let predicate = NSPredicate(format: "id == %@", id)
+        var collection =
+            database.fetch(WidgetCollection.self, predicate: predicate).first as? WidgetCollection
+        if collection == nil {
+            collection = WidgetCollection(context: database.context)
+            collection!.id = id
+        }
+        return collection!
+    }
 
+}
+
+struct WidgetView<Content: View>: View {
+    let type: WidgetType
+    let isAddedByDefault: Bool
+    let content: Content
+    
+    var body: some View {
+        content
+    }
+}
+
+extension View {
+    
+    func widget(ofType type: WidgetType, isAddedByDefault: Bool) -> WidgetView<AnyView> {
+        WidgetView(type: type, isAddedByDefault: isAddedByDefault, content: AnyView(self))
+    }
+    
 }
 
 // MARK: - Preview

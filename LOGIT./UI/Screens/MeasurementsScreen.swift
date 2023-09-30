@@ -12,40 +12,36 @@ struct MeasurementsScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
-    @EnvironmentObject var widgetController: WidgetController
     @EnvironmentObject var measurementController: MeasurementEntryController
 
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 WidgetCollectionView(
+                    type: .baseMeasurements,
                     title: NSLocalizedString("coreMetrics", comment: ""),
-                    collection: widgetController.baseMeasurementCollection
-                ) { widget in
-                    Group {
-                        switch widget.type {
-                        case .measurement(let measurementType):
-                            MeasurementEntryView(measurementType: measurementType)
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                        default: EmptyView()
-                        }
-                    }
-                }
+                    views: [
+                        MeasurementEntryView(measurementType: .bodyweight)
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                            .widget(ofType: .measurement(.bodyweight), isAddedByDefault: true),
+                        MeasurementEntryView(measurementType: .calories)
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                            .widget(ofType: .measurement(.calories), isAddedByDefault: false)
+                    ]
+                )
+                
                 WidgetCollectionView(
+                    type: .circumferenceMeasurements,
                     title: NSLocalizedString("bodyParts", comment: ""),
-                    collection: widgetController.circumferenceMeasurementCollection
-                ) { widget in
-                    Group {
-                        switch widget.type {
-                        case .measurement(let measurementType):
-                            MeasurementEntryView(measurementType: measurementType)
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                        default: EmptyView()
-                        }
+                    views: LengthMeasurementEntryType.allCases.map {
+                        MeasurementEntryView(measurementType: .length($0))
+                            .padding(CELL_PADDING)
+                            .tileStyle()
+                            .widget(ofType: .measurement(.length($0)), isAddedByDefault: false)
                     }
-                }
+                )
             }
             .padding(.horizontal)
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
@@ -59,7 +55,6 @@ struct MeasurementsScreen_Previews: PreviewProvider {
         NavigationStack {
             MeasurementsScreen()
                 .environmentObject(Database.preview)
-                .environmentObject(WidgetController.preview)
                 .environmentObject(MeasurementEntryController.preview)
         }
     }

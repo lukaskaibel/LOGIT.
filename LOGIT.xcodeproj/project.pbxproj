@@ -59,7 +59,6 @@
 		795D6E6327F50E6A00A71807 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D6E6227F50E6A00A71807 /* Timer.swift */; };
 		795D9B8B282EC34B00866C06 /* DropSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D9B8A282EC34B00866C06 /* DropSet+.swift */; };
 		7960313D2AAFB5BC00C2CF7B /* WidgetCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960313C2AAFB5BC00C2CF7B /* WidgetCollectionView.swift */; };
-		7960313F2AAFC74C00C2CF7B /* WidgetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960313E2AAFC74C00C2CF7B /* WidgetController.swift */; };
 		796031412AB0ABF200C2CF7B /* Widget+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796031402AB0ABF200C2CF7B /* Widget+.swift */; };
 		796031432AB0AEAD00C2CF7B /* WidgetCollection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796031422AB0AEAD00C2CF7B /* WidgetCollection+.swift */; };
 		7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */; };
@@ -217,7 +216,6 @@
 		795D6E6227F50E6A00A71807 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		795D9B8A282EC34B00866C06 /* DropSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DropSet+.swift"; sourceTree = "<group>"; };
 		7960313C2AAFB5BC00C2CF7B /* WidgetCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCollectionView.swift; sourceTree = "<group>"; };
-		7960313E2AAFC74C00C2CF7B /* WidgetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetController.swift; sourceTree = "<group>"; };
 		796031402AB0ABF200C2CF7B /* Widget+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Widget+.swift"; sourceTree = "<group>"; };
 		796031422AB0AEAD00C2CF7B /* WidgetCollection+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WidgetCollection+.swift"; sourceTree = "<group>"; };
 		796031442AB0B15D00C2CF7B /* LOGIT 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LOGIT 2.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -499,7 +497,6 @@
 				795A48802A6899A10008A458 /* Chronograph.swift */,
 				79702C6B2A7D356100F19EF3 /* ExerciseService.swift */,
 				79C07B2D2ABA535F000BF879 /* MeasurementController.swift */,
-				7960313E2AAFC74C00C2CF7B /* WidgetController.swift */,
 				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
 				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
 				7996D0AA2AC60C0E0028FF22 /* VolumeCalculations.swift */,
@@ -955,7 +952,6 @@
 				7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */,
 				797EF7E629292E32003C2266 /* MuscleGroupsDetailScreen.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
-				7960313F2AAFC74C00C2CF7B /* WidgetController.swift in Sources */,
 				798BDC232A79A9D800EAA75D /* TemplateService.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,
 				79DB259E2914229B00ADDF24 /* Database+EntityEdit.swift in Sources */,

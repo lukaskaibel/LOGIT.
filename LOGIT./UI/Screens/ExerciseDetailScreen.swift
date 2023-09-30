@@ -19,7 +19,6 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
-    @EnvironmentObject var overviewController: WidgetController
 
     // MARK: - State
 
@@ -41,22 +40,18 @@ struct ExerciseDetailScreen: View {
             VStack(spacing: SECTION_SPACING) {
                 header
                     .padding(.horizontal)
-
+                
                 WidgetCollectionView(
+                    type: .exerciseDetail,
                     title: NSLocalizedString("overview", comment: ""),
-                    collection: overviewController.exerciseDetailWidgetCollection
-                ) { item in
-                    Group {
-                        switch item.type {
-                        case .personalBest: exerciseInfo
-                        case .bestWeightPerDay: weightGraph
-                        case .bestRepetitionsPerDay: repetitionsGraph
-                        case .volumePerDay: volumePerDayGraph
-                        case .exerciseSetsPerWeek: setsPerWeekGraph
-                        default: EmptyView()
-                        }
-                    }
-                }
+                    views: [
+                        exerciseInfo.widget(ofType: .personalBest, isAddedByDefault: true),
+                        weightGraph.widget(ofType: .bestWeightPerDay, isAddedByDefault: true),
+                        repetitionsGraph.widget(ofType: .bestRepetitionsPerDay, isAddedByDefault: false),
+                        volumePerDayGraph.widget(ofType: .volumePerDay, isAddedByDefault: false),
+                        setsPerWeekGraph.widget(ofType: .exerciseSetsPerWeek, isAddedByDefault: false)
+                    ]
+                )
                 .padding(.horizontal)
 
                 setGroupList
@@ -403,6 +398,5 @@ struct ExerciseDetailView_Previews: PreviewProvider {
             ExerciseDetailScreen(exercise: Database.preview.getExercises().first!)
         }
         .environmentObject(Database.preview)
-        .environmentObject(WidgetController.preview)
     }
 }

@@ -21,7 +21,6 @@ struct HomeScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
-    @EnvironmentObject var overviewController: WidgetController
 
     // MARK: - State
 
@@ -86,19 +85,15 @@ struct HomeScreen: View {
                     .padding(.leading)
 
                     WidgetCollectionView(
+                        type: .homeScreen,
                         title: NSLocalizedString("overview", comment: ""),
-                        collection: overviewController.homeScreenWidgetCollection
-                    ) { item in
-                        Group {
-                            switch item.type {
-                            case .targetPerWeek: targetWorkoutsView
-                            case .muscleGroupsInLastTen: muscleGroupPercentageView
-                            case .setsPerWeek: setsPerWeek
-                            case .workoutsPerMonth: workoutsPerMonth
-                            default: EmptyView()
-                            }
-                        }
-                    }
+                        views: [
+                            targetWorkoutsView.widget(ofType: .targetPerWeek, isAddedByDefault: true),
+                            muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: false),
+                            setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
+                            workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false)
+                        ]
+                    )
                     .padding(.horizontal)
 
                     //                    VStack(spacing: SECTION_HEADER_SPACING) {
@@ -335,7 +330,6 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen()
             .environmentObject(Database.preview)
-            .environmentObject(WidgetController.preview)
             .environmentObject(MeasurementEntryController.preview)
     }
 }
