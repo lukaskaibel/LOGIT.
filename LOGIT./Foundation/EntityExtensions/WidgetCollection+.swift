@@ -9,12 +9,8 @@ import Foundation
 
 extension WidgetCollection {
 
-    enum CollectionType: String {
-        case exerciseDetail, homeScreen, baseMeasurements, circumferenceMeasurements
-    }
-
-    var type: CollectionType {
-        CollectionType(rawValue: id!)!
+    var type: WidgetCollectionType {
+        WidgetCollectionType(rawValue: id!)!
     }
 
     var items: [Widget] {

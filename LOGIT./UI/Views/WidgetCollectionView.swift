@@ -11,14 +11,14 @@ struct WidgetCollectionView<Content: View>: View {
 
     @EnvironmentObject var database: Database
 
-    let type: WidgetCollection.CollectionType
+    let type: WidgetCollectionType
     let title: String
     let views: [WidgetView<Content>]
     
     @StateObject private var collection: WidgetCollection
     @State private var isShowingUpgradeToPro = false
     
-    init(type: WidgetCollection.CollectionType, title: String, views: [WidgetView<Content>]) {
+    init(type: WidgetCollectionType, title: String, views: [WidgetView<Content>]) {
         self.type = type
         self.title = title
         self.views = views

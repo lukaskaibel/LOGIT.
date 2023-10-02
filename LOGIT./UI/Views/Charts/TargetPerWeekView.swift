@@ -58,7 +58,7 @@ struct TargetPerWeekView: View {
                                 value: weeksFromNow,
                                 to: .now
                             )!
-                            .startOfWeek!
+                            .startOfWeek
                         )
                     )
                     .font(.caption.weight(.bold))

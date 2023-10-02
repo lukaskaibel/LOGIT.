@@ -91,36 +91,11 @@ struct HomeScreen: View {
                             targetWorkoutsView.widget(ofType: .targetPerWeek, isAddedByDefault: true),
                             muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: false),
                             setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
-                            workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false)
+                            workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false),
+                            volumePerDay.widget(ofType: .homeScreenVolumePerDay, isAddedByDefault: false)
                         ]
                     )
                     .padding(.horizontal)
-
-                    //                    VStack(spacing: SECTION_HEADER_SPACING) {
-                    //                        HStack {
-                    //                            Text(NSLocalizedString("recentWorkouts", comment: ""))
-                    //                                .sectionHeaderStyle2()
-                    //                                .fixedSize()
-                    //                            Button(NSLocalizedString("showAll", comment: "")) {
-                    //                                navigateToWorkoutList = true
-                    //                            }
-                    //                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    //                        }
-                    //                        VStack(spacing: CELL_SPACING) {
-                    //                            ForEach(recentWorkouts, id: \.objectID) { workout in
-                    //                                NavigationLink(value: workout) {
-                    //                                    WorkoutCell(workout: workout)
-                    //                                        .padding(CELL_PADDING)
-                    //                                        .tileStyle()
-                    //                                }
-                    //                                .buttonStyle(TileButtonStyle())
-                    //                            }
-                    //                            .emptyPlaceholder(recentWorkouts) {
-                    //                                Text(NSLocalizedString("noWorkouts", comment: ""))
-                    //                            }
-                    //                        }
-                    //                    }
-                    //                    .padding(.horizontal)
                 }
                 .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
                 .padding(.top)
@@ -268,6 +243,24 @@ struct HomeScreen: View {
                         guard let date = $0.first?.date else { return nil }
                         return DateBarChart.Item(date: date, value: $0.count)
                     }
+            }
+        }
+        .padding(CELL_PADDING)
+        .tileStyle()
+    }
+    
+    private var volumePerDay: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("volume", comment: ""))
+                    .tileHeaderStyle()
+                Text(NSLocalizedString("PerDay", comment: ""))
+                    .tileHeaderSecondaryStyle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            DateBarChart(dateUnit: .day) {
+                volume(per: .day)
+                    .map { .init(date: $0.0, value: $0.1) }
             }
         }
         .padding(CELL_PADDING)

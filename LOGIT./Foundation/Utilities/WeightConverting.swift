@@ -1,27 +1,11 @@
 //
-//  WeightUnit.swift
-//  LOGIT.
+//  WeightConverting.swift
+//  LOGIT
 //
-//  Created by Lukas Kaibel on 15.03.22.
+//  Created by Lukas Kaibel on 02.10.23.
 //
 
 import Foundation
-
-enum WeightUnit: String, Codable, Identifiable {
-
-    case kg, lbs
-
-    static var used: WeightUnit {
-        WeightUnit(rawValue: UserDefaults.standard.string(forKey: "weightUnit")!)!
-    }
-
-    var id: String {
-        self.rawValue
-    }
-
-}
-
-// MARK: - Functions for translating weight from grams to kilograms or pounds
 
 private let KG_TO_GRAMS: Int = 1000
 private let LBS_TO_GRAMS: Int = 454

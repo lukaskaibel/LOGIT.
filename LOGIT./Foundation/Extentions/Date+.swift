@@ -9,10 +9,16 @@ import Foundation
 
 extension Date {
 
-    var startOfWeek: Date? {
-        Calendar.current.date(
-            from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)
-        )
+    var startOfWeek: Date {
+            return Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) ?? self
+        }
+        
+    var startOfMonth: Date {
+        return Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: self)) ?? self
+    }
+    
+    var startOfYear: Date {
+        return Calendar.current.date(from: Calendar.current.dateComponents([.year], from: self)) ?? self
     }
 
     func inSameWeekOfYear(as date: Date) -> Bool {

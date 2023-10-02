@@ -51,24 +51,71 @@ struct DateBarChart: View {
             AxisMarks(preset: .extended, values: .stride(by: dateUnit)) { value in
                 if let date = value.as(Date.self) {
                     AxisValueLabel(dateDescription(for: date))
+                        .foregroundStyle(isInSameDateUnitAsNow(date: date) ? Color.primary : .secondary)
                         .font(.caption.weight(.bold))
                 }
             }
         }
         .chartXScale(domain: [
-            minXValue, (Calendar.current.date(byAdding: .day, value: 7, to: .now)?.startOfWeek)!,
+            minXValue, maxXValue
         ])
         .chartYAxis(.hidden)
     }
 
     // MARK: - Computed Properties
+    
+    private var maxXValue: Date {
+        switch dateUnit {
+        case .day:
+            guard let startOfNextDay = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: Date().addingTimeInterval(24*60*60)) else {
+                fatalError("Failed to calculate start of next day.")
+            }
+            return startOfNextDay.addingTimeInterval(-1)
+            
+        case .weekOfYear, .weekOfMonth:
+            guard let startOfNextWeek = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: Date().startOfWeek) else {
+                fatalError("Failed to calculate start of next week.")
+            }
+            return startOfNextWeek.addingTimeInterval(-1)
+            
+        case .month:
+            guard let startOfNextMonth = Calendar.current.date(byAdding: .month, value: 1, to: Date().startOfMonth) else {
+                fatalError("Failed to calculate start of next month.")
+            }
+            return startOfNextMonth.addingTimeInterval(-1)
+            
+        case .year:
+            guard let startOfNextYear = Calendar.current.date(byAdding: .year, value: 1, to: Date().startOfYear) else {
+                fatalError("Failed to calculate start of next year.")
+            }
+            return startOfNextYear.addingTimeInterval(-1)
+            
+        default:
+            return Date()
+        }
+    }
 
     private var minXValue: Date {
-        return Calendar.current.date(
+        guard let dateMinusUnits = Calendar.current.date(
             byAdding: dateUnit,
-            value: -8,
-            to: .now
-        )!
+            value: -7,
+            to: Date()
+        ) else {
+            fatalError("Failed to calculate dateMinusUnits.")
+        }
+        
+        switch dateUnit {
+        case .day:
+            return Calendar.current.startOfDay(for: dateMinusUnits)
+        case .weekOfYear, .weekOfMonth:
+            return Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: dateMinusUnits)) ?? dateMinusUnits
+        case .month:
+            return Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: dateMinusUnits)) ?? dateMinusUnits
+        case .year:
+            return Calendar.current.date(from: Calendar.current.dateComponents([.year], from: dateMinusUnits)) ?? dateMinusUnits
+        default:
+            return dateMinusUnits
+        }
     }
 
     private var maxYValue: Int {
@@ -82,9 +129,24 @@ struct DateBarChart: View {
     private func dateDescription(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat =
-            dateUnit == .day
-            ? "DDD" : dateUnit == .weekOfYear ? "d.M." : dateUnit == .month ? "MMM" : "MMM YY"
+            dateUnit == .day || dateUnit == .weekOfYear ? "d.M." : dateUnit == .month ? "MMM" : "MMM YY"
         return formatter.string(from: date).uppercased()
+    }
+    
+    private func isInSameDateUnitAsNow(date: Date) -> Bool {
+        switch dateUnit {
+        case .day:
+            return Calendar.current.isDate(date, inSameDayAs: Date())
+        case .weekOfYear, .weekOfMonth:
+            return Calendar.current.isDate(date, equalTo: Date(), toGranularity: .weekOfYear)
+        case .month:
+            return Calendar.current.isDate(date, equalTo: Date(), toGranularity: .month)
+        case .year:
+            return Calendar.current.isDate(date, equalTo: Date(), toGranularity: .year)
+        default:
+            // For other units, you might need to adjust or add more cases.
+            return false
+        }
     }
 
 }
