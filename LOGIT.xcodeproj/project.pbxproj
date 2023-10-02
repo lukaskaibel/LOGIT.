@@ -24,7 +24,6 @@
 		792156D22A955DD40010A0FC /* TipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792156D12A955DD40010A0FC /* TipView.swift */; };
 		7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */; };
 		79283FD42AC4270B008DCCA1 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79283FD32AC4270B008DCCA1 /* String+.swift */; };
-		792A3FEA2AB3138C00C6A097 /* OverviewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */; };
 		792A3FEC2AB34EB400C6A097 /* UpgradeToProScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */; };
 		792A3FF12AB36FC400C6A097 /* DateBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FF02AB36FC400C6A097 /* DateBarChart.swift */; };
 		792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792A3FF22AB478F000C6A097 /* DatabaseTests.swift */; };
@@ -101,6 +100,7 @@
 		79AB818B2ACB4E8000B2CCDF /* WeightConverting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB818A2ACB4E8000B2CCDF /* WeightConverting.swift */; };
 		79AB818D2ACB4EB200B2CCDF /* WidgetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB818C2ACB4EB200B2CCDF /* WidgetType.swift */; };
 		79AB81902ACB4F0800B2CCDF /* WidgetCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB818F2ACB4F0800B2CCDF /* WidgetCollectionType.swift */; };
+		79AB81922ACB694A00B2CCDF /* MeasurementEntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */; };
 		79B70BF32803031B0012EAAD /* TemplateStandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */; };
 		79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */; };
 		79B7F2A92AA9E1A20090B785 /* ReorderableForEach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */; };
@@ -182,7 +182,6 @@
 		792156D12A955DD40010A0FC /* TipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipView.swift; sourceTree = "<group>"; };
 		7927C3E42A82F725006B99D8 /* TargetPerWeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetPerWeekView.swift; sourceTree = "<group>"; };
 		79283FD32AC4270B008DCCA1 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewControllerTests.swift; sourceTree = "<group>"; };
 		792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeToProScreen.swift; sourceTree = "<group>"; };
 		792A3FF02AB36FC400C6A097 /* DateBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateBarChart.swift; sourceTree = "<group>"; };
 		792A3FF22AB478F000C6A097 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
@@ -261,6 +260,7 @@
 		79AB818A2ACB4E8000B2CCDF /* WeightConverting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightConverting.swift; sourceTree = "<group>"; };
 		79AB818C2ACB4EB200B2CCDF /* WidgetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetType.swift; sourceTree = "<group>"; };
 		79AB818F2ACB4F0800B2CCDF /* WidgetCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCollectionType.swift; sourceTree = "<group>"; };
+		79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementEntryType.swift; sourceTree = "<group>"; };
 		79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateStandardSet+.swift"; sourceTree = "<group>"; };
 		79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLineChart.swift; sourceTree = "<group>"; };
 		79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableForEach.swift; sourceTree = "<group>"; };
@@ -462,6 +462,7 @@
 				79CAF79C27E1426600A1711C /* WeightUnit.swift */,
 				79AB818C2ACB4EB200B2CCDF /* WidgetType.swift */,
 				79AB818F2ACB4F0800B2CCDF /* WidgetCollectionType.swift */,
+				79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -627,7 +628,6 @@
 				792A3FF22AB478F000C6A097 /* DatabaseTests.swift */,
 				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
 				79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */,
-				792A3FE92AB3138C00C6A097 /* OverviewControllerTests.swift */,
 			);
 			path = LOGITTests;
 			sourceTree = "<group>";
@@ -852,7 +852,6 @@
 			files = (
 				79C07B302ABA566E000BF879 /* MeasurementEntryControllerTests.swift in Sources */,
 				792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */,
-				792A3FEA2AB3138C00C6A097 /* OverviewControllerTests.swift in Sources */,
 				79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -937,6 +936,7 @@
 				7988FBB32A7307D800E4FE54 /* TileStyle.swift in Sources */,
 				792A3FF12AB36FC400C6A097 /* DateBarChart.swift in Sources */,
 				79AB818D2ACB4EB200B2CCDF /* WidgetType.swift in Sources */,
+				79AB81922ACB694A00B2CCDF /* MeasurementEntryType.swift in Sources */,
 				807FC47F268A909D00169820 /* Exercise+.swift in Sources */,
 				79488DDB2A755C52005C485D /* WorkoutSetGroupList.swift in Sources */,
 				79C07B2A2AB8AE65000BF879 /* MeasurementView.swift in Sources */,

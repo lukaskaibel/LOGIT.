@@ -176,9 +176,9 @@ struct ExerciseDetailScreen: View {
     private var weightGraph: some View {
         VStack {
             VStack(alignment: .leading) {
-                Text(NSLocalizedString("weight", comment: ""))
+                Text(NSLocalizedString("maximumWeight", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("bestPerDay", comment: ""))
+                Text(NSLocalizedString("PerDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -208,9 +208,9 @@ struct ExerciseDetailScreen: View {
     private var repetitionsGraph: some View {
         VStack {
             VStack(alignment: .leading) {
-                Text(NSLocalizedString("repetitions", comment: ""))
+                Text(NSLocalizedString("maximumRepetitions", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("bestPerDay", comment: ""))
+                Text(NSLocalizedString("PerDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -242,7 +242,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("volume", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("perDay", comment: ""))
+                Text(NSLocalizedString("PerDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -274,7 +274,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("sets", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("perWeek", comment: ""))
+                Text(NSLocalizedString("PerWeek", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)

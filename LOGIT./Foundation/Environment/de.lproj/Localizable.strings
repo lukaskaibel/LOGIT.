@@ -99,7 +99,7 @@
 
 // MARK: - L
 
-"lastTenWorkouts" = "Letzte 10 Workouts";
+"lastTenWorkouts" = "In Letzten 10 Workouts";
 "lastUsed" = "Zuletzt benutzt";
 "lastWorkout" = "Letztes Workout";
 "legs" = "Beine";
@@ -108,29 +108,32 @@
 
 // MARK: - M
 
+"maximumWeight" = "Maximales Gewicht";
+"maximumRepetitions" = "Maximale Wiederholungen";
 "maxReps" = "Max Wdh";
 "maxWeight" = "Max Gewicht";
 "measurementBodyweight" = "Körpergewicht";
 "measurementCalories" = "Kalorien";
-"measurementLengthChest" = "Brust";
-"measurementLengthHips" = "Hüfte";
-"measurementLengthBicepsLeft" = "Bizeps Links";
-"measurementLengthCalfLeft" = "Wade Links";
-"measurementLengthForearmLeft" = "Unterarm Links";
-"measurementLengthThighLeft" = "Oberschenkel Links";
-"measurementLengthNeck" = "Hals";
-"measurementLengthBicepsRight" = "Bizeps Rechts";
-"measurementLengthCalfRight" = "Wade Rechts";
-"measurementLengthForearmRight" = "Unterarm Rechts";
-"measurementLengthThighRight" = "Oberschenkel Rechts";
-"measurementLengthShoulders" = "Schultern";
-"measurementLengthWaist" = "Taille";
+"chest" = "Brust";
+"hips" = "Hüfte";
+"bicepsLeft" = "Bizeps Links";
+"calfLeft" = "Wade Links";
+"forearmLeft" = "Unterarm Links";
+"thighLeft" = "Oberschenkel Links";
+"neck" = "Hals";
+"bicepsRight" = "Bizeps Rechts";
+"calfRight" = "Wade Rechts";
+"forearmRight" = "Unterarm Rechts";
+"thighRight" = "Oberschenkel Rechts";
+"shoulders" = "Schultern";
+"waist" = "Taille";
 "measurements" = "Messungen";
 "monthly" = "Monatlich";
 "morning" = "Morgen";
 "muscleGroup" = "Muskelgruppe";
 "muscleGroups" = "Muskelgruppen";
 "muscleGroupsInLastTen" = "Muskelgruppen Übersicht";
+"muscleGroupSplit" = "Muskelgruppen Aufteilung";
 "myTemplates" = "Meine Vorlagen";
 
 // MARK: - N
@@ -172,6 +175,7 @@
 "oldestFirst" = "Älteste zuerst";
 "one" = "Eins";
 "overallSets" = "Gesamte Sätze";
+"overallVolume" = "Gesamtes Volumen";
 "overview" = "Überblick";
 
 // MARK: - P
@@ -179,6 +183,7 @@
 "performed" = "Ausführungen:";
 "personalBest" = "Persönliche Bestleistung";
 "perDay" = "pro Tag";
+"PerDay" = "Pro Tag";
 "PerMonth" = "Pro Monat";
 "perWeek" = "pro Woche";
 "PerWeek" = "Pro Woche";

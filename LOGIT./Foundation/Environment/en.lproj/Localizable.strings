@@ -99,7 +99,7 @@
 
 // MARK: - L
 
-"lastTenWorkouts" = "Last 10 Workouts";
+"lastTenWorkouts" = "In Last 10 Workouts";
 "lastUsed" = "Last used";
 "lastWorkout" = "Last Workout";
 "legs" = "Legs";
@@ -108,29 +108,31 @@
 
 // MARK: - M
 
+"maximumWeight" = "Maximum Weight";
+"maximumRepetitions" = "Maximum Repetitions";
 "maxReps" = "Max Reps";
 "maxWeight" = "Max Weight";
 "measurementBodyweight" = "Bodyweight";
 "measurementCalories" = "Calories";
-"measurementLengthChest" = "Chest";
-"measurementLengthHips" = "Hips";
-"measurementLengthBicepsLeft" = "Biceps Left";
-"measurementLengthCalfLeft" = "Calf Left";
-"measurementLengthForearmLeft" = "Forearm Left";
-"measurementLengthThighLeft" = "Thigh Left";
-"measurementLengthNeck" = "Neck";
-"measurementLengthBicepsRight" = "Biceps Right";
-"measurementLengthCalfRight" = "Calf Right";
-"measurementLengthForearmRight" = "Forearm Right";
-"measurementLengthThighRight" = "Thigh Right";
-"measurementLengthShoulders" = "Shoulders";
-"measurementLengthWaist" = "Waist";
+"chest" = "Chest";
+"measurementLengthHhmeasurementLengthBicepsLeft" = "Biceps Left";
+"calfLeft" = "Calf Left";
+"forearmLeft" = "Forearm Left";
+"thighLeft" = "Thigh Left";
+"neck" = "Neck";
+"bicepsRight" = "Biceps Right";
+"calfRight" = "Calf Right";
+"forearmRight" = "Forearm Right";
+"thighRight" = "Thigh Right";
+"shoulders" = "Shoulders";
+"waist" = "Waist";
 "measurements" = "Measurements";
 "monthly" = "Monthly";
 "morning" = "Morning";
 "muscleGroup" = "Muscle Group";
 "muscleGroups" = "Muscle Groups";
 "muscleGroupsInLastTen" = "Muscle Group Overview";
+"muscleGroupSplit" = "Muscle Group Split";
 "myTemplates" = "My Templates";
 
 // MARK: - N
@@ -171,6 +173,7 @@
 "oldestFirst" = "Oldest First";
 "one" = "One";
 "overallSets" = "Overall Sets";
+"overallVolume" = "Overall Volume";
 "overview" = "Overview";
 
 // MARK: - P
@@ -178,6 +181,7 @@
 "performed" = "Performed";
 "personalBest" = "Personal Best";
 "perDay" = "per Day";
+"PerDay" = "Per Day";
 "PerMonth" = "Per Month";
 "perWeek" = "per week";
 "PerWeek" = "Per Week";

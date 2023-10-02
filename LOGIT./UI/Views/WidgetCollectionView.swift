@@ -42,14 +42,12 @@ struct WidgetCollectionView<Content: View>: View {
                                 isShowingUpgradeToPro = true
                             }
                         } label: {
-                            HStack {
-                                Text(NSLocalizedString(item.id!, comment: ""))
-                                Spacer()
-                                if canUseFeature {
-                                    Image(systemName: item.isAdded ? "checkmark" : "plus")
-                                } else {
-                                    Image(systemName: "crown.fill")
-                                }
+                            Text(item.type.title)
+                            Text(item.type.unit)
+                            if canUseFeature {
+                                Image(systemName: item.isAdded ? "checkmark" : "plus")
+                            } else {
+                                Image(systemName: "crown.fill")
                             }
                         }
                     }

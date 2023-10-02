@@ -177,7 +177,7 @@ struct HomeScreen: View {
             VStack {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text(NSLocalizedString("muscleGroups", comment: ""))
+                        Text(NSLocalizedString("muscleGroupSplit", comment: ""))
                             .tileHeaderStyle()
                         Text(NSLocalizedString("lastTenWorkouts", comment: ""))
                             .tileHeaderSecondaryStyle()
@@ -252,13 +252,13 @@ struct HomeScreen: View {
     private var volumePerDay: some View {
         VStack {
             VStack(alignment: .leading) {
-                Text(NSLocalizedString("volume", comment: ""))
+                Text(NSLocalizedString("overallVolume", comment: ""))
                     .tileHeaderStyle()
                 Text(NSLocalizedString("PerDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            DateBarChart(dateUnit: .day) {
+            DateLineChart(dateDomain: .threeMonths) {
                 volume(per: .day)
                     .map { .init(date: $0.0, value: $0.1) }
             }

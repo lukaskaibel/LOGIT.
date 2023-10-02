@@ -35,16 +35,12 @@ struct MeasurementEntryView: View {
                     }
                     VStack(alignment: .leading) {
                         Text(
-                            NSLocalizedString(
-                                "measurement" + measurementType.rawValue.firstLetterUppercased,
-                                comment: ""
-                            )
+                            measurementType.title
                         )
                         .tileHeaderStyle()
                         if !isAddingMeasurementEntry {
                             Text(
-                                measurementType.unit.uppercased() + " "
-                                    + NSLocalizedString("perDay", comment: "")
+                                WidgetType.measurement(measurementType).unit
                             )
                             .tileHeaderSecondaryStyle()
                         }
@@ -132,10 +128,7 @@ struct MeasurementEntryView: View {
                     VStack(spacing: 20) {
                         VStack(alignment: .leading) {
                             Text(
-                                NSLocalizedString(
-                                    "measurement" + measurementType.rawValue.firstLetterUppercased,
-                                    comment: ""
-                                )
+                                measurementType.title
                             )
                             .screenHeaderStyle()
                             Text(NSLocalizedString("measurements", comment: ""))

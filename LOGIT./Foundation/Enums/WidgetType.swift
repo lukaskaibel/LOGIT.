@@ -77,6 +77,44 @@ enum WidgetType {
             return "measurement" + measurementType.rawValue.firstLetterUppercased
         }
     }
+    
+    var title: String {
+        switch self {
+        case .personalBest: return NSLocalizedString("personalBest", comment: "")
+        case .bestWeightPerDay: return NSLocalizedString("maximumWeight", comment: "")
+        case .bestRepetitionsPerDay: return NSLocalizedString("maximumRepetitions", comment: "")
+        case .volumePerDay: return NSLocalizedString("volume", comment: "")
+        case .exerciseSetsPerWeek: return NSLocalizedString("sets", comment: "")
+            
+        case .targetPerWeek: return NSLocalizedString("workoutTarget", comment: "")
+        case .muscleGroupsInLastTen: return NSLocalizedString("muscleGroupSplit", comment: "")
+        case .setsPerWeek: return NSLocalizedString("overallSets", comment: "")
+        case .workoutsPerMonth: return NSLocalizedString("workouts", comment: "")
+        case .homeScreenVolumePerDay: return NSLocalizedString("overallVolume", comment: "")
+            
+        case .measurement(let measurement):
+            return measurement.title
+        }
+    }
+    
+    var unit: String {
+        switch self {
+        case .personalBest: return NSLocalizedString("allTime", comment: "")
+        case .bestWeightPerDay: return NSLocalizedString("PerDay", comment: "")
+        case .bestRepetitionsPerDay: return NSLocalizedString("PerDay", comment: "")
+        case .volumePerDay: return NSLocalizedString("PerDay", comment: "")
+        case .exerciseSetsPerWeek: return NSLocalizedString("PerWeek", comment: "")
+            
+        case .targetPerWeek: return NSLocalizedString("PerWeek", comment: "")
+        case .muscleGroupsInLastTen: return NSLocalizedString("lastTenWorkouts", comment: "")
+        case .setsPerWeek: return NSLocalizedString("PerWeek", comment: "")
+        case .workoutsPerMonth: return NSLocalizedString("PerMonth", comment: "")
+        case .homeScreenVolumePerDay: return NSLocalizedString("PerDay", comment: "")
+            
+        case .measurement(let measurement):
+            return measurement.unit.uppercased() + " " + NSLocalizedString("perDay", comment: "")
+        }
+    }
 }
 
 extension WidgetType: Equatable {
