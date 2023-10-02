@@ -104,7 +104,7 @@ struct TargetPerWeekDetailScreen: View {
 
     private var header: some View {
         VStack(alignment: .leading) {
-            Text(NSLocalizedString("target", comment: ""))
+            Text(NSLocalizedString("workoutTarget", comment: ""))
                 .screenHeaderStyle()
             Text("\(targetPerWeek) / \(NSLocalizedString("week", comment: ""))")
                 .screenHeaderSecondaryStyle()

@@ -100,16 +100,16 @@ enum WidgetType {
     var unit: String {
         switch self {
         case .personalBest: return NSLocalizedString("allTime", comment: "")
-        case .bestWeightPerDay: return NSLocalizedString("PerDay", comment: "")
+        case .bestWeightPerDay: return WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: "")
         case .bestRepetitionsPerDay: return NSLocalizedString("PerDay", comment: "")
-        case .volumePerDay: return NSLocalizedString("PerDay", comment: "")
+        case .volumePerDay: return WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: "")
         case .exerciseSetsPerWeek: return NSLocalizedString("PerWeek", comment: "")
             
         case .targetPerWeek: return NSLocalizedString("PerWeek", comment: "")
         case .muscleGroupsInLastTen: return NSLocalizedString("lastTenWorkouts", comment: "")
         case .setsPerWeek: return NSLocalizedString("PerWeek", comment: "")
         case .workoutsPerMonth: return NSLocalizedString("PerMonth", comment: "")
-        case .homeScreenVolumePerDay: return NSLocalizedString("PerDay", comment: "")
+        case .homeScreenVolumePerDay: return WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: "")
             
         case .measurement(let measurement):
             return measurement.unit.uppercased() + " " + NSLocalizedString("perDay", comment: "")

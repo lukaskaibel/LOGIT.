@@ -178,7 +178,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("maximumWeight", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("PerDay", comment: ""))
+                Text(WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -242,7 +242,7 @@ struct ExerciseDetailScreen: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("volume", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("PerDay", comment: ""))
+                Text(WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)

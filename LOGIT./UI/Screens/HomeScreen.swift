@@ -254,7 +254,7 @@ struct HomeScreen: View {
             VStack(alignment: .leading) {
                 Text(NSLocalizedString("overallVolume", comment: ""))
                     .tileHeaderStyle()
-                Text(NSLocalizedString("PerDay", comment: ""))
+                Text(WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: ""))
                     .tileHeaderSecondaryStyle()
             }
             .frame(maxWidth: .infinity, alignment: .leading)

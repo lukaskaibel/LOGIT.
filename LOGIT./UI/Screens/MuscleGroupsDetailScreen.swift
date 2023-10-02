@@ -23,7 +23,7 @@ struct MuscleGroupsDetailScreen: View {
         ScrollView {
             LazyVStack(spacing: SECTION_SPACING) {
                 VStack(alignment: .leading) {
-                    Text(NSLocalizedString("muscleGroups", comment: ""))
+                    Text(NSLocalizedString("muscleGroupSplit", comment: ""))
                         .screenHeaderStyle()
                     Text(NSLocalizedString("lastTenWorkouts", comment: ""))
                         .screenHeaderSecondaryStyle()
