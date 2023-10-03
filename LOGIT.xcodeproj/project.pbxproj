@@ -44,6 +44,8 @@
 		79488DEC2A770C7D005C485D /* EmptyPlaceholderModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79488DEB2A770C7D005C485D /* EmptyPlaceholderModifier.swift */; };
 		79488DEE2A770CB9005C485D /* OnSwipeDownModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79488DED2A770CB9005C485D /* OnSwipeDownModifier.swift */; };
 		79488DF02A770CE4005C485D /* KeyboardToolbarButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79488DEF2A770CE4005C485D /* KeyboardToolbarButtonStyle.swift */; };
+		794A8E5D2ACC211D006087EA /* TemplateServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794A8E5C2ACC211D006087EA /* TemplateServiceTests.swift */; };
+		794A8E602ACC2184006087EA /* athleanx_total_body_A.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 794A8E5F2ACC2184006087EA /* athleanx_total_body_A.jpeg */; };
 		794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 794C3C462804AD1A003CB9F1 /* Localizable.strings */; };
 		794DAC632A320919006F0168 /* ChronoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794DAC622A320919006F0168 /* ChronoView.swift */; };
 		794E64FC28EE38F3003AACDD /* ExerciseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E64FB28EE38F3003AACDD /* ExerciseCell.swift */; };
@@ -203,6 +205,8 @@
 		79488DEB2A770C7D005C485D /* EmptyPlaceholderModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyPlaceholderModifier.swift; sourceTree = "<group>"; };
 		79488DED2A770CB9005C485D /* OnSwipeDownModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnSwipeDownModifier.swift; sourceTree = "<group>"; };
 		79488DEF2A770CE4005C485D /* KeyboardToolbarButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbarButtonStyle.swift; sourceTree = "<group>"; };
+		794A8E5C2ACC211D006087EA /* TemplateServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateServiceTests.swift; sourceTree = "<group>"; };
+		794A8E5F2ACC2184006087EA /* athleanx_total_body_A.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = athleanx_total_body_A.jpeg; sourceTree = "<group>"; };
 		794C3C452804AD1A003CB9F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		794C3C472804AD2A003CB9F1 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		794DAC622A320919006F0168 /* ChronoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronoView.swift; sourceTree = "<group>"; };
@@ -455,6 +459,14 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		794A8E5E2ACC2162006087EA /* WorkoutImages */ = {
+			isa = PBXGroup;
+			children = (
+				794A8E5F2ACC2184006087EA /* athleanx_total_body_A.jpeg */,
+			);
+			path = WorkoutImages;
+			sourceTree = "<group>";
+		};
 		794DAC662A320F9C006F0168 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -625,9 +637,11 @@
 		79E849082A7EA28000C0DF95 /* LOGITTests */ = {
 			isa = PBXGroup;
 			children = (
+				794A8E5E2ACC2162006087EA /* WorkoutImages */,
 				792A3FF22AB478F000C6A097 /* DatabaseTests.swift */,
 				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
 				79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */,
+				794A8E5C2ACC211D006087EA /* TemplateServiceTests.swift */,
 			);
 			path = LOGITTests;
 			sourceTree = "<group>";
@@ -769,6 +783,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				794A8E602ACC2184006087EA /* athleanx_total_body_A.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,6 +866,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79C07B302ABA566E000BF879 /* MeasurementEntryControllerTests.swift in Sources */,
+				794A8E5D2ACC211D006087EA /* TemplateServiceTests.swift in Sources */,
 				792A3FF32AB478F000C6A097 /* DatabaseTests.swift in Sources */,
 				79FF97B72AA29E680070015E /* ExerciseServiceTests.swift in Sources */,
 			);

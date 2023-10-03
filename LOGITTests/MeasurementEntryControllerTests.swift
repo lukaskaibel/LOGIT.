@@ -15,7 +15,7 @@ final class MeasurementEntryControllerTests: XCTestCase {
     private let database = Database.preview
 
     func testAddMeasurementEntry() throws {
-        controller.addMeasurementEntry(ofType: .weight, value: 85, onDate: .now)
+        controller.addMeasurementEntry(ofType: .bodyweight, value: 85, onDate: .now)
         controller.addMeasurementEntry(ofType: .length(.chest), value: 50, onDate: .now)
 
         let measurements = database.fetch(MeasurementEntry.self) as! [MeasurementEntry]
@@ -28,12 +28,12 @@ final class MeasurementEntryControllerTests: XCTestCase {
 
     func testGetMeasurementEntries() throws {
         // 1. Setup test data
-        controller.addMeasurementEntry(ofType: .weight, value: 85, onDate: .now)
+        controller.addMeasurementEntry(ofType: .bodyweight, value: 85, onDate: .now)
         controller.addMeasurementEntry(ofType: .length(.chest), value: 50, onDate: .now)
         controller.addMeasurementEntry(ofType: .length(.neck), value: 45, onDate: .now)
 
         // 2. Retrieve measurement entries
-        let weightEntries = controller.getMeasurementEntries(ofType: .weight)
+        let weightEntries = controller.getMeasurementEntries(ofType: .bodyweight)
         let chestEntries = controller.getMeasurementEntries(ofType: .length(.chest))
         let neckEntries = controller.getMeasurementEntries(ofType: .length(.neck))
 
