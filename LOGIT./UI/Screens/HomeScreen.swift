@@ -127,8 +127,13 @@ struct HomeScreen: View {
         VStack(alignment: .leading) {
             Text(Date.now.formatted(date: .long, time: .omitted))
                 .screenHeaderTertiaryStyle()
-            Text("LOGIT")
-                .screenHeaderStyle()
+            if !isProUser {
+                Text("LOGIT")
+                    .screenHeaderStyle()
+            } else {
+                LogitProLogo()
+                    .screenHeaderStyle()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

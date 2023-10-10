@@ -13,9 +13,11 @@ struct LogitProLogo: View {
             Text("LOGIT")
                 .foregroundColor(.primary)
                 .fontWeight(.bold)
+                .fontDesign(.default)
             Text("Pro")
                 .foregroundColor(.secondary)
                 .fontDesign(.rounded)
+                .fontWeight(.regular)
         }
     }
 }

@@ -21,6 +21,7 @@ struct CreateTemplateMenu: View {
     @State private var isShowingPhotosPicker = false
     @State private var isShowingTemplateGenerationScreen = false
     @State private var isShowingCreationFailedAlert = false
+    @State private var isShowingUpgradeToProScreen = false
 
     @State private var newTemplate: Template?
     @State private var templateExtraction: AnyCancellable?
@@ -31,12 +32,21 @@ struct CreateTemplateMenu: View {
                 newTemplate = database.newTemplate()
                 database.flagAsTemporary(newTemplate!)
             } label: {
-                Label("Create from Scratch", systemImage: "plus")
+                Label(NSLocalizedString("newTemplate", comment: ""), systemImage: "plus")
             }
             Button {
-                isShowingPhotosPicker = true
+                if !isProUser {
+                    isShowingUpgradeToProScreen = true
+                } else {
+                    isShowingPhotosPicker = true
+                }
             } label: {
-                Label("Create from Photo", systemImage: "photo")
+                Text(NSLocalizedString("templateFromPhoto", comment: ""))
+                if !isProUser {
+                    Image(systemName: "crown")
+                } else {
+                    Image(systemName: "photo")
+                }
             }
         } label: {
             Image(systemName: "plus")
@@ -100,6 +110,9 @@ struct CreateTemplateMenu: View {
         }
         .sheet(isPresented: $isShowingTemplateGenerationScreen) {
             TemplateGenerationScreen(templateExtration: $templateExtraction)
+        }
+        .sheet(isPresented: $isShowingUpgradeToProScreen) {
+            UpgradeToProScreen()
         }
     }
 }

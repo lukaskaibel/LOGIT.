@@ -241,6 +241,8 @@
 "targetPerWeekDescription" = "Wähle dein Workout Ziel pro Woche aus.";
 "template" = "Vorlage";
 "templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
+"templateFromPhoto" = "Vorlage aus Foto";
+"templateFromPhotoDescription" = "Extrahiert eine Vorlage aus einem Foto";
 "templates" = "Vorlagen";
 "three" = "Drei";
 "threeMonths" = "3 Monate";

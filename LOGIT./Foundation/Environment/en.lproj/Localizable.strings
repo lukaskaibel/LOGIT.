@@ -238,6 +238,8 @@
 "targetPerWeekDescription" = "Select your workout target per week.";
 "template" = "Template";
 "templateExplanation" = "Use Templates to plan and reuse workouts. You can select a Template when starting a workout.";
+"templateFromPhoto" = "Template from Photo";
+"templateFromPhotoDescription" = "Extracts a template from a photo";
 "templates" = "Templates";
 "three" = "Three";
 "threeMonths" = "3 Months";
