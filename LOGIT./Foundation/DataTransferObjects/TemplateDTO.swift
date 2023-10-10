@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct TemplateDTO: Decodable {
+    let name: String
+    let setGroups: [TemplateSetGroupDTO]
+}

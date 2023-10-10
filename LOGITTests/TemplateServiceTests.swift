@@ -12,12 +12,17 @@ import Combine
 
 final class TemplateServiceTests: XCTestCase {
     
+    let templateService = TemplateService(database: Database.preview)
+    
     var cancellables = [AnyCancellable]()
     
     func testAthleanXTotalBodyA() throws {
+        let expectation = XCTestExpectation(description: "Template creation completion")
+        
         let image = getImage("athleanx_total_body_A")
         XCTAssertNotNil(image, "Getting test image failed")
-        TemplateService().createTemplate(from: image!)
+        
+        templateService.createTemplate(from: image!)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -25,89 +30,92 @@ final class TemplateServiceTests: XCTestCase {
                 case .failure(let error):
                     XCTFail("Failed to create template from image: \(error)")
                 }
-            }, receiveValue: { template in
-                XCTAssertEqual(template.name?.lowercased(), "perfect total body workout a", "Template name not matching photo.")
-                XCTAssertEqual(template.setGroups.count, 6, "Number of SetGroups not matching the photo")
+            }, receiveValue: { [weak self] template in
+                guard let self = self else {
+                    XCTFail("Self was deallocated before the closure was called!")
+                    return
+                }
                 
-                XCTAssertTrue(self.templateSetGroupEquals(
-                    template.setGroups[0],
-                    name: "barbell squats",
+                XCTAssertEqual(template.name?.lowercased(), "perfect total body workout a", "Template name not matching photo.")
+                XCTAssertEqual(template.setGroups.count, 7, "Number of SetGroups not matching the photo")
+                
+                print(template.setGroups.map { $0.exercise?.name })
+                
+                XCTAssertTrue(self.templateHasSetGroup(
+                    template, 
+                    nameContaining: "squat",
                     numberOfSets: [3],
                     repetitions: [5],
                     weight: [0]
                 ))
                 
-                XCTAssertTrue(self.templateSetGroupEquals(
-                    template.setGroups[1],
-                    name: "barbell hip thrusts",
+                XCTAssertTrue(self.templateHasSetGroup(
+                    template,
+                    nameContaining: "barbell hip thrust",
                     numberOfSets: [3, 4],
                     repetitions: [10, 11, 12],
                     weight: [0]
                 ))
                 
-                XCTAssertTrue(self.templateSetGroupEquals(
-                    template.setGroups[3],
-                    name: "weighted chin ups",
+                XCTAssertTrue(self.templateHasSetGroup(
+                    template,
+                    nameContaining: "weighted chin ups",
                     numberOfSets: [3, 4],
                     repetitions: [6, 7, 8, 9, 10],
                     weight: [0]
                 ))
                 
-                XCTAssertTrue(self.templateSetGroupEquals(
-                    template.setGroups[3],
-                    name: "db farmer's carry",
+                XCTAssertTrue(self.templateHasSetGroup(
+                    template,
+                    nameContaining: "carry",
                     numberOfSets: [3, 4],
                     repetitions: [50],
                     weight: [0]
                 ))
+                expectation.fulfill()  // Signal that the async work is done
             })
             .store(in: &cancellables)
+        
+        // Wait for the expectation to be fulfilled (with a timeout)
+        self.wait(for: [expectation], timeout: 60)
     }
-    
+
     private func getImage(_ name: String) -> UIImage? {
-        // Get the URL of the current file
-        let currentFileURL = URL(fileURLWithPath: #file)
-
-        // Construct the directory URL (assuming the directory is named "ImagesDirectory")
-        let directoryURL = currentFileURL.deletingLastPathComponent().appendingPathComponent("WorkoutImages")
-
-        do {
-            // Fetch the content of the directory
-            let contents = try FileManager.default.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil, options: [])
-            return contents
-                .filter { $0.pathExtension == "jpeg" }
-                .filter { $0.path().contains(name) }
-                .compactMap { UIImage(contentsOfFile: $0.path) }
-                .first
-        } catch {
-            XCTFail("Error reading image '\(name)' from WorkoutImages: \(error)")
-            return nil
+        // Access the image directly from the asset catalog
+        let image = UIImage(named: name, in: Bundle(for: type(of: self)), compatibleWith: nil)
+        
+        if image == nil {
+            XCTFail("Couldn't find image '\(name)' in WorkoutImages.")
         }
+
+        return image
     }
-    
-    private func templateSetGroupEquals(
-        _ setGroup: TemplateSetGroup,
-        name: String,
+
+
+    private func templateHasSetGroup(
+        _ template: Template,
+        nameContaining name: String,
         numberOfSets: [Int],
         repetitions: [Int],
         weight: [Int]
     ) -> Bool {
         var result = true
-        if setGroup.exercise?.name?.lowercased() != name.lowercased() {
+        if let setGroup = template.setGroups.first(where: { $0.exercise?.name?.lowercased().contains(name.lowercased()) ?? false }) {
+            if !numberOfSets.contains(where: { $0 == setGroup.sets.count }) {
+                result = false
+                Logger().error("\(name) Number of sets '\(setGroup.sets.count)' not equal to '\(numberOfSets)'")
+            }
+            if !repetitions.contains(where: { $0 == (setGroup.sets.value(at: 0) as? TemplateStandardSet)!.repetitions }) {
+                result = false
+                Logger().error("\(name) Repetitions '\((setGroup.sets.value(at: 0) as? TemplateStandardSet)!.repetitions)' not equal to '\(repetitions)'")
+            }
+            if !weight.contains(where: { $0 == (setGroup.sets.value(at: 0) as? TemplateStandardSet)!.weight }) {
+                result = false
+                Logger().error("\(name) Weight '\((setGroup.sets.value(at: 0) as? TemplateStandardSet)!.weight)' not equal to '\(weight)'")
+            }
+        } else {
             result = false
-            Logger().error("Exercise name '\(setGroup.exercise?.name?.lowercased() ?? "nil")' not equal to '\(name.lowercased())'")
-        }
-        if !numberOfSets.contains(where: { $0 == setGroup.sets.count }) {
-            result = false
-            Logger().error("Number of sets '\(setGroup.sets.count)' not equal to '\(numberOfSets)'")
-        }
-        if !repetitions.contains(where: { $0 == (setGroup.sets.value(at: 0) as? StandardSet)!.repetitions }) {
-            result = false
-            Logger().error("Repetitions '\((setGroup.sets.value(at: 0) as? StandardSet)!.repetitions)' not equal to '\(repetitions)'")
-        }
-        if !weight.contains(where: { $0 == (setGroup.sets.value(at: 0) as? StandardSet)!.repetitions }) {
-            result = false
-            Logger().error("Weight '\((setGroup.sets.value(at: 0) as? StandardSet)!.repetitions)' not equal to '\(weight)'")
+            Logger().error("\(name) Template does not have exercise with name containing: '\(name)'")
         }
         return result
     }

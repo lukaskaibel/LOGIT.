@@ -11,39 +11,51 @@ import OpenAIKit
 import SwiftUI
 
 class TemplateService: ObservableObject {
+    
+    private static let logger = Logger(subsystem: "com.lukaskbl.LOGIT", category: "TemplateService")
 
     enum Error: Swift.Error {
         case emptyResponse, invalidData, invalidImage, jsonParsingError, keysNotMatching,
             noRecognizedText
     }
 
-    private let database = Database.shared
-    private lazy var exerciseCreator = ExerciseService(database: database)
-
-    private var cancellables = [AnyCancellable]()
+    private let database: Database
+    private var exerciseService: ExerciseService
+    
+    var cancellables = [AnyCancellable]()
+    
+    init(database: Database) {
+        self.database = database
+        self.exerciseService = ExerciseService(database: database)
+    }
 
     // MARK: - Prompts
 
     private let systemPrompt = """
-            You should extract the workout from the following text. You only extract exercises that are actual exercises. If an entry is not specifically mentioned, you use the default.
-            Repetitions and sets might not be exactly called that so you will have to infer if possible.
-            Also make sure the the workout name makes sense, otherwise change it accordingly.
-            The result should be a JSON looking like this:
+            Your job is to extract the workout from a text.
+            You will have to infer if a value means number of sets, repetitions, or weight.
+            Exercise names should only include the name of the exercise, nothing else.
+            If you cannot infer a value, use the default from below.
+            Return a JSON like this:
             Workout = {
                 name: string = "",
-                exercises: [{
-                    name: string = "",
+                setGroups: [{
+                    exercise: Exercise,
                     sets: [{
                         repetitions: integer = 0,
                         weight: integer = 0
                     }]
                 }]
             }
+            Exercise = {
+                name: string
+            }
         """
 
     // MARK: - Public Methods
 
     func createTemplate(from uiImage: UIImage) -> AnyPublisher<Template, Swift.Error> {
+        Self.logger.info("Creating Template from UIImage...")
         return TextProcessing.readText(from: uiImage)
             .flatMap { recognizedText -> AnyPublisher<String, Swift.Error> in
                 guard let text = recognizedText else {
@@ -51,21 +63,17 @@ class TemplateService: ObservableObject {
                 }
                 return Just(text).setFailureType(to: Swift.Error.self).eraseToAnyPublisher()
             }
-            .flatMap { [unowned self] text -> AnyPublisher<String, Swift.Error> in
-                return generateTemplateJSONText(from: text)
-            }
-            .flatMap { text -> AnyPublisher<Data, Swift.Error> in
-                return TextProcessing.extractJsonDataFromString(text)
-            }
-            .flatMap { [unowned self] jsonData -> AnyPublisher<Template, Swift.Error> in
-                return createTemplate(from: jsonData)
-            }
+            .flatMap { [unowned self] in generateTemplateJSONText(from: $0) }
+            .flatMap { TextProcessing.extractJsonDataFromString($0) }
+            .flatMap { [unowned self] in createTemplateDTO(from: $0) }
+            .flatMap { [unowned self] in createTemplateFromDTO($0) }
             .eraseToAnyPublisher()
     }
 
     // MARK: - Private Helper Methods
 
     private func generateTemplateJSONText(from text: String) -> AnyPublisher<String, Swift.Error> {
+        Self.logger.info("Generating Template JSON from text: \(text)")
         let systemMessage = AIMessage(role: .system, content: systemPrompt)
         let userMessage = AIMessage(role: .user, content: text)
 
@@ -83,9 +91,11 @@ class TemplateService: ObservableObject {
                         if let text = aiResult.choices.first?.message?.content {
                             promise(.success(text))
                         } else {
+                            Self.logger.error("Failed to generate Template from JSON")
                             promise(.failure(Error.emptyResponse))
                         }
                     case .failure(let error):
+                        Self.logger.error("Failed to generate Template from JSON: \(error)")
                         promise(.failure(error))
                     }
                 }
@@ -94,111 +104,72 @@ class TemplateService: ObservableObject {
         return AnyPublisher(publisher)
     }
 
-    private func createTemplate(from jsonData: Data) -> AnyPublisher<Template, Swift.Error> {
-        // Helper function to find a matching key, checking if the key contains the property name
-        func findKey(_ propertyName: String, in dictionary: [String: Any]) -> String? {
-            return dictionary.keys.first(where: {
-                $0.lowercased().contains(propertyName.lowercased())
-            })
-        }
+    private func createTemplateDTO(from jsonData: Data) -> AnyPublisher<TemplateDTO, Swift.Error> {
+        Self.logger.info("Decoding JSON to TemplateDTO...")
+        let decoder = JSONDecoder()
+        return Just(jsonData)
+            .decode(type: TemplateDTO.self, decoder: decoder)
+            .eraseToAnyPublisher()
+    }
+    
+    private func createTemplateFromDTO(_ dto: TemplateDTO) -> AnyPublisher<Template, Swift.Error> {
+        Self.logger.info("Converting TemplateDTO to Template...")
+        let exerciseNames = dto.setGroups.compactMap { $0.exercise.name }
 
-        return Future<Template, Swift.Error> { [unowned self] promise in
-            guard
-                let json = try? JSONSerialization.jsonObject(with: jsonData, options: [])
-                    as? [String: Any]
-            else {
-                promise(.failure(Error.jsonParsingError))
-                return
-            }
+        return exerciseService.matchExercisesToExisting(exerciseNames)
+            .flatMap { [self] nameToExerciseMapping -> AnyPublisher<Template, Swift.Error> in
+                let template = self.database.newTemplate(name: dto.name)
 
-            guard let nameKey = findKey("name", in: json) ?? findKey("title", in: json),
-                let setGroupsKey = findKey("exercises", in: json)
-            else {
-                promise(.failure(Error.keysNotMatching))
-                return
-            }
+                let indexedPublishers: [AnyPublisher<(TemplateSetGroup, Int), Swift.Error>] = dto.setGroups.enumerated().compactMap { index, setGroupDTO in
+                    guard let exerciseName = setGroupDTO.exercise.name else { return nil }
 
-            let name = json[nameKey] as? String ?? ""
-            let template = database.newTemplate(name: name)
-            database.flagAsTemporary(template)
-
-            let setGroupsJSON = json[setGroupsKey] as? [[String: Any]]
-
-            let setGroupPublishers =
-                setGroupsJSON?
-                .map { setGroupJSON -> AnyPublisher<(), Swift.Error> in
-                    guard let exerciseNameKey = findKey("name", in: setGroupJSON),
-                        let setsKey = findKey("sets", in: setGroupJSON)
-                    else {
-                        return Fail(error: Error.keysNotMatching).eraseToAnyPublisher()
+                    if let exercise = nameToExerciseMapping[exerciseName], let exercise = exercise {
+                        let setGroup = self.createSetGroupFromDTO(setGroupDTO, withExercise: exercise)
+                        return Just((setGroup, index))
+                            .setFailureType(to: Swift.Error.self)
+                            .eraseToAnyPublisher()
+                    } else {
+                        return self.exerciseService.createExercise(for: exerciseName)
+                            .map { exercise in
+                                (self.createSetGroupFromDTO(setGroupDTO, withExercise: exercise), index)
+                            }
+                            .eraseToAnyPublisher()
                     }
+                }
 
-                    guard let exerciseName = setGroupJSON[exerciseNameKey] as? String else {
-                        return Fail(error: Error.keysNotMatching).eraseToAnyPublisher()
+                return Publishers.Sequence(sequence: indexedPublishers)
+                    .flatMap(maxPublishers: .max(dto.setGroups.count)) { $0 }
+                    .collect()
+                    .map { indexedSetGroups in
+                        let sortedSetGroups = indexedSetGroups.sorted(by: { $0.1 < $1.1 }).map { $0.0 }
+                        template.setGroups.append(contentsOf: sortedSetGroups)
+                        return template
                     }
-
-                    return createOrGetExistingExercise(for: exerciseName)
-                        .flatMap { [unowned self] exercise -> AnyPublisher<(), Swift.Error> in
-                            let setGroup = database.newTemplateSetGroup(
-                                createFirstSetAutomatically: false,
-                                exercise: exercise,
-                                template: template
-                            )
-
-                            let setsJSON = setGroupJSON[setsKey] as? [[String: Any]]
-                            setsJSON?
-                                .forEach { setJSON in
-                                    guard let repetitionsKey = findKey("repetitions", in: setJSON),
-                                        let weightKey = findKey("weight", in: setJSON)
-                                    else {
-                                        return
-                                    }
-
-                                    let repetitions = setJSON[repetitionsKey] as? Int ?? 0
-                                    let weight = setJSON[weightKey] as? Int ?? 0
-
-                                    database.newTemplateStandardSet(
-                                        repetitions: repetitions,
-                                        weight: weight,
-                                        setGroup: setGroup
-                                    )
-                                }
-
-                            return Just(())
-                                .setFailureType(to: Swift.Error.self)
-                                .eraseToAnyPublisher()
-                        }
-                        .eraseToAnyPublisher()
-                } ?? []
-
-            // Wait until all exercises have been created or gotten, then complete the promise.
-            Publishers.MergeMany(setGroupPublishers)
-                .collect()
-                .sink(
-                    receiveCompletion: { completion in
-                        switch completion {
-                        case .finished:
-                            promise(.success(template))
-                        case .failure(let error):
-                            promise(.failure(error))
-                        }
-                    },
-                    receiveValue: { _ in }
-                )
-                .store(in: &cancellables)
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    private func createSetGroupFromDTO(_ dto: TemplateSetGroupDTO, withExercise exercise: Exercise) -> TemplateSetGroup {
+        Self.logger.info("Converting TemplateSetGroup from TemmplateSetGroupDTO")
+        let setGroup = database.newTemplateSetGroup(createFirstSetAutomatically: false, exercise: exercise)
+        for setDTO in dto.sets {
+            database.newTemplateStandardSet(repetitions: setDTO.repetitions, weight: setDTO.weight, setGroup: setGroup)
         }
-        .eraseToAnyPublisher()
+        return setGroup
     }
 
     private func createOrGetExistingExercise(for name: String) -> AnyPublisher<
         Exercise, Swift.Error
     > {
+        Self.logger.info("Creating or fetching existing exercise matching name: \(name)")
         if let existingExercise = database.getExercises(withNameIncluding: name).first {
+            Self.logger.debug("Found existing Exercise with name: \(existingExercise.name ?? "nil")")
             return Just(existingExercise)
                 .setFailureType(to: Swift.Error.self)
                 .eraseToAnyPublisher()
         } else {
-            return exerciseCreator.createExercise(for: name)
+            return exerciseService.createExercise(for: name)
                 .handleEvents(receiveOutput: { [unowned self] newExercise in
                     database.flagAsTemporary(newExercise)
                 })

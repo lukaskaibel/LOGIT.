@@ -11,6 +11,8 @@ import OSLog
 import OpenAIKit
 
 class ExerciseService {
+    
+    private static let logger = Logger(subsystem: ".com.lukaskbl.LOGIT", category: "ExerciseService")
 
     enum Error: Swift.Error {
         case emptyResponse, jsonParsingError, keysNotMatching
@@ -25,30 +27,35 @@ class ExerciseService {
     // MARK: - Prompts
 
     let createExercisePrompt = """
-            For the following exercise name, return a JSON object that includes the primary muscle Group for that exercise.
-            enum MuscleGroup {
-            case \((MuscleGroup.allCases.map { $0.rawValue }).joined(separator: ", "))
+            For the following exercise name, return a JSON object with the type of training.
+            enum Type {
+                \((MuscleGroup.allCases.map { $0.rawValue }).joined(separator: ", "))
             }
             Return JSON of form:
             exercise = {
             name: string,
-            muscleGroup: MuscleGroup
+            type: Type
             }
         """
 
     lazy var getMatchingExercisePrompt = """
-            For the following exercise names, decide if they are already in this list of exercises:
-            \(database.getExercises().compactMap({ $0.name }).joined(separator: ", "))
-            The names don't have to match, they should just mean the same exercise.
-            Also match the exercises, if the name is in a different language than the existing exercises name.
-            Return the following JSON: { matches: [{ name: String, existingExerciseName: String | None }] }
+            Your job is to map a list of words to a list of exercises, if the word refers to the exercise.
+            The word should also be mapped to the exercise, if it just means the exercise in a different language.
+            Return a JSON like this: { matches: [{ word: string, exercise: Exercise | null }] }.
+            enum Exercise {
+                \(database.getExercises().compactMap({ $0.name }).joined(separator: ", "))
+            }
         """
 
     // MARK: - Public Methods
-
+    
+    /// Matches a given list of Exercise names to the corresponding Exercise entity, if one exists.
+    /// - Parameter exerciseNames: List of Exercise names.
+    /// - Returns: Returns a publisher that publishes a dictionary with the given names as keys and the Exercises, if found, as values (otherwise nil).
     func matchExercisesToExisting(_ exerciseNames: [String]) -> AnyPublisher<
         [String: Exercise?], Swift.Error
     > {
+        Self.logger.info("Looking for existing Exercises matching: \(exerciseNames)")
         let systemMessage = AIMessage(role: .system, content: getMatchingExercisePrompt)
         let userMessage = AIMessage(role: .user, content: exerciseNames.joined(separator: ", "))
         let publisher = Future<String, Swift.Error> { promise in
@@ -63,6 +70,7 @@ class ExerciseService {
                     switch result {
                     case .success(let aiResult):
                         if let text = aiResult.choices.first?.message?.content {
+                            print(text)
                             promise(.success(text))
                         } else {
                             promise(.failure(Error.emptyResponse))
@@ -95,8 +103,8 @@ class ExerciseService {
                 var result = [String: Exercise?]()
                 matches?
                     .forEach { match in
-                        guard let exerciseNameKey = findKey("name", in: match),
-                            let existingExerciseNameKey = findKey("existingExerciseName", in: match)
+                        guard let exerciseNameKey = findKey("word", in: match),
+                            let existingExerciseNameKey = findKey("exercise", in: match)
                         else {
                             return promise(.failure(Error.keysNotMatching))
                         }
@@ -109,7 +117,9 @@ class ExerciseService {
                             database.getExercises(withNameIncluding: existingExerciseName).first
                         result[exerciseName] = existingExercise
                     }
-
+                
+                let pairedExercises = zip(result.keys, result.values.map({ $0?.name ?? "nil" })).map { "\($0): \($1)" }.joined(separator: ", ")
+                Self.logger.debug("Found matching exercises for names: \(pairedExercises)")
                 promise(.success(result))
             }
             .eraseToAnyPublisher()
@@ -118,8 +128,13 @@ class ExerciseService {
 
         return publisher
     }
-
+    
+    /// Creates a new Exercise entity in the database with corresponding Muscle Group (using ChatGPT API).
+    /// - Parameter name: Name of the exercise that will be created.
+    /// - Returns: Returns a publisher that publishes either the Exercise, or an error.
     func createExercise(for name: String) -> AnyPublisher<Exercise, Swift.Error> {
+        Self.logger.info("Creating Exercise for name: \(name)")
+        
         let systemMessage = AIMessage(role: .system, content: createExercisePrompt)
         let userMessage = AIMessage(role: .user, content: name)
 
@@ -135,6 +150,8 @@ class ExerciseService {
                     switch result {
                     case .success(let aiResult):
                         if let text = aiResult.choices.first?.message?.content {
+                            print("Got response for system message: \(systemMessage)")
+                            Self.logger.debug("Returned Exercise JSON: \(text)")
                             promise(.success(text))
                         } else {
                             promise(.failure(Error.emptyResponse))
@@ -163,31 +180,17 @@ class ExerciseService {
     }
 
     private func createExercise(from jsonData: Data) -> AnyPublisher<Exercise, Swift.Error> {
-        let publisher = Future<Exercise, Swift.Error> { [unowned self] promise in
-            guard
-                let json = try? JSONSerialization.jsonObject(with: jsonData, options: [])
-                    as? [String: Any]
-            else {
-                promise(.failure(Error.jsonParsingError))
-                return
+        Self.logger.info("Decoding Exercise from JSON: \(jsonData.description)")
+        let decoder = JSONDecoder()
+        return Just(jsonData)
+            .decode(type: ExerciseDTO.self, decoder: decoder)
+            .tryMap { [unowned self] dto -> Exercise in
+                guard let name = dto.name, let muscleGroup = dto.type else {
+                    throw Error.jsonParsingError
+                }
+                return self.database.newExercise(name: name, muscleGroup: muscleGroup)
             }
-
-            guard let nameKey = findKey("name", in: json),
-                let muscleGroupKey = findKey("muscleGroup", in: json)
-            else {
-                promise(.failure(Error.keysNotMatching))
-                return
-            }
-
-            let name = json[nameKey] as? String ?? ""
-            let muscleGroup = MuscleGroup(rawValue: json[muscleGroupKey] as? String ?? "") ?? .chest
-
-            let exercise = database.newExercise(name: name, muscleGroup: muscleGroup)
-
-            promise(.success(exercise))
-        }
-
-        return AnyPublisher(publisher)
+            .eraseToAnyPublisher()
     }
 
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -55,10 +55,15 @@
 		7955EEAE27FDC2F30010693C /* TemplateListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */; };
 		7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB127FDC5680010693C /* TemplateCell.swift */; };
 		7955EEB427FDD8820010693C /* StartWorkoutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB327FDD8820010693C /* StartWorkoutScreen.swift */; };
+		7959F4CF2ACD8F5B0038B222 /* WorkoutImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7959F4CE2ACD8F5B0038B222 /* WorkoutImages.xcassets */; };
+		7959F4D22ACDB7E20038B222 /* ExerciseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7959F4D02ACDB7DE0038B222 /* ExerciseDTO.swift */; };
 		795A48812A6899A10008A458 /* Chronograph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A48802A6899A10008A458 /* Chronograph.swift */; };
 		795BFA3028384C07005E59FE /* TemplateSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795BFA2F28384C07005E59FE /* TemplateSet+.swift */; };
 		795D6E6327F50E6A00A71807 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D6E6227F50E6A00A71807 /* Timer.swift */; };
 		795D9B8B282EC34B00866C06 /* DropSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795D9B8A282EC34B00866C06 /* DropSet+.swift */; };
+		79602BEF2ACF39CF001A5046 /* TemplateSetDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79602BEE2ACF39CF001A5046 /* TemplateSetDTO.swift */; };
+		79602BF12ACF3A43001A5046 /* TemplateSetGroupDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79602BF02ACF3A43001A5046 /* TemplateSetGroupDTO.swift */; };
+		79602BF32ACF3AE4001A5046 /* TemplateDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79602BF22ACF3AE4001A5046 /* TemplateDTO.swift */; };
 		7960313D2AAFB5BC00C2CF7B /* WidgetCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7960313C2AAFB5BC00C2CF7B /* WidgetCollectionView.swift */; };
 		796031412AB0ABF200C2CF7B /* Widget+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796031402AB0ABF200C2CF7B /* Widget+.swift */; };
 		796031432AB0AEAD00C2CF7B /* WidgetCollection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796031422AB0AEAD00C2CF7B /* WidgetCollection+.swift */; };
@@ -217,10 +222,15 @@
 		7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListScreen.swift; sourceTree = "<group>"; };
 		7955EEB127FDC5680010693C /* TemplateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCell.swift; sourceTree = "<group>"; };
 		7955EEB327FDD8820010693C /* StartWorkoutScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartWorkoutScreen.swift; sourceTree = "<group>"; };
+		7959F4CE2ACD8F5B0038B222 /* WorkoutImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = WorkoutImages.xcassets; sourceTree = "<group>"; };
+		7959F4D02ACDB7DE0038B222 /* ExerciseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDTO.swift; sourceTree = "<group>"; };
 		795A48802A6899A10008A458 /* Chronograph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chronograph.swift; sourceTree = "<group>"; };
 		795BFA2F28384C07005E59FE /* TemplateSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateSet+.swift"; sourceTree = "<group>"; };
 		795D6E6227F50E6A00A71807 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		795D9B8A282EC34B00866C06 /* DropSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DropSet+.swift"; sourceTree = "<group>"; };
+		79602BEE2ACF39CF001A5046 /* TemplateSetDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSetDTO.swift; sourceTree = "<group>"; };
+		79602BF02ACF3A43001A5046 /* TemplateSetGroupDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSetGroupDTO.swift; sourceTree = "<group>"; };
+		79602BF22ACF3AE4001A5046 /* TemplateDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDTO.swift; sourceTree = "<group>"; };
 		7960313C2AAFB5BC00C2CF7B /* WidgetCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCollectionView.swift; sourceTree = "<group>"; };
 		796031402AB0ABF200C2CF7B /* Widget+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Widget+.swift"; sourceTree = "<group>"; };
 		796031422AB0AEAD00C2CF7B /* WidgetCollection+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WidgetCollection+.swift"; sourceTree = "<group>"; };
@@ -378,6 +388,7 @@
 				79488DF22A770DFD005C485D /* Environment */,
 				801CDC482688BD9D00BB653D /* Extentions */,
 				798BDC262A7BCCE300EAA75D /* Utilities */,
+				79602BED2ACF393B001A5046 /* DataTransferObjects */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -477,6 +488,17 @@
 				79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		79602BED2ACF393B001A5046 /* DataTransferObjects */ = {
+			isa = PBXGroup;
+			children = (
+				7959F4D02ACDB7DE0038B222 /* ExerciseDTO.swift */,
+				79602BEE2ACF39CF001A5046 /* TemplateSetDTO.swift */,
+				79602BF02ACF3A43001A5046 /* TemplateSetGroupDTO.swift */,
+				79602BF22ACF3AE4001A5046 /* TemplateDTO.swift */,
+			);
+			path = DataTransferObjects;
 			sourceTree = "<group>";
 		};
 		7967D57C2811886700B30D03 /* Charts */ = {
@@ -642,6 +664,7 @@
 				79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */,
 				79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */,
 				794A8E5C2ACC211D006087EA /* TemplateServiceTests.swift */,
+				7959F4CE2ACD8F5B0038B222 /* WorkoutImages.xcassets */,
 			);
 			path = LOGITTests;
 			sourceTree = "<group>";
@@ -784,6 +807,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				794A8E602ACC2184006087EA /* athleanx_total_body_A.jpeg in Resources */,
+				7959F4CF2ACD8F5B0038B222 /* WorkoutImages.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,9 +924,11 @@
 				7962583E29341122003AC2AC /* ExerciseHeader.swift in Sources */,
 				79746709277136FE006518F0 /* WorkoutDetailScreen.swift in Sources */,
 				79488DE62A76F00F005C485D /* TemplateDropSetCell.swift in Sources */,
+				79602BF32ACF3AE4001A5046 /* TemplateDTO.swift in Sources */,
 				791F556729EC768100902352 /* StandardSetCell.swift in Sources */,
 				794E64FC28EE38F3003AACDD /* ExerciseCell.swift in Sources */,
 				794DAC632A320919006F0168 /* ChronoView.swift in Sources */,
+				79602BEF2ACF39CF001A5046 /* TemplateSetDTO.swift in Sources */,
 				796031412AB0ABF200C2CF7B /* Widget+.swift in Sources */,
 				79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */,
 				80ED02902764D94200D59B75 /* ExerciseSelectionScreen.swift in Sources */,
@@ -941,6 +967,7 @@
 				79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,
 				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,
+				7959F4D22ACDB7E20038B222 /* ExerciseDTO.swift in Sources */,
 				8058F49F268D2503006A94AC /* Workout+.swift in Sources */,
 				7955EEAE27FDC2F30010693C /* TemplateListScreen.swift in Sources */,
 				7996D0AB2AC60C0E0028FF22 /* VolumeCalculating.swift in Sources */,
@@ -982,6 +1009,7 @@
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
 				798BDC232A79A9D800EAA75D /* TemplateService.swift in Sources */,
 				80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */,
+				79602BF12ACF3A43001A5046 /* TemplateSetGroupDTO.swift in Sources */,
 				79DB259E2914229B00ADDF24 /* Database+EntityEdit.swift in Sources */,
 				795A48812A6899A10008A458 /* Chronograph.swift in Sources */,
 				8065AA6F2686667F00F53A5A /* LOGITApp.swift in Sources */,

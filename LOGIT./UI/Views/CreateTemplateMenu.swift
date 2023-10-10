@@ -13,8 +13,7 @@ import SwiftUI
 struct CreateTemplateMenu: View {
 
     @EnvironmentObject private var database: Database
-
-    @StateObject private var templateExtractor = TemplateService()
+    @EnvironmentObject private var templateService: TemplateService
 
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var workoutImage: UIImage?
@@ -67,7 +66,7 @@ struct CreateTemplateMenu: View {
                 return
             }
             isShowingTemplateGenerationScreen = true
-            templateExtraction = templateExtractor.createTemplate(from: image)
+            templateExtraction = templateService.createTemplate(from: image)
                 .sink(
                     receiveCompletion: { completion in
                         isShowingTemplateGenerationScreen = false

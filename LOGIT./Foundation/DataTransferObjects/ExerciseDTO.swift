@@ -8,6 +8,7 @@
 import Foundation
 
 struct ExerciseDTO: Decodable {
-    var name: String?
-    var muscleGroup: MuscleGroup?
+    let name: String?
+    // Had to use 'type' instead of 'muscleGroup', because ChatGPT would always make up new muscle groups
+    let type: MuscleGroup?
 }

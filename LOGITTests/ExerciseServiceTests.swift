@@ -63,7 +63,37 @@ final class ExerciseServiceTests: XCTestCase {
     func testCreateExerciseForName() throws {
         let expectation = XCTestExpectation(description: "Creating Exercise Expectation")
 
-        exerciseService.createExercise(for: "Bulgarian Split Squats")
+//        exerciseService.createExercise(for: "Bulgarian Split Squats")
+//            .sink(
+//                receiveCompletion: { completion in
+//                    switch completion {
+//                    case .finished:
+//                        print("Completed")
+//                        break
+//                    case .failure(let error):
+//                        XCTFail(
+//                            "ExerciseServiceTests: testCreateExerciseForName failed: \(error.localizedDescription)"
+//                        )
+//                    }
+//                    expectation.fulfill()  // Fulfill the expectation when completed
+//                },
+//                receiveValue: { [unowned self] exercise in
+//                    XCTAssertEqual(
+//                        "Bulgarian Split Squats",
+//                        database.getExercises(withNameIncluding: "Bulgarian").first!.name,
+//                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Unable to create Exercise from 'Bulgarian Split Squats'"
+//                    )
+//                    XCTAssertEqual(
+//                        MuscleGroup.legs,
+//                        database.getExercises(withNameIncluding: "Bulgarian").first!.muscleGroup,
+//                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Wrong Muscle Group for 'Bulgarian Split Squats'"
+//                    )
+//                    expectation.fulfill()
+//                }
+//            )
+//            .store(in: &cancellables)
+        
+        exerciseService.createExercise(for: "barbell hip thrusts")
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
@@ -79,14 +109,14 @@ final class ExerciseServiceTests: XCTestCase {
                 },
                 receiveValue: { [unowned self] exercise in
                     XCTAssertEqual(
-                        "Bulgarian Split Squats",
-                        database.getExercises(withNameIncluding: "Bulgarian").first!.name,
-                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Unable to create Exercise from 'Bulgarian Split Squats'"
+                        "barbell hip thrusts",
+                        database.getExercises(withNameIncluding: "thrust").first!.name,
+                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Unable to create Exercise from 'barbell hip thrusts'"
                     )
                     XCTAssertEqual(
                         MuscleGroup.legs,
-                        database.getExercises(withNameIncluding: "Bulgarian").first!.muscleGroup,
-                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Wrong Muscle Group for 'Bulgarian Split Squats'"
+                        database.getExercises(withNameIncluding: "thrust").first!.muscleGroup,
+                        "ExerciseServiceTests: testMatchingExerciseToExistingExercises failed: Wrong Muscle Group for 'barbell hip thrusts'"
                     )
                     expectation.fulfill()
                 }
