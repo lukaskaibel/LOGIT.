@@ -191,7 +191,7 @@ struct ExerciseDetailScreen: View {
                         )
                     }
             }
-            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
+            .foregroundStyle((exercise.muscleGroup?.color.gradient) ?? Color.accentColor.gradient)
             Picker("Calendar Component", selection: $selectedTimeSpanForWeight) {
                 Text(NSLocalizedString("threeMonths", comment: ""))
                     .tag(DateLineChart.DateDomain.threeMonths)
@@ -223,7 +223,7 @@ struct ExerciseDetailScreen: View {
                         )
                     }
             }
-            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
+            .foregroundStyle((exercise.muscleGroup?.color.gradient) ?? Color.accentColor.gradient)
             Picker("Calendar Component", selection: $selectedTimeSpanForRepetitions) {
                 Text(NSLocalizedString("threeMonths", comment: ""))
                     .tag(DateLineChart.DateDomain.threeMonths)
@@ -255,7 +255,7 @@ struct ExerciseDetailScreen: View {
                         )
                     }
             }
-            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
+            .foregroundStyle((exercise.muscleGroup?.color.gradient) ?? Color.accentColor.gradient)
             Picker("Calendar Component", selection: $selectedTimeSpanForVolume) {
                 Text(NSLocalizedString("threeMonths", comment: ""))
                     .tag(DateLineChart.DateDomain.threeMonths)
@@ -285,7 +285,7 @@ struct ExerciseDetailScreen: View {
                         return .init(date: date, value: $0.count)
                     }
             }
-            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
+            .foregroundStyle((exercise.muscleGroup?.color.gradient) ?? Color.accentColor.gradient)
         }
         .padding(CELL_PADDING)
         .tileStyle()

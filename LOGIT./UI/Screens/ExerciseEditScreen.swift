@@ -81,11 +81,11 @@ struct ExerciseEditScreen: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(NSLocalizedString("done", comment: "")) {
+                    Button(NSLocalizedString("save", comment: "")) {
                         if exerciseName.trimmingCharacters(in: .whitespaces).isEmpty {
                             showingExerciseNameEmptyAlert = true
                         } else if exerciseToEdit == nil
-                            && !database.getExercises(withNameIncluding: exerciseName).isEmpty
+                                    && !database.getExercises().filter({ $0.name?.lowercased() == exerciseName.lowercased() }).isEmpty
                         {
                             showingExerciseExistsAlert = true
                         } else {
