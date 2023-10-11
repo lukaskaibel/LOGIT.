@@ -29,10 +29,7 @@ struct TemplateSuperSetCell: View {
                         .font(.footnote)
                     IntegerField(
                         placeholder: 0,
-                        value: superSet.repetitionsFirstExercise,
-                        setValue: {
-                            superSet.repetitionsFirstExercise = $0
-                        },
+                        value: $superSet.repetitionsFirstExercise,
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInTemplate,
@@ -44,10 +41,10 @@ struct TemplateSuperSetCell: View {
                     )
                     IntegerField(
                         placeholder: 0,
-                        value: Int64(convertWeightForDisplaying(superSet.weightFirstExercise)),
-                        setValue: {
-                            superSet.weightFirstExercise = convertWeightForStoring($0)
-                        },
+                        value: Binding(
+                            get: { Int64(convertWeightForDisplaying(superSet.weightFirstExercise)) },
+                            set: { superSet.weightFirstExercise = convertWeightForStoring($0) }
+                        ),
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInTemplate,
@@ -64,10 +61,7 @@ struct TemplateSuperSetCell: View {
                         .font(.footnote)
                     IntegerField(
                         placeholder: 0,
-                        value: superSet.repetitionsSecondExercise,
-                        setValue: {
-                            superSet.repetitionsSecondExercise = $0
-                        },
+                        value: $superSet.repetitionsSecondExercise,
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInTemplate,
@@ -79,10 +73,10 @@ struct TemplateSuperSetCell: View {
                     )
                     IntegerField(
                         placeholder: 0,
-                        value: Int64(convertWeightForDisplaying(superSet.weightSecondExercise)),
-                        setValue: {
-                            superSet.weightSecondExercise = convertWeightForStoring($0)
-                        },
+                        value: Binding(
+                            get: { Int64(convertWeightForDisplaying(superSet.weightSecondExercise)) },
+                            set: { superSet.weightSecondExercise = convertWeightForStoring($0) }
+                        ),
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInTemplate,

@@ -17,7 +17,7 @@ struct MeasurementEntryView: View {
     @State private var isShowingMeasurementEntryList = false
 
     @State private var newMeasurementDate: Date = .now
-    @State private var newMeasurementValue: Int?
+    @State private var newMeasurementValue: Int64 = 0
 
     var body: some View {
         ZStack {
@@ -48,20 +48,18 @@ struct MeasurementEntryView: View {
                     Spacer()
                     if isAddingMeasurementEntry {
                         Button(NSLocalizedString("add", comment: "")) {
-                            if let value = newMeasurementValue {
-                                resetNewMeasurementEntries()
-                                measurementController.addMeasurementEntry(
-                                    ofType: measurementType,
-                                    value: value,
-                                    onDate: newMeasurementDate
-                                )
-                            }
+                            resetNewMeasurementEntries()
+                            measurementController.addMeasurementEntry(
+                                ofType: measurementType,
+                                value: Int(newMeasurementValue),
+                                onDate: newMeasurementDate
+                            )
                             withAnimation {
                                 isAddingMeasurementEntry = false
                             }
                         }
                         .fontWeight(.bold)
-                        .disabled(newMeasurementValue == nil)
+                        .disabled(newMeasurementValue > 0)
                     } else {
                         Button {
                             withAnimation {
@@ -86,10 +84,7 @@ struct MeasurementEntryView: View {
                             Spacer()
                             IntegerField(
                                 placeholder: 0,
-                                value: Int64(newMeasurementValue ?? 0),
-                                setValue: { newValue in
-                                    newMeasurementValue = Int(newValue)
-                                },
+                                value: $newMeasurementValue,
                                 maxDigits: 4,
                                 index: .init(primary: 0),
                                 focusedIntegerFieldIndex: .constant(nil),
@@ -179,7 +174,7 @@ struct MeasurementEntryView: View {
 
     private func resetNewMeasurementEntries() {
         newMeasurementDate = .now
-        newMeasurementValue = nil
+        newMeasurementValue = 0
     }
 }
 

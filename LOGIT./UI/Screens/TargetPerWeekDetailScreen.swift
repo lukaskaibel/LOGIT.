@@ -68,7 +68,7 @@ struct TargetPerWeekDetailScreen: View {
                     LazyVStack(spacing: CELL_SPACING) {
                         ForEach(
                             workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0),
-                            id: \.objectID
+                            id: \.self
                         ) {
                             workout in
                             Button {

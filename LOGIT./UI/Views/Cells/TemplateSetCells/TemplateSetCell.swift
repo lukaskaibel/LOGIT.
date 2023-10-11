@@ -70,17 +70,34 @@ struct TemplateSetCell: View {
                 }
                 if let dropSet = templateSet as? TemplateDropSet, canEdit {
                     Divider()
-                    Stepper(
-                        NSLocalizedString("dropCount", comment: ""),
-                        onIncrement: {
-                            dropSet.addDrop()
-                            database.refreshObjects()
-                        },
-                        onDecrement: {
+                    HStack {
+                        Text(NSLocalizedString("dropCount", comment: ""))
+                        Spacer()
+                        Button {
+                            UISelectionFeedbackGenerator().selectionChanged()
                             dropSet.removeLastDrop()
                             database.refreshObjects()
+                        } label: {
+                            Image(systemName: "minus")
+                                .fontWeight(.semibold)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
                         }
-                    )
+                        .disabled((dropSet.repetitions?.count ?? 0) < 2)
+                        Text(String(dropSet.repetitions?.count ?? 0))
+                            .font(.body.weight(.medium).monospacedDigit())
+                            .foregroundStyle(.primary)
+                        Button {
+                            UISelectionFeedbackGenerator().selectionChanged()
+                            dropSet.addDrop()
+                            database.refreshObjects()
+                        } label: {
+                            Image(systemName: "plus")
+                                .fontWeight(.semibold)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
+                        }
+                    }
                     .accentColor(dropSet.exercise?.muscleGroup?.color)
                 }
             }

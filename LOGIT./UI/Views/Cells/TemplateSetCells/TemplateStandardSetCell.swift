@@ -25,10 +25,7 @@ struct TemplateStandardSetCell: View {
             if let indexInTemplate = indexInTemplate {
                 IntegerField(
                     placeholder: 0,
-                    value: standardSet.repetitions,
-                    setValue: {
-                        standardSet.repetitions = $0
-                    },
+                    value: $standardSet.repetitions,
                     maxDigits: 4,
                     index: IntegerField.Index(
                         primary: indexInTemplate,
@@ -40,10 +37,10 @@ struct TemplateStandardSetCell: View {
                 )
                 IntegerField(
                     placeholder: 0,
-                    value: Int64(convertWeightForDisplaying(standardSet.weight)),
-                    setValue: {
-                        standardSet.weight = convertWeightForStoring($0)
-                    },
+                    value: Binding(
+                        get: { Int64(convertWeightForDisplaying(standardSet.weight)) },
+                        set: { standardSet.weight = convertWeightForStoring($0) }
+                    ),
                     maxDigits: 4,
                     index: IntegerField.Index(
                         primary: indexInTemplate,

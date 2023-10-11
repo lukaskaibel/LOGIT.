@@ -27,10 +27,7 @@ struct TemplateDropSetCell: View {
                     HStack {
                         IntegerField(
                             placeholder: 0,
-                            value: dropSet.repetitions?.value(at: index) ?? 0,
-                            setValue: {
-                                dropSet.repetitions?.replaceValue(at: index, with: $0)
-                            },
+                            value: repetitionsBinding(forIndex: index),
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInTemplate,
@@ -42,16 +39,7 @@ struct TemplateDropSetCell: View {
                         )
                         IntegerField(
                             placeholder: 0,
-                            value: Int64(
-                                convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)
-                            ),
-                            setValue: {
-                                dropSet.weights?
-                                    .replaceValue(
-                                        at: index,
-                                        with: convertWeightForStoring(Int64($0))
-                                    )
-                            },
+                            value: weightsBinding(forIndex: index),
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInTemplate,
@@ -71,6 +59,28 @@ struct TemplateDropSetCell: View {
 
     private var indexInTemplate: Int? {
         dropSet.setGroup?.workout?.sets.firstIndex(of: dropSet)
+    }
+    
+    private func repetitionsBinding(forIndex index: Int) -> Binding<Int64> {
+        Binding(
+            get: {
+                return Int64(dropSet.repetitions?.value(at: index) ?? 0)
+            },
+            set: { newValue in
+                dropSet.repetitions?[index] = newValue
+            }
+        )
+    }
+    
+    private func weightsBinding(forIndex index: Int) -> Binding<Int64> {
+        Binding(
+            get: {
+                return Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0))
+            },
+            set: { newValue in
+                dropSet.weights?[index] = newValue
+            }
+        )
     }
 
 }

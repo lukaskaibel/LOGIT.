@@ -37,7 +37,7 @@ extension WorkoutRecorderScreen {
             Spacer()
             if !isFocusingTitleTextfield {
                 if let workoutSet = selectedWorkoutSet {
-                    if let _ = workoutSetTemplateSetDictionary[workoutSet] {
+                    if let templateSet = workoutSetTemplateSetDictionary[workoutSet], templateSet.hasEntry {
                         Button {
                             toggleSetCompleted(for: workoutSet)
                         } label: {

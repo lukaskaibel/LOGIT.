@@ -11,7 +11,6 @@ struct StandardSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
     @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
         [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
@@ -28,11 +27,7 @@ struct StandardSetCell: View {
             if let indexInWorkout = indexInWorkout {
                 IntegerField(
                     placeholder: repetitionsPlaceholder(for: standardSet),
-                    value: standardSet.repetitions,
-                    setValue: {
-                        standardSet.repetitions = $0
-                        setWorkoutEndDate(.now)
-                    },
+                    value: $standardSet.repetitions,
                     maxDigits: 4,
                     index: IntegerField.Index(
                         primary: indexInWorkout,
@@ -44,11 +39,10 @@ struct StandardSetCell: View {
                 )
                 IntegerField(
                     placeholder: weightPlaceholder(for: standardSet),
-                    value: Int64(convertWeightForDisplaying(standardSet.weight)),
-                    setValue: {
-                        standardSet.weight = convertWeightForStoring($0)
-                        setWorkoutEndDate(.now)
-                    },
+                    value: Binding(
+                        get: { Int64(convertWeightForDisplaying(standardSet.weight)) },
+                        set: { standardSet.weight = convertWeightForStoring($0) }
+                    ),
                     maxDigits: 4,
                     index: IntegerField.Index(
                         primary: indexInWorkout,

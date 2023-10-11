@@ -84,6 +84,7 @@ struct WorkoutRecorderScreen: View {
                             \.workoutSetTemplateSetDictionary,
                             workoutSetTemplateSetDictionary
                         )
+                        .environment(\.setWorkoutEndDate, { workout.endDate = $0 })
 
                         Button {
                             sheetType = .exerciseSelection(

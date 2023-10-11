@@ -11,7 +11,6 @@ struct SuperSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
     @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
         [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
@@ -32,11 +31,7 @@ struct SuperSetCell: View {
                         .font(.footnote)
                     IntegerField(
                         placeholder: repetitionsPlaceholder(for: superSet).first!,
-                        value: superSet.repetitionsFirstExercise,
-                        setValue: {
-                            superSet.repetitionsFirstExercise = $0
-                            setWorkoutEndDate(.now)
-                        },
+                        value: $superSet.repetitionsFirstExercise,
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInWorkout,
@@ -48,11 +43,10 @@ struct SuperSetCell: View {
                     )
                     IntegerField(
                         placeholder: weightsPlaceholder(for: superSet).first!,
-                        value: Int64(convertWeightForDisplaying(superSet.weightFirstExercise)),
-                        setValue: {
-                            superSet.weightFirstExercise = convertWeightForStoring($0)
-                            setWorkoutEndDate(.now)
-                        },
+                        value: Binding(
+                            get: { Int64(convertWeightForDisplaying(superSet.weightFirstExercise)) },
+                            set: { superSet.weightFirstExercise = convertWeightForStoring($0) }
+                        ),
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInWorkout,
@@ -69,11 +63,7 @@ struct SuperSetCell: View {
                         .font(.footnote)
                     IntegerField(
                         placeholder: repetitionsPlaceholder(for: superSet).second!,
-                        value: superSet.repetitionsSecondExercise,
-                        setValue: {
-                            superSet.repetitionsSecondExercise = $0
-                            setWorkoutEndDate(.now)
-                        },
+                        value: $superSet.repetitionsSecondExercise,
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInWorkout,
@@ -85,11 +75,10 @@ struct SuperSetCell: View {
                     )
                     IntegerField(
                         placeholder: weightsPlaceholder(for: superSet).second!,
-                        value: Int64(convertWeightForDisplaying(superSet.weightSecondExercise)),
-                        setValue: {
-                            superSet.weightSecondExercise = convertWeightForStoring($0)
-                            setWorkoutEndDate(.now)
-                        },
+                        value: Binding(
+                            get: { Int64(convertWeightForDisplaying(superSet.weightSecondExercise)) },
+                            set: { superSet.weightSecondExercise = convertWeightForStoring($0) }
+                        ),
                         maxDigits: 4,
                         index: IntegerField.Index(
                             primary: indexInWorkout,

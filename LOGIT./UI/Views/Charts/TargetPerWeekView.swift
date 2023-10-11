@@ -26,19 +26,20 @@ struct TargetPerWeekView: View {
             //                        .font(.footnote.weight(.semibold))
             //                        .foregroundColor(.secondary)
             //                }
-            ForEach(groupedWorkouts, id: \.first) { workoutsInWeek in
+            ForEach(-4...0, id: \.self) { weeksFromNow in
+                let workoutsInWeek = workouts(forWeekIndex: weeksFromNow)
                 ForEach(workoutsInWeek.indices, id: \.self) { index in
-                    if let workoutDate = workoutsInWeek.value(at: index)?.date {
+                    if let workout = workoutsInWeek.value(at: index) {
                         BarMark(
-                            x: .value("Week", weeksFromNow(to: workoutDate)),
+                            x: .value("Week", weeksFromNow),
                             yStart: .value("Workouts in Week", barMarkYStart(for: index)),
                             yEnd: .value("Workouts in Week", barMarkYEnd(for: index)),
                             width: 25
                         )
                         .foregroundStyle(
                             LinearGradient(
-                                colors: workoutsInWeek.value(at: index)?.muscleGroups
-                                    .map { $0.color } ?? [.secondaryLabel],
+                                colors: workout.muscleGroups
+                                    .map { $0.color },
                                 startPoint: .bottomLeading,
                                 endPoint: .topTrailing
                             )
@@ -93,26 +94,15 @@ struct TargetPerWeekView: View {
 
     // MARK: - Supporting
 
-    private var groupedWorkouts: [[Workout]] {
-        database.getGroupedWorkouts(groupedBy: .date(calendarComponent: .weekOfYear))
-    }
-
-    private func weeksFromNow(to date: Date) -> Int {
-        let calendar = Calendar.current
-        let now = Date()
-
-        // Set the start of the week to Monday
-        var components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)
-        components.weekday = 2  // Monday
-
-        guard let startOfWeek = calendar.date(from: components) else {
-            print("Error calculating start of the week")
-            return 0
-        }
-
-        let weeksDifference = calendar.dateComponents([.weekOfYear], from: startOfWeek, to: date)
-
-        return weeksDifference.weekOfYear ?? 0
+    private func workouts(forWeekIndex index: Int) -> [Workout] {
+        database.getWorkouts(
+            for: .weekOfYear,
+            including: Calendar.current.date(
+                byAdding: .weekOfYear,
+                value: index,
+                to: .now
+            )!
+        )
     }
 
     private func weekDescription(_ startOfWeek: Date) -> String {

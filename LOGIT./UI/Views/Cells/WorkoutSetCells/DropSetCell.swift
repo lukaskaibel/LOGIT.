@@ -11,7 +11,6 @@ struct DropSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
     @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
         [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
@@ -30,11 +29,7 @@ struct DropSetCell: View {
                     HStack {
                         IntegerField(
                             placeholder: repetitionsPlaceholder(for: dropSet).value(at: index) ?? 0,
-                            value: dropSet.repetitions?.value(at: index) ?? 0,
-                            setValue: {
-                                dropSet.repetitions?.replaceValue(at: index, with: $0)
-                                setWorkoutEndDate(.now)
-                            },
+                            value: repetitionsBinding(forIndex: index),
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInWorkout,
@@ -46,17 +41,7 @@ struct DropSetCell: View {
                         )
                         IntegerField(
                             placeholder: weightsPlaceholder(for: dropSet).value(at: index) ?? 0,
-                            value: Int64(
-                                convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0)
-                            ),
-                            setValue: {
-                                dropSet.weights?
-                                    .replaceValue(
-                                        at: index,
-                                        with: convertWeightForStoring(Int64($0))
-                                    )
-                                setWorkoutEndDate(.now)
-                            },
+                            value: weightsBinding(forIndex: index),
                             maxDigits: 4,
                             index: IntegerField.Index(
                                 primary: indexInWorkout,
@@ -76,6 +61,28 @@ struct DropSetCell: View {
 
     private var indexInWorkout: Int? {
         dropSet.workout?.sets.firstIndex(of: dropSet)
+    }
+    
+    private func repetitionsBinding(forIndex index: Int) -> Binding<Int64> {
+        Binding(
+            get: {
+                return Int64(dropSet.repetitions?.value(at: index) ?? 0)
+            },
+            set: { newValue in
+                dropSet.repetitions?[index] = newValue
+            }
+        )
+    }
+    
+    private func weightsBinding(forIndex index: Int) -> Binding<Int64> {
+        Binding(
+            get: {
+                return Int64(convertWeightForDisplaying(dropSet.weights?.value(at: index) ?? 0))
+            },
+            set: { newValue in
+                dropSet.weights?[index] = newValue
+            }
+        )
     }
 
     private func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {

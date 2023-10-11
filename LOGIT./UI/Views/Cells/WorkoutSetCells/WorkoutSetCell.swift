@@ -11,6 +11,7 @@ struct WorkoutSetCell: View {
 
     // MARK: - Environment
 
+    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
     @Environment(\.canEdit) var canEdit: Bool
     @EnvironmentObject var database: Database
 
@@ -70,20 +71,40 @@ struct WorkoutSetCell: View {
                 }
                 if let dropSet = workoutSet as? DropSet, canEdit {
                     Divider()
-                    Stepper(
-                        NSLocalizedString("dropCount", comment: ""),
-                        onIncrement: {
-                            dropSet.addDrop()
-                            database.refreshObjects()
-                        },
-                        onDecrement: {
+                    HStack {
+                        Text(NSLocalizedString("dropCount", comment: ""))
+                        Spacer()
+                        Button {
+                            UISelectionFeedbackGenerator().selectionChanged()
                             dropSet.removeLastDrop()
                             database.refreshObjects()
+                        } label: {
+                            Image(systemName: "minus")
+                                .fontWeight(.semibold)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
                         }
-                    )
+                        .disabled(dropSet.numberOfDrops < 2)
+                        Text(String(dropSet.numberOfDrops))
+                            .font(.body.weight(.medium).monospacedDigit())
+                            .foregroundStyle(.primary)
+                        Button {
+                            UISelectionFeedbackGenerator().selectionChanged()
+                            dropSet.addDrop()
+                            database.refreshObjects()
+                        } label: {
+                            Image(systemName: "plus")
+                                .fontWeight(.semibold)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
+                        }
+                    }
                     .accentColor(dropSet.exercise?.muscleGroup?.color)
                 }
             }
+        }
+        .onReceive(workoutSet.objectWillChange) { _ in
+            setWorkoutEndDate(.now)
         }
     }
 

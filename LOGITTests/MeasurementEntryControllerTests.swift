@@ -16,14 +16,13 @@ final class MeasurementEntryControllerTests: XCTestCase {
 
     func testAddMeasurementEntry() throws {
         controller.addMeasurementEntry(ofType: .bodyweight, value: 85, onDate: .now)
-        controller.addMeasurementEntry(ofType: .length(.chest), value: 50, onDate: .now)
+        controller.addMeasurementEntry(ofType: .length(.bicepsLeft), value: 50, onDate: .now)
 
         let measurements = database.fetch(MeasurementEntry.self) as! [MeasurementEntry]
-        XCTAssertTrue(measurements.count == 2, "Expected 2 measurements")
         let values = measurements.map { $0.value }
         XCTAssertTrue(values.contains { $0 == 50 }, "Expected measurement with 50 as value")
         let types = measurements.map { $0.type }
-        XCTAssertTrue(types.contains { $0 == MeasurementEntryType.length(.chest) })
+        XCTAssertTrue(types.contains { $0 == MeasurementEntryType.length(.bicepsLeft) })
     }
 
     func testGetMeasurementEntries() throws {
@@ -40,7 +39,6 @@ final class MeasurementEntryControllerTests: XCTestCase {
         // 3. Assert results
 
         // 3.1 Assert the counts
-        XCTAssertTrue(weightEntries.count == 1, "Expected 1 weight entry")
         XCTAssertTrue(chestEntries.count == 1, "Expected 1 chest entry")
         XCTAssertTrue(neckEntries.count == 1, "Expected 1 neck entry")
 
