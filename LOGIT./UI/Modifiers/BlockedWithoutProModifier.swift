@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct BlockedWithoutProModifier: ViewModifier {
+    
+    @EnvironmentObject private var purchaseManager: PurchaseManager
 
     let blocked: Bool
 
     @State private var isShowingUpgradeToProScreen = false
 
     func body(content: Content) -> some View {
-        if !isProUser && blocked {
+        if !purchaseManager.hasUnlockedPro && blocked {
             content
                 .allowsHitTesting(false)
                 .overlay {

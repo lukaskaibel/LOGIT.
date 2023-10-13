@@ -9,7 +9,8 @@ import SwiftUI
 
 struct WidgetCollectionView<Content: View>: View {
 
-    @EnvironmentObject var database: Database
+    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var purchaseManager: PurchaseManager
 
     let type: WidgetCollectionType
     let title: String
@@ -33,7 +34,7 @@ struct WidgetCollectionView<Content: View>: View {
                 Spacer()
                 Menu {
                     ForEach(collection.items) { item in
-                        let canUseFeature = !item.isProFeature || isProUser
+                        let canUseFeature = !item.isProFeature || purchaseManager.hasUnlockedPro
                         Button {
                             if canUseFeature {
                                 item.isAdded.toggle()

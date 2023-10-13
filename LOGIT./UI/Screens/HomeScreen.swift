@@ -20,7 +20,8 @@ struct HomeScreen: View {
 
     // MARK: - Environment
 
-    @EnvironmentObject var database: Database
+    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var purchaseManager: PurchaseManager
 
     // MARK: - State
 
@@ -127,7 +128,7 @@ struct HomeScreen: View {
         VStack(alignment: .leading) {
             Text(Date.now.formatted(date: .long, time: .omitted))
                 .screenHeaderTertiaryStyle()
-            if !isProUser {
+            if !purchaseManager.hasUnlockedPro {
                 Text("LOGIT")
                     .screenHeaderStyle()
             } else {

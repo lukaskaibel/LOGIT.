@@ -29,6 +29,7 @@ struct LOGIT: App {
         @StateObject private var templateService = TemplateService(database: Database.shared)
         @StateObject private var measurementController = MeasurementEntryController.shared
     #endif
+    @StateObject private var purchaseManager = PurchaseManager(entitlementManager: EntitlementManager())
     @State private var selectedTab: TabType = .home
 
     // MARK: - Init
@@ -105,7 +106,17 @@ struct LOGIT: App {
                 .environmentObject(database)
                 .environmentObject(measurementController)
                 .environmentObject(templateService)
+                .environmentObject(purchaseManager)
                 .environment(\.goHome, { selectedTab = .home })
+                .task {
+                    Task {
+                        do {
+                            try await purchaseManager.loadProducts()
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }
                 .preferredColorScheme(.dark)
                 #if targetEnvironment(simulator)
                     .statusBarHidden(true)

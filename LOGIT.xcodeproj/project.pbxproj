@@ -69,6 +69,7 @@
 		796031432AB0AEAD00C2CF7B /* WidgetCollection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796031422AB0AEAD00C2CF7B /* WidgetCollection+.swift */; };
 		7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */; };
 		7962583E29341122003AC2AC /* ExerciseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583D29341122003AC2AC /* ExerciseHeader.swift */; };
+		796734D62AD9631C0047A134 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796734D52AD9631C0047A134 /* EntitlementManager.swift */; };
 		7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */; };
 		796D611927E53AB400E15F01 /* ExerciseEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */; };
 		79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */; };
@@ -108,6 +109,8 @@
 		79AB818D2ACB4EB200B2CCDF /* WidgetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB818C2ACB4EB200B2CCDF /* WidgetType.swift */; };
 		79AB81902ACB4F0800B2CCDF /* WidgetCollectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB818F2ACB4F0800B2CCDF /* WidgetCollectionType.swift */; };
 		79AB81922ACB694A00B2CCDF /* MeasurementEntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */; };
+		79B27FE32AD803C90026EF35 /* LOGITStoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */; };
+		79B27FE52AD8288A0026EF35 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B27FE42AD8288A0026EF35 /* PurchaseManager.swift */; };
 		79B70BF32803031B0012EAAD /* TemplateStandardSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */; };
 		79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */; };
 		79B7F2A92AA9E1A20090B785 /* ReorderableForEach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */; };
@@ -237,6 +240,7 @@
 		796031442AB0B15D00C2CF7B /* LOGIT 2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LOGIT 2.0.xcdatamodel"; sourceTree = "<group>"; };
 		7962583B2933BA2B003AC2AC /* ProgressCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircleButton.swift; sourceTree = "<group>"; };
 		7962583D29341122003AC2AC /* ExerciseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHeader.swift; sourceTree = "<group>"; };
+		796734D52AD9631C0047A134 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupSelector.swift; sourceTree = "<group>"; };
 		796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEditScreen.swift; sourceTree = "<group>"; };
 		79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateGenerationScreen.swift; sourceTree = "<group>"; };
@@ -275,6 +279,8 @@
 		79AB818C2ACB4EB200B2CCDF /* WidgetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetType.swift; sourceTree = "<group>"; };
 		79AB818F2ACB4F0800B2CCDF /* WidgetCollectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetCollectionType.swift; sourceTree = "<group>"; };
 		79AB81912ACB694A00B2CCDF /* MeasurementEntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementEntryType.swift; sourceTree = "<group>"; };
+		79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = LOGITStoreKit.storekit; sourceTree = "<group>"; };
+		79B27FE42AD8288A0026EF35 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		79B70BF22803031B0012EAAD /* TemplateStandardSet+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateStandardSet+.swift"; sourceTree = "<group>"; };
 		79B7F2A42AA8A1D20090B785 /* DateLineChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLineChart.swift; sourceTree = "<group>"; };
 		79B7F2A82AA9E1A20090B785 /* ReorderableForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderableForEach.swift; sourceTree = "<group>"; };
@@ -538,8 +544,10 @@
 			isa = PBXGroup;
 			children = (
 				795A48802A6899A10008A458 /* Chronograph.swift */,
+				796734D52AD9631C0047A134 /* EntitlementManager.swift */,
 				79702C6B2A7D356100F19EF3 /* ExerciseService.swift */,
 				79C07B2D2ABA535F000BF879 /* MeasurementController.swift */,
+				79B27FE42AD8288A0026EF35 /* PurchaseManager.swift */,
 				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
 				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
 				7996D0AA2AC60C0E0028FF22 /* VolumeCalculating.swift */,
@@ -716,6 +724,7 @@
 				79488DF12A770D17005C485D /* Legacy */,
 				790E8F092A48B27E00EA1430 /* Sounds */,
 				792A3FEF2AB36E7700C6A097 /* UI */,
+				79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */,
 			);
 			path = LOGIT.;
 			sourceTree = "<group>";
@@ -818,6 +827,7 @@
 				790130A9291C4B9B00EF8955 /* Launch Screen.storyboard in Resources */,
 				794C3C442804AD1A003CB9F1 /* Localizable.strings in Resources */,
 				790E8F112A48B89900EA1430 /* timer.wav in Resources */,
+				79B27FE32AD803C90026EF35 /* LOGITStoreKit.storekit in Resources */,
 				8065AA732686668100F53A5A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -950,6 +960,7 @@
 				7988FBB72A73391600E4FE54 /* ButtonStyle.swift in Sources */,
 				7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */,
 				792A3FEC2AB34EB400C6A097 /* UpgradeToProScreen.swift in Sources */,
+				796734D62AD9631C0047A134 /* EntitlementManager.swift in Sources */,
 				7996D0A52AC49CCA0028FF22 /* LogitProLogo.swift in Sources */,
 				798BDC132A79A7DC00EAA75D /* Secrets.swift in Sources */,
 				8084604B276662A000E0D0D0 /* WorkoutListScreen.swift in Sources */,
@@ -964,6 +975,7 @@
 				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,
 				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
+				79B27FE52AD8288A0026EF35 /* PurchaseManager.swift in Sources */,
 				79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,
 				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,

@@ -13,6 +13,7 @@ import SwiftUI
 struct CreateTemplateMenu: View {
 
     @EnvironmentObject private var database: Database
+    @EnvironmentObject private var purchaseManager: PurchaseManager
     @EnvironmentObject private var templateService: TemplateService
 
     @State private var photoPickerItem: PhotosPickerItem?
@@ -35,14 +36,14 @@ struct CreateTemplateMenu: View {
                 Label(NSLocalizedString("newTemplate", comment: ""), systemImage: "plus")
             }
             Button {
-                if !isProUser {
+                if !purchaseManager.hasUnlockedPro {
                     isShowingUpgradeToProScreen = true
                 } else {
                     isShowingPhotosPicker = true
                 }
             } label: {
                 Text(NSLocalizedString("templateFromPhoto", comment: ""))
-                if !isProUser {
+                if !purchaseManager.hasUnlockedPro {
                     Image(systemName: "crown")
                 } else {
                     Image(systemName: "photo")

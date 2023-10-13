@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct UpgradeToProScreen: View {
+    
+    // MARK: - Environment
+    
+    @EnvironmentObject private var purchaseManager: PurchaseManager
+    @Environment(\.dismiss) var dismiss
 
     private let database = Database.preview
 
@@ -116,14 +121,24 @@ struct UpgradeToProScreen: View {
                     Text("Pricing")
                     Spacer()
                     HStack(alignment: .lastTextBaseline, spacing: 3) {
-                        Text("1.99")
+                        Text(purchaseManager.products.first?.displayPrice ?? "")
                             .font(.body.weight(.semibold))
-                        Text("€ / Month")
+                        Text("/ Month")
                             .font(.footnote.weight(.semibold))
                     }
                 }
                 Button {
-
+                    Task {
+                        do {
+                            guard let product = purchaseManager.products.first else {
+                                // TODO: Show Alert that error during purchase
+                                return
+                            }
+                            try await purchaseManager.purchase(product)
+                        } catch {
+                            // TODO: Show Alert for Error during purchase
+                        }
+                    }
                 } label: {
                     HStack {
                         Image(systemName: "crown.fill")
@@ -134,7 +149,13 @@ struct UpgradeToProScreen: View {
                 }
                 .buttonStyle(BigButtonStyle())
                 Button {
-
+                    Task {
+                        do {
+                            try await purchaseManager.restorePurchase()
+                        } catch {
+                            // TODO: Show Alert for Restore Purchase failed
+                        }
+                    }
                 } label: {
                     Text("Restore Purchase")
                 }
@@ -146,6 +167,11 @@ struct UpgradeToProScreen: View {
                     .edgesIgnoringSafeArea(.bottom)
             }
             .frame(maxHeight: .infinity, alignment: .bottom)
+        }
+        .onChange(of: purchaseManager.hasUnlockedPro) { newValue in
+            if newValue {
+                dismiss()
+            }
         }
     }
 
@@ -233,5 +259,6 @@ struct UpgradeToProScreen: View {
 struct UpgradeToProScreen_Previews: PreviewProvider {
     static var previews: some View {
         UpgradeToProScreen()
+            .environmentObject(PurchaseManager(entitlementManager: EntitlementManager()))
     }
 }
