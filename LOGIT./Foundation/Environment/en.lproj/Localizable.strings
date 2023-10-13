@@ -219,6 +219,7 @@
 "showAll" = "Show All";
 "showDetails" = "Show Details";
 "showMeasurements" = "Show Measurements";
+"showSubscriptions" = "Show Subscriptions";
 "six" = "Six";
 "sortBy" = "Sort by";
 "standard" = "Standard";
@@ -228,6 +229,7 @@
 "starttime" = "Start Time";
 "startWorkout" = "Start Workout";
 "stop" = "Stop";
+"subscription" = "Subscription";
 "summary" = "Summary";
 "superSet" = "Superset";
 
@@ -259,6 +261,7 @@
 "unitDescription" = "Select the unit you want to use. Any previous entries will be converted on change.";
 "unused" = "Unused";
 "update" = "Update";
+"upgradeTo" = "Upgrade to";
 "useDefaultExercises" = "Use Default Exercises";
 
 // MARK: - W

@@ -222,6 +222,7 @@
 "showAll" = "Alle anzeigen";
 "showDetails" = "Details anzeigen";
 "showMeasurements" = "Messungen anzeigen";
+"showSubscriptions" = "Abonnements anzeigen";
 "six" = "Sechs";
 "sortBy" = "Sortieren nach";
 "standard" = "Standard";
@@ -231,6 +232,7 @@
 "starttime" = "Startzeit";
 "startWorkout" = "Workout starten";
 "stop" = "Stop";
+"subscription" = "Abonnement";
 "summary" = "Zusammenfassung";
 "superSet" = "Supersatz";
 
@@ -262,6 +264,7 @@
 "unitDescription" = "Wähle eine Einheit. Alle vorherigen Eingaben werden konvertiert.";
 "unused" = "Unbenutzt";
 "update" = "Update";
+"upgradeTo" = "Upgraden zu";
 "useDefaultExercises" = "Standard Übungen benutzen";
 
 // MARK: - W
