@@ -35,7 +35,7 @@ extension WorkoutRecorderScreen {
     internal var ToolbarItemsKeyboard: some ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
             Spacer()
-            if !isFocusingTitleTextfield {
+            if focusedIntegerFieldIndex != nil {
                 if let workoutSet = selectedWorkoutSet {
                     if let templateSet = workoutSetTemplateSetDictionary[workoutSet], templateSet.hasEntry {
                         Button {
@@ -88,10 +88,8 @@ extension WorkoutRecorderScreen {
                 }
             }
             Button {
-                if isFocusingTitleTextfield {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isFocusingTitleTextfield = false
-                    }
+                if focusedIntegerFieldIndex == nil {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 } else {
                     focusedIntegerFieldIndex = nil
                 }
@@ -99,7 +97,7 @@ extension WorkoutRecorderScreen {
                 Image(systemName: "keyboard.chevron.compact.down")
                     .keyboardToolbarButtonStyle()
             }
-            if !isFocusingTitleTextfield {
+            if focusedIntegerFieldIndex != nil {
                 Spacer()
             }
         }
