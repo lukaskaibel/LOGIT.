@@ -38,9 +38,7 @@ final class TemplateServiceTests: XCTestCase {
                 
                 XCTAssertEqual(template.name?.lowercased(), "perfect total body workout a", "Template name not matching photo.")
                 XCTAssertEqual(template.setGroups.count, 7, "Number of SetGroups not matching the photo")
-                
-                print(template.setGroups.map { $0.exercise?.name })
-                
+                                
                 XCTAssertTrue(self.templateHasSetGroup(
                     template, 
                     nameContaining: "squat",

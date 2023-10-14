@@ -475,7 +475,6 @@ struct WorkoutRecorderScreen: View {
             timerSound?.play()
         } catch {
             Logger().error("WorkoutRecorderScreen: Could not find and play the timer sound.")
-            print()
         }
     }
 

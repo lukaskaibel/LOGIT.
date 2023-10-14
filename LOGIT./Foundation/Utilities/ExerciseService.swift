@@ -70,7 +70,6 @@ class ExerciseService {
                     switch result {
                     case .success(let aiResult):
                         if let text = aiResult.choices.first?.message?.content {
-                            print(text)
                             promise(.success(text))
                         } else {
                             promise(.failure(Error.emptyResponse))

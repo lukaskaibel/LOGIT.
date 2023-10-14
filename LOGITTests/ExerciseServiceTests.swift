@@ -26,7 +26,6 @@ final class ExerciseServiceTests: XCTestCase {
                 receiveCompletion: { completion in
                     switch completion {
                     case .finished:
-                        print("Completed")
                         break
                     case .failure(let error):
                         XCTFail(

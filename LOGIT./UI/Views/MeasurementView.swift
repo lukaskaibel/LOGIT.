@@ -59,7 +59,7 @@ struct MeasurementEntryView: View {
                             }
                         }
                         .fontWeight(.bold)
-                        .disabled(newMeasurementValue > 0)
+                        .disabled(newMeasurementValue == 0)
                     } else {
                         Button {
                             withAnimation {

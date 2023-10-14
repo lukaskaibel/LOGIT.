@@ -67,7 +67,6 @@ struct IntegerField: View {
             isFocused = newValue == index
         }
         .onChange(of: isFocused) { newValue in
-            print(newValue)
             guard newValue != (focusedIntegerFieldIndex == index) else { return }
             focusedIntegerFieldIndex = index
         }

@@ -238,8 +238,6 @@ struct WorkoutDetailScreen: View {
     // MARK: - Computed Properties
 
     private var workoutDurationString: String {
-        print(workout.date)
-        print(workout.endDate)
         guard let start = workout.date, let end = workout.endDate else { return "0:00" }
         let hours = Calendar.current.dateComponents([.hour], from: start, to: end).hour ?? 0
         let minutes =

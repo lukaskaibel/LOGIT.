@@ -24,94 +24,58 @@ struct UpgradeToProScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                 
-                VStack {
-                    HStack(spacing: 30) {
-                        Image(systemName: "chart.bar.xaxis")
-                            .font(.largeTitle)
-                            .foregroundColor(.secondary)
-                        VStack(alignment: .leading) {
-                            Text("Visualisation".uppercased())
-                                .font(.caption.weight(.semibold))
+                VStack(alignment: .leading, spacing: 60) {
+                    VStack {
+                        HStack(spacing: 30) {
+                            Image(systemName: "chart.bar.xaxis")
+                                .font(.largeTitle)
                                 .foregroundColor(.secondary)
-                            Text("Charts")
-                                .font(.title3.weight(.bold))
-                            Text("Choose from a collection of powerful charts.")
-                                .multilineTextAlignment(.leading)
+                            VStack(alignment: .leading) {
+                                Text("Visualisation".uppercased())
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundColor(.secondary)
+                                Text("Charts")
+                                    .font(.title3.weight(.bold))
+                                Text("Choose from a collection of powerful charts.")
+                                    .multilineTextAlignment(.leading)
+                            }
+                        }
+                    }
+                    VStack {
+                        HStack(spacing: 30) {
+                            Image(systemName: "ruler")
+                                .font(.largeTitle)
+                                .foregroundColor(.secondary)
+                            VStack(alignment: .leading) {
+                                Text("Track More".uppercased())
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundColor(.secondary)
+                                Text("Measurements")
+                                    .font(.title3.weight(.bold))
+                                Text("Stay on track by measuring and tracking your individual body parts.")
+                                    .multilineTextAlignment(.leading)
+                            }
+                        }
+                    }
+                    VStack {
+                        HStack(spacing: 30) {
+                            Image(systemName: "camera")
+                                .font(.largeTitle)
+                                .foregroundColor(.secondary)
+                            VStack(alignment: .leading) {
+                                Text("Save time".uppercased())
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundColor(.secondary)
+                                Text("Scan a Workout")
+                                    .font(.title3.weight(.bold))
+                                Text("Take a photo or screenshot of a workout to start working out in seconds.")
+                                    .multilineTextAlignment(.leading)
+                            }
                         }
                     }
                 }
-
-//                VStack(spacing: SECTION_HEADER_SPACING) {
-//                    Text("Features")
-//                        .sectionHeaderStyle2()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding(.horizontal)
-//                    VStack(alignment: .leading, spacing: 10) {
-//                        VStack(alignment: .leading, spacing: 5) {
-//                            Text("Visualisation")
-//                                .font(.body.weight(.semibold))
-//                                .foregroundColor(.secondary)
-//                                .textCase(.uppercase)
-//                            Text("Plot your Progress")
-//                                .font(.title.weight(.bold))
-//                        }
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding([.horizontal, .top], CELL_PADDING)
-//                        Text("Choose from a collection of powerful charts.")
-//                            .font(.title3.weight(.medium))
-//                            .padding(.horizontal, CELL_PADDING)
-//                        TabView {
-//                            bestWeightChart
-//                                .padding(.horizontal, CELL_PADDING)
-//                            muscleGroupGraph
-//                                .padding(.horizontal, CELL_PADDING)
-//                        }
-//                        .tabViewStyle(.page)
-//                        .frame(height: 300)
-//                        .padding(.bottom, CELL_PADDING)
-//                    }
-//                    .tileStyle()
-//                    .padding(.horizontal)
-//
-//                    VStack(alignment: .leading, spacing: 10) {
-//                        VStack(alignment: .leading, spacing: 5) {
-//                            Text("Save time")
-//                                .font(.body.weight(.semibold))
-//                                .foregroundColor(.secondary)
-//                                .textCase(.uppercase)
-//                            Text("Scan a Workout")
-//                                .font(.title.weight(.bold))
-//                        }
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        Text(
-//                            "Take a photo or screenshot of a workout to start working out in seconds."
-//                        )
-//
-//                    }
-//                    .padding(CELL_PADDING)
-//                    .tileStyle()
-//                    .padding(.horizontal)
-//
-//                    VStack(alignment: .leading, spacing: 10) {
-//                        VStack(alignment: .leading, spacing: 5) {
-//                            Text("Track More")
-//                                .font(.body.weight(.semibold))
-//                                .foregroundColor(.secondary)
-//                                .textCase(.uppercase)
-//                            Text("Measure your Body")
-//                                .font(.title.weight(.bold))
-//                        }
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        Text("Stay on track by measuring and tracking your individual body parts.")
-//
-//                    }
-//                    .padding(CELL_PADDING)
-//                    .tileStyle()
-//                    .padding(.horizontal)
-//
-//                }
-
-            
+                .padding(.horizontal)
+//                .padding(.top, 10)
             }
             .padding(.bottom, 200)
         }
