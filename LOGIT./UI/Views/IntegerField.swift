@@ -64,7 +64,10 @@ struct IntegerField: View {
         }
         .onChange(of: focusedIntegerFieldIndex) { newValue in
             guard isFocused != (newValue == index) else { return }
-            isFocused = newValue == index
+            // Solution, because otherwise moving down wasnt working, since it would first focus on the new field, while the old one was still focused, which caused the focus to get lost.
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            guard newValue == index else { return }
+            isFocused = true
         }
         .onChange(of: isFocused) { newValue in
             guard newValue != (focusedIntegerFieldIndex == index) else { return }
