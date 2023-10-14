@@ -44,6 +44,7 @@ struct IntegerField: View {
                             }
                         }
                         .keyboardType(.numberPad)
+                        .accentColor(.clear)
                 } else {
                     Text(valueString)
                         .foregroundColor(isEmpty ? .placeholder : .primary)
@@ -56,6 +57,14 @@ struct IntegerField: View {
                 .font(.system(.footnote, design: .rounded, weight: .bold))
                 .foregroundColor(isEmpty ? .placeholder : .secondary)
         }
+        .overlay {
+            RoundedRectangle(cornerRadius: 2)
+                .foregroundStyle(isFocused ? Color.label : Color.clear)
+                .frame(height: 2)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .offset(y: 3)
+        }
+        .fixedSize()
         .onTapGesture {
             isFocused = true
         }
