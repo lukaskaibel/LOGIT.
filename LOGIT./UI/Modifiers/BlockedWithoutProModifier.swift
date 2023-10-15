@@ -18,6 +18,9 @@ struct BlockedWithoutProModifier: ViewModifier {
     func body(content: Content) -> some View {
         if !purchaseManager.hasUnlockedPro && blocked {
             content
+                .overlay {
+                    Color.black.opacity(0.2)
+                }
                 .blur(radius: 5)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 .allowsHitTesting(false)

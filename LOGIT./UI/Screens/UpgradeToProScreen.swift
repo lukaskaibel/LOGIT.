@@ -18,64 +18,70 @@ struct UpgradeToProScreen: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: SECTION_SPACING) {
-                LogitProLogo()
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                
-                VStack(alignment: .leading, spacing: 60) {
-                    VStack {
-                        HStack(spacing: 30) {
-                            Image(systemName: "chart.bar.xaxis")
-                                .font(.largeTitle)
-                                .foregroundColor(.secondary)
-                            VStack(alignment: .leading) {
-                                Text("Visualisation".uppercased())
-                                    .font(.caption.weight(.semibold))
+            VStack(spacing: 0) {
+                Capsule()
+                    .foregroundStyle(.secondary)
+                    .frame(width: 40, height: 5)
+                    .padding(.top)
+                VStack(spacing: SECTION_SPACING) {
+                    LogitProLogo()
+                        .font(.largeTitle)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                    
+                    VStack(alignment: .leading, spacing: 50) {
+                        VStack {
+                            HStack(spacing: 30) {
+                                Image(systemName: "chart.bar.xaxis")
+                                    .font(.largeTitle)
                                     .foregroundColor(.secondary)
-                                Text("Charts")
-                                    .font(.title3.weight(.bold))
-                                Text("Choose from a collection of powerful charts.")
-                                    .multilineTextAlignment(.leading)
+                                VStack(alignment: .leading) {
+                                    Text("Visualise".uppercased())
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundColor(.secondary)
+                                    Text("Charts")
+                                        .font(.title3.weight(.bold))
+                                    Text("From weight to reps, volume, and sets – visualize every step of your fitness journey!")
+                                        .multilineTextAlignment(.leading)
+                                }
+                            }
+                        }
+                        VStack {
+                            HStack(spacing: 30) {
+                                Image(systemName: "ruler")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.secondary)
+                                VStack(alignment: .leading) {
+                                    Text("Track More".uppercased())
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundColor(.secondary)
+                                    Text("Measurements")
+                                        .font(.title3.weight(.bold))
+                                    Text("Plot bodyweight, calories, and measurements to clearly mark your progress.")
+                                        .multilineTextAlignment(.leading)
+                                }
+                            }
+                        }
+                        VStack {
+                            HStack(spacing: 30) {
+                                Image(systemName: "camera")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.secondary)
+                                VStack(alignment: .leading) {
+                                    Text("Save time".uppercased())
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundColor(.secondary)
+                                    Text("Scan a Workout")
+                                        .font(.title3.weight(.bold))
+                                    Text("Convert a photo into a workout template instantly and start working out in seconds!")
+                                        .multilineTextAlignment(.leading)
+                                }
                             }
                         }
                     }
-                    VStack {
-                        HStack(spacing: 30) {
-                            Image(systemName: "ruler")
-                                .font(.largeTitle)
-                                .foregroundColor(.secondary)
-                            VStack(alignment: .leading) {
-                                Text("Track More".uppercased())
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundColor(.secondary)
-                                Text("Measurements")
-                                    .font(.title3.weight(.bold))
-                                Text("Stay on track by measuring and tracking your individual body parts.")
-                                    .multilineTextAlignment(.leading)
-                            }
-                        }
-                    }
-                    VStack {
-                        HStack(spacing: 30) {
-                            Image(systemName: "camera")
-                                .font(.largeTitle)
-                                .foregroundColor(.secondary)
-                            VStack(alignment: .leading) {
-                                Text("Save time".uppercased())
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundColor(.secondary)
-                                Text("Scan a Workout")
-                                    .font(.title3.weight(.bold))
-                                Text("Take a photo or screenshot of a workout to start working out in seconds.")
-                                    .multilineTextAlignment(.leading)
-                            }
-                        }
-                    }
+                    .padding(.leading, 25)
+                    .padding(.trailing)
                 }
-                .padding(.horizontal)
-//                .padding(.top, 10)
             }
             .padding(.bottom, 200)
         }
