@@ -19,11 +19,11 @@ struct WidgetCollectionView<Content: View>: View {
     @StateObject private var collection: WidgetCollection
     @State private var isShowingUpgradeToPro = false
     
-    init(type: WidgetCollectionType, title: String, views: [WidgetView<Content>]) {
+    init(type: WidgetCollectionType, title: String, views: [WidgetView<Content>], database: Database) {
         self.type = type
         self.title = title
         self.views = views
-        _collection = StateObject(wrappedValue: Self.createWidgetCollectionIfNotExisting(withId: type.rawValue))
+        _collection = StateObject(wrappedValue: Self.createWidgetCollectionIfNotExisting(withId: type.rawValue, in: database))
     }
 
     var body: some View {
@@ -55,6 +55,7 @@ struct WidgetCollectionView<Content: View>: View {
                 } label: {
                     Image(systemName: "plus.square.dashed")
                         .font(.title2)
+                        .foregroundStyle(.secondary)
                 }
             }
             VStack(spacing: CELL_SPACING) {
@@ -101,13 +102,7 @@ struct WidgetCollectionView<Content: View>: View {
     }
     
     @discardableResult
-    static func createWidgetCollectionIfNotExisting(withId id: String) -> WidgetCollection {
-        #if targetEnvironment(simulator)
-        let database = Database.preview
-        #else
-        let database = Database.shared
-        #endif
-        
+    static func createWidgetCollectionIfNotExisting(withId id: String, in database: Database) -> WidgetCollection {
         let predicate = NSPredicate(format: "id == %@", id)
         var collection =
             database.fetch(WidgetCollection.self, predicate: predicate).first as? WidgetCollection

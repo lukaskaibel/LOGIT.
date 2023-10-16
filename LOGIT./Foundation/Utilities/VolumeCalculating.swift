@@ -6,18 +6,11 @@
 //
 
 import Foundation
-
-#if targetEnvironment(simulator)
-private let database = Database.preview
-#else
-private let database = Database.shared
-#endif
     
-public func volume(for exercise: Exercise, per calendarComponent: Calendar.Component) -> [(Date, Int)] {
-    let groupedWorkoutSets = database.getGroupedWorkoutsSets(with: exercise, in: calendarComponent)
+public func getVolume(of groupedSets: [[WorkoutSet]], for exercise: Exercise) -> [(Date, Int)] {
     return Array(zip(
-        groupedWorkoutSets.map { $0.first?.setGroup?.workout?.date ?? Date.distantPast },
-        groupedWorkoutSets
+        groupedSets.map { $0.first?.setGroup?.workout?.date ?? Date.distantPast },
+        groupedSets
             .map { groupedWorkoutSets in
                 groupedWorkoutSets
                     .map { workoutSet in
@@ -43,11 +36,10 @@ public func volume(for exercise: Exercise, per calendarComponent: Calendar.Compo
     ))
 }
 
-public func volume(per calendarComponent: Calendar.Component) -> [(Date, Int)] {
-    let groupedWorkoutSets = database.getGroupedWorkoutsSets(in: calendarComponent)
+public func getVolume(of groupedSets: [[WorkoutSet]]) -> [(Date, Int)] {
     return Array(zip(
-        groupedWorkoutSets.map { $0.first?.setGroup?.workout?.date ?? Date.distantPast },
-        groupedWorkoutSets
+        groupedSets.map { $0.first?.setGroup?.workout?.date ?? Date.distantPast },
+        groupedSets
             .map { groupedWorkoutSets in
                 groupedWorkoutSets
                     .map { workoutSet in

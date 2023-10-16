@@ -219,11 +219,19 @@ struct TemplateDetailScreen: View {
 
 }
 
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
+        NavigationStack {
+            TemplateDetailScreen(template: database.testTemplate)
+        }
+    }
+}
+
 struct TemplateDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            TemplateDetailScreen(template: Database.preview.testTemplate)
-        }
-        .environmentObject(Database.preview)
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

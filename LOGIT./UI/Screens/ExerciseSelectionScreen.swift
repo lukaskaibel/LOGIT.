@@ -179,6 +179,6 @@ struct ExerciseSelectionView_Previews: PreviewProvider {
                 forSecondary: false
             )
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

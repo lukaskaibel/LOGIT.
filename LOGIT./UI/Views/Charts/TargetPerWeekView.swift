@@ -126,8 +126,6 @@ struct TargetPerWeekView: View {
 struct TargetPerWeekView_Previews: PreviewProvider {
     static var previews: some View {
         TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
-            .environmentObject(Database.preview)
-            .frame(height: 200)
-            .padding()
+            .previewEnvironmentObjects()
     }
 }

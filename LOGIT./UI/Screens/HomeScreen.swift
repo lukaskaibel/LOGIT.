@@ -94,7 +94,8 @@ struct HomeScreen: View {
                             setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
                             workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false),
                             volumePerDay.widget(ofType: .homeScreenVolumePerDay, isAddedByDefault: false)
-                        ]
+                        ],
+                        database: database
                     )
                     .padding(.horizontal)
                 }
@@ -265,7 +266,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: .threeMonths) {
-                volume(per: .day)
+                getVolume(of: database.getGroupedWorkoutsSets(in: .day))
                     .map { .init(date: $0.0, value: $0.1) }
             }
         }
@@ -328,7 +329,6 @@ private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeScreen()
-            .environmentObject(Database.preview)
-            .environmentObject(MeasurementEntryController.preview)
+            .previewEnvironmentObjects()
     }
 }

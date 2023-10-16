@@ -484,12 +484,20 @@ struct WorkoutRecorderScreen: View {
 
 }
 
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
+        WorkoutRecorderScreen(
+            workout: database.newWorkout(),
+            template: database.testTemplate
+        )
+    }
+}
+
 struct WorkoutRecorderView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutRecorderScreen(
-            workout: Database.preview.newWorkout(),
-            template: Database.preview.testTemplate
-        )
-        .environmentObject(Database.preview)
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

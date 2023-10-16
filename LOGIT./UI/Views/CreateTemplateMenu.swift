@@ -123,6 +123,6 @@ struct CreateTemplateMenu_Previews: PreviewProvider {
         NavigationStack {
             CreateTemplateMenu()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

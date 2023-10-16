@@ -248,14 +248,22 @@ struct WorkoutDetailScreen: View {
 
 }
 
-struct WorkoutDetailView_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         NavigationStack {
             WorkoutDetailScreen(
-                workout: Database.preview.getWorkouts().first!,
+                workout: database.getWorkouts().first!,
                 canNavigateToTemplate: false
             )
         }
-        .environmentObject(Database.preview)
+    }
+}
+
+struct WorkoutDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

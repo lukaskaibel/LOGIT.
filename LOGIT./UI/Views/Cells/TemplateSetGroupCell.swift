@@ -222,13 +222,15 @@ struct TemplateSetGroupCell: View {
 
 }
 
-struct TemplateSetGroupCell_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
                     TemplateSetGroupCell(
-                        setGroup: Database.preview.getTemplates().first!.setGroups.first!,
+                        setGroup: database.getTemplates().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),
@@ -238,7 +240,7 @@ struct TemplateSetGroupCell_Previews: PreviewProvider {
                     .tileStyle()
                     .padding()
                     TemplateSetGroupCell(
-                        setGroup: Database.preview.getTemplates().first!.setGroups.first!,
+                        setGroup: database.getTemplates().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(true),
@@ -248,7 +250,7 @@ struct TemplateSetGroupCell_Previews: PreviewProvider {
                     .tileStyle()
                     .padding()
                     TemplateSetGroupCell(
-                        setGroup: Database.preview.getTemplates().first!.setGroups.first!,
+                        setGroup: database.getTemplates().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),
@@ -262,6 +264,12 @@ struct TemplateSetGroupCell_Previews: PreviewProvider {
 
             }
         }
-        .environmentObject(Database.preview)
+    }
+}
+
+struct TemplateSetGroupCell_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

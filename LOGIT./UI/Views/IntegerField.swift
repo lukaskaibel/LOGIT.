@@ -134,6 +134,6 @@ struct IntegerField_Previews: PreviewProvider {
         )
         .padding(CELL_PADDING)
         .secondaryTileStyle()
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

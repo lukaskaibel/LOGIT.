@@ -50,7 +50,8 @@ struct ExerciseDetailScreen: View {
                         repetitionsGraph.widget(ofType: .bestRepetitionsPerDay, isAddedByDefault: false),
                         volumePerDayGraph.widget(ofType: .volumePerDay, isAddedByDefault: false),
                         setsPerWeekGraph.widget(ofType: .exerciseSetsPerWeek, isAddedByDefault: false)
-                    ]
+                    ],
+                    database: database
                 )
                 .padding(.horizontal)
 
@@ -247,7 +248,7 @@ struct ExerciseDetailScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: selectedTimeSpanForVolume) {
-                volume(for: exercise, per: .day)
+                getVolume(of: database.getGroupedWorkoutsSets(with: exercise, in: .day), for: exercise)
                     .map {
                         return .init(
                             date: $0.0,
@@ -392,11 +393,19 @@ struct ExerciseDetailScreen: View {
 
 }
 
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
+        NavigationView {
+            ExerciseDetailScreen(exercise: database.getExercises().first!)
+        }
+    }
+}
+
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ExerciseDetailScreen(exercise: Database.preview.getExercises().first!)
-        }
-        .environmentObject(Database.preview)
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

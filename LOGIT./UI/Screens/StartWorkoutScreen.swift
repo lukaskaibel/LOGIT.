@@ -141,6 +141,6 @@ struct WorkoutRecorderStartScreen_Previews: PreviewProvider {
         NavigationView {
             StartWorkoutScreen()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

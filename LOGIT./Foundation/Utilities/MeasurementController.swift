@@ -11,18 +11,15 @@ class MeasurementEntryController: ObservableObject {
 
     // MARK: - Statics
 
-    static let shared = MeasurementEntryController()
-    static let preview = MeasurementEntryController(isPreview: true)
-
     // MARK: - Constants
 
     private let database: Database
 
     // MARK: - Init
 
-    init(isPreview: Bool = false) {
-        database = isPreview ? Database.preview : .shared
-        if isPreview {
+    init(database: Database) {
+        self.database = database
+        if database.isPreview {
             setupPreviewMeasurementEntries()
         }
     }

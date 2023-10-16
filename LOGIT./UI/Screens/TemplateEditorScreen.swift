@@ -183,14 +183,22 @@ struct TemplateEditorScreen: View {
 
 }
 
-struct TemplateEditorView_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         NavigationView {
             TemplateEditorScreen(
-                template: Database.preview.testTemplate,
+                template: database.testTemplate,
                 isEditingExistingTemplate: true
             )
         }
-        .environmentObject(Database.preview)
+    }
+}
+
+struct TemplateEditorView_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

@@ -110,6 +110,6 @@ struct AllExercisesView_Previews: PreviewProvider {
         NavigationStack {
             ExerciseListScreen()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

@@ -62,13 +62,21 @@ struct WorkoutCell: View {
 
 }
 
-struct WorkoutCell_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         ScrollView {
-            WorkoutCell(workout: Database.preview.fetch(Workout.self).first! as! Workout)
+            WorkoutCell(workout: database.fetch(Workout.self).first! as! Workout)
                 .padding(CELL_PADDING)
                 .tileStyle()
         }
-        .environmentObject(Database.preview)
+    }
+}
+
+struct WorkoutCell_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

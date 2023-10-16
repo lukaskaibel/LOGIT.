@@ -20,21 +20,26 @@ struct LOGIT: App {
 
     // MARK: - State
 
-    #if targetEnvironment(simulator)
-        @StateObject private var database = Database.preview
-        @StateObject private var templateService = TemplateService(database: Database.preview)
-        @StateObject private var measurementController = MeasurementEntryController.preview
-    #else
-        @StateObject private var database = Database.shared
-        @StateObject private var templateService = TemplateService(database: Database.shared)
-        @StateObject private var measurementController = MeasurementEntryController.shared
-    #endif
+    @StateObject private var database: Database
+    @StateObject private var templateService: TemplateService
+    @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager(entitlementManager: EntitlementManager())
+    
     @State private var selectedTab: TabType = .home
 
     // MARK: - Init
 
     init() {
+        #if targetEnvironment(simulator)
+        let database = Database(isPreview: true)
+        #else
+        let database = Database()
+        #endif
+        
+        self._database = StateObject(wrappedValue: database)
+        self._templateService = StateObject(wrappedValue: TemplateService(database: database))
+        self._measurementController = StateObject(wrappedValue: MeasurementEntryController(database: database))
+        
         UserDefaults.standard.register(defaults: [
             "weightUnit": WeightUnit.kg.rawValue,
             "workoutPerWeekTarget": 3,
@@ -42,10 +47,6 @@ struct LOGIT: App {
         ])
         //Fixes issue with wrong Accent Color in Alerts
         UIView.appearance().tintColor = UIColor(named: "AccentColor")
-
-        // MARK: - Test Methods
-        //testLanguage()
-        // testFirstStart()
     }
 
     // MARK: - Body

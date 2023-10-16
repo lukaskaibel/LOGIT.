@@ -116,6 +116,6 @@ struct AllWorkoutsView_Previews: PreviewProvider {
         NavigationView {
             WorkoutListScreen()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

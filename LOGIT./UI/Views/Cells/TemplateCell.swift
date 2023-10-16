@@ -65,12 +65,21 @@ struct TemplateCell: View {
 
 }
 
-struct TemplateCell_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         ScrollView {
-            TemplateCell(template: Database.preview.testTemplate)
+            TemplateCell(template: database.testTemplate)
                 .padding(CELL_PADDING)
                 .tileStyle()
         }
+    }
+}
+
+struct TemplateCell_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

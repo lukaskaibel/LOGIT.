@@ -51,13 +51,21 @@ struct WorkoutSetGroupList: View {
     }
 }
 
-struct WorkoutSetGroupList_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         WorkoutSetGroupList(
-            workout: Database.preview.getWorkouts().first!,
+            workout: database.getWorkouts().first!,
             focusedIntegerFieldIndex: .constant(nil),
             sheetType: .constant(nil),
             canReorder: false
         )
+    }
+}
+
+struct WorkoutSetGroupList_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
     }
 }

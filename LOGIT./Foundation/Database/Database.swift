@@ -12,16 +12,18 @@ class Database: ObservableObject {
 
     // MARK: - Constants
 
-    static let shared = Database()
-    static let preview = Database(isPreview: true)
-
     private let container: NSPersistentContainer
 
     private let TEMPORARY_OBJECT_IDS_KEY = "temporaryObjectIds"
 
+    // MARK: - Properties
+    
+    var isPreview: Bool
+    
     // MARK: - Init
 
     init(isPreview: Bool = false) {
+        self.isPreview = isPreview
         container = NSPersistentCloudKitContainer(name: "LOGIT")
 
         if isPreview {

@@ -149,6 +149,6 @@ struct TargetWorkoutsDetailView_Previews: PreviewProvider {
         NavigationStack {
             TargetPerWeekDetailScreen()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

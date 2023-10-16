@@ -140,6 +140,6 @@ struct TemplateListView_Previews: PreviewProvider {
         NavigationStack {
             TemplateListScreen()
         }
-        .environmentObject(Database.preview)
+        .previewEnvironmentObjects()
     }
 }

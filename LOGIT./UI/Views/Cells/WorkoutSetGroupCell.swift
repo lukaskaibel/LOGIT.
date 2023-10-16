@@ -222,13 +222,15 @@ struct WorkoutSetGroupCell: View {
 
 }
 
-struct WorkoutSetGroupCell_Previews: PreviewProvider {
-    static var previews: some View {
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
                     WorkoutSetGroupCell(
-                        setGroup: Database.preview.getWorkouts().first!.setGroups.first!,
+                        setGroup: database.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),
@@ -238,7 +240,7 @@ struct WorkoutSetGroupCell_Previews: PreviewProvider {
                     .tileStyle()
                     .padding()
                     WorkoutSetGroupCell(
-                        setGroup: Database.preview.getWorkouts().first!.setGroups.first!,
+                        setGroup: database.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(true),
@@ -248,7 +250,7 @@ struct WorkoutSetGroupCell_Previews: PreviewProvider {
                     .tileStyle()
                     .padding()
                     WorkoutSetGroupCell(
-                        setGroup: Database.preview.getWorkouts().first!.setGroups.first!,
+                        setGroup: database.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),
@@ -259,9 +261,15 @@ struct WorkoutSetGroupCell_Previews: PreviewProvider {
                     .padding()
                     .canEdit(false)
                 }
-
+                
             }
         }
-        .environmentObject(Database.preview)
+    }
+}
+
+struct WorkoutSetGroupCell_Previews: PreviewProvider {
+    static var previews: some View {
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

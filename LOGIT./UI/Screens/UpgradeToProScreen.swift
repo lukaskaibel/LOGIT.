@@ -14,8 +14,6 @@ struct UpgradeToProScreen: View {
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @Environment(\.dismiss) var dismiss
 
-    private let database = Database.preview
-
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -143,85 +141,6 @@ struct UpgradeToProScreen: View {
                 dismiss()
             }
         }
-    }
-
-    private var bestWeightChart: some View {
-        let exercise = database.getExercises(withNameIncluding: "benchpress").first!
-        return VStack {
-            VStack(alignment: .leading) {
-                Text(NSLocalizedString("weight", comment: ""))
-                    .tileHeaderStyle()
-                Text(NSLocalizedString("bestPerDay", comment: ""))
-                    .tileHeaderSecondaryStyle()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            DateLineChart(dateDomain: .threeMonths) {
-                database.getWorkoutSets(with: exercise, onlyHighest: .weight, in: .day)
-                    .filter { $0.max(.weight) > 0 }
-                    .map {
-                        .init(
-                            date: $0.setGroup!.workout!.date!,
-                            value: convertWeightForDisplaying($0.max(.weight))
-                        )
-                    }
-            }
-            .foregroundStyle((exercise.muscleGroup?.color.gradient)!)
-        }
-        .padding(CELL_PADDING)
-        .secondaryTileStyle()
-    }
-
-    private var muscleGroupGraph: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(NSLocalizedString("muscleGroups", comment: ""))
-                        .tileHeaderStyle()
-                    Text(NSLocalizedString("lastTenWorkouts", comment: ""))
-                        .tileHeaderSecondaryStyle()
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            PieGraph(
-                items:
-                    Array(
-                        Array(database.getWorkouts(sortedBy: .date).prefix(10))
-                            .reduce(
-                                [:],
-                                { current, workout in
-                                    current.merging(
-                                        workout.muscleGroupOccurances,
-                                        uniquingKeysWith: +
-                                    )
-                                }
-                            )
-                            .merging(
-                                MuscleGroup.allCases.reduce(
-                                    into: [MuscleGroup: Int](),
-                                    { $0[$1, default: 0] = 0 }
-                                ),
-                                uniquingKeysWith: +
-                            )
-                    )
-                    .sorted {
-                        MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases
-                            .firstIndex(
-                                of: $1.key
-                            )!
-                    }
-                    .map {
-                        PieGraph.Item(
-                            title: $0.0.description.capitalized,
-                            amount: $0.1,
-                            color: $0.0.color,
-                            isSelected: false
-                        )
-                    },
-                showZeroValuesInLegend: true
-            )
-        }
-        .padding(CELL_PADDING)
-        .secondaryTileStyle()
     }
 
 }

@@ -184,8 +184,7 @@ struct MeasurementEntryView_Previews: PreviewProvider {
             MeasurementEntryView(measurementType: .bodyweight)
                 .padding(CELL_PADDING)
                 .tileStyle()
-                .environmentObject(Database.preview)
-                .environmentObject(MeasurementEntryController.preview)
+                .previewEnvironmentObjects()
         }
     }
 }

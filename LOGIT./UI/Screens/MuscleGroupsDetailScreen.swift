@@ -174,11 +174,19 @@ struct MuscleGroupsDetailScreen: View {
 
 }
 
+private struct PreviewWrapperView: View {
+    @EnvironmentObject private var database: Database
+    
+    var body: some View {
+        NavigationView {
+            MuscleGroupsDetailScreen(setGroups: database.testWorkout.setGroups)
+        }
+    }
+}
+
 struct MuscleGroupDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            MuscleGroupsDetailScreen(setGroups: Database.preview.testWorkout.setGroups)
-        }
-        .environmentObject(Database.preview)
+        PreviewWrapperView()
+            .previewEnvironmentObjects()
     }
 }

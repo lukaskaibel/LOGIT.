@@ -29,7 +29,8 @@ struct MeasurementsScreen: View {
                             .padding(CELL_PADDING)
                             .tileStyle()
                             .widget(ofType: .measurement(.calories), isAddedByDefault: false)
-                    ]
+                    ],
+                    database: database
                 )
                 
                 WidgetCollectionView(
@@ -40,7 +41,8 @@ struct MeasurementsScreen: View {
                             .padding(CELL_PADDING)
                             .tileStyle()
                             .widget(ofType: .measurement(.length($0)), isAddedByDefault: false)
-                    }
+                    },
+                    database: database
                 )
             }
             .padding(.horizontal)
@@ -54,8 +56,7 @@ struct MeasurementsScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             MeasurementsScreen()
-                .environmentObject(Database.preview)
-                .environmentObject(MeasurementEntryController.preview)
         }
+        .previewEnvironmentObjects()
     }
 }
