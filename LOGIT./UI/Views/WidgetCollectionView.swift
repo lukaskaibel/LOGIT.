@@ -53,7 +53,8 @@ struct WidgetCollectionView<Content: View>: View {
                         }
                     }
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.square.dashed")
+                        .font(.title2)
                 }
             }
             VStack(spacing: CELL_SPACING) {

@@ -48,6 +48,7 @@ struct WorkoutDetailScreen: View {
                         setsPerMuscleGroup
                             .padding(CELL_PADDING)
                             .tileStyle()
+                            .isBlockedWithoutPro()
                     }
                 }
 

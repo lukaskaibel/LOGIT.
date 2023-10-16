@@ -90,7 +90,7 @@ struct HomeScreen: View {
                         title: NSLocalizedString("overview", comment: ""),
                         views: [
                             targetWorkoutsView.widget(ofType: .targetPerWeek, isAddedByDefault: true),
-                            muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: false),
+                            muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: true),
                             setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
                             workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false),
                             volumePerDay.widget(ofType: .homeScreenVolumePerDay, isAddedByDefault: false)

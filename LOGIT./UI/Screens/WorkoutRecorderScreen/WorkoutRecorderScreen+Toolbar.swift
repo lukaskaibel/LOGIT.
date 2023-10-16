@@ -48,7 +48,7 @@ extension WorkoutRecorderScreen {
                         Button {
                             toggleCopyPrevious(for: workoutSet)
                         } label: {
-                            Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "return.right")")
+                            Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "plus.square.on.square")")
                                 .foregroundColor(
                                     !(workoutSet.previousSetInSetGroup?.hasEntry ?? false)
                                         && !workoutSet.hasEntry
