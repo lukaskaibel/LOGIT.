@@ -127,6 +127,8 @@
 		79DAF0B029940195002F4364 /* Binding+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DAF0AF29940195002F4364 /* Binding+.swift */; };
 		79DB259E2914229B00ADDF24 /* Database+EntityEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB259D2914229B00ADDF24 /* Database+EntityEdit.swift */; };
 		79DB25A02914382400ADDF24 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB259F2914382400ADDF24 /* UIConstants.swift */; };
+		79DB52112AE1724F00073423 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB52102AE1724F00073423 /* NetworkMonitor.swift */; };
+		79DB52132AE176D000073423 /* RequiresNetworkConnectionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB52122AE176D000073423 /* RequiresNetworkConnectionModifier.swift */; };
 		79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */; };
 		79E2E60429132C46003845BC /* Database+SetConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E60329132C46003845BC /* Database+SetConvert.swift */; };
 		79F2D1222800CD0C00197E0A /* TemplateDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */; };
@@ -297,6 +299,8 @@
 		79DAF0AF29940195002F4364 /* Binding+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+.swift"; sourceTree = "<group>"; };
 		79DB259D2914229B00ADDF24 /* Database+EntityEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityEdit.swift"; sourceTree = "<group>"; };
 		79DB259F2914382400ADDF24 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		79DB52102AE1724F00073423 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		79DB52122AE176D000073423 /* RequiresNetworkConnectionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiresNetworkConnectionModifier.swift; sourceTree = "<group>"; };
 		79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityFetch.swift"; sourceTree = "<group>"; };
 		79E2E60329132C46003845BC /* Database+SetConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+SetConvert.swift"; sourceTree = "<group>"; };
 		79E849072A7EA28000C0DF95 /* LOGITTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOGITTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -371,6 +375,7 @@
 				7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */,
 				79488DED2A770CB9005C485D /* OnSwipeDownModifier.swift */,
 				79743E042ADD82EC004E4DCC /* PreviewEnvironmentObjects.swift */,
+				79DB52122AE176D000073423 /* RequiresNetworkConnectionModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -547,6 +552,7 @@
 				795A48802A6899A10008A458 /* Chronograph.swift */,
 				79702C6B2A7D356100F19EF3 /* ExerciseService.swift */,
 				79C07B2D2ABA535F000BF879 /* MeasurementController.swift */,
+				79DB52102AE1724F00073423 /* NetworkMonitor.swift */,
 				79B27FE42AD8288A0026EF35 /* PurchaseManager.swift */,
 				798BDC222A79A9D800EAA75D /* TemplateService.swift */,
 				798BDC272A7BCD1800EAA75D /* TextProcessing.swift */,
@@ -975,6 +981,7 @@
 				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,
 				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
+				79DB52112AE1724F00073423 /* NetworkMonitor.swift in Sources */,
 				79B27FE52AD8288A0026EF35 /* PurchaseManager.swift in Sources */,
 				79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */,
 				79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */,
@@ -1003,6 +1010,7 @@
 				79881EC62831675000BD06CF /* TemplateDropSet+.swift in Sources */,
 				79283FD42AC4270B008DCCA1 /* String+.swift in Sources */,
 				79A4E33027E8CB0C0089001F /* FirstStartScreen.swift in Sources */,
+				79DB52132AE176D000073423 /* RequiresNetworkConnectionModifier.swift in Sources */,
 				790E1A34279DB5B300EDB715 /* Database.swift in Sources */,
 				79511D072925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift in Sources */,
 				7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */,

@@ -24,6 +24,7 @@ struct LOGIT: App {
     @StateObject private var templateService: TemplateService
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager()
+    @StateObject private var networkMonitor = NetworkMonitor()
     
     @State private var selectedTab: TabType = .home
 
@@ -108,6 +109,7 @@ struct LOGIT: App {
                 .environmentObject(measurementController)
                 .environmentObject(templateService)
                 .environmentObject(purchaseManager)
+                .environmentObject(networkMonitor)
                 .environment(\.goHome, { selectedTab = .home })
                 .task {
                     Task {
@@ -119,6 +121,12 @@ struct LOGIT: App {
                     }
                 }
                 .preferredColorScheme(.dark)
+                .onAppear {
+                    // Fixes issue with Alerts and Confirmation Dialogs not in dark mode
+                    let scenes = UIApplication.shared.connectedScenes
+                    guard let scene = scenes.first as? UIWindowScene else { return }
+                    scene.keyWindow?.overrideUserInterfaceStyle = .dark
+                }
                 #if targetEnvironment(simulator)
                     .statusBarHidden(true)
                 #endif

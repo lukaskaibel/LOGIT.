@@ -15,6 +15,7 @@ struct CreateTemplateMenu: View {
     @EnvironmentObject private var database: Database
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @EnvironmentObject private var templateService: TemplateService
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
 
     @State private var photoPickerItem: PhotosPickerItem?
     @State private var workoutImage: UIImage?
@@ -36,6 +37,7 @@ struct CreateTemplateMenu: View {
                 Label(NSLocalizedString("newTemplate", comment: ""), systemImage: "plus")
             }
             Button {
+                guard networkMonitor.isConnected else { return }
                 if !purchaseManager.hasUnlockedPro {
                     isShowingUpgradeToProScreen = true
                 } else {
@@ -49,6 +51,7 @@ struct CreateTemplateMenu: View {
                     Image(systemName: "photo")
                 }
             }
+            .requiresNetworkConnection()
         } label: {
             Image(systemName: "plus")
         }

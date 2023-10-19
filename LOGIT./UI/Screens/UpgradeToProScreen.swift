@@ -12,6 +12,7 @@ struct UpgradeToProScreen: View {
     // MARK: - Environment
     
     @EnvironmentObject private var purchaseManager: PurchaseManager
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -102,6 +103,7 @@ struct UpgradeToProScreen: View {
                 }
                 Button {
                     Task {
+                        guard networkMonitor.isConnected else { return }
                         do {
                             try await purchaseManager.subscribeToProMonthly()
                         } catch {
@@ -117,6 +119,7 @@ struct UpgradeToProScreen: View {
                     }
                 }
                 .buttonStyle(BigButtonStyle())
+                .requiresNetworkConnection()
                 Button {
                     Task {
                         do {

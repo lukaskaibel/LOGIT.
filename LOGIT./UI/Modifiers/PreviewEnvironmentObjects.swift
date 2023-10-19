@@ -13,6 +13,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
     @StateObject private var templateService: TemplateService
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager: PurchaseManager
+    @StateObject private var networkMonitor: NetworkMonitor
     
     init() {
         let db = Database(isPreview: true)
@@ -20,6 +21,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
         _templateService = StateObject(wrappedValue: TemplateService(database: db))
         _measurementController = StateObject(wrappedValue: MeasurementEntryController(database: db))
         _purchaseManager = StateObject(wrappedValue: PurchaseManager())
+        _networkMonitor = StateObject(wrappedValue: NetworkMonitor())
     }
 
     func body(content: Content) -> some View {
