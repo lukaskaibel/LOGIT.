@@ -19,11 +19,20 @@ struct PreviewEnvironmentObjects: ViewModifier {
         _database = StateObject(wrappedValue: db)
         _templateService = StateObject(wrappedValue: TemplateService(database: db))
         _measurementController = StateObject(wrappedValue: MeasurementEntryController(database: db))
-        _purchaseManager = StateObject(wrappedValue: PurchaseManager(entitlementManager: EntitlementManager()))
+        _purchaseManager = StateObject(wrappedValue: PurchaseManager())
     }
 
     func body(content: Content) -> some View {
         content
+            .task {
+                Task {
+                    do {
+                        try await purchaseManager.loadProducts()
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
     }
 }
 

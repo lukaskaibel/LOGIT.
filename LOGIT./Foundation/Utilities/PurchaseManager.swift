@@ -5,25 +5,30 @@
 //  Created by Lukas Kaibel on 12.10.23.
 //
 
-import Foundation
+import OSLog
+import SwiftUI
 import StoreKit
+
+enum PurchaseError: Error {
+    case productNotFound
+}
 
 @MainActor
 class PurchaseManager: NSObject, ObservableObject {
 
-    private let productIds = ["com.lukaskbl.LOGIT.prosubscriptionmonthly"]
+    // MARK: - Constants
+    
+    private let proSubscriptionMonthlyId = "com.lukaskbl.LOGIT.prosubscriptionmonthly"
 
-    @Published
-    private(set) var products: [Product] = []
-    @Published
-    private(set) var purchasedProductIDs = Set<String>()
-
-    private let entitlementManager: EntitlementManager
-    private var productsLoaded = false
+    // MARK: - Private Variables
+    
+    private var products: [Product]?
+    private var purchasedProductIDs: [String]?
     private var updates: Task<Void, Never>? = nil
-
-    init(entitlementManager: EntitlementManager) {
-        self.entitlementManager = entitlementManager
+    
+    // MARK: - Init / Deinit
+    
+    override init() {
         super.init()
         self.updates = observeTransactionUpdates()
         SKPaymentQueue.default().add(self)
@@ -33,28 +38,64 @@ class PurchaseManager: NSObject, ObservableObject {
         self.updates?.cancel()
     }
     
-    var hasUnlockedPro: Bool {
-       return !self.purchasedProductIDs.isEmpty
-    }
-
+    // MARK: - Public Methods / Variables
+    
     func loadProducts() async throws {
-        guard !self.productsLoaded else { return }
-        self.products = try await Product.products(for: productIds)
-        self.productsLoaded = true
+        self.products = try await Product.products(for: [proSubscriptionMonthlyId])
+        proSubscriptionMonthlyPriceString = products?.first(where: { $0.id == proSubscriptionMonthlyId })?.displayPrice ?? proSubscriptionMonthlyPriceString
+        await updateProExpirationDate()
     }
+    
+    func restorePurchase() async throws {
+        try await AppStore.sync()
+    }
+    
+    var proExpirationDate: Date? {
+        get {
+            UserDefaults(suiteName: "com.lukaskbl.LOGIT")?.object(forKey: "com.lukaskbl.LOGIT.expirationDate") as? Date
+        }
+        set {
+            UserDefaults(suiteName: "com.lukaskbl.LOGIT")?.set(newValue, forKey: "com.lukaskbl.LOGIT.expirationDate")
+            objectWillChange.send()
+        }
+    }
+    
+    var proSubscriptionMonthlyPriceString: String {
+        get {
+            (UserDefaults(suiteName: "com.lukaskbl.LOGIT")?.object(forKey: "com.lukaskbl.LOGIT.proSubscriptionMonthlyPriceString") as? String) ?? "-.--"
+        }
+        set {
+            UserDefaults(suiteName: "com.lukaskbl.LOGIT")?.set(newValue, forKey: "com.lukaskbl.LOGIT.proSubscriptionMonthlyPriceString")
+            objectWillChange.send()
+        }
+    }
+    
+    var hasUnlockedPro: Bool {
+        if let proExpirationDate = proExpirationDate {
+            return proExpirationDate > .now
+        }
+        return false
+    }
+    
+    func subscribeToProMonthly() async throws {
+        guard let proMonthlyProduct = products?.first(where: { $0.id == proSubscriptionMonthlyId }) else {
+            throw PurchaseError.productNotFound
+        }
+        try await purchase(proMonthlyProduct)
+    }
+    
+    // MARK: - Private Methods
 
-    func purchase(_ product: Product) async throws {
+    private func purchase(_ product: Product) async throws {
         let result = try await product.purchase()
 
         switch result {
         case let .success(.verified(transaction)):
             // Successful purchase
             await transaction.finish()
-            await self.updatePurchasedProducts()
+            await self.updateProExpirationDate()
         case let .success(.unverified(_, error)):
-            // Successful purchase but transaction/receipt can't be verified
-            // Could be a jailbroken phone
-            break
+            throw error
         case .pending:
             // Transaction waiting on SCA (Strong Customer Authentication) or
             // approval from Ask to Buy
@@ -67,32 +108,24 @@ class PurchaseManager: NSObject, ObservableObject {
         }
     }
 
-    func updatePurchasedProducts() async {
+    private func updateProExpirationDate() async {
         for await result in Transaction.currentEntitlements {
-            guard case .verified(let transaction) = result else {
+            guard case .verified(let transaction) = result, transaction.revocationDate == nil else {
                 continue
             }
 
-            if transaction.revocationDate == nil {
-                self.purchasedProductIDs.insert(transaction.productID)
-            } else {
-                self.purchasedProductIDs.remove(transaction.productID)
-            }
+            proExpirationDate = transaction.expirationDate
+            return
         }
-
-        self.entitlementManager.hasPro = !self.purchasedProductIDs.isEmpty
+        proExpirationDate = nil
     }
     
-    func restorePurchase() async throws {
-        try await AppStore.sync()
-    }
+    
 
     private func observeTransactionUpdates() -> Task<Void, Never> {
         Task(priority: .background) { [unowned self] in
-            for await verificationResult in Transaction.updates {
-                // Using verificationResult directly would be better
-                // but this way works for this tutorial
-                await self.updatePurchasedProducts()
+            for await _ in Transaction.updates {
+                await self.updateProExpirationDate()
             }
         }
     }
@@ -100,7 +133,7 @@ class PurchaseManager: NSObject, ObservableObject {
 
 extension PurchaseManager: SKPaymentTransactionObserver {
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-
+        
     }
 
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {

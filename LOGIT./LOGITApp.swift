@@ -23,7 +23,7 @@ struct LOGIT: App {
     @StateObject private var database: Database
     @StateObject private var templateService: TemplateService
     @StateObject private var measurementController: MeasurementEntryController
-    @StateObject private var purchaseManager = PurchaseManager(entitlementManager: EntitlementManager())
+    @StateObject private var purchaseManager = PurchaseManager()
     
     @State private var selectedTab: TabType = .home
 

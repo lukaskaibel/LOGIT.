@@ -124,6 +124,6 @@ struct ProfileView_Previews: PreviewProvider {
         NavigationStack {
             SettingsScreen()
         }
-        .environmentObject(PurchaseManager(entitlementManager: EntitlementManager()))
+        .environmentObject(PurchaseManager())
     }
 }

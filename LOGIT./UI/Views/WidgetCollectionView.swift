@@ -55,7 +55,7 @@ struct WidgetCollectionView<Content: View>: View {
                 } label: {
                     Image(systemName: "plus.square.dashed")
                         .font(.title2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.label)
                 }
             }
             VStack(spacing: CELL_SPACING) {

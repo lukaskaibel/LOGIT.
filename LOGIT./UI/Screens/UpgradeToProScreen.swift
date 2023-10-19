@@ -71,7 +71,7 @@ struct UpgradeToProScreen: View {
                                         .foregroundColor(.secondary)
                                     Text("Scan a Workout")
                                         .font(.title3.weight(.bold))
-                                    Text("Convert a photo into a workout template instantly and start working out in seconds!")
+                                    Text("Convert a photo into a workout template and start working out instantly!")
                                         .multilineTextAlignment(.leading)
                                 }
                             }
@@ -85,24 +85,25 @@ struct UpgradeToProScreen: View {
         }
         .overlay {
             VStack(spacing: 20) {
-                HStack {
-                    Text("Pricing")
-                    Spacer()
-                    HStack(alignment: .lastTextBaseline, spacing: 3) {
-                        Text(purchaseManager.products.first?.displayPrice ?? "")
-                            .font(.body.weight(.semibold))
-                        Text("/ Month")
-                            .font(.footnote.weight(.semibold))
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Pricing")
+                        Spacer()
+                        HStack(alignment: .lastTextBaseline, spacing: 3) {
+                            Text(purchaseManager.proSubscriptionMonthlyPriceString)
+                                .font(.body.weight(.semibold))
+                            Text("/ Month")
+                                .font(.footnote.weight(.semibold))
+                        }
                     }
+                    Text("Auto-renews every month")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
                 Button {
                     Task {
                         do {
-                            guard let product = purchaseManager.products.first else {
-                                // TODO: Show Alert that error during purchase
-                                return
-                            }
-                            try await purchaseManager.purchase(product)
+                            try await purchaseManager.subscribeToProMonthly()
                         } catch {
                             // TODO: Show Alert for Error during purchase
                         }
@@ -126,6 +127,7 @@ struct UpgradeToProScreen: View {
                     }
                 } label: {
                     Text("Restore Purchase")
+                        .foregroundStyle(Color.label)
                 }
             }
             .padding()
@@ -148,6 +150,6 @@ struct UpgradeToProScreen: View {
 struct UpgradeToProScreen_Previews: PreviewProvider {
     static var previews: some View {
         UpgradeToProScreen()
-            .environmentObject(PurchaseManager(entitlementManager: EntitlementManager()))
+            .previewEnvironmentObjects()
     }
 }
