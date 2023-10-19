@@ -35,12 +35,12 @@ struct UpgradeToProScreen: View {
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
                                 VStack(alignment: .leading) {
-                                    Text("Visualise".uppercased())
+                                    Text(NSLocalizedString("visualise", comment: "").uppercased())
                                         .font(.caption.weight(.semibold))
                                         .foregroundColor(.secondary)
-                                    Text("Charts")
+                                    Text(NSLocalizedString("charts", comment: ""))
                                         .font(.title3.weight(.bold))
-                                    Text("From weight to reps, volume, and sets – visualize every step of your fitness journey!")
+                                    Text(NSLocalizedString("chartsPromotionText", comment: ""))
                                         .multilineTextAlignment(.leading)
                                 }
                             }
@@ -51,12 +51,12 @@ struct UpgradeToProScreen: View {
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
                                 VStack(alignment: .leading) {
-                                    Text("Track More".uppercased())
+                                    Text(NSLocalizedString("trackMore", comment: "").uppercased())
                                         .font(.caption.weight(.semibold))
                                         .foregroundColor(.secondary)
-                                    Text("Measurements")
+                                    Text(NSLocalizedString("measurements", comment: ""))
                                         .font(.title3.weight(.bold))
-                                    Text("Plot bodyweight, calories, and measurements to clearly mark your progress.")
+                                    Text(NSLocalizedString("measurementsPromotionDescription", comment: ""))
                                         .multilineTextAlignment(.leading)
                                 }
                             }
@@ -67,12 +67,12 @@ struct UpgradeToProScreen: View {
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
                                 VStack(alignment: .leading) {
-                                    Text("Save time".uppercased())
+                                    Text(NSLocalizedString("saveTime", comment: "").uppercased())
                                         .font(.caption.weight(.semibold))
                                         .foregroundColor(.secondary)
-                                    Text("Scan a Workout")
+                                    Text(NSLocalizedString("scanAWorkout", comment: ""))
                                         .font(.title3.weight(.bold))
-                                    Text("Convert a photo into a workout template and start working out instantly!")
+                                    Text(NSLocalizedString("scanAWorkoutPromotionText", comment: ""))
                                         .multilineTextAlignment(.leading)
                                 }
                             }
@@ -88,16 +88,16 @@ struct UpgradeToProScreen: View {
             VStack(spacing: 20) {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("Pricing")
+                        Text(NSLocalizedString("price", comment: ""))
                         Spacer()
                         HStack(alignment: .lastTextBaseline, spacing: 3) {
                             Text(purchaseManager.proSubscriptionMonthlyPriceString)
                                 .font(.body.weight(.semibold))
-                            Text("/ Month")
+                            Text("/ \(NSLocalizedString("month", comment: ""))")
                                 .font(.footnote.weight(.semibold))
                         }
                     }
-                    Text("Auto-renews every month")
+                    Text(NSLocalizedString("autoRenewMonth", comment: ""))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -113,7 +113,7 @@ struct UpgradeToProScreen: View {
                 } label: {
                     HStack {
                         Image(systemName: "crown.fill")
-                        Text("Upgrade to")
+                        Text(NSLocalizedString("upgradeTo", comment: ""))
                         LogitProLogo()
                             .environment(\.colorScheme, .light)
                     }
@@ -129,7 +129,7 @@ struct UpgradeToProScreen: View {
                         }
                     }
                 } label: {
-                    Text("Restore Purchase")
+                    Text(NSLocalizedString("restorePurchase", comment: ""))
                         .foregroundStyle(Color.label)
                 }
             }

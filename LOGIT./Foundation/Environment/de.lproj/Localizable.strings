@@ -17,6 +17,7 @@
 "all" = "Alle";
 "allTime" = "Aller Zeiten";
 "alreadyExists" = "existiert schon.";
+"autoRenewMonth" = "Erneuert automatisch am Ende des Monats";
 "ascending" = "Aufsteigend";
 
 // MARK: - B
@@ -34,6 +35,8 @@
 "calories" = "Kalorien";
 "cancel" = "Abbrechen";
 "cardio" = "Ausdauer";
+"charts" = "Diagramme";
+"chartsPromotionText" = "Tracke deinen Fitnessfortschritt, wie z.B. Gewicht, Volumen und mehr...";
 "chest" = "Brust";
 "chooseExercise" = "Übung auswählen";
 "chooseSecondaryExercise" = "Zweite Übung auswählen";
@@ -128,6 +131,8 @@
 "shoulders" = "Schultern";
 "waist" = "Taille";
 "measurements" = "Messungen";
+"measurementsPromotionDescription" = "Verfolge weitere wichtige Fitnessmetriken, wie Körpergewicht, Kalorien und mehr...";
+"month" = "Monat";
 "monthly" = "Monatlich";
 "morning" = "Morgen";
 "muscleGroup" = "Muskelgruppe";
@@ -189,6 +194,7 @@
 "PerWeek" = "Pro Woche";
 "preventAutoLock" = "Bildschirmsperre verhindern";
 "preventAutoLockDescription" = "Verhindert das Abschalten des Bildschirms während des Training.";
+"price" = "Preis";
 "profile" = "Profil";
 
 // MARK: - R
@@ -201,10 +207,14 @@
 "reps" = "Wdh";
 "replaceExercise" = "Übung ersetzen";
 "replaceSecondaryExercise" = "Zweite Übung ersetzen";
+"restorePurchase" = "Kauf Wiederherstellen";
 
 // MARK: - S
 
 "save" = "Speichern";
+"saveTime" = "Spare Zeit";
+"scanAWorkout" = "Scanne einen Workout";
+"scanAWorkoutPromotionText" = "Mache aus einem Foto blitzschnell eine Workout-Vorlage!";
 "searchExercises" = "In Übungen suchen";
 "searchWorkouts" = "In Workouts suchen";
 "sec" = "sek";
@@ -255,6 +265,7 @@
 "title" = "Titel";
 "today" = "Heute";
 "toGo" = "übrig";
+"trackMore" = "Tracke mehr";
 "triceps" = "Trizeps";
 "two" = "Zwei";
 
@@ -291,6 +302,7 @@
 "year" = "Jahr";
 "yearly" = "Jährlich";
 "yesterday" = "Gestern";
+"visualise" = "Visualisieren";
 
 // MARK: - Z
 

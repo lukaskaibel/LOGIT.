@@ -17,6 +17,7 @@
 "all" = "All";
 "allTime" = "All Time";
 "alreadyExists" = "already exists.";
+"autoRenewMonth" = "Automatically renews every month";
 "ascending" = "Ascending";
 
 // MARK: - B
@@ -34,6 +35,8 @@
 "calories" = "Calories";
 "cancel" = "Cancel";
 "cardio" = "Cardio";
+"charts" = "Charts";
+"chartsPromotionText" = "From weight to reps, volume, and sets – visualize every step of your fitness journey!";
 "chest" = "Chest";
 "chooseExercise" = "Choose Exercise";
 "chooseSecondaryExercise" = "Choose Secondary Exercise";
@@ -127,6 +130,8 @@
 "shoulders" = "Shoulders";
 "waist" = "Waist";
 "measurements" = "Measurements";
+"measurementsPromotionDescription" = "Plot bodyweight, calories, and other metrics to clearly see your progress.";
+"month" = "Month";
 "monthly" = "Monthly";
 "morning" = "Morning";
 "muscleGroup" = "Muscle Group";
@@ -187,6 +192,7 @@
 "PerWeek" = "Per Week";
 "preventAutoLock" = "Prevent Auto-Lock";
 "preventAutoLockDescription" = "Keeps screen active during workout.";
+"price" = "Price";
 "profile" = "Profile";
 
 // MARK: - R
@@ -199,10 +205,14 @@
 "reps" = "rps";
 "replaceExercise" = "Replace Exercise";
 "replaceSecondaryExercise" = "Replace Secondary Exercise";
+"restorePurchase" = "Restore Purchase";
 
 // MARK: - S
 
 "save" = "Save";
+"saveTime" = "Save Time";
+"scanAWorkout" = "Scan a Workout";
+"scanAWorkoutPromotionText" = "Convert a photo into a workout template and start working out instantly!";
 "searchExercises" = "Search in Exercises";
 "searchWorkouts" = "Search in Workouts";
 "sec" = "sec";
@@ -252,6 +262,7 @@
 "title" = "Title";
 "today" = "Today";
 "toGo" = "to go";
+"trackMore" = "Track More";
 "triceps" = "Triceps";
 "two" = "Two";
 
@@ -288,6 +299,7 @@
 "year" = "Year";
 "yearly" = "Yearly";
 "yesterday" = "Yesterday";
+"visualise" = "Visualise";
 
 // MARK: - Z
 
