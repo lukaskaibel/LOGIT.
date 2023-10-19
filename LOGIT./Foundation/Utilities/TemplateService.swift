@@ -131,7 +131,8 @@ class TemplateService: ObservableObject {
                     } else {
                         return self.exerciseService.createExercise(for: exerciseName)
                             .map { exercise in
-                                (self.createSetGroupFromDTO(setGroupDTO, withExercise: exercise), index)
+                                self.database.flagAsTemporary(exercise)
+                                return (self.createSetGroupFromDTO(setGroupDTO, withExercise: exercise), index)
                             }
                             .eraseToAnyPublisher()
                     }

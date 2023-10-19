@@ -90,6 +90,11 @@ struct TemplateEditorScreen: View {
                     : NSLocalizedString("newTemplate", comment: "")
             )
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if !isEditingExistingTemplate {
+                    database.flagAsTemporary(template)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(NSLocalizedString("save", comment: "")) {
