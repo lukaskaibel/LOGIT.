@@ -23,9 +23,9 @@ struct TemplateGenerationScreen: View {
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
-                Text("Generating Template")
+                Text(NSLocalizedString("generatingTemplate", comment: ""))
                     .font(.largeTitle.weight(.bold))
-                Text("From Image")
+                Text(NSLocalizedString("FromPhoto", comment: ""))
                     .font(.system(.title3, design: .rounded, weight: .bold))
                     .foregroundColor(.secondary)
             }
@@ -37,7 +37,7 @@ struct TemplateGenerationScreen: View {
             VStack(spacing: 30) {
                 ProgressView()
                     .progressViewStyle(.circular)
-                Text("This will only take a few seconds.")
+                Text(NSLocalizedString("onlyFewSeconds", comment: ""))
                     .frame(maxWidth: 200)
                     .multilineTextAlignment(.center)
             }
@@ -46,7 +46,7 @@ struct TemplateGenerationScreen: View {
                 templateExtration?.cancel()
                 dismiss()
             } label: {
-                Text("Cancel")
+                Text(NSLocalizedString("cancel", comment: ""))
             }
             .buttonStyle(BigButtonStyle())
             .padding(.bottom, 50)

@@ -48,6 +48,8 @@
 "create" = "Create";
 "createExercise" = "Übung erstellen";
 "createTemplate" = "Vorlage erstellen";
+"creatingTemplateFailed" = "Generieren Fehlgeschlagen";
+"creatingTemplateFailedText" = "Stelle sicher, dass das Bild ein Workout enthält.";
 
 // MARK: - D
 
@@ -90,11 +92,16 @@
 "five" = "Fünf";
 "four" = "Vier";
 "fromLastWeek" = "zu letzter Woche";
+"FromPhoto" = "Aus Foto";
 
 // MARK: - H
 
 "history" = "Ausführungen";
 "home" = "Home";
+
+// MARK: - G
+
+"generatingTemplate" = "Vorlage wird erstellt";
 
 // MARK: - I
 
@@ -179,6 +186,7 @@
 "ok" = "Ok";
 "oldestFirst" = "Älteste zuerst";
 "one" = "Eins";
+"onlyFewSeconds" = "Dies wird nur ein paar Sekunden dauern...";
 "overallSets" = "Gesamte Sätze";
 "overallVolume" = "Gesamtes Volumen";
 "overview" = "Überblick";

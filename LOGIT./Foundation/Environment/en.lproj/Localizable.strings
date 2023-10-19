@@ -48,6 +48,8 @@
 "create" = "Create";
 "createExercise" = "Create Exercise";
 "createTemplate" = "Create Template";
+"creatingTemplateFailed" = "Creating Template Failed";
+"creatingTemplateFailedText" = "Make sure the selected image contains a workout.";
 
 // MARK: - D
 
@@ -90,6 +92,11 @@
 "five" = "Five";
 "four" = "Four";
 "fromLastWeek" = "from last week";
+"FromPhoto" = "From Photo";
+
+// MARK: - G
+
+"generatingTemplate" = "Generating Template";
 
 // MARK: - H
 
@@ -177,6 +184,7 @@
 "ok" = "Ok";
 "oldestFirst" = "Oldest First";
 "one" = "One";
+"onlyFewSeconds" = "This will only take a few seconds...";
 "overallSets" = "Overall Sets";
 "overallVolume" = "Overall Volume";
 "overview" = "Overview";

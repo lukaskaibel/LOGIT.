@@ -45,6 +45,7 @@ struct CreateTemplateMenu: View {
                 }
             } label: {
                 Text(NSLocalizedString("templateFromPhoto", comment: ""))
+                Text("(BETA)")
                 if !purchaseManager.hasUnlockedPro {
                     Image(systemName: "crown")
                 } else {
@@ -55,11 +56,11 @@ struct CreateTemplateMenu: View {
         } label: {
             Image(systemName: "plus")
         }
-        .alert("Creating Template Failed", isPresented: $isShowingCreationFailedAlert) {
+        .alert(NSLocalizedString("creatingTemplateFailed", comment: ""), isPresented: $isShowingCreationFailedAlert) {
             Button(NSLocalizedString("ok", comment: ""), role: .cancel) {
                 isShowingCreationFailedAlert = false
             }
-            Text("Make sure the selected image contains a workout.")
+            Text(NSLocalizedString("creatingTemplateFailedText", comment: ""))
         }
         .onChange(of: photoPickerItem) { _ in
             Task {

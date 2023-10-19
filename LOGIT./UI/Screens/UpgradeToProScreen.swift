@@ -67,8 +67,12 @@ struct UpgradeToProScreen: View {
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
                                 VStack(alignment: .leading) {
-                                    Text(NSLocalizedString("saveTime", comment: "").uppercased())
-                                        .font(.caption.weight(.semibold))
+                                    HStack {
+                                        Text(NSLocalizedString("saveTime", comment: "").uppercased())
+                                        Spacer()
+                                        Text("(BETA)")
+                                    }
+                                    .font(.caption.weight(.semibold))
                                         .foregroundColor(.secondary)
                                     Text(NSLocalizedString("scanAWorkout", comment: ""))
                                         .font(.title3.weight(.bold))
