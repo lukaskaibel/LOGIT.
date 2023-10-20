@@ -10,6 +10,7 @@
 // MARK: - A
 
 "abdominals" = "Bauch";
+"acceptPrivacyPolicy" = "Datenschutzbestimmungen akzeptieren";
 "add" = "Hinzufügen";
 "addExercise" = "Übung hinzufügen";
 "addSet" = "Satz hinzufügen";
@@ -203,6 +204,7 @@
 "preventAutoLock" = "Bildschirmsperre verhindern";
 "preventAutoLockDescription" = "Verhindert das Abschalten des Bildschirms während des Training.";
 "price" = "Preis";
+"privacyPolicy" = "Datenschutzbestimmungen";
 "profile" = "Profil";
 
 // MARK: - R

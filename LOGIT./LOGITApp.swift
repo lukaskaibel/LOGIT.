@@ -16,6 +16,7 @@ struct LOGIT: App {
 
     // MARK: - AppStorage
 
+    @AppStorage("acceptedPrivacyPolicyVersion") var acceptedPrivacyPolicyVersion: Int?
     @AppStorage("setupDone") var setupDone: Bool = false
 
     // MARK: - State
@@ -27,6 +28,7 @@ struct LOGIT: App {
     @StateObject private var networkMonitor = NetworkMonitor()
     
     @State private var selectedTab: TabType = .home
+    @State private var isShowingPrivacyPolicy = false
 
     // MARK: - Init
 
@@ -105,6 +107,12 @@ struct LOGIT: App {
                     }
                     .tag(TabType.settings)
                 }
+                .sheet(isPresented: $isShowingPrivacyPolicy) {
+                    NavigationStack {
+                        PrivacyPolicyScreen(needsAcceptance: true)
+                    }
+                    .interactiveDismissDisabled()
+                }
                 .environmentObject(database)
                 .environmentObject(measurementController)
                 .environmentObject(templateService)
@@ -112,6 +120,9 @@ struct LOGIT: App {
                 .environmentObject(networkMonitor)
                 .environment(\.goHome, { selectedTab = .home })
                 .task {
+                    if acceptedPrivacyPolicyVersion != privacyPolicyVersion {
+                        isShowingPrivacyPolicy = true
+                    }
                     Task {
                         do {
                             try await purchaseManager.loadProducts()

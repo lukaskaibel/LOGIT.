@@ -9,6 +9,8 @@ import SwiftUI
 
 public var isProUser = true
 
+public var privacyPolicyVersion = 2
+
 private struct WorkoutSetTemplateSetDictionaryKey: EnvironmentKey {
     static let defaultValue: [WorkoutSet: TemplateSet] = [WorkoutSet: TemplateSet]()
 }

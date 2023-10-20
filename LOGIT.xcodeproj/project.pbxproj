@@ -13,6 +13,9 @@
 		7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7907FDE9289E99B1006AF271 /* CloudKit.framework */; };
 		790E1A34279DB5B300EDB715 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E1A33279DB5B300EDB715 /* Database.swift */; };
 		790E8F112A48B89900EA1430 /* timer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 790E8F102A48B89900EA1430 /* timer.wav */; };
+		791347B12AE2B79E00D20BB7 /* logit_privacy_policy.md in Resources */ = {isa = PBXBuildFile; fileRef = 791347B02AE2B79E00D20BB7 /* logit_privacy_policy.md */; };
+		791347B32AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791347B22AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift */; };
+		791347B62AE2BEB100D20BB7 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 791347B52AE2BEB100D20BB7 /* MarkdownUI */; };
 		7919C5FD2A7410FB00F35493 /* WorkoutSetGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */; };
 		7919C6002A742EB900F35493 /* OnDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */; };
 		791F25A52AC1AE0800613793 /* MeasurementsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */; };
@@ -183,6 +186,8 @@
 		7907FDE9289E99B1006AF271 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		790E1A33279DB5B300EDB715 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		790E8F102A48B89900EA1430 /* timer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = timer.wav; sourceTree = "<group>"; };
+		791347B02AE2B79E00D20BB7 /* logit_privacy_policy.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = logit_privacy_policy.md; sourceTree = "<group>"; };
+		791347B22AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
 		7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetGroupCell.swift; sourceTree = "<group>"; };
 		7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeleteModifier.swift; sourceTree = "<group>"; };
 		791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementsScreen.swift; sourceTree = "<group>"; };
@@ -340,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				791347B62AE2BEB100D20BB7 /* MarkdownUI in Frameworks */,
 				7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */,
 				55F89780B925B62D1E06523A /* Pods_LOGIT.framework in Frameworks */,
 			);
@@ -363,6 +369,14 @@
 				790E8F102A48B89900EA1430 /* timer.wav */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		791347AF2AE2B79000D20BB7 /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				791347B02AE2B79E00D20BB7 /* logit_privacy_policy.md */,
+			);
+			path = Documents;
 			sourceTree = "<group>";
 		};
 		7919C5FE2A742EA500F35493 /* Modifiers */ = {
@@ -587,6 +601,7 @@
 				80E9FAEE26FE152100C670D5 /* HomeScreen.swift */,
 				791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */,
 				797EF7E529292E32003C2266 /* MuscleGroupsDetailScreen.swift */,
+				791347B22AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift */,
 				8033F98D27072B0600EC707A /* SettingsScreen.swift */,
 				7955EEB327FDD8820010693C /* StartWorkoutScreen.swift */,
 				79511D062925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift */,
@@ -726,6 +741,7 @@
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				8065AA7C2686668100F53A5A /* Info.plist */,
 				79488DF32A770FA2005C485D /* Config */,
+				791347AF2AE2B79000D20BB7 /* Documents */,
 				792A3FED2AB36C1E00C6A097 /* Foundation */,
 				79488DF12A770D17005C485D /* Legacy */,
 				790E8F092A48B27E00EA1430 /* Sounds */,
@@ -773,6 +789,9 @@
 			dependencies = (
 			);
 			name = LOGIT;
+			packageProductDependencies = (
+				791347B52AE2BEB100D20BB7 /* MarkdownUI */,
+			);
 			productName = WorkoutDiary;
 			productReference = 8065AA6B2686667F00F53A5A /* LOGIT.app */;
 			productType = "com.apple.product-type.application";
@@ -806,6 +825,9 @@
 				de,
 			);
 			mainGroup = 8065AA622686667F00F53A5A;
+			packageReferences = (
+				791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
 			productRefGroup = 8065AA6C2686667F00F53A5A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -835,6 +857,7 @@
 				790E8F112A48B89900EA1430 /* timer.wav in Resources */,
 				79B27FE32AD803C90026EF35 /* LOGITStoreKit.storekit in Resources */,
 				8065AA732686668100F53A5A /* Assets.xcassets in Resources */,
+				791347B12AE2B79E00D20BB7 /* logit_privacy_policy.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,6 +1047,7 @@
 				79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */,
 				79488DEC2A770C7D005C485D /* EmptyPlaceholderModifier.swift in Sources */,
 				79B7F2A52AA8A1D20090B785 /* DateLineChart.swift in Sources */,
+				791347B32AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift in Sources */,
 				7927C3E52A82F725006B99D8 /* TargetPerWeekView.swift in Sources */,
 				797EF7E629292E32003C2266 /* MuscleGroupsDetailScreen.swift in Sources */,
 				806C4FFA2688B46400A9B01D /* StandardSet+.swift in Sources */,
@@ -1322,6 +1346,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		791347B52AE2BEB100D20BB7 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		8065AA792686668100F53A5A /* LOGIT.xcdatamodeld */ = {

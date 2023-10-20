@@ -22,6 +22,7 @@ struct SettingsScreen: View {
     // MARK: - State
     
     @State private var isShowingUpgradeToPro = false
+    @State private var isShowingPrivacyPolicy = false
 
     // MARK: - Body
 
@@ -73,6 +74,20 @@ struct SettingsScreen: View {
                         .tileStyle()
                 }
                 
+                VStack(spacing: CELL_SPACING) {
+                    Button {
+                        isShowingPrivacyPolicy = true
+                    } label: {
+                        HStack {
+                            Text(NSLocalizedString("privacyPolicy", comment: ""))
+                            Spacer()
+                            NavigationChevron()
+                        }
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                    }
+                }
+                
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     Text(NSLocalizedString("subscription", comment: ""))
                         .sectionHeaderStyle2()
@@ -114,6 +129,21 @@ struct SettingsScreen: View {
         .navigationBarTitleDisplayMode(.large)
         .sheet(isPresented: $isShowingUpgradeToPro) {
             UpgradeToProScreen()
+        }
+        .sheet(isPresented: $isShowingPrivacyPolicy) {
+            NavigationStack {
+                PrivacyPolicyScreen()
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                isShowingPrivacyPolicy = false
+                            } label: {
+                                Text(NSLocalizedString("done", comment: ""))
+                            }
+                        }
+                    }
+                    .navigationBarTitleDisplayMode(.large)
+            }
         }
     }
 

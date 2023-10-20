@@ -10,6 +10,7 @@
 // MARK: - A
 
 "abdominals" = "Abs";
+"acceptPrivacyPolicy" = "Accept Privacy Policy";
 "add" = "Add";
 "addExercise" = "Add Exercise";
 "addSet" = "Add Set";
@@ -201,6 +202,7 @@
 "preventAutoLock" = "Prevent Auto-Lock";
 "preventAutoLockDescription" = "Keeps screen active during workout.";
 "price" = "Price";
+"privacyPolicy" = "Privacy Policy";
 "profile" = "Profile";
 
 // MARK: - R
