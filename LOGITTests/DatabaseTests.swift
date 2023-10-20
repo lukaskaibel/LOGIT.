@@ -11,7 +11,7 @@ import XCTest
 
 final class DatabaseTests: XCTestCase {
 
-    private let database = Database.preview
+    let database = Database(isPreview: true)
 
     func testWorkoutSetsGroupedByCalendarComponent() {
         // Tests if there are workout sets with different weeks in the database to make sure that the following tests are correcty testing.

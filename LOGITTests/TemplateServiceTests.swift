@@ -12,7 +12,8 @@ import Combine
 
 final class TemplateServiceTests: XCTestCase {
     
-    let templateService = TemplateService(database: Database.preview)
+    let database = Database(isPreview: true)
+    lazy var templateService = TemplateService(database: database)
     
     var cancellables = [AnyCancellable]()
     

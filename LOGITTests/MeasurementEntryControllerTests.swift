@@ -11,8 +11,8 @@ import XCTest
 
 final class MeasurementEntryControllerTests: XCTestCase {
 
-    private let controller = MeasurementEntryController.preview
-    private let database = Database.preview
+    let database = Database(isPreview: true)
+    private lazy var controller = MeasurementEntryController(database: database)
 
     func testAddMeasurementEntry() throws {
         controller.addMeasurementEntry(ofType: .bodyweight, value: 85, onDate: .now)

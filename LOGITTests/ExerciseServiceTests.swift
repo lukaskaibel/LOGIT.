@@ -12,7 +12,7 @@ import XCTest
 
 final class ExerciseServiceTests: XCTestCase {
 
-    private let database = Database.preview
+    let database = Database(isPreview: true)
     private lazy var exerciseService = ExerciseService(database: database)
 
     private var cancellables = [AnyCancellable]()
