@@ -10,7 +10,7 @@ import Foundation
 enum MeasurementEntryType {
     case bodyweight
     case percentage
-    case calories
+    case caloriesBurned
     case length(LengthMeasurementEntryType)
 
     init?(rawValue: String) {
@@ -27,8 +27,8 @@ enum MeasurementEntryType {
             self = .bodyweight
         case "percentage":
             self = .percentage
-        case "calories":
-            self = .calories
+        case "caloriesBurned":
+            self = .caloriesBurned
         default:
             return nil
         }
@@ -40,8 +40,8 @@ enum MeasurementEntryType {
             return "bodyweight"
         case .percentage:
             return "percentage"
-        case .calories:
-            return "calories"
+        case .caloriesBurned:
+            return "caloriesBurned"
         case .length(let lengthType):
             return "length" + lengthType.rawValue.firstLetterUppercased
         }
@@ -51,7 +51,7 @@ enum MeasurementEntryType {
         switch self {
         case .bodyweight: return NSLocalizedString("bodyweight", comment: "")
         case .percentage: return NSLocalizedString("percentage", comment: "")
-        case .calories: return NSLocalizedString("calories", comment: "")
+        case .caloriesBurned: return NSLocalizedString("caloriesBurned", comment: "")
         case .length(let lengthType):
             return NSLocalizedString(lengthType.rawValue, comment: "")
         }
@@ -63,7 +63,7 @@ enum MeasurementEntryType {
             return WeightUnit.used.rawValue
         case .percentage:
             return "%"
-        case .calories:
+        case .caloriesBurned:
             return "kCal"
         case .length(_):
             return "cm"

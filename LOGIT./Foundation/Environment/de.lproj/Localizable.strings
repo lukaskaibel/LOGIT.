@@ -33,7 +33,7 @@
 
 // MARK: - C
 
-"calories" = "Kalorien";
+"calories" = "Verbrannte Kalorien";
 "cancel" = "Abbrechen";
 "cardio" = "Ausdauer";
 "charts" = "Diagramme";
@@ -124,7 +124,7 @@
 "maxReps" = "Max Wdh";
 "maxWeight" = "Max Gewicht";
 "measurementBodyweight" = "Körpergewicht";
-"measurementCalories" = "Kalorien";
+"measurementCaloriesBurned" = "Verbrannte Kalorien";
 "chest" = "Brust";
 "hips" = "Hüfte";
 "bicepsLeft" = "Bizeps Links";

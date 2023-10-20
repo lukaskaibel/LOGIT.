@@ -48,12 +48,12 @@ struct MeasurementEntryView: View {
                     Spacer()
                     if isAddingMeasurementEntry {
                         Button(NSLocalizedString("add", comment: "")) {
-                            resetNewMeasurementEntries()
                             measurementController.addMeasurementEntry(
                                 ofType: measurementType,
                                 value: Int(newMeasurementValue),
                                 onDate: newMeasurementDate
                             )
+                            resetNewMeasurementEntries()
                             withAnimation {
                                 isAddingMeasurementEntry = false
                             }

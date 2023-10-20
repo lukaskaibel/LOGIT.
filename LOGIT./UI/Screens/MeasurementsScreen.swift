@@ -25,10 +25,10 @@ struct MeasurementsScreen: View {
                             .padding(CELL_PADDING)
                             .tileStyle()
                             .widget(ofType: .measurement(.bodyweight), isAddedByDefault: true),
-                        MeasurementEntryView(measurementType: .calories)
+                        MeasurementEntryView(measurementType: .caloriesBurned)
                             .padding(CELL_PADDING)
                             .tileStyle()
-                            .widget(ofType: .measurement(.calories), isAddedByDefault: false)
+                            .widget(ofType: .measurement(.caloriesBurned), isAddedByDefault: false)
                     ],
                     database: database
                 )

@@ -33,7 +33,7 @@
 
 // MARK: - C
 
-"calories" = "Calories";
+"caloriesBurned" = "Calories Burned";
 "cancel" = "Cancel";
 "cardio" = "Cardio";
 "charts" = "Charts";
@@ -124,7 +124,7 @@
 "maxReps" = "Max Reps";
 "maxWeight" = "Max Weight";
 "measurementBodyweight" = "Bodyweight";
-"measurementCalories" = "Calories";
+"measurementCaloriesBurned" = "Calories Burned";
 "chest" = "Chest";
 "measurementLengthHhmeasurementLengthBicepsLeft" = "Biceps Left";
 "calfLeft" = "Calf Left";
