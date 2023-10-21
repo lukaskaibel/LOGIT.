@@ -193,53 +193,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9B2527E4-B258-4104-B4C1-E41D676767A9"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LOGIT./Foundation/Utilities/PurchaseManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "updateProExpirationDate()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9B2527E4-B258-4104-B4C1-E41D676767A9 - 2317f22830c3e63d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LOGIT.PurchaseManager.updateProExpirationDate() async -&gt; ()"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Foundation/Utilities/PurchaseManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "660">
-               </Location>
-               <Location
-                  uuid = "9B2527E4-B258-4104-B4C1-E41D676767A9 - 2317f22830c3e63d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for LOGIT.PurchaseManager.updateProExpirationDate() async -&gt; ()"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Foundation/Utilities/PurchaseManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "117"
-                  endingLineNumber = "117"
-                  offsetFromSymbolStart = "580">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
