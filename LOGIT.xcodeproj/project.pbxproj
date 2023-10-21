@@ -121,6 +121,7 @@
 		79C07B2C2ABA47D9000BF879 /* MeasurementEntry+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2B2ABA47D9000BF879 /* MeasurementEntry+.swift */; };
 		79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2D2ABA535F000BF879 /* MeasurementController.swift */; };
 		79C07B302ABA566E000BF879 /* MeasurementEntryControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C07B2F2ABA566E000BF879 /* MeasurementEntryControllerTests.swift */; };
+		79C8FADF2AE3F657001EA5A7 /* OpenAIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 79C8FADE2AE3F657001EA5A7 /* OpenAIKit */; };
 		79CAF79D27E1426600A1711C /* WeightUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CAF79C27E1426600A1711C /* WeightUnit.swift */; };
 		79CD8BE528240A020052D83C /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE428240A020052D83C /* CalendarView.swift */; };
 		79CD8BEA28240B0A0052D83C /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD8BE928240B0A0052D83C /* MonthView.swift */; };
@@ -179,7 +180,6 @@
 
 /* Begin PBXFileReference section */
 		22040B8B5D5971A78B9E3A04 /* Pods_LOGIT.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LOGIT.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LOGIT.release.xcconfig"; path = "Target Support Files/Pods-LOGIT/Pods-LOGIT.release.xcconfig"; sourceTree = "<group>"; };
 		790130A8291C4B9B00EF8955 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7907B5A4280B73E7003E5515 /* Database+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Preview.swift"; sourceTree = "<group>"; };
 		7907FDE8289E99A5006AF271 /* LOGIT..entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LOGIT..entitlements; sourceTree = "<group>"; };
@@ -330,7 +330,6 @@
 		80E9FAEE26FE152100C670D5 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		80ED028F2764D94200D59B75 /* ExerciseSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionScreen.swift; sourceTree = "<group>"; };
 		80F9C34A2704C4F000B6EBF2 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
-		C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LOGIT.debug.xcconfig"; path = "Target Support Files/Pods-LOGIT/Pods-LOGIT.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				791347B62AE2BEB100D20BB7 /* MarkdownUI in Frameworks */,
+				79C8FADF2AE3F657001EA5A7 /* OpenAIKit in Frameworks */,
 				7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */,
 				55F89780B925B62D1E06523A /* Pods_LOGIT.framework in Frameworks */,
 			);
@@ -354,15 +354,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		52E873A688862B4BE19F439F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */,
-				785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		790E8F092A48B27E00EA1430 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,7 +710,6 @@
 				79E849082A7EA28000C0DF95 /* LOGITTests */,
 				792D522827F1160800B08813 /* Frameworks */,
 				8065AA6C2686667F00F53A5A /* Products */,
-				52E873A688862B4BE19F439F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -736,8 +726,9 @@
 			isa = PBXGroup;
 			children = (
 				790130A8291C4B9B00EF8955 /* Launch Screen.storyboard */,
-				8065AA6E2686667F00F53A5A /* LOGITApp.swift */,
 				7907FDE8289E99A5006AF271 /* LOGIT..entitlements */,
+				8065AA6E2686667F00F53A5A /* LOGITApp.swift */,
+				79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */,
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				8065AA7C2686668100F53A5A /* Info.plist */,
 				79488DF32A770FA2005C485D /* Config */,
@@ -746,7 +737,6 @@
 				79488DF12A770D17005C485D /* Legacy */,
 				790E8F092A48B27E00EA1430 /* Sounds */,
 				792A3FEF2AB36E7700C6A097 /* UI */,
-				79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */,
 			);
 			path = LOGIT.;
 			sourceTree = "<group>";
@@ -776,13 +766,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8065AA7F2686668100F53A5A /* Build configuration list for PBXNativeTarget "LOGIT" */;
 			buildPhases = (
-				48FBC04DC0C27F9D8BA1907E /* [CP] Check Pods Manifest.lock */,
 				8065AA672686667F00F53A5A /* Sources */,
 				8065AA682686667F00F53A5A /* Frameworks */,
 				8065AA692686667F00F53A5A /* Resources */,
 				792D523927F1160A00B08813 /* Embed Foundation Extensions */,
 				790091622A772B2000FAE34E /* Swift-Format Script */,
-				A1776E91983DE385FD1B11E9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -791,6 +779,7 @@
 			name = LOGIT;
 			packageProductDependencies = (
 				791347B52AE2BEB100D20BB7 /* MarkdownUI */,
+				79C8FADE2AE3F657001EA5A7 /* OpenAIKit */,
 			);
 			productName = WorkoutDiary;
 			productReference = 8065AA6B2686667F00F53A5A /* LOGIT.app */;
@@ -827,6 +816,7 @@
 			mainGroup = 8065AA622686667F00F53A5A;
 			packageReferences = (
 				791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				79C8FADD2AE3F657001EA5A7 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 8065AA6C2686667F00F53A5A /* Products */;
 			projectDirPath = "";
@@ -864,28 +854,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		48FBC04DC0C27F9D8BA1907E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LOGIT-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		790091622A772B2000FAE34E /* Swift-Format Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -903,23 +871,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#export PATH=\"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/.build/debug:$PATH\"\n#if which swift-format >/dev/null; then\n    #swift-format format --configuration \"/Users/lukaskaibel/Library/Mobile Documents/com~apple~CloudDocs/Developement/Swift/swift-format/myConfiguration.json\" -i -r \"${PROJECT_DIR}\"\n#else\n  #  echo \"warning: swift-format not installed\"\n#fi\n";
-		};
-		A1776E91983DE385FD1B11E9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LOGIT/Pods-LOGIT-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1255,7 +1206,6 @@
 		};
 		8065AA802686668100F53A5A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7969A187512FC95EDCA412C /* Pods-LOGIT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1287,7 +1237,6 @@
 		};
 		8065AA812686668100F53A5A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 785C8439CB08BCB0A0AB4DBD /* Pods-LOGIT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1356,6 +1305,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		79C8FADD2AE3F657001EA5A7 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/FuturraGroup/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1363,6 +1320,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		79C8FADE2AE3F657001EA5A7 /* OpenAIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79C8FADD2AE3F657001EA5A7 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

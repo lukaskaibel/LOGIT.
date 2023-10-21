@@ -9,6 +9,7 @@ import Combine
 import Foundation
 import OSLog
 import OpenAIKit
+import UIKit
 import Vision
 
 struct TextProcessing {
