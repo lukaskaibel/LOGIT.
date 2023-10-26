@@ -10,10 +10,11 @@ import SwiftUI
 struct StartWorkoutScreen: View {
 
     enum FullScreenCoverType: Identifiable {
-        case workoutRecorder(template: Template?)
+        case workoutRecorder(template: Template?), scanScreen
         var id: Int {
             switch self {
             case .workoutRecorder: return 0
+            case .scanScreen: return 1
             }
         }
     }
@@ -45,6 +46,11 @@ struct StartWorkoutScreen: View {
                 withoutTemplateButton
                     .padding(.horizontal)
                     .padding(.vertical, 30)
+                Button {
+                    fullScreenCoverType = .scanScreen
+                } label: {
+                    Label("Scan a Workout", systemImage: "camera")
+                }
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     HStack {
                         Text(NSLocalizedString("myTemplates", comment: ""))
@@ -66,6 +72,8 @@ struct StartWorkoutScreen: View {
             switch type {
             case let .workoutRecorder(template):
                 WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
+            case .scanScreen:
+                ScanScreen()
             }
         }
         .sheet(item: $sheetType) { type in

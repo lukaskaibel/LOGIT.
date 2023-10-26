@@ -17,6 +17,7 @@
 		791347B62AE2BEB100D20BB7 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 791347B52AE2BEB100D20BB7 /* MarkdownUI */; };
 		7919C5FD2A7410FB00F35493 /* WorkoutSetGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */; };
 		7919C6002A742EB900F35493 /* OnDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */; };
+		791DBE2A2AEA8351008B4E81 /* ScanScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791DBE292AEA8351008B4E81 /* ScanScreen.swift */; };
 		791F25A52AC1AE0800613793 /* MeasurementsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */; };
 		791F556729EC768100902352 /* StandardSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556329EC768100902352 /* StandardSetCell.swift */; };
 		791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556429EC768100902352 /* WorkoutSetCell.swift */; };
@@ -57,6 +58,7 @@
 		7955EEAE27FDC2F30010693C /* TemplateListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */; };
 		7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB127FDC5680010693C /* TemplateCell.swift */; };
 		7955EEB427FDD8820010693C /* StartWorkoutScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7955EEB327FDD8820010693C /* StartWorkoutScreen.swift */; };
+		795767812AE706DB0040E327 /* Camera-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 795767802AE706DB0040E327 /* Camera-SwiftUI */; };
 		7959F4CF2ACD8F5B0038B222 /* WorkoutImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7959F4CE2ACD8F5B0038B222 /* WorkoutImages.xcassets */; };
 		7959F4D22ACDB7E20038B222 /* ExerciseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7959F4D02ACDB7DE0038B222 /* ExerciseDTO.swift */; };
 		795A48812A6899A10008A458 /* Chronograph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A48802A6899A10008A458 /* Chronograph.swift */; };
@@ -189,6 +191,7 @@
 		791347B22AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
 		7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetGroupCell.swift; sourceTree = "<group>"; };
 		7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeleteModifier.swift; sourceTree = "<group>"; };
+		791DBE292AEA8351008B4E81 /* ScanScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanScreen.swift; sourceTree = "<group>"; };
 		791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementsScreen.swift; sourceTree = "<group>"; };
 		791F556329EC768100902352 /* StandardSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardSetCell.swift; sourceTree = "<group>"; };
 		791F556429EC768100902352 /* WorkoutSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetCell.swift; sourceTree = "<group>"; };
@@ -346,6 +349,7 @@
 				791347B62AE2BEB100D20BB7 /* MarkdownUI in Frameworks */,
 				79C8FADF2AE3F657001EA5A7 /* OpenAIKit in Frameworks */,
 				7907FDEA289E99B1006AF271 /* CloudKit.framework in Frameworks */,
+				795767812AE706DB0040E327 /* Camera-SwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +595,7 @@
 				791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */,
 				797EF7E529292E32003C2266 /* MuscleGroupsDetailScreen.swift */,
 				791347B22AE2B7B700D20BB7 /* PrivacyPolicyScreen.swift */,
+				791DBE292AEA8351008B4E81 /* ScanScreen.swift */,
 				8033F98D27072B0600EC707A /* SettingsScreen.swift */,
 				7955EEB327FDD8820010693C /* StartWorkoutScreen.swift */,
 				79511D062925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift */,
@@ -778,6 +783,7 @@
 			packageProductDependencies = (
 				791347B52AE2BEB100D20BB7 /* MarkdownUI */,
 				79C8FADE2AE3F657001EA5A7 /* OpenAIKit */,
+				795767802AE706DB0040E327 /* Camera-SwiftUI */,
 			);
 			productName = WorkoutDiary;
 			productReference = 8065AA6B2686667F00F53A5A /* LOGIT.app */;
@@ -815,6 +821,7 @@
 			packageReferences = (
 				791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 				79C8FADD2AE3F657001EA5A7 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				7957677F2AE706DB0040E327 /* XCRemoteSwiftPackageReference "Camera-SwiftUI" */,
 			);
 			productRefGroup = 8065AA6C2686667F00F53A5A /* Products */;
 			projectDirPath = "";
@@ -926,6 +933,7 @@
 				7988FBB52A7309A000E4FE54 /* SectionHeaderStyle.swift in Sources */,
 				79D570D8277B4C520005E006 /* BarGraph.swift in Sources */,
 				79F7E0FE27E67578006D4354 /* ExerciseListScreen.swift in Sources */,
+				791DBE2A2AEA8351008B4E81 /* ScanScreen.swift in Sources */,
 				79488DDE2A76ED3A005C485D /* TemplateSetGroupCell.swift in Sources */,
 				79AB818B2ACB4E8000B2CCDF /* WeightConverting.swift in Sources */,
 				795D9B8B282EC34B00866C06 /* DropSet+.swift in Sources */,
@@ -1303,6 +1311,14 @@
 				minimumVersion = 2.2.0;
 			};
 		};
+		7957677F2AE706DB0040E327 /* XCRemoteSwiftPackageReference "Camera-SwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rorodriguez116/Camera-SwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
 		79C8FADD2AE3F657001EA5A7 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FuturraGroup/OpenAI.git";
@@ -1318,6 +1334,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 791347B42AE2BEB100D20BB7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
+		};
+		795767802AE706DB0040E327 /* Camera-SwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7957677F2AE706DB0040E327 /* XCRemoteSwiftPackageReference "Camera-SwiftUI" */;
+			productName = "Camera-SwiftUI";
 		};
 		79C8FADE2AE3F657001EA5A7 /* OpenAIKit */ = {
 			isa = XCSwiftPackageProductDependency;
