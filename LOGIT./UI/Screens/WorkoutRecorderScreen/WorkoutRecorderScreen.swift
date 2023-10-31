@@ -457,10 +457,18 @@ struct WorkoutRecorderScreen: View {
                 database.convertSetGroupToStandardSets($0)
             }
         }
+        
+        workout.exercises.forEach { database.unflagAsTemporary($0) }
+        database.deleteAllTemporaryObjects()
+        database.refreshObjects()
+        
         database.save()
     }
 
     private func deleteWorkout() {
+        database.deleteAllTemporaryObjects()
+        database.refreshObjects()
+
         workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
         database.delete(workout, saveContext: true)
     }

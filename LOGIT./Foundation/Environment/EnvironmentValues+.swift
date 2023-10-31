@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-public var isProUser = true
-
 public var privacyPolicyVersion = 2
 
 private struct WorkoutSetTemplateSetDictionaryKey: EnvironmentKey {

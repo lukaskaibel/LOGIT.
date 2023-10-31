@@ -8,7 +8,13 @@
 import SwiftUI
 import Combine
 import Camera_SwiftUI
+import PhotosUI
+import OSLog
 import AVFoundation
+
+enum ScanScreenType {
+    case template, workout
+}
 
 struct ScanScreen: View {
     
@@ -16,25 +22,34 @@ struct ScanScreen: View {
     
     @StateObject private var scanModel = ScanModel()
     
-    @State var currentZoomFactor: CGFloat = 1.0
+    @State private var isShowingPhotosPicker = false
+    @State private var photoPickerItem: PhotosPickerItem?
+    @State private var workoutImage: UIImage?
+    
+    @Binding var selectedImage: UIImage?
+    let type: ScanScreenType
     
     var body: some View {
         GeometryReader { reader in
             VStack {
                 HStack {
-                    cancelButton
-                    Spacer()
-                    if scanModel.photo == nil {
+                    if scanModel.photo == nil && workoutImage == nil {
+                        cancelButton
+                        Spacer()
+                        Text(NSLocalizedString(type == .workout ? "scanAWorkout" : "scanATemplate", comment: ""))
+                        Spacer()
                         flashButton
+                    } else {
+                        dismissImageButton
+                        Spacer()
                     }
                 }
                 .padding(.horizontal)
                 Spacer()
                 Group {
-                    if let image = scanModel.photo?.image {
+                    if let image = scanModel.photo?.image ?? workoutImage {
                         Image(uiImage: image)
                             .resizable()
-                            
                             .scaledToFit()
                     } else {
                         cameraPreview
@@ -43,30 +58,59 @@ struct ScanScreen: View {
                 .frame(maxWidth: .infinity)
                 Spacer()
                 Group {
-                    if let image = scanModel.photo?.image {
+                    if let image = scanModel.photo?.image ?? workoutImage {
                         HStack {
                             Button {
-                                scanModel.photo = nil
+                                selectedImage = image
                             } label: {
-                                Image(systemName: "arrow.counterclockwise")
-                            }
-                            .buttonStyle(SecondaryBigButtonStyle())
-                            .frame(width: 50)
-                            Button {
-                                
-                            } label: {
-                                Label("Generate Workout", systemImage: "gearshape.2.fill")
+                                Label(NSLocalizedString(type == .workout ? "generateWorkout" : "generateTemplate", comment: ""), systemImage: "gearshape.2.fill")
                             }
                             .buttonStyle(BigButtonStyle())
                         }
                     } else {
-                        captureButton
+                        HStack {
+                            Button {
+                                isShowingPhotosPicker = true
+                            } label: {
+                                Image(systemName: "photo.on.rectangle")
+                            }
+                            .buttonStyle(CapsuleButtonStyle())
+                            Spacer()
+                            captureButton
+                            Spacer()
+                            Button {
+                                isShowingPhotosPicker = true
+                            } label: {
+                                Image(systemName: "photo.on.rectangle")
+                            }
+                            .buttonStyle(CapsuleButtonStyle())
+                            .disabled(true)
+                            .hidden()
+                        }
                     }
                 }
                 .padding(.horizontal)
             }
             .padding(.vertical)
         }
+        .onChange(of: photoPickerItem) { _ in
+            Task {
+                if let data = try? await photoPickerItem?.loadTransferable(type: Data.self) {
+                    if let uiImage = UIImage(data: data) {
+                        Logger().info("CreateTemplateMenu: Image picked")
+                        workoutImage = uiImage
+                        return
+                    }
+                }
+
+                Logger().warning("CreateTemplateMenu: Loading image failed")
+            }
+        }
+        .photosPicker(
+            isPresented: $isShowingPhotosPicker,
+            selection: $photoPickerItem,
+            photoLibrary: .shared()
+        )
     }
     
     // MARK: - Supporting Views
@@ -116,10 +160,26 @@ struct ScanScreen: View {
             .animation(.easeInOut)
     }
     
-    private var cancelButton: some View {
-        Button(NSLocalizedString("cancel", comment: "")) {
-            dismiss()
+    private var dismissImageButton: some View {
+        Button {
+            scanModel.photo = nil
+            workoutImage = nil
+        } label: {
+            Image(systemName: "xmark")
+                .font(.title3.weight(.semibold))
+                .padding(7)
+                .background(Color.fill)
+                .clipShape(Circle())
         }
+    }
+    
+    private var cancelButton: some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "xmark")
+        }
+        .font(.title2)
     }
     
 }
@@ -191,5 +251,5 @@ private final class ScanModel: ObservableObject {
 }
 
 #Preview {
-    ScanScreen()
+    ScanScreen(selectedImage: .constant(nil), type: .workout)
 }
