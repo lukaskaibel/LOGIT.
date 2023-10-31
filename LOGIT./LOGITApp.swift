@@ -82,7 +82,7 @@ struct LOGIT: App {
                     .tabItem {
                         Label(
                             NSLocalizedString("startWorkout", comment: ""),
-                            systemImage: "plus"
+                            systemImage: "play.fill"
                         )
                     }
                     .tag(TabType.startWorkout)

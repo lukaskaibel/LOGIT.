@@ -18,6 +18,7 @@
 		7919C5FD2A7410FB00F35493 /* WorkoutSetGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */; };
 		7919C6002A742EB900F35493 /* OnDeleteModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */; };
 		791DBE2A2AEA8351008B4E81 /* ScanScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791DBE292AEA8351008B4E81 /* ScanScreen.swift */; };
+		791DBE2C2AEAAECD008B4E81 /* TemplateGenerationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791DBE2B2AEAAECD008B4E81 /* TemplateGenerationModifier.swift */; };
 		791F25A52AC1AE0800613793 /* MeasurementsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */; };
 		791F556729EC768100902352 /* StandardSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556329EC768100902352 /* StandardSetCell.swift */; };
 		791F556829EC768100902352 /* WorkoutSetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791F556429EC768100902352 /* WorkoutSetCell.swift */; };
@@ -75,7 +76,7 @@
 		7962583E29341122003AC2AC /* ExerciseHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7962583D29341122003AC2AC /* ExerciseHeader.swift */; };
 		7967D57E2811887F00B30D03 /* MuscleGroupSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */; };
 		796D611927E53AB400E15F01 /* ExerciseEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */; };
-		79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */; };
+		79702C6A2A7D0F0200F19EF3 /* GenerationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C692A7D0F0200F19EF3 /* GenerationScreen.swift */; };
 		79702C6C2A7D356100F19EF3 /* ExerciseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79702C6B2A7D356100F19EF3 /* ExerciseService.swift */; };
 		79743E052ADD82EC004E4DCC /* PreviewEnvironmentObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79743E042ADD82EC004E4DCC /* PreviewEnvironmentObjects.swift */; };
 		79746709277136FE006518F0 /* WorkoutDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79746708277136FE006518F0 /* WorkoutDetailScreen.swift */; };
@@ -192,6 +193,7 @@
 		7919C5FC2A7410FB00F35493 /* WorkoutSetGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetGroupCell.swift; sourceTree = "<group>"; };
 		7919C5FF2A742EB900F35493 /* OnDeleteModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeleteModifier.swift; sourceTree = "<group>"; };
 		791DBE292AEA8351008B4E81 /* ScanScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanScreen.swift; sourceTree = "<group>"; };
+		791DBE2B2AEAAECD008B4E81 /* TemplateGenerationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateGenerationModifier.swift; sourceTree = "<group>"; };
 		791F25A42AC1AE0800613793 /* MeasurementsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementsScreen.swift; sourceTree = "<group>"; };
 		791F556329EC768100902352 /* StandardSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardSetCell.swift; sourceTree = "<group>"; };
 		791F556429EC768100902352 /* WorkoutSetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetCell.swift; sourceTree = "<group>"; };
@@ -251,7 +253,7 @@
 		7962583D29341122003AC2AC /* ExerciseHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseHeader.swift; sourceTree = "<group>"; };
 		7967D57D2811887F00B30D03 /* MuscleGroupSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupSelector.swift; sourceTree = "<group>"; };
 		796D611827E53AB400E15F01 /* ExerciseEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEditScreen.swift; sourceTree = "<group>"; };
-		79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateGenerationScreen.swift; sourceTree = "<group>"; };
+		79702C692A7D0F0200F19EF3 /* GenerationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationScreen.swift; sourceTree = "<group>"; };
 		79702C6B2A7D356100F19EF3 /* ExerciseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseService.swift; sourceTree = "<group>"; };
 		79743E042ADD82EC004E4DCC /* PreviewEnvironmentObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewEnvironmentObjects.swift; sourceTree = "<group>"; };
 		79746708277136FE006518F0 /* WorkoutDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDetailScreen.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 				79488DED2A770CB9005C485D /* OnSwipeDownModifier.swift */,
 				79743E042ADD82EC004E4DCC /* PreviewEnvironmentObjects.swift */,
 				79DB52122AE176D000073423 /* RequiresNetworkConnectionModifier.swift */,
+				791DBE2B2AEAAECD008B4E81 /* TemplateGenerationModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -601,7 +604,7 @@
 				79511D062925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift */,
 				79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */,
 				79898A7F27F7B02100935E05 /* TemplateEditorScreen.swift */,
-				79702C692A7D0F0200F19EF3 /* TemplateGenerationScreen.swift */,
+				79702C692A7D0F0200F19EF3 /* GenerationScreen.swift */,
 				7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */,
 				792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */,
 				79746708277136FE006518F0 /* WorkoutDetailScreen.swift */,
@@ -958,7 +961,7 @@
 				7996D0A72AC49E700028FF22 /* BlockedWithoutProModifier.swift in Sources */,
 				79F7E10327E68FAC006D4354 /* SegmentedBarChart.swift in Sources */,
 				79A637D72A39E2A1002A1F20 /* FlashView.swift in Sources */,
-				79702C6A2A7D0F0200F19EF3 /* TemplateGenerationScreen.swift in Sources */,
+				79702C6A2A7D0F0200F19EF3 /* GenerationScreen.swift in Sources */,
 				7962583C2933BA2B003AC2AC /* ProgressCircleButton.swift in Sources */,
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
 				79DB52112AE1724F00073423 /* NetworkMonitor.swift in Sources */,
@@ -992,6 +995,7 @@
 				79A4E33027E8CB0C0089001F /* FirstStartScreen.swift in Sources */,
 				79DB52132AE176D000073423 /* RequiresNetworkConnectionModifier.swift in Sources */,
 				790E1A34279DB5B300EDB715 /* Database.swift in Sources */,
+				791DBE2C2AEAAECD008B4E81 /* TemplateGenerationModifier.swift in Sources */,
 				79511D072925A2EE00AF8363 /* TargetPerWeekDetailScreen.swift in Sources */,
 				7955EEB227FDC5680010693C /* TemplateCell.swift in Sources */,
 				79FF2BB02A8A71C200548661 /* ScreenHeaderStyle.swift in Sources */,

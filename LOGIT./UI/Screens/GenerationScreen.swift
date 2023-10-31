@@ -1,5 +1,5 @@
 //
-//  TemplateGenerationScreen.swift
+//  GenerationScreen.swift
 //  LOGIT
 //
 //  Created by Lukas Kaibel on 04.08.23.
@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-struct TemplateGenerationScreen: View {
+struct GenerationScreen: View {
 
     // MARK: - Environment
 
@@ -23,7 +23,7 @@ struct TemplateGenerationScreen: View {
     var body: some View {
         VStack {
             VStack(alignment: .leading) {
-                Text(NSLocalizedString("generatingTemplate", comment: ""))
+                Text(NSLocalizedString("generatingWorkout", comment: ""))
                     .font(.largeTitle.weight(.bold))
                 Text(NSLocalizedString("FromPhoto", comment: ""))
                     .font(.system(.title3, design: .rounded, weight: .bold))
@@ -55,10 +55,8 @@ struct TemplateGenerationScreen: View {
     }
 }
 
-struct TemplateGenerationScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            TemplateGenerationScreen(templateExtration: .constant(nil))
-        }
+#Preview {
+    NavigationStack {
+        GenerationScreen(templateExtration: .constant(nil))
     }
 }

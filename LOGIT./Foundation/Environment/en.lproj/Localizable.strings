@@ -97,7 +97,10 @@
 
 // MARK: - G
 
+"generateTemplate" = "Generate Template";
+"generateWorkout" = "Generate Workout";
 "generatingTemplate" = "Generating Template";
+"generatingWorkout" = "Generating Workout";
 
 // MARK: - H
 
@@ -221,6 +224,7 @@
 
 "save" = "Save";
 "saveTime" = "Save Time";
+"scanATemplate" = "Scan a Template";
 "scanAWorkout" = "Scan a Workout";
 "scanAWorkoutPromotionText" = "Convert a photo into a workout template and start working out instantly!";
 "searchExercises" = "Search in Exercises";
@@ -245,6 +249,7 @@
 "standard" = "Standard";
 "start" = "Start";
 "startEmpty" = "Start Empty Workout";
+"startFromScan" = "Start Workout from Scan";
 "startSetup" = "Start Setup";
 "starttime" = "Start Time";
 "startWorkout" = "Start Workout";

@@ -20,13 +20,15 @@ struct StartWorkoutScreen: View {
     }
 
     enum SheetType: Identifiable {
-        case templateDetail(template: Template)
+        case templateDetail(template: Template), upgradeToPro
         var id: UUID { UUID() }
     }
 
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject var networkMonitor: NetworkMonitor
+    @EnvironmentObject private var purchaseManager: PurchaseManager
 
     // MARK: - State
 
@@ -37,20 +39,21 @@ struct StartWorkoutScreen: View {
 
     @State private var sheetType: SheetType? = nil
     @State private var fullScreenCoverType: FullScreenCoverType? = nil
+    
+    @State private var templateImage: UIImage?
+    @State private var generatedTemplate: Template?
 
     // MARK: - Body
 
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
-                withoutTemplateButton
-                    .padding(.horizontal)
-                    .padding(.vertical, 30)
-                Button {
-                    fullScreenCoverType = .scanScreen
-                } label: {
-                    Label("Scan a Workout", systemImage: "camera")
+                VStack(spacing: 8) {
+                    withoutTemplateButton
+                    scanWorkoutButton
                 }
+                .padding(.horizontal)
+                .padding(.vertical, 30)
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     HStack {
                         Text(NSLocalizedString("myTemplates", comment: ""))
@@ -67,13 +70,20 @@ struct StartWorkoutScreen: View {
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
             .padding(.top)
         }
+        .templateGeneration(from: $templateImage, to: $generatedTemplate)
+        .onChange(of: generatedTemplate) { newValue in
+            if let template = newValue {
+                database.flagAsTemporary(template)
+                fullScreenCoverType = .workoutRecorder(template: template)
+            }
+        }
         .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
         .fullScreenCover(item: $fullScreenCoverType) { type in
             switch type {
             case let .workoutRecorder(template):
                 WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
             case .scanScreen:
-                ScanScreen()
+                ScanScreen(selectedImage: $templateImage, type: .workout)
             }
         }
         .sheet(item: $sheetType) { type in
@@ -89,6 +99,8 @@ struct StartWorkoutScreen: View {
                             }
                         }
                 }
+            case .upgradeToPro:
+                UpgradeToProScreen()
             }
         }
     }
@@ -107,9 +119,24 @@ struct StartWorkoutScreen: View {
         Button {
             fullScreenCoverType = .workoutRecorder(template: nil)
         } label: {
-            Text(NSLocalizedString("startEmpty", comment: ""))
+            Label(NSLocalizedString("startEmpty", comment: ""), systemImage: "play.fill")
         }
         .buttonStyle(BigButtonStyle())
+    }
+    
+    private var scanWorkoutButton: some View {
+        Button {
+            if purchaseManager.hasUnlockedPro {
+                guard networkMonitor.isConnected else { return }
+                fullScreenCoverType = .scanScreen
+            } else {
+                sheetType = .upgradeToPro
+            }
+        } label: {
+            Label(NSLocalizedString("startFromScan", comment: ""), systemImage: purchaseManager.hasUnlockedPro ? "camera.fill" : "crown.fill")
+        }
+        .buttonStyle(SecondaryBigButtonStyle())
+        .requiresNetworkConnection()
     }
 
     private var templateList: some View {
