@@ -47,6 +47,23 @@ struct UpgradeToProScreen: View {
                         }
                         VStack {
                             HStack(spacing: 30) {
+                                Image(systemName: "camera")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.secondary)
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("saveTime", comment: "").uppercased())
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundColor(.secondary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Text(NSLocalizedString("scanAWorkout", comment: ""))
+                                        .font(.title3.weight(.bold))
+                                    Text(NSLocalizedString("scanAWorkoutPromotionText", comment: ""))
+                                        .multilineTextAlignment(.leading)
+                                }
+                            }
+                        }
+                        VStack {
+                            HStack(spacing: 30) {
                                 Image(systemName: "ruler")
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
@@ -57,26 +74,6 @@ struct UpgradeToProScreen: View {
                                     Text(NSLocalizedString("measurements", comment: ""))
                                         .font(.title3.weight(.bold))
                                     Text(NSLocalizedString("measurementsPromotionDescription", comment: ""))
-                                        .multilineTextAlignment(.leading)
-                                }
-                            }
-                        }
-                        VStack {
-                            HStack(spacing: 30) {
-                                Image(systemName: "camera")
-                                    .font(.largeTitle)
-                                    .foregroundColor(.secondary)
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        Text(NSLocalizedString("saveTime", comment: "").uppercased())
-                                        Spacer()
-                                        Text("(BETA)")
-                                    }
-                                    .font(.caption.weight(.semibold))
-                                        .foregroundColor(.secondary)
-                                    Text(NSLocalizedString("scanAWorkout", comment: ""))
-                                        .font(.title3.weight(.bold))
-                                    Text(NSLocalizedString("scanAWorkoutPromotionText", comment: ""))
                                         .multilineTextAlignment(.leading)
                                 }
                             }

@@ -19,11 +19,11 @@ struct BigButtonStyle: ButtonStyle {
             .padding(20)
             .background(Color.accentColor)
             .listRowBackground(Color.clear)
-            .cornerRadius(20)
+            .cornerRadius(15)
             .scaleEffect(configuration.isPressed ? MIN_BUTTON_SCALE : 1.0)
             .onChange(of: configuration.isPressed) { isPressed in
                 if isPressed {
-                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 }
             }
             .animation(.easeOut(duration: SCALE_ANIMATION_TIME), value: configuration.isPressed)

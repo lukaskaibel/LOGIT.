@@ -48,12 +48,12 @@ struct StartWorkoutScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
-                VStack(spacing: 8) {
-                    withoutTemplateButton
+                HStack {
                     scanWorkoutButton
+                    withoutTemplateButton
                 }
                 .padding(.horizontal)
-                .padding(.vertical, 30)
+                .padding(.vertical)
                 VStack(spacing: SECTION_HEADER_SPACING) {
                     HStack {
                         Text(NSLocalizedString("myTemplates", comment: ""))
@@ -119,7 +119,15 @@ struct StartWorkoutScreen: View {
         Button {
             fullScreenCoverType = .workoutRecorder(template: nil)
         } label: {
-            Label(NSLocalizedString("startEmpty", comment: ""), systemImage: "play.fill")
+            VStack(spacing: 12) {
+                Image(systemName: "play.fill")
+                    .font(.title2)
+                Text(NSLocalizedString("startEmpty", comment: ""))
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2, reservesSpace: true)
+            }
+            .fontWeight(.semibold)
         }
         .buttonStyle(BigButtonStyle())
     }
@@ -133,7 +141,15 @@ struct StartWorkoutScreen: View {
                 sheetType = .upgradeToPro
             }
         } label: {
-            Label(NSLocalizedString("startFromScan", comment: ""), systemImage: purchaseManager.hasUnlockedPro ? "camera.fill" : "crown.fill")
+            VStack(spacing: 12) {
+                Image(systemName: purchaseManager.hasUnlockedPro ? "camera.fill" : "crown.fill")
+                    .font(.title2)
+                Text(NSLocalizedString("startFromScan", comment: ""))
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2, reservesSpace: true)
+            }
+            .fontWeight(.semibold)
         }
         .buttonStyle(SecondaryBigButtonStyle())
         .requiresNetworkConnection()
