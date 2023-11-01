@@ -101,6 +101,8 @@
 "generateWorkout" = "Generate Workout";
 "generatingTemplate" = "Generating Template";
 "generatingWorkout" = "Generating Workout";
+"generatingWorkoutFailed" = "Generating Workout Failed";
+"generatingWorkoutFailedText" = "Make sure the photo contains a workout and try again.";
 
 // MARK: - H
 

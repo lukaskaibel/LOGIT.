@@ -32,7 +32,6 @@ struct TemplateGenerationModifier: ViewModifier {
                 templateExtraction = templateService.createTemplate(from: image)
                     .sink(
                         receiveCompletion: { completion in
-                            isShowingTemplateGenerationScreen = false
                             switch completion {
                             case .finished:
                                 break
@@ -50,14 +49,16 @@ struct TemplateGenerationModifier: ViewModifier {
                         }
                     )
             }
-            .alert(NSLocalizedString("creatingTemplateFailed", comment: ""), isPresented: $isShowingCreationFailedAlert) {
-                Button(NSLocalizedString("ok", comment: ""), role: .cancel) {
-                    isShowingCreationFailedAlert = false
-                }
-                Text(NSLocalizedString("creatingTemplateFailedText", comment: ""))
-            }
             .sheet(isPresented: $isShowingTemplateGenerationScreen) {
                 GenerationScreen(templateExtration: $templateExtraction)
+                    .alert(NSLocalizedString("generatingWorkoutFailed", comment: ""), isPresented: $isShowingCreationFailedAlert) {
+                        Button(NSLocalizedString("ok", comment: ""), role: .cancel) {
+                            isShowingCreationFailedAlert = false
+                            isShowingTemplateGenerationScreen = false
+                        }
+                    } message: {
+                        Text(NSLocalizedString("generatingWorkoutFailedText", comment: ""))
+                    }
             }
     }
 }
