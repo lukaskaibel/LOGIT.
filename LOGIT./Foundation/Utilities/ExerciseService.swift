@@ -41,6 +41,7 @@ class ExerciseService {
     lazy var getMatchingExercisePrompt = """
             Your job is to map a list of words to a list of exercises, if the word refers to the exercise.
             The word should also be mapped to the exercise, if it just means the exercise in a different language.
+            Do not match exercises with different equipment (e.g. dumbbell != barbell) or execution (e.g. standing != sitting).
             Return a JSON like this: { matches: [{ word: string, exercise: Exercise | null }] }.
             enum Exercise {
                 \(database.getExercises().compactMap({ $0.name }).joined(separator: ", "))
