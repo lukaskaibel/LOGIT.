@@ -52,6 +52,7 @@ struct WorkoutRecorderScreen: View {
     @State private var shouldShowChronoViewAgainWhenPossible = false
     @State private var isShowingChronoInHeader = false
     @State private var shouldFlash = false
+    @State private var didAppear = false
     @State private var timerSound: AVAudioPlayer?
 
     @State private var isShowingFinishConfirmation = false
@@ -219,17 +220,21 @@ struct WorkoutRecorderScreen: View {
             }
         }
         .onAppear {
-            chronograph.onTimerFired = {
-                shouldFlash = true
-                if !timerIsMuted {
-                    playTimerSound()
+            // onAppear called twice because of bug
+            if !didAppear {
+                didAppear = true
+                chronograph.onTimerFired = {
+                    shouldFlash = true
+                    if !timerIsMuted {
+                        playTimerSound()
+                    }
                 }
-            }
-            if preventAutoLock {
-                UIApplication.shared.isIdleTimerDisabled = true
-            }
-            if let template = template {
-                updateWorkout(with: template)
+                if preventAutoLock {
+                    UIApplication.shared.isIdleTimerDisabled = true
+                }
+                if let template = template {
+                    updateWorkout(with: template)
+                }
             }
         }
         .onDisappear {
