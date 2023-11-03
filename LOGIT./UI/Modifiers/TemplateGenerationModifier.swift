@@ -34,6 +34,7 @@ struct TemplateGenerationModifier: ViewModifier {
                         receiveCompletion: { completion in
                             switch completion {
                             case .finished:
+                                isShowingTemplateGenerationScreen = false
                                 break
                             case .failure(let error):
                                 isShowingCreationFailedAlert = true
