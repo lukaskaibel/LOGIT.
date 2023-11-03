@@ -62,6 +62,7 @@ struct ScanScreen: View {
                         HStack {
                             Button {
                                 selectedImage = image
+                                dismiss()
                             } label: {
                                 Label(NSLocalizedString(type == .workout ? "generateWorkout" : "generateTemplate", comment: ""), systemImage: "gearshape.2.fill")
                             }
