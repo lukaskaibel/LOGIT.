@@ -52,6 +52,10 @@ struct CreateTemplateMenu: View {
                 .foregroundStyle(Color.label)
         }
         .templateGeneration(from: $templateImage, to: $newTemplate)
+        .onChange(of: newTemplate) { newValue in
+            guard let template = newValue else { return }
+            database.flagAsTemporary(template)
+        }
         .sheet(item: $newTemplate) { template in
             TemplateEditorScreen(
                 template: template,
