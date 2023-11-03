@@ -56,7 +56,9 @@ class TemplateService: ObservableObject {
 
     func createTemplate(from uiImage: UIImage) -> AnyPublisher<Template, Swift.Error> {
         Self.logger.info("Creating Template from UIImage...")
+        
         return TextProcessing.readText(from: uiImage)
+            .subscribe(on: DispatchQueue.global(qos: .userInitiated))
             .flatMap { recognizedText -> AnyPublisher<String, Swift.Error> in
                 guard let text = recognizedText else {
                     return Fail(error: Error.noRecognizedText).eraseToAnyPublisher()
@@ -67,6 +69,7 @@ class TemplateService: ObservableObject {
             .flatMap { TextProcessing.extractJsonDataFromString($0) }
             .flatMap { [unowned self] in createTemplateDTO(from: $0) }
             .flatMap { [unowned self] in createTemplateFromDTO($0) }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 
