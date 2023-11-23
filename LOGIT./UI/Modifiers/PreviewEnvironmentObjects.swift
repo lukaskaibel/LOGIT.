@@ -26,6 +26,11 @@ struct PreviewEnvironmentObjects: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .environmentObject(database)
+            .environmentObject(templateService)
+            .environmentObject(measurementController)
+            .environmentObject(purchaseManager)
+            .environmentObject(networkMonitor)
             .task {
                 Task {
                     do {
