@@ -23,24 +23,34 @@ struct TargetPerWeekChart: View {
             selectedCategoryIndex: selectedCategoryIndex,
             canSelectCategory: canSelectWeek,
             grayOutNotSelectedCategories: grayOutNotSelectedWeeks,
-            categories: [4, 3, 2, 1, 0].map({
-                let workoutsInWeek = workouts(forWeekIndex: -$0)
-                return .init(
-                    label: weekDescription(forWeeksFromNow: $0),
-                    segments: workoutsInWeek.map({
-                        .init(items: $0.muscleGroupOccurances.map({
-                            .init(
-                                id: UUID(),
-                                value: $0.1,
-                                color: workoutsInWeek.count < targetPerWeek ? $0.0.color.translucentBackground : $0.0.color
-                            )
-                        }))
-                    }))
-            })
+            categories: categories,
+            horizontalRuleMarkValue: targetPerWeek
         )
     }
 
     // MARK: - Supporting
+
+    private var categories: [SegmentedStackedBarChartCategory<UUID>] {
+        [4, 3, 2, 1, 0]
+            .map({
+                let workoutsInWeek = workouts(forWeekIndex: -$0)
+                return 
+                    .init(
+                        label: weekDescription(forWeeksFromNow: $0),
+                        segments: workoutsInWeek
+                            .map({
+                                .init(items: $0.muscleGroupOccurances.map({
+                                    .init(
+                                        id: UUID(),
+                                        value: $0.1,
+                                        color: workoutsInWeek.count < targetPerWeek ? $0.0.color.translucentBackground : $0.0.color
+                                    )
+                                }))
+                            })
+                            .reversed()
+                    )
+            })
+    }
     
     private var selectedCategoryIndex: Binding<Int?> {
         Binding(

@@ -37,6 +37,16 @@ struct SegmentedStackedBarChartCategory<Identifier: Hashable>: Identifiable, Equ
     }
 }
 
+struct RoundedCorner: Shape {
+
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
 
 
 struct SegmentedStackedBarChart<Identifier: Hashable>: View {
@@ -55,12 +65,13 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
     // MARK: - Paramters
     
     let categories: [SegmentedStackedBarChartCategory<Identifier>]
+    let horizontalRuleMarkValue: Int
     
     // MARK: - Body
     
     var body: some View {
         Chart {
-            RuleMark(y: .value("Target", 2 - segmentSpacing * 2))
+            RuleMark(y: .value("Target", Float(horizontalRuleMarkValue) - segmentSpacing * 2))
                 .foregroundStyle(Color.secondary)
                 .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, dash: [5, 15]))
 //                .annotation(position: .leading, alignment: .leading) {
@@ -74,14 +85,18 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
                         .foregroundStyle(Color.clear)
                 }
                 ForEach(category.segments) { segment in
-                    ForEach(segment.items) { item in
-                        BarMark(
-                            x: .value("Bar x value", category.label),
-                            yStart: .value("Item y start", yStart(for: item, in: segment, in: category)),
-                            yEnd: .value("Item y end", yEnd(for: item, in: segment, in: category)),
-                            width:  standardBarWidth
-                        )
-                        .foregroundStyle(barColor(for: item, in: category))
+
+                    Group {
+                        ForEach(segment.items) { item in
+                            BarMark(
+                                x: .value("Bar x value", category.label),
+                                yStart: .value("Item y start", yStart(for: item, in: segment, in: category)),
+                                yEnd: .value("Item y end", yEnd(for: item, in: segment, in: category)),
+                                width:  standardBarWidth
+                            )
+                            .foregroundStyle(barColor(for: item, in: category))
+                            .clipShape(RoundedCorner(radius: 5, corners: (segment.items.first == item ? [.bottomLeft, .bottomRight] : []) + (segment.items.last == item ? [.topLeft, .topRight] : [])))
+                        }
                     }
                 }
             }
@@ -137,7 +152,11 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
         in segment: SegmentedStackedBarChartSegment<Identifier>,
         in category: SegmentedStackedBarChartCategory<Identifier>
     ) -> Float {
-        return Float(category.segments.firstIndex(of: segment)! + 1) - segmentSpacing / 2
+
+        let overallValueOfSegment = Float(segment.items.reduce(0, { $0 + $1.value }))
+        let percentageBeforeItem: Float = Float(segment.items.prefix(while: { $0.id != item.id }).reduce(0, { $0 + $1.value })) / overallValueOfSegment
+        let percentageWithItem = percentageBeforeItem + Float(item.value) / overallValueOfSegment
+        return Float(category.segments.firstIndex(of: segment)!) + segmentSpacing / 2 + (1 - segmentSpacing) * percentageWithItem
     }
     
     private var selectedCategory: SegmentedStackedBarChartCategory<Identifier>? {
@@ -268,7 +287,8 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
                     )
                 ]
             )
-        ]
+        ],
+        horizontalRuleMarkValue: 3
     )
     .frame(maxHeight: 250)
     
