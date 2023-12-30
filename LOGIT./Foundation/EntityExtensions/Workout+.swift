@@ -68,6 +68,10 @@ extension Workout {
             return leftIndex < rightIndex
         }
     }
+    
+    func percentage(ofTraining muscleGroup: MuscleGroup) -> Float {
+        Float(muscleGroupOccurances.first(where: { $0.0 == muscleGroup })?.1 ?? 0) / Float(muscleGroupOccurances.reduce(0, { $0 + $1.1 }))
+    }
 
     var primaryMuscleGroup: MuscleGroup? {
         (muscleGroupOccurances.max { $0.1 < $1.1 })?.0

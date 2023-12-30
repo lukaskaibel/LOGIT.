@@ -160,7 +160,7 @@ struct HomeScreen: View {
                     NavigationChevron()
                         .foregroundColor(.secondaryLabel)
                 }
-                TargetPerWeekView(selectedWeeksFromNowIndex: .constant(nil))
+                TargetPerWeekChart(selectedWeeksFromNowIndex: .constant(0), canSelectWeek: false, grayOutNotSelectedWeeks: false)
                     .frame(height: 170)
                     .overlay {
                         if workouts.isEmpty {

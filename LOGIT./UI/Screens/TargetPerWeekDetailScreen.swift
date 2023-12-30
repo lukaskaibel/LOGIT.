@@ -30,7 +30,7 @@ struct TargetPerWeekDetailScreen: View {
             VStack(spacing: SECTION_SPACING) {
                 header
                     .padding([.horizontal, .top])
-                TargetPerWeekView(selectedWeeksFromNowIndex: $selectedIndexInWeekGroup)
+                TargetPerWeekChart(selectedWeeksFromNowIndex: $selectedIndexInWeekGroup, canSelectWeek: true, grayOutNotSelectedWeeks: true)
                     .frame(height: 200)
                     .overlay {
                         if workouts.isEmpty {
