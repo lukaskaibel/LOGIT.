@@ -108,8 +108,7 @@ struct TemplateEditorScreen: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(NSLocalizedString("cancel", comment: "")) {
-                        database.deleteAllTemporaryObjects()
-                        database.save()
+                        database.discardUnsavedChanges()
                         dismiss()
                     }
                 }

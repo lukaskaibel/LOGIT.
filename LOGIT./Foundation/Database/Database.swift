@@ -58,6 +58,11 @@ class Database: ObservableObject {
             }
         }
     }
+    
+    func discardUnsavedChanges() {
+        context.rollback()
+        objectWillChange.send()
+    }
 
     func refreshObjects() {
         context.refreshAllObjects()
