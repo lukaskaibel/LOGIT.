@@ -13,21 +13,6 @@ import UIKit
 
 struct WorkoutRecorderScreen: View {
 
-    enum SheetType: Identifiable {
-        case exerciseDetail(exercise: Exercise)
-        case exerciseSelection(
-            exercise: Exercise?,
-            setExercise: (Exercise) -> Void,
-            forSecondary: Bool
-        )
-        var id: Int {
-            switch self {
-            case .exerciseDetail: return 0
-            case .exerciseSelection: return 1
-            }
-        }
-    }
-
     // MARK: - AppStorage
 
     @AppStorage("preventAutoLock") var preventAutoLock: Bool = true
@@ -56,7 +41,7 @@ struct WorkoutRecorderScreen: View {
     @State private var timerSound: AVAudioPlayer?
 
     @State private var isShowingFinishConfirmation = false
-    @State internal var sheetType: SheetType?
+    @State internal var sheetType: WorkoutSetGroupList.SheetType?
 
     @State internal var focusedIntegerFieldIndex: IntegerField.Index?
 

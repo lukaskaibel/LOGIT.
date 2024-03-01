@@ -45,7 +45,7 @@ class Database: ObservableObject {
         container.viewContext
     }
 
-    // MARK: - Public Methods
+    // MARK: - Context Methods / Properties
 
     func save() {
         if context.hasChanges {
@@ -62,6 +62,10 @@ class Database: ObservableObject {
     func discardUnsavedChanges() {
         context.rollback()
         objectWillChange.send()
+    }
+    
+    var hasUnsavedChanges: Bool {
+        context.hasChanges
     }
 
     func refreshObjects() {

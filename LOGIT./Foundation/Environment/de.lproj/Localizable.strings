@@ -14,6 +14,7 @@
 "add" = "Hinzufügen";
 "addExercise" = "Übung hinzufügen";
 "addSet" = "Satz hinzufügen";
+"addWorkout" = "Workout hinzufügen";
 "afternoon" = "Nachmittag";
 "all" = "Alle";
 "allTime" = "Aller Zeiten";
@@ -78,7 +79,9 @@
 "edit" = "Bearbeiten";
 "edit" = "Bearbeiten";
 "editTemplate" = "Vorlagen bearbeiten";
+"editWorkout" = "Workout bearbeiten";
 "eight" = "Acht";
+"end" = "Ende";
 "evening" = "Abend";
 "exercise" = "Übung";
 "exerciseName" = "Übungsname";

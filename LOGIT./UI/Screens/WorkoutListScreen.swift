@@ -19,6 +19,7 @@ struct WorkoutListScreen: View {
     @State private var groupingKey: Database.WorkoutGroupingKey = .date(calendarComponent: .month)
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
+    @State private var isShowingAddWorkout = false
 
     // MARK: - Body
 
@@ -66,7 +67,7 @@ struct WorkoutListScreen: View {
             )
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Menu {
                     Section {
                         Button(action: { groupingKey = .name }) {
@@ -82,7 +83,15 @@ struct WorkoutListScreen: View {
                         systemImage: "arrow.up.arrow.down"
                     )
                 }
+                Button {
+                    isShowingAddWorkout = true
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
+        }
+        .sheet(isPresented: $isShowingAddWorkout) {
+            WorkoutEditorScreen(workout: database.newWorkout(), isAddingNewWorkout: true)
         }
     }
 

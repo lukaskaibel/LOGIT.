@@ -11,7 +11,7 @@ import SwiftUI
 struct WorkoutDetailScreen: View {
 
     enum SheetType: Int, Identifiable {
-        case newTemplateFromWorkout, templateDetail
+        case newTemplateFromWorkout, templateDetail, workoutEditor
         var id: Int { self.rawValue }
     }
 
@@ -86,13 +86,25 @@ struct WorkoutDetailScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(
-                    role: .destructive,
-                    action: {
-                        isShowingDeleteWorkoutAlert = true
+                Menu {
+                    Button(
+                        action: { 
+                            sheetType = .workoutEditor
+                        },
+                        label: {
+                            Label(NSLocalizedString("edit", comment: ""), systemImage: "pencil")
+                        }
+                    )
+                    Button(
+                        role: .destructive,
+                        action: {
+                            isShowingDeleteWorkoutAlert = true
+                        }
+                    ) {
+                        Label(NSLocalizedString("delete", comment: ""), systemImage: "trash")
                     }
-                ) {
-                    Image(systemName: "trash")
+                } label: {
+                    Image(systemName: "ellipsis.circle")
                 }
             }
         }
@@ -124,6 +136,8 @@ struct WorkoutDetailScreen: View {
                             }
                         }
                 }
+            case .workoutEditor:
+                WorkoutEditorScreen(workout: workout, isAddingNewWorkout: false)
             }
         }
     }

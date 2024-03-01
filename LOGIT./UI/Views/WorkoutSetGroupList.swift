@@ -8,6 +8,21 @@
 import SwiftUI
 
 struct WorkoutSetGroupList: View {
+    
+    enum SheetType: Identifiable {
+        case exerciseDetail(exercise: Exercise)
+        case exerciseSelection(
+            exercise: Exercise?,
+            setExercise: (Exercise) -> Void,
+            forSecondary: Bool
+        )
+        var id: Int {
+            switch self {
+            case .exerciseDetail: return 0
+            case .exerciseSelection: return 1
+            }
+        }
+    }
 
     // MARK: - Environment
 
@@ -17,7 +32,7 @@ struct WorkoutSetGroupList: View {
 
     @ObservedObject var workout: Workout
     @Binding var focusedIntegerFieldIndex: IntegerField.Index?
-    @Binding var sheetType: WorkoutRecorderScreen.SheetType?
+    @Binding var sheetType: SheetType?
     let canReorder: Bool
 
     // MARK: - State

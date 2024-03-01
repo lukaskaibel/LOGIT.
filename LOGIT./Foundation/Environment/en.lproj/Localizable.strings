@@ -14,6 +14,7 @@
 "add" = "Add";
 "addExercise" = "Add Exercise";
 "addSet" = "Add Set";
+"addWorkout" = "Add Workout";
 "afternoon" = "Afternoon";
 "all" = "All";
 "allTime" = "All Time";
@@ -78,7 +79,9 @@
 "edit" = "Edit";
 "edit" = "Edit";
 "editTemplate" = "Edit Template";
+"editWorkout" = "Edit Workout";
 "eight" = "Eight";
+"end" = "End";
 "evening" = "Evening";
 "exercise" = "Exercise";
 "exerciseName" = "Exercise Name";
