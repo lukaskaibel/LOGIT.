@@ -11,9 +11,8 @@ struct StandardSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
-        [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
 
     // MARK: - Parameters
 
@@ -64,7 +63,7 @@ struct StandardSetCell: View {
 
     private func repetitionsPlaceholder(for standardSet: StandardSet) -> Int64 {
         guard
-            let templateStandardSet = workoutSetTemplateSetDictionary[standardSet]
+            let templateStandardSet = workoutRecorder.templateSet(for: standardSet)
                 as? TemplateStandardSet
         else { return 0 }
         return templateStandardSet.repetitions
@@ -72,7 +71,7 @@ struct StandardSetCell: View {
 
     private func weightPlaceholder(for standardSet: StandardSet) -> Int64 {
         guard
-            let templateStandardSet = workoutSetTemplateSetDictionary[standardSet]
+            let templateStandardSet = workoutRecorder.templateSet(for: standardSet)
                 as? TemplateStandardSet
         else { return 0 }
         return Int64(convertWeightForDisplaying(templateStandardSet.weight))

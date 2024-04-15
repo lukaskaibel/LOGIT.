@@ -11,9 +11,8 @@ struct DropSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
-        [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
 
     // MARK: - Parameters
 
@@ -86,7 +85,7 @@ struct DropSetCell: View {
     }
 
     private func repetitionsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet
+        guard let templateDropSet = workoutRecorder.templateSet(for: dropSet) as? TemplateDropSet
         else {
             return [0]
         }
@@ -94,7 +93,7 @@ struct DropSetCell: View {
     }
 
     private func weightsPlaceholder(for dropSet: DropSet) -> [Int64] {
-        guard let templateDropSet = workoutSetTemplateSetDictionary[dropSet] as? TemplateDropSet
+        guard let templateDropSet = workoutRecorder.templateSet(for: dropSet) as? TemplateDropSet
         else {
             return [0]
         }

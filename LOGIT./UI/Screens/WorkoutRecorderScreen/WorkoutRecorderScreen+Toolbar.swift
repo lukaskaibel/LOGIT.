@@ -25,7 +25,7 @@ extension WorkoutRecorderScreen {
             .buttonStyle(SelectionButtonStyle(isSelected: isShowingChronoView))
             Spacer()
             Text(
-                "\(workout.setGroups.count) \(NSLocalizedString("exercise\(workout.setGroups.count == 1 ? "" : "s")", comment: ""))"
+                "\(workoutRecorder.workout?.setGroups.count ?? 0) \(NSLocalizedString("exercise\(workoutRecorder.workout?.setGroups.count ?? 0 == 1 ? "" : "s")", comment: ""))"
             )
             .font(.caption)
             Spacer()
@@ -38,16 +38,16 @@ extension WorkoutRecorderScreen {
                 Spacer()
                 if focusedIntegerFieldIndex != nil {
                     if let workoutSet = selectedWorkoutSet {
-                        if let templateSet = workoutSetTemplateSetDictionary[workoutSet], templateSet.hasEntry {
+                        if let templateSet = workoutRecorder.templateSet(for: workoutSet), templateSet.hasEntry {
                             Button {
-                                toggleSetCompleted(for: workoutSet)
+                                workoutRecorder.toggleSetCompleted(for: workoutSet)
                             } label: {
                                 Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "checkmark")")
                                     .keyboardToolbarButtonStyle()
                             }
                         } else {
                             Button {
-                                toggleCopyPrevious(for: workoutSet)
+                                workoutRecorder.toggleCopyPrevious(for: workoutSet)
                             } label: {
                                 Image(systemName: "\(workoutSet.hasEntry ? "xmark" : "plus.square.on.square")")
                                     .foregroundColor(

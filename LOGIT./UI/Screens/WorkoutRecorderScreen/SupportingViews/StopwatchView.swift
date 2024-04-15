@@ -1,5 +1,5 @@
 //
-//  WorkoutDurationView.swift
+//  StopwatchView.swift
 //  LOGIT.
 //
 //  Created by Lukas Kaibel on 01.04.22.
@@ -7,16 +7,17 @@
 
 import SwiftUI
 
-struct WorkoutDurationView: View {
-    @State private var startTime = Date()
+struct StopwatchView: View {
+    
+    let startTime: Date
+    
     @State private var updater = false
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         if updater || !updater {
             Text(workoutDurationString)
-                .font(.body.weight(.bold).monospacedDigit())
                 .onReceive(timer) { input in
                     updater.toggle()
                 }

@@ -10,11 +10,10 @@ import SwiftUI
 struct StartWorkoutScreen: View {
 
     enum FullScreenCoverType: Identifiable {
-        case workoutRecorder(template: Template?), scanScreen
+        case scanScreen
         var id: Int {
             switch self {
-            case .workoutRecorder: return 0
-            case .scanScreen: return 1
+            case .scanScreen: return 0
             }
         }
     }
@@ -29,6 +28,7 @@ struct StartWorkoutScreen: View {
     @EnvironmentObject var database: Database
     @EnvironmentObject var networkMonitor: NetworkMonitor
     @EnvironmentObject private var purchaseManager: PurchaseManager
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
 
     // MARK: - State
 
@@ -52,6 +52,7 @@ struct StartWorkoutScreen: View {
                     scanWorkoutButton
                     withoutTemplateButton
                 }
+                .disabled(workoutRecorder.workout != nil)
                 .padding(.horizontal)
                 .padding(.vertical)
                 VStack(spacing: SECTION_HEADER_SPACING) {
@@ -74,14 +75,12 @@ struct StartWorkoutScreen: View {
         .onChange(of: generatedTemplate) { newValue in
             if let template = newValue {
                 database.flagAsTemporary(template)
-                fullScreenCoverType = .workoutRecorder(template: template)
+                workoutRecorder.startWorkout(from: template)
             }
         }
         .navigationTitle(NSLocalizedString("startWorkout", comment: ""))
         .fullScreenCover(item: $fullScreenCoverType) { type in
             switch type {
-            case let .workoutRecorder(template):
-                WorkoutRecorderScreen(workout: database.newWorkout(), template: template)
             case .scanScreen:
                 ScanScreen(selectedImage: $templateImage, type: .workout)
             }
@@ -117,7 +116,7 @@ struct StartWorkoutScreen: View {
 
     private var withoutTemplateButton: some View {
         Button {
-            fullScreenCoverType = .workoutRecorder(template: nil)
+            workoutRecorder.startWorkout()
         } label: {
             VStack(spacing: 12) {
                 Image(systemName: "play.fill")
@@ -158,7 +157,7 @@ struct StartWorkoutScreen: View {
     private var templateList: some View {
         ForEach(database.getTemplates(), id: \.objectID) { template in
             Button {
-                fullScreenCoverType = .workoutRecorder(template: template)
+                workoutRecorder.startWorkout(from: template)
             } label: {
                 HStack {
                     TemplateCell(template: template)

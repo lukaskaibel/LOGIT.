@@ -11,7 +11,6 @@ struct WorkoutSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.setWorkoutEndDate) var setWorkoutEndDate: (Date) -> Void
     @Environment(\.canEdit) var canEdit: Bool
     @EnvironmentObject var database: Database
 
@@ -104,7 +103,7 @@ struct WorkoutSetCell: View {
             }
         }
         .onReceive(workoutSet.objectWillChange) { _ in
-            setWorkoutEndDate(.now)
+            workoutSet.workout?.endDate = .now
         }
     }
 

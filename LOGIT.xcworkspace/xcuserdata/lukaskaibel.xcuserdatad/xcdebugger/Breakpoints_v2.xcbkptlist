@@ -34,83 +34,6 @@
             endingLineNumber = "19"
             landmarkName = "WorkoutSetGroupList"
             landmarkType = "14">
-            <Locations>
-               <Location
-                  uuid = "DA31E7A3-B274-4055-8240-AB1917A95755 - 6a47bc0bd5d2e055"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LOGIT.WorkoutSetGroupList.focusedIntegerFieldIndex.getter : Swift.Optional&lt;LOGIT.IntegerField.Index&gt;"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Views/WorkoutSetGroupList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "284">
-               </Location>
-               <Location
-                  uuid = "DA31E7A3-B274-4055-8240-AB1917A95755 - 25a209fecea3969"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LOGIT.WorkoutSetGroupList.focusedIntegerFieldIndex.setter : Swift.Optional&lt;LOGIT.IntegerField.Index&gt;"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Views/WorkoutSetGroupList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "232">
-               </Location>
-               <Location
-                  uuid = "DA31E7A3-B274-4055-8240-AB1917A95755 - fd8880a5e06cfe6a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LOGIT.WorkoutSetGroupList.focusedIntegerFieldIndex.modify : Swift.Optional&lt;LOGIT.IntegerField.Index&gt;"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Views/WorkoutSetGroupList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "292">
-               </Location>
-               <Location
-                  uuid = "DA31E7A3-B274-4055-8240-AB1917A95755 - e253661f04afeec3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LOGIT.WorkoutSetGroupList.focusedIntegerFieldIndex.modify : Swift.Optional&lt;LOGIT.IntegerField.Index&gt; with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Views/WorkoutSetGroupList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  uuid = "DA31E7A3-B274-4055-8240-AB1917A95755 - ab96a087844e76e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "LOGIT.WorkoutSetGroupList.$focusedIntegerFieldIndex.getter : SwiftUI.Binding&lt;Swift.Optional&lt;LOGIT.IntegerField.Index&gt;&gt;"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./Views/WorkoutSetGroupList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "328">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -159,38 +82,6 @@
             endingLineNumber = "51"
             landmarkName = "body"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "145E2E35-E571-4F2F-8B73-F1B96ED3AF14 - d583910007c440a2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; Charts.AxisMarks&lt;Swift.Optional&lt;&lt;&lt;opaque return type of Charts.AxisMark.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0&gt;&gt; in LOGIT.DateBarChart.body.getter : some"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./UI/Views/Charts/DateBarChart.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "51"
-                  endingLineNumber = "51"
-                  offsetFromSymbolStart = "532">
-               </Location>
-               <Location
-                  uuid = "145E2E35-E571-4F2F-8B73-F1B96ED3AF14 - facb049658e6eba4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Charts.AxisValue) -&gt; Swift.Optional&lt;&lt;&lt;opaque return type of Charts.AxisMark.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0&gt; in closure #2 () -&gt; Charts.AxisMarks&lt;Swift.Optional&lt;&lt;&lt;opaque return type of Charts.AxisMark.font(Swift.Optional&lt;SwiftUI.Font&gt;) -&gt; some&gt;&gt;.0&gt;&gt; in LOGIT.DateBarChart.body.getter : some"
-                  moduleName = "LOGIT"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukaskaibel/Library/Mobile%20Documents/com~apple~CloudDocs/Developement/Swift/LOGIT/LOGIT./LOGIT./UI/Views/Charts/DateBarChart.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "52"
-                  endingLineNumber = "52"
-                  offsetFromSymbolStart = "884">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

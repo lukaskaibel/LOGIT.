@@ -22,6 +22,7 @@ struct HomeScreen: View {
 
     @EnvironmentObject private var database: Database
     @EnvironmentObject private var purchaseManager: PurchaseManager
+    @EnvironmentObject private var workoutRecorder: WorkoutRecorder
 
     // MARK: - State
 
@@ -107,7 +108,10 @@ struct HomeScreen: View {
             }
             .scrollIndicators(.hidden)
             .fullScreenCover(isPresented: $isShowingWorkoutRecorder) {
-                WorkoutRecorderScreen(workout: database.newWorkout(), template: nil)
+                WorkoutRecorderScreen()
+                    .onAppear {
+                        workoutRecorder.startWorkout()
+                    }
             }
             .navigationDestination(item: $navigationDestinationType) { destination in
                 switch destination {

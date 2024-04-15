@@ -11,9 +11,8 @@ struct SuperSetCell: View {
 
     // MARK: - Environment
 
-    @Environment(\.workoutSetTemplateSetDictionary) var workoutSetTemplateSetDictionary:
-        [WorkoutSet: TemplateSet]
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
 
     // MARK: - Parameters
 
@@ -101,7 +100,7 @@ struct SuperSetCell: View {
     }
 
     private func repetitionsPlaceholder(for superSet: SuperSet) -> [Int64] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet
+        guard let templateSuperSet = workoutRecorder.templateSet(for: superSet) as? TemplateSuperSet
         else { return [0, 0] }
         return [
             templateSuperSet.repetitionsFirstExercise, templateSuperSet.repetitionsSecondExercise,
@@ -110,7 +109,7 @@ struct SuperSetCell: View {
     }
 
     private func weightsPlaceholder(for superSet: SuperSet) -> [Int64] {
-        guard let templateSuperSet = workoutSetTemplateSetDictionary[superSet] as? TemplateSuperSet
+        guard let templateSuperSet = workoutRecorder.templateSet(for: superSet) as? TemplateSuperSet
         else { return [0, 0] }
         return [templateSuperSet.weightFirstExercise, templateSuperSet.weightSecondExercise]
             .map { Int64(convertWeightForDisplaying($0)) }
