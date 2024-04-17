@@ -73,11 +73,7 @@ class Database: ObservableObject {
     }
 
     // MARK: - Object Access / Manipulation
-
-    func object(with objectID: NSManagedObjectID) -> NSManagedObject {
-        context.object(with: objectID)
-    }
-
+    
     func fetch(
         _ type: NSManagedObject.Type,
         sortingKey: String? = nil,
@@ -108,6 +104,10 @@ class Database: ObservableObject {
         if saveContext {
             save()
         }
+    }
+    
+    func managedObjectID(forURIRepresentation url: URL) -> NSManagedObjectID? {
+        container.persistentStoreCoordinator.managedObjectID(forURIRepresentation: url)
     }
 
     // MARK: - Temporary Objects

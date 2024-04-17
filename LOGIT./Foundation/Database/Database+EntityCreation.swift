@@ -18,6 +18,7 @@ extension Database {
         setGroups: [WorkoutSetGroup] = [WorkoutSetGroup]()
     ) -> Workout {
         let workout = Workout(context: context)
+        workout.id = UUID()
         workout.name = name
         workout.date = date
         workout.setGroups = setGroups

@@ -34,6 +34,13 @@ extension Database {
             }
         }
     }
+    
+    func getWorkout(with id: UUID) -> Workout? {
+        (fetch(
+            Workout.self,
+            predicate: NSPredicate(format: "id == %@", id as CVarArg)
+        ) as! [Workout]).first
+    }
 
     func getWorkouts(
         withNameIncluding filteredText: String = "",
