@@ -125,7 +125,6 @@ struct LOGIT: App {
                 .zIndex(0)
                 .fullScreenDraggableCover(isPresented: $isShowingWorkoutRecorder) {
                     WorkoutRecorderScreen()
-                        .zIndex(1)
                 }
                 .sheet(isPresented: $isShowingPrivacyPolicy) {
                     NavigationStack {

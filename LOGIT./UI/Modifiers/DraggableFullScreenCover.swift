@@ -26,18 +26,11 @@ struct FullScreenDraggableCover<ScreenContent: View, Background: ShapeStyle>: Vi
     
     @ViewBuilder
     func body(content: Content) -> some View {
-        ZStack {
-            content
-                .disabled(isPresented)
-            if isPresented {
+        content
+            .fullScreenCover(isPresented: $isPresented) {
                 Group {
                     GeometryReader { geometry in
-                        ZStack {
-                            TextField("", text: .constant(""))
-                                .focused($bringFocusToCover)
-                                .opacity(0.001)
-                            screenContent()
-                        }
+                        screenContent()
                             .environment(\.fullScreenDraggableCoverTopInset, yOffset == 0 ? 1 : yOffset < geometry.safeAreaInsets.top + (geometry.safeAreaInsets.bottom == 0 ? 10 : 0) ? yOffset : geometry.safeAreaInsets.top + (geometry.safeAreaInsets.bottom == 0 ? 10 : 0))
                             .environment(\.fullScreenDraggableDragChanged, { value in
                                 guard yOffset + value.translation.height > 0 else { yOffset = 0; return}
@@ -71,37 +64,37 @@ struct FullScreenDraggableCover<ScreenContent: View, Background: ShapeStyle>: Vi
                             .clipped()
                             .background(background)
                             .clipShape(RoundedRectangle(cornerRadius: yOffset != 0 ? UIScreen.main.displayCornerRadius : 0, style: .continuous))
-                            
+                        
                             .offset(y: yOffset > 0 ? yOffset : 0)
                             .ignoresSafeArea(.container, edges: .all)
-                            .onAppear {
-                                yOffset = geometry.size.height
-                                if #available(iOS 17.0, *) {
-                                    withAnimation(.easeOut(duration: 0.15)) {
-                                        yOffset = 0
-                                    } completion: {
-                                        bringFocusToCover = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
-                                            bringFocusToCover = false
-                                        }
-                                    }
-                                } else {
-                                    withAnimation(.easeOut(duration: 0.15)) {
-                                        yOffset = 0
-                                    }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                                        bringFocusToCover = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
-                                            bringFocusToCover = false
-                                        }
-                                    }
-                                }
-                            }
-                            .transition(.move(edge: .bottom))
+                        //                        .onAppear {
+                        //                            yOffset = geometry.size.height
+                        //                            if #available(iOS 17.0, *) {
+                        //                                withAnimation(.easeOut(duration: 0.15)) {
+                        //                                    yOffset = 0
+                        //                                } completion: {
+                        //                                    bringFocusToCover = true
+                        //                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+                        //                                        bringFocusToCover = false
+                        //                                    }
+                        //                                }
+                        //                            } else {
+                        //                                withAnimation(.easeOut(duration: 0.15)) {
+                        //                                    yOffset = 0
+                        //                                }
+                        //                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        //                                    bringFocusToCover = true
+                        //                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.001) {
+                        //                                        bringFocusToCover = false
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                        }
+                        //                        .transition(.move(edge: .bottom))
                     }
                 }
+                .presentationBackground(.clear)
             }
-        }
                     
     }
     
@@ -143,7 +136,7 @@ private struct FullScreenDraggableCoverTopInsetModifier: ViewModifier {
 extension View {
     @ViewBuilder
     func fullScreenDraggableCover<Content: View>(isPresented: Binding<Bool>, content: @escaping () -> Content) -> some View {
-        modifier(FullScreenDraggableCover(isPresented: isPresented, background: .thinMaterial, screenContent: content))
+        modifier(FullScreenDraggableCover(isPresented: isPresented, background: Color.background, screenContent: content))
     }
     @ViewBuilder
     func fullScreenDraggableCoverDragArea() -> some View {

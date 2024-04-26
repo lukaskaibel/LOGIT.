@@ -48,14 +48,14 @@ class Database: ObservableObject {
     // MARK: - Context Methods / Properties
 
     func save() {
-        if context.hasChanges {
-            do {
-                try context.save()
-                refreshObjects()
-                objectWillChange.send()
-            } catch {
-                os_log("Database: Failed to save context: \(String(describing: error))")
+        guard context.hasChanges else { return }
+        do {
+            try context.save()
+            DispatchQueue.main.async { [weak self] in
+                self?.objectWillChange.send()
             }
+        } catch {
+            os_log("Database: Failed to save context: %@", type: .error, error.localizedDescription)
         }
     }
     
@@ -100,7 +100,9 @@ class Database: ObservableObject {
             delete(setGroup)
         }
         context.delete(object)
-        refreshObjects()
+        DispatchQueue.main.async {
+            object.objectWillChange.send()
+        }
         if saveContext {
             save()
         }

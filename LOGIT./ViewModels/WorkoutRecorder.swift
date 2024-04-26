@@ -76,45 +76,65 @@ final class WorkoutRecorder: ObservableObject {
             Self.logger.warning("Attempted to save empty workout")
             return
         }
-        if workout.name?.isEmpty ?? true {
-            workout.name = Workout.getStandardName(for: workout.date!)
-        }
-        workout.setGroups.forEach {
-            if $0.setType == .superSet && $0.secondaryExercise == nil {
-                database.convertSetGroupToStandardSets($0)
+        
+        // Use a local copy of the workout for the background operations to avoid race conditions
+        let workoutCopy = workout
+        self.workout = nil
+        entityObserver.unsubscribeObject(workoutCopy)
+        setCurrentWorkout(workout: nil)
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let database = self?.database else {
+                Self.logger.error("Failed to clean up workout after finish: self already uninitialized")
+                return
+            }
+            
+            if workoutCopy.name?.isEmpty ?? true {
+                workoutCopy.name = Workout.getStandardName(for: workoutCopy.date!)
+            }
+            workoutCopy.setGroups.forEach {
+                if $0.setType == .superSet && $0.secondaryExercise == nil {
+                    database.convertSetGroupToStandardSets($0)
+                }
+            }
+            
+            workoutCopy.exercises.forEach { database.unflagAsTemporary($0) }
+            database.deleteAllTemporaryObjects()
+            
+            workoutCopy.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
+            if workoutCopy.isEmpty {
+                database.delete(workoutCopy, saveContext: true)
+            }
+            
+            DispatchQueue.main.async {
+                database.save()
             }
         }
-        
-        workout.exercises.forEach { database.unflagAsTemporary($0) }
-        database.deleteAllTemporaryObjects()
-        
-        workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
-        if workout.isEmpty {
-            database.delete(workout, saveContext: true)
-        }
-        
-        entityObserver.unsubscribeObject(workout)
-        setCurrentWorkout(workout: nil)
-        self.workout = nil
-        
-        database.save()
     }
+
     
     func discardWorkout() {
         guard let workout = workout else {
             Self.logger.warning("Attempted to discard empty workout")
             return
         }
-        database.deleteAllTemporaryObjects()
-        database.refreshObjects()
-
-        workout.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
         
-        entityObserver.unsubscribeObject(workout)
-        setCurrentWorkout(workout: nil)
+        let workoutCopy = workout
         self.workout = nil
+        entityObserver.unsubscribeObject(workoutCopy)
+        setCurrentWorkout(workout: nil)
         
-        database.delete(workout, saveContext: true)
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let database = self?.database else {
+                Self.logger.error("Failed to discard workout: self already uninitialized")
+                return
+            }
+            database.deleteAllTemporaryObjects()
+
+            workoutCopy.sets.filter({ !$0.hasEntry }).forEach { database.delete($0) }
+            
+            database.delete(workoutCopy, saveContext: true)
+        }
     }
     
     func addSetGroup(with exercise: Exercise) {
@@ -168,14 +188,15 @@ final class WorkoutRecorder: ObservableObject {
         cancellable = self.$workout
             .sink { [weak self] newValue in
                 if let workout = newValue {
-                    self?.entityObserver.onWorkoutChanged(workout: workout) { [weak self] in
-                        print("Saving Workout")
-                        self?.database.save()
+                    self?.entityObserver.onWorkoutChanged(workout: workout) {
+                        DispatchQueue.global(qos: .background).async { [weak self] in
+                            self?.database.save()
+                        }
                     }
                 }
             }
     }
-    
+
     // MARK: - Make current workout persistant
     
     private func getCurrentWorkout() -> Workout? {
