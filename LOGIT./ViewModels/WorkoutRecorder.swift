@@ -25,6 +25,7 @@ final class WorkoutRecorder: ObservableObject {
     
     private let database: Database
     private let entityObserver = EntityObserver()
+    private let currentWorkoutManager: CurrentWorkoutManager
     private var workoutSetTemplateSetDictionary = [WorkoutSet: TemplateSet]()
     private var cancellable: AnyCancellable?
     
@@ -32,15 +33,16 @@ final class WorkoutRecorder: ObservableObject {
     
     init(database: Database) {
         self.database = database
+        currentWorkoutManager = CurrentWorkoutManager(database: database)
         setUpAutoSaveForWorkout()
-        workout = getCurrentWorkout()
+        workout = currentWorkoutManager.getCurrentWorkout()
     }
     
     // MARK: - Public Methods
     
     func startWorkout(from template: Template? = nil) {
         workout = database.newWorkout()
-        setCurrentWorkout(workout: workout!)
+        currentWorkoutManager.setCurrentWorkout(workout!)
         if let template = template {
             template.workouts.append(workout!)
             workout!.name = template.name
@@ -81,7 +83,7 @@ final class WorkoutRecorder: ObservableObject {
         let workoutCopy = workout
         self.workout = nil
         entityObserver.unsubscribeObject(workoutCopy)
-        setCurrentWorkout(workout: nil)
+        currentWorkoutManager.setCurrentWorkout(nil)
         
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let database = self?.database else {
@@ -122,7 +124,7 @@ final class WorkoutRecorder: ObservableObject {
         let workoutCopy = workout
         self.workout = nil
         entityObserver.unsubscribeObject(workoutCopy)
-        setCurrentWorkout(workout: nil)
+        currentWorkoutManager.setCurrentWorkout(nil)
         
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let database = self?.database else {
@@ -195,39 +197,6 @@ final class WorkoutRecorder: ObservableObject {
                     }
                 }
             }
-    }
-
-    // MARK: - Make current workout persistant
-    
-    private func getCurrentWorkout() -> Workout? {
-        guard let idString = UserDefaults.standard.value(forKey: WorkoutRecorder.CURRENT_WORKOUT_ID_KEY) as? String,
-                let uuid = UUID(uuidString: idString)
-        else {
-            Self.logger.log("No current workout detected")
-            return nil
-        }
-        guard let currentWorkout = database.getWorkout(with: uuid) else {
-            Self.logger.warning("Failed to get current workout: no workout matching id: \(uuid)")
-            return nil
-        }
-        return currentWorkout
-    }
-    
-    private func setCurrentWorkout(workout: Workout?) {
-        guard let workout = workout else {
-            UserDefaults.standard.removeObject(forKey: WorkoutRecorder.CURRENT_WORKOUT_ID_KEY)
-            Self.logger.log("Unset current workout")
-            return
-        }
-        guard let id = workout.id else {
-            Self.logger.error("Failed to set current workout: workout has no id")
-            return
-        }
-        UserDefaults.standard.setValue(
-            id.uuidString,
-            forKey: WorkoutRecorder.CURRENT_WORKOUT_ID_KEY
-        )
-        Self.logger.log("Set current workout with id: \(id)")
     }
 
 }
