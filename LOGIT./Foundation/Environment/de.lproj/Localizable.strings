@@ -29,6 +29,7 @@
 "bestWeightPerDay" = "Höchstes Gewicht pro Tag";
 "bestRepetitionsPerDay" = "Höchste Wdh. pro Tag";
 "biceps" = "Bizeps";
+"bicepsLeft" = "Linker Bizeps";
 "bodyParts" = "Körperteile";
 "bodyweight" = "Körpergewicht";
 
@@ -52,6 +53,7 @@
 "createTemplate" = "Vorlage erstellen";
 "creatingTemplateFailed" = "Generieren Fehlgeschlagen";
 "creatingTemplateFailedText" = "Stelle sicher, dass das Bild ein Workout enthält.";
+"currentWorkout" = "Aktuelles Workout";
 
 // MARK: - D
 
@@ -257,7 +259,8 @@
 "standard" = "Standard";
 "start" = "Start";
 "startEmpty" = "Leeres Workout starten";
-"startFromScan" = "Workout starten aus Scan";
+"startFromScan" = "Workout scannen";
+"startFromTemplate" = "Aus Vorlage starten";
 "startSetup" = "Set-Up starten";
 "starttime" = "Startzeit";
 "startWorkout" = "Workout starten";

@@ -81,16 +81,6 @@ struct LOGIT: App {
                         }
                         .tag(TabType.templates)
                         NavigationStack {
-                            StartWorkoutScreen()
-                        }
-                        .tabItem {
-                            Label(
-                                NSLocalizedString("startWorkout", comment: ""),
-                                systemImage: "play.fill"
-                            )
-                        }
-                        .tag(TabType.startWorkout)
-                        NavigationStack {
                             MeasurementsScreen()
                         }
                         .tabItem {
@@ -111,6 +101,25 @@ struct LOGIT: App {
                         }
                         .tag(TabType.settings)
                     }
+                    .toolbarBackground(.hidden, for: .tabBar)
+                    .overlay {
+                        Rectangle()
+                            .fill(.bar)
+                            .frame(height: 140)
+                            .mask {
+                                VStack(spacing: 0) {
+                                    LinearGradient(colors: [Color.black.opacity(0),
+                                                            Color.black],
+                                                   startPoint: .top,
+                                                   endPoint: .bottom)
+                                        .frame(height: 45)
+                                    
+                                    Rectangle()
+                                }
+                            }
+                            .frame(maxHeight: .infinity, alignment: .bottom)
+                            .edgesIgnoringSafeArea(.bottom)
+                    }
                     .safeAreaInset(edge: .bottom) {
                         if let workout = workoutRecorder.workout {
                             CurrentWorkoutView(workout: workout)
@@ -119,6 +128,12 @@ struct LOGIT: App {
                                 .onTapGesture {
                                     isShowingWorkoutRecorder = true
                                 }
+                                .transition(.move(edge: .bottom))
+                        } else {
+                            StartWorkoutView()
+                                .floatingStyle()
+                                .padding(.horizontal, 10)
+                                .padding(.bottom, 5)
                         }
                     }
                 }

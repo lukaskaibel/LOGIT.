@@ -85,7 +85,7 @@ final class WorkoutRecorder: ObservableObject {
         entityObserver.unsubscribeObject(workoutCopy)
         currentWorkoutManager.setCurrentWorkout(nil)
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let database = self?.database else {
                 Self.logger.error("Failed to clean up workout after finish: self already uninitialized")
                 return
@@ -108,9 +108,7 @@ final class WorkoutRecorder: ObservableObject {
                 database.delete(workoutCopy, saveContext: true)
             }
             
-            DispatchQueue.main.async {
-                database.save()
-            }
+            database.save()
         }
     }
 
@@ -126,7 +124,7 @@ final class WorkoutRecorder: ObservableObject {
         entityObserver.unsubscribeObject(workoutCopy)
         currentWorkoutManager.setCurrentWorkout(nil)
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let database = self?.database else {
                 Self.logger.error("Failed to discard workout: self already uninitialized")
                 return
@@ -191,9 +189,7 @@ final class WorkoutRecorder: ObservableObject {
             .sink { [weak self] newValue in
                 if let workout = newValue {
                     self?.entityObserver.onWorkoutChanged(workout: workout) {
-                        DispatchQueue.global(qos: .background).async { [weak self] in
-                            self?.database.save()
-                        }
+                        self?.database.save()
                     }
                 }
             }

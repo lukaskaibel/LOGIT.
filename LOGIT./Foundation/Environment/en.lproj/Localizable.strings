@@ -29,6 +29,7 @@
 "bestWeightPerDay" = "Best Weight per Day";
 "bestRepetitionsPerDay" = "Best Reps per Day";
 "biceps" = "Biceps";
+"bicepsLeft" = "Biceps Left";
 "bodyParts" = "Body Parts";
 "bodyweight" = "Bodyweight";
 
@@ -52,6 +53,7 @@
 "createTemplate" = "Create Template";
 "creatingTemplateFailed" = "Creating Template Failed";
 "creatingTemplateFailedText" = "Make sure the selected image contains a workout.";
+"currentWorkout" = "Current Workout";
 
 // MARK: - D
 
@@ -254,7 +256,8 @@
 "standard" = "Standard";
 "start" = "Start";
 "startEmpty" = "Start Empty Workout";
-"startFromScan" = "Start Workout from Scan";
+"startFromScan" = "Start from Scan";
+"startFromTemplate" = "Start from Template";
 "startSetup" = "Start Setup";
 "starttime" = "Start Time";
 "startWorkout" = "Start Workout";

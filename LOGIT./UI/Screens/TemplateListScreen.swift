@@ -10,8 +10,11 @@ import SwiftUI
 struct TemplateListScreen: View {
 
     // MARK: - Environment
+    
+    @Environment(\.dismiss) var dismiss
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRecorder: WorkoutRecorder
 
     // MARK: - State
 
@@ -21,6 +24,8 @@ struct TemplateListScreen: View {
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var showingTemplateCreation = false
     @State private var isShowingNoTemplatesTip = false
+    
+    var showStartButton: Bool = false
 
     // MARK: - Body
 
@@ -52,10 +57,21 @@ struct TemplateListScreen: View {
                             Button {
                                 navigateToTemplate = template
                             } label: {
-                                HStack {
-                                    TemplateCell(template: template)
-                                    NavigationChevron()
-                                        .muscleGroupGradientStyle(for: template.muscleGroups)
+                                VStack {
+                                    HStack {
+                                        TemplateCell(template: template)
+                                        NavigationChevron()
+                                            .muscleGroupGradientStyle(for: template.muscleGroups)
+                                    }
+                                    if showStartButton {
+                                        Button {
+                                            workoutRecorder.startWorkout(from: template)
+                                            dismiss()
+                                        } label: {
+                                            Label(NSLocalizedString("startFromTemplate", comment: ""), systemImage: "play.fill")
+                                        }
+                                        .buttonStyle(SecondaryBigButtonStyle())
+                                    }
                                 }
                                 .padding(CELL_PADDING)
                                 .tileStyle()

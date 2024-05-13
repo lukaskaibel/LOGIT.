@@ -14,7 +14,7 @@ struct CurrentWorkoutView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("Current Workout")
+                Text(NSLocalizedString("currentWorkout", comment: ""))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -34,9 +34,8 @@ struct CurrentWorkoutView: View {
                 .fontWeight(.semibold)
                 .lineLimit(1)
         }
-        .padding(12)
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(10)
+        .floatingStyle()
     }
     
     private var workoutHasName: Bool {
