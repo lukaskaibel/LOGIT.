@@ -9,115 +9,11 @@ import Foundation
 
 extension Database {
 
-    // MARK: - Workout Fetch
-
-    enum WorkoutSortingKey: String {
+    // MARK: - WorkoutSet Fetch
+    
+    enum WorkoutSetGroupSortingKey: String {
         case date, name
     }
-
-    enum WorkoutGroupingKey: Equatable {
-        case date(calendarComponent: Calendar.Component)
-        case name
-
-        static func == (lhs: WorkoutGroupingKey, rhs: WorkoutGroupingKey) -> Bool {
-            switch lhs {
-            case .name:
-                switch rhs {
-                case .name: return true
-                case .date: return false
-                }
-            case .date:
-                switch rhs {
-                case .name: return false
-                case .date: return true
-                }
-            }
-        }
-    }
-    
-    func getWorkout(with id: UUID) -> Workout? {
-        (fetch(
-            Workout.self,
-            predicate: NSPredicate(format: "id == %@", id as CVarArg)
-        ) as! [Workout]).first
-    }
-
-    func getWorkouts(
-        withNameIncluding filteredText: String = "",
-        sortedBy sortingKey: WorkoutSortingKey = .date,
-        usingMuscleGroup muscleGroup: MuscleGroup? = nil
-    ) -> [Workout] {
-        (fetch(
-            Workout.self,
-            sortingKey: sortingKey.rawValue,
-            ascending: sortingKey == .name,
-            predicate: filteredText.isEmpty
-                ? nil
-                : NSPredicate(
-                    format: "name CONTAINS[c] %@",
-                    filteredText
-                )
-        ) as! [Workout])
-        .filter {
-            muscleGroup == nil || ($0.exercises.map { $0.muscleGroup }).contains(muscleGroup)
-        }
-    }
-
-    func getWorkouts(
-        withNameIncluding filteredText: String = "",
-        sortedBy sortingKey: WorkoutSortingKey = .date,
-        for calendarComponent: Calendar.Component,
-        including date: Date
-    ) -> [Workout] {
-        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey)
-            .filter {
-                guard let workoutDate = $0.date else { return false }
-                return Calendar.current.component(calendarComponent, from: workoutDate)
-                    == Calendar.current.component(calendarComponent, from: date)
-            }
-    }
-
-    func getGroupedWorkouts(
-        withNameIncluding filteredText: String = "",
-        groupedBy groupingKey: WorkoutGroupingKey = .name,
-        usingMuscleGroup muscleGroup: MuscleGroup? = nil
-    ) -> [[Workout]] {
-        var result = [[Workout]]()
-        getWorkouts(
-            withNameIncluding: filteredText,
-            sortedBy: groupingKey == .name ? .name : .date,
-            usingMuscleGroup: muscleGroup
-        )
-        .forEach { workout in
-            switch groupingKey {
-            case .date(let component):
-                if let lastDate = result.last?.last?.date,
-                    let workoutDate = workout.date,
-                    Calendar.current.isDate(
-                        lastDate,
-                        equalTo: workoutDate,
-                        toGranularity: component
-                    )
-                {
-                    result[result.count - 1].append(workout)
-                } else {
-                    result.append([workout])
-                }
-            case .name:
-                if let firstLetterOfLastWorkoutName = result.last?.last?.name?.first,
-                    let workoutFirstLetter = workout.name?.first,
-                    firstLetterOfLastWorkoutName == workoutFirstLetter
-                {
-                    result[result.count - 1].append(workout)
-                } else {
-                    result.append([workout])
-                }
-            }
-        }
-        return result
-    }
-
-    // MARK: - WorkoutSet Fetch
 
     func getWorkoutSetGroups(with exercise: Exercise? = nil) -> [WorkoutSetGroup] {
         (fetch(
@@ -132,7 +28,7 @@ extension Database {
 
     func getGroupedWorkoutSetGroups(
         with exercise: Exercise? = nil,
-        groupedBy sortingKey: WorkoutSortingKey = .date
+        groupedBy sortingKey: WorkoutSetGroupSortingKey = .date
     ) -> [[WorkoutSetGroup]] {
         var result = [[WorkoutSetGroup]]()
         getWorkoutSetGroups(with: exercise)

@@ -21,6 +21,7 @@ struct HomeScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject private var database: Database
+    @EnvironmentObject private var workoutRepository: WorkoutRepository
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @EnvironmentObject private var workoutRecorder: WorkoutRecorder
 
@@ -249,7 +250,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateBarChart(dateUnit: .month) {
-                database.getGroupedWorkouts(groupedBy: .date(calendarComponent: .month))
+                workoutRepository.getGroupedWorkouts(groupedBy: .date(calendarComponent: .month))
                     .compactMap {
                         guard let date = $0.first?.date else { return nil }
                         return DateBarChart.Item(date: date, value: $0.count)
@@ -295,11 +296,11 @@ struct HomeScreen: View {
     // MARK: - Supportings Methods
 
     var workouts: [Workout] {
-        database.getWorkouts(sortedBy: .date)
+        workoutRepository.getWorkouts(sortedBy: .date)
     }
 
     var recentWorkouts: [Workout] {
-        Array(database.getWorkouts(sortedBy: .date).prefix(3))
+        Array(workoutRepository.getWorkouts(sortedBy: .date).prefix(3))
     }
 
     var lastTenWorkouts: [Workout] {

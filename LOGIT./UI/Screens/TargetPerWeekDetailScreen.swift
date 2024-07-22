@@ -15,7 +15,7 @@ struct TargetPerWeekDetailScreen: View {
 
     // MARK: - Environment
 
-    @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRepository: WorkoutRepository
 
     // MARK: - State
 
@@ -116,11 +116,11 @@ struct TargetPerWeekDetailScreen: View {
     // MARK: - Supporting Methods
 
     var workouts: [Workout] {
-        database.getWorkouts(sortedBy: .date)
+        workoutRepository.getWorkouts(sortedBy: .date)
     }
 
     private func workouts(forWeekIndex index: Int) -> [Workout] {
-        database.getWorkouts(
+        workoutRepository.getWorkouts(
             for: .weekOfYear,
             including: Calendar.current.date(
                 byAdding: .weekOfYear,

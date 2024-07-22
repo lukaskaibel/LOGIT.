@@ -24,6 +24,7 @@ final class WorkoutRecorder: ObservableObject {
     // MARK: - Private Variables
     
     private let database: Database
+    private let workoutRepository: WorkoutRepository
     private let entityObserver = EntityObserver()
     private let currentWorkoutManager: CurrentWorkoutManager
     private var workoutSetTemplateSetDictionary = [WorkoutSet: TemplateSet]()
@@ -31,9 +32,10 @@ final class WorkoutRecorder: ObservableObject {
     
     // MARK: - Init
     
-    init(database: Database) {
+    init(database: Database, workoutRepository: WorkoutRepository) {
         self.database = database
-        currentWorkoutManager = CurrentWorkoutManager(database: database)
+        self.workoutRepository = workoutRepository
+        currentWorkoutManager = CurrentWorkoutManager(workoutRepository: workoutRepository)
         setUpAutoSaveForWorkout()
         workout = currentWorkoutManager.getCurrentWorkout()
     }

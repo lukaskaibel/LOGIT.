@@ -17,12 +17,12 @@ final class CurrentWorkoutManager {
     
     // MARK: - Private Variables
     
-    private let database: Database
+    private let workoutRepository: WorkoutRepository
     
     // MARK: - Init
     
-    init(database: Database) {
-        self.database = database
+    init(workoutRepository: WorkoutRepository) {
+        self.workoutRepository = workoutRepository
     }
     
     // MARK: - Public
@@ -34,7 +34,7 @@ final class CurrentWorkoutManager {
             Self.logger.log("No current workout available")
             return nil
         }
-        guard let currentWorkout = database.getWorkout(with: uuid) else {
+        guard let currentWorkout = workoutRepository.getWorkout(with: uuid) else {
             Self.logger.warning("Failed to get current workout: no workout matching id: \(uuid)")
             return nil
         }

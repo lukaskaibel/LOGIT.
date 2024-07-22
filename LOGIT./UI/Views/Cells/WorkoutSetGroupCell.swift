@@ -223,14 +223,14 @@ struct WorkoutSetGroupCell: View {
 }
 
 private struct PreviewWrapperView: View {
-    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var workoutRepository: WorkoutRepository
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack {
                     WorkoutSetGroupCell(
-                        setGroup: database.getWorkouts().first!.setGroups.first!,
+                        setGroup: workoutRepository.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),
@@ -240,7 +240,7 @@ private struct PreviewWrapperView: View {
                     .tileStyle()
                     .padding()
                     WorkoutSetGroupCell(
-                        setGroup: database.getWorkouts().first!.setGroups.first!,
+                        setGroup: workoutRepository.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(true),
@@ -250,7 +250,7 @@ private struct PreviewWrapperView: View {
                     .tileStyle()
                     .padding()
                     WorkoutSetGroupCell(
-                        setGroup: database.getWorkouts().first!.setGroups.first!,
+                        setGroup: workoutRepository.getWorkouts().first!.setGroups.first!,
                         focusedIntegerFieldIndex: .constant(nil),
                         sheetType: .constant(nil),
                         isReordering: .constant(false),

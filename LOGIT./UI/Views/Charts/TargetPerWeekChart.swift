@@ -12,6 +12,7 @@ struct TargetPerWeekChart: View {
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRepository: WorkoutRepository
 
     @Binding var selectedWeeksFromNowIndex: Int?
     let canSelectWeek: Bool
@@ -49,7 +50,7 @@ struct TargetPerWeekChart: View {
     }
 
     private func workouts(forWeekIndex index: Int) -> [Workout] {
-        database.getWorkouts(
+        workoutRepository.getWorkouts(
             for: .weekOfYear,
             including: Calendar.current.date(
                 byAdding: .weekOfYear,

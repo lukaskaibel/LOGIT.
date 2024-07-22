@@ -22,6 +22,7 @@ struct LOGIT: App {
     // MARK: - State
 
     @StateObject private var database: Database
+    @StateObject private var workoutRepository: WorkoutRepository
     @StateObject private var templateService: TemplateService
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager()
@@ -40,11 +41,13 @@ struct LOGIT: App {
         #else
         let database = Database()
         #endif
+        let workoutRepository = WorkoutRepository(database: database)
         
         self._database = StateObject(wrappedValue: database)
+        self._workoutRepository = StateObject(wrappedValue: WorkoutRepository(database: database))
         self._templateService = StateObject(wrappedValue: TemplateService(database: database))
         self._measurementController = StateObject(wrappedValue: MeasurementEntryController(database: database))
-        self._workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: database))
+        self._workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: database, workoutRepository: workoutRepository))
         
         UserDefaults.standard.register(defaults: [
             "weightUnit": WeightUnit.kg.rawValue,
@@ -148,6 +151,7 @@ struct LOGIT: App {
                     .interactiveDismissDisabled()
                 }
                 .environmentObject(database)
+                .environmentObject(workoutRepository)
                 .environmentObject(measurementController)
                 .environmentObject(templateService)
                 .environmentObject(purchaseManager)

@@ -67,11 +67,11 @@ struct WorkoutSetGroupList: View {
 }
 
 private struct PreviewWrapperView: View {
-    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var workoutRepository: WorkoutRepository
     
     var body: some View {
         WorkoutSetGroupList(
-            workout: database.getWorkouts().first!,
+            workout: workoutRepository.getWorkouts().first!,
             focusedIntegerFieldIndex: .constant(nil),
             sheetType: .constant(nil),
             canReorder: false

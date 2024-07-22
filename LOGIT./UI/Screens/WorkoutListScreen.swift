@@ -12,11 +12,12 @@ struct WorkoutListScreen: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject var workoutRepository: WorkoutRepository
 
     // MARK: - State
 
     @State private var selectedWorkout: Workout?
-    @State private var groupingKey: Database.WorkoutGroupingKey = .date(calendarComponent: .month)
+    @State private var groupingKey: WorkoutRepository.WorkoutGroupingKey = .date(calendarComponent: .month)
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var isShowingAddWorkout = false
@@ -98,7 +99,7 @@ struct WorkoutListScreen: View {
     // MARK: - Computed Properties
 
     private var groupedWorkouts: [[Workout]] {
-        database.getGroupedWorkouts(
+        workoutRepository.getGroupedWorkouts(
             withNameIncluding: searchedText,
             groupedBy: groupingKey,
             usingMuscleGroup: selectedMuscleGroup

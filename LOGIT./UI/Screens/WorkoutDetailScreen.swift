@@ -263,12 +263,12 @@ struct WorkoutDetailScreen: View {
 }
 
 private struct PreviewWrapperView: View {
-    @EnvironmentObject private var database: Database
+    @EnvironmentObject var workoutRepository: WorkoutRepository
     
     var body: some View {
         NavigationStack {
             WorkoutDetailScreen(
-                workout: database.getWorkouts().first!,
+                workout: workoutRepository.getWorkouts().first!,
                 canNavigateToTemplate: false
             )
         }
