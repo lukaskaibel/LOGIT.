@@ -23,6 +23,7 @@ struct LOGIT: App {
 
     @StateObject private var database: Database
     @StateObject private var workoutRepository: WorkoutRepository
+    @StateObject private var workoutSetRepository: WorkoutSetRepository
     @StateObject private var templateService: TemplateService
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager()
@@ -43,9 +44,11 @@ struct LOGIT: App {
         #endif
         let currentWorkoutManager = CurrentWorkoutManager(database: database)
         let workoutRepository = WorkoutRepository(database: database, currentWorkoutManager: currentWorkoutManager)
+        let workoutSetRepository = WorkoutSetRepository(database: database, currentWorkoutManager: currentWorkoutManager)
         
         self._database = StateObject(wrappedValue: database)
         self._workoutRepository = StateObject(wrappedValue: workoutRepository)
+        self._workoutSetRepository = StateObject(wrappedValue: workoutSetRepository)
         self._templateService = StateObject(wrappedValue: TemplateService(database: database))
         self._measurementController = StateObject(wrappedValue: MeasurementEntryController(database: database))
         self._workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: database, workoutRepository: workoutRepository, currentWorkoutManager: currentWorkoutManager))
@@ -153,6 +156,7 @@ struct LOGIT: App {
                 }
                 .environmentObject(database)
                 .environmentObject(workoutRepository)
+                .environmentObject(workoutSetRepository)
                 .environmentObject(measurementController)
                 .environmentObject(templateService)
                 .environmentObject(purchaseManager)

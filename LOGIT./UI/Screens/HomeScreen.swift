@@ -22,6 +22,7 @@ struct HomeScreen: View {
 
     @EnvironmentObject private var database: Database
     @EnvironmentObject private var workoutRepository: WorkoutRepository
+    @EnvironmentObject private var workoutSetRepository: WorkoutSetRepository
     @EnvironmentObject private var purchaseManager: PurchaseManager
     @EnvironmentObject private var workoutRecorder: WorkoutRecorder
 
@@ -229,7 +230,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateBarChart(dateUnit: .weekOfYear) {
-                database.getGroupedWorkoutsSets(in: .weekOfYear)
+                workoutSetRepository.getGroupedWorkoutsSets(in: .weekOfYear)
                     .compactMap {
                         guard let date = $0.first?.workout?.date else { return nil }
                         return DateBarChart.Item(date: date, value: $0.count)
@@ -271,7 +272,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: .threeMonths) {
-                getVolume(of: database.getGroupedWorkoutsSets(in: .day))
+                getVolume(of: workoutSetRepository.getGroupedWorkoutsSets(in: .day))
                     .map { .init(date: $0.0, value: $0.1) }
             }
         }

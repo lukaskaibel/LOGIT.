@@ -147,6 +147,7 @@
 		79DE32952BCDD1D800FD417A /* EntityObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE32942BCDD1D800FD417A /* EntityObserver.swift */; };
 		79E2E6022912E9F8003845BC /* Database+EntityFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E6012912E9F8003845BC /* Database+EntityFetch.swift */; };
 		79E2E60429132C46003845BC /* Database+SetConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E2E60329132C46003845BC /* Database+SetConvert.swift */; };
+		79EF10822C4FFA0D008444BA /* WorkoutSetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EF10812C4FFA0D008444BA /* WorkoutSetRepository.swift */; };
 		79F2D1222800CD0C00197E0A /* TemplateDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */; };
 		79F6D5F22B0F8742005D48CB /* SegmentedStackedBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F6D5F12B0F8742005D48CB /* SegmentedStackedBarChart.swift */; };
 		79F7E0FE27E67578006D4354 /* ExerciseListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F7E0FD27E67578006D4354 /* ExerciseListScreen.swift */; };
@@ -335,6 +336,7 @@
 		79E2E60329132C46003845BC /* Database+SetConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+SetConvert.swift"; sourceTree = "<group>"; };
 		79E849072A7EA28000C0DF95 /* LOGITTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LOGITTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		79E849092A7EA28000C0DF95 /* ExerciseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseServiceTests.swift; sourceTree = "<group>"; };
+		79EF10812C4FFA0D008444BA /* WorkoutSetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetRepository.swift; sourceTree = "<group>"; };
 		79F2D1212800CD0C00197E0A /* TemplateDetailScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetailScreen.swift; sourceTree = "<group>"; };
 		79F6D5F12B0F8742005D48CB /* SegmentedStackedBarChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedStackedBarChart.swift; sourceTree = "<group>"; };
 		79F7E0FD27E67578006D4354 /* ExerciseListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListScreen.swift; sourceTree = "<group>"; };
@@ -417,6 +419,7 @@
 			isa = PBXGroup;
 			children = (
 				791E955D2C4E8158006A6664 /* WorkoutRepository.swift */,
+				79EF10812C4FFA0D008444BA /* WorkoutSetRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1087,6 +1090,7 @@
 				7996D0A92AC4C9F70028FF22 /* View+.swift in Sources */,
 				791F25A52AC1AE0800613793 /* MeasurementsScreen.swift in Sources */,
 				79CABA762BA0D0EA00F97599 /* CurrentWorkoutView.swift in Sources */,
+				79EF10822C4FFA0D008444BA /* WorkoutSetRepository.swift in Sources */,
 				79CD8BE528240A020052D83C /* CalendarView.swift in Sources */,
 				79CD8BEE282540430052D83C /* WorkoutSet+.swift in Sources */,
 				79898A8827F86DC800935E05 /* Template+.swift in Sources */,

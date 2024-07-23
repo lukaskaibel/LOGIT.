@@ -19,6 +19,7 @@ struct ExerciseDetailScreen: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
+    @EnvironmentObject private var workoutSetRepository: WorkoutSetRepository
 
     // MARK: - State
 
@@ -248,7 +249,7 @@ struct ExerciseDetailScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateLineChart(dateDomain: selectedTimeSpanForVolume) {
-                getVolume(of: database.getGroupedWorkoutsSets(with: exercise, in: .day), for: exercise)
+                getVolume(of: workoutSetRepository.getGroupedWorkoutsSets(with: exercise, in: .day), for: exercise)
                     .map {
                         return .init(
                             date: $0.0,
@@ -280,7 +281,7 @@ struct ExerciseDetailScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateBarChart(dateUnit: .weekOfYear) {
-                database.getGroupedWorkoutsSets(with: exercise, in: .weekOfYear)
+                workoutSetRepository.getGroupedWorkoutsSets(with: exercise, in: .weekOfYear)
                     .compactMap {
                         guard let date = $0.first?.workout?.date else { return nil }
                         return .init(date: date, value: $0.count)
@@ -327,7 +328,7 @@ struct ExerciseDetailScreen: View {
     // MARK: - Computed Properties
 
     private func personalBest(for attribute: WorkoutSet.Attribute) -> Int {
-        database.getWorkoutSets(with: exercise)
+        workoutSetRepository.getWorkoutSets(with: exercise)
             .map {
                 attribute == .repetitions
                     ? $0.max(.repetitions) : convertWeightForDisplaying($0.max(.weight))
@@ -362,7 +363,7 @@ struct ExerciseDetailScreen: View {
 
     private var firstPerformedOverOneYearAgo: Bool {
         Calendar.current.date(byAdding: .year, value: -1, to: .now)!
-            > database.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date })
+            > workoutSetRepository.getWorkoutSets(with: exercise).compactMap({ $0.setGroup?.workout?.date })
             .min()
             ?? .now
     }
@@ -372,7 +373,7 @@ struct ExerciseDetailScreen: View {
         withoutZeroRepetitions: Bool = false,
         withoutZeroWeights: Bool = false
     ) -> [WorkoutSet] {
-        database.getWorkoutSets(with: exercise, onlyHighest: attribute, in: .day)
+        workoutSetRepository.getWorkoutSets(with: exercise, onlyHighest: attribute, in: .day)
             .filter { !withoutZeroRepetitions || $0.max(.repetitions) > 0 }
             .filter { !withoutZeroWeights || $0.max(.weight) > 0 }
     }
