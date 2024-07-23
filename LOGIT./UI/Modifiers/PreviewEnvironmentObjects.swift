@@ -19,14 +19,15 @@ struct PreviewEnvironmentObjects: ViewModifier {
     
     init() {
         let db = Database(isPreview: true)
-        let wr = WorkoutRepository(database: db)
+        let cwm = CurrentWorkoutManager(database: db)
+        let wr = WorkoutRepository(database: db, currentWorkoutManager: cwm)
         _database = StateObject(wrappedValue: db)
         _workoutRepository = StateObject(wrappedValue: wr)
         _templateService = StateObject(wrappedValue: TemplateService(database: db))
         _measurementController = StateObject(wrappedValue: MeasurementEntryController(database: db))
         _purchaseManager = StateObject(wrappedValue: PurchaseManager())
         _networkMonitor = StateObject(wrappedValue: NetworkMonitor())
-        _workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: db, workoutRepository: wr))
+        _workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: db, workoutRepository: wr, currentWorkoutManager: cwm))
     }
 
     func body(content: Content) -> some View {

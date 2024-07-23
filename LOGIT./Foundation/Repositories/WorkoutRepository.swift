@@ -10,9 +10,11 @@ import Foundation
 class WorkoutRepository: ObservableObject {
     
     private let database: Database
+    private let currentWorkoutManager: CurrentWorkoutManager
     
-    init(database: Database) {
+    init(database: Database, currentWorkoutManager: CurrentWorkoutManager) {
         self.database = database
+        self.currentWorkoutManager = currentWorkoutManager
     }
     
     enum WorkoutSortingKey: String {
@@ -49,7 +51,8 @@ class WorkoutRepository: ObservableObject {
     func getWorkouts(
         withNameIncluding filteredText: String = "",
         sortedBy sortingKey: WorkoutSortingKey = .date,
-        usingMuscleGroup muscleGroup: MuscleGroup? = nil
+        usingMuscleGroup muscleGroup: MuscleGroup? = nil,
+        includingCurrentWorkout: Bool = false
     ) -> [Workout] {
         (database.fetch(
             Workout.self,
@@ -63,7 +66,8 @@ class WorkoutRepository: ObservableObject {
                 )
         ) as! [Workout])
         .filter {
-            muscleGroup == nil || ($0.exercises.map { $0.muscleGroup }).contains(muscleGroup)
+            (muscleGroup == nil || ($0.exercises.map { $0.muscleGroup }).contains(muscleGroup)) &&
+            (includingCurrentWorkout ? true : $0 != currentWorkoutManager.getCurrentWorkout())
         }
     }
 
@@ -71,9 +75,10 @@ class WorkoutRepository: ObservableObject {
         withNameIncluding filteredText: String = "",
         sortedBy sortingKey: WorkoutSortingKey = .date,
         for calendarComponent: Calendar.Component,
-        including date: Date
+        including date: Date,
+        includingCurrentWorkout: Bool = false
     ) -> [Workout] {
-        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey)
+        getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey, includingCurrentWorkout: includingCurrentWorkout)
             .filter {
                 guard let workoutDate = $0.date else { return false }
                 return Calendar.current.component(calendarComponent, from: workoutDate)
@@ -84,13 +89,15 @@ class WorkoutRepository: ObservableObject {
     func getGroupedWorkouts(
         withNameIncluding filteredText: String = "",
         groupedBy groupingKey: WorkoutGroupingKey = .name,
-        usingMuscleGroup muscleGroup: MuscleGroup? = nil
+        usingMuscleGroup muscleGroup: MuscleGroup? = nil,
+        includingCurrentWorkout: Bool = false
     ) -> [[Workout]] {
         var result = [[Workout]]()
         getWorkouts(
             withNameIncluding: filteredText,
             sortedBy: groupingKey == .name ? .name : .date,
-            usingMuscleGroup: muscleGroup
+            usingMuscleGroup: muscleGroup,
+            includingCurrentWorkout: includingCurrentWorkout
         )
         .forEach { workout in
             switch groupingKey {

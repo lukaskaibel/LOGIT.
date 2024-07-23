@@ -32,10 +32,10 @@ final class WorkoutRecorder: ObservableObject {
     
     // MARK: - Init
     
-    init(database: Database, workoutRepository: WorkoutRepository) {
+    init(database: Database, workoutRepository: WorkoutRepository, currentWorkoutManager: CurrentWorkoutManager) {
         self.database = database
         self.workoutRepository = workoutRepository
-        currentWorkoutManager = CurrentWorkoutManager(workoutRepository: workoutRepository)
+        self.currentWorkoutManager = currentWorkoutManager
         setUpAutoSaveForWorkout()
         workout = currentWorkoutManager.getCurrentWorkout()
     }
