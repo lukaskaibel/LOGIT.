@@ -20,6 +20,7 @@ struct ExerciseDetailScreen: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var database: Database
     @EnvironmentObject private var workoutSetRepository: WorkoutSetRepository
+    @EnvironmentObject private var workoutSetGroupRepository: WorkoutSetGroupRepository
 
     // MARK: - State
 
@@ -317,7 +318,7 @@ struct ExerciseDetailScreen: View {
                     }
                 }
             }
-            .emptyPlaceholder(database.getWorkoutSetGroups(with: exercise)) {
+            .emptyPlaceholder(workoutSetGroupRepository.getWorkoutSetGroups(with: exercise)) {
                 Text(NSLocalizedString("noHistory", comment: ""))
                     .frame(maxWidth: .infinity)
                     .frame(height: 150)
@@ -379,7 +380,7 @@ struct ExerciseDetailScreen: View {
     }
 
     private var groupedWorkoutSetGroups: [[WorkoutSetGroup]] {
-        database.getGroupedWorkoutSetGroups(with: exercise)
+        workoutSetGroupRepository.getGroupedWorkoutSetGroups(with: exercise)
     }
 
     private func setGroupGroupHeaderTitle(for index: Int) -> String {

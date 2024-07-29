@@ -12,6 +12,7 @@ struct ExerciseCell: View {
     // MARK: - Environment
 
     @EnvironmentObject var database: Database
+    @EnvironmentObject private var workoutSetGroupRepository: WorkoutSetGroupRepository
 
     // MARK: - Parameters
 
@@ -41,7 +42,7 @@ struct ExerciseCell: View {
     // MARK: - Computed Properties
 
     private var lastUsed: Date? {
-        database.getWorkoutSetGroups(with: exercise).last?.workout?.date
+        workoutSetGroupRepository.getWorkoutSetGroups(with: exercise).last?.workout?.date
     }
 
 }

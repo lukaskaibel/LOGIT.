@@ -9,42 +9,6 @@ import Foundation
 
 extension Database {
 
-    // MARK: - WorkoutSet Fetch
-    
-    enum WorkoutSetGroupSortingKey: String {
-        case date, name
-    }
-
-    func getWorkoutSetGroups(with exercise: Exercise? = nil) -> [WorkoutSetGroup] {
-        (fetch(
-            WorkoutSetGroup.self,
-            sortingKey: "workout.date",
-            ascending: false
-        ) as! [WorkoutSetGroup])
-        .filter {
-            exercise == nil || $0.exercise == exercise || $0.secondaryExercise == exercise
-        }
-    }
-
-    func getGroupedWorkoutSetGroups(
-        with exercise: Exercise? = nil,
-        groupedBy sortingKey: WorkoutSetGroupSortingKey = .date
-    ) -> [[WorkoutSetGroup]] {
-        var result = [[WorkoutSetGroup]]()
-        getWorkoutSetGroups(with: exercise)
-            .forEach { setGroup in
-                if let lastDate = result.last?.last?.workout?.date,
-                    let setGroupDate = setGroup.workout?.date,
-                    Calendar.current.isDate(lastDate, equalTo: setGroupDate, toGranularity: .month)
-                {
-                    result[result.count - 1].append(setGroup)
-                } else {
-                    result.append([setGroup])
-                }
-            }
-        return result
-    }
-
     // MARK: - Exercise Fetch
 
     func getExercises(
