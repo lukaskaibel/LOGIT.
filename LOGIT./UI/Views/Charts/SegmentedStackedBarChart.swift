@@ -86,7 +86,7 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
                 }
                 ForEach(category.segments) { segment in
 
-                    Group {
+//                    Group {
                         ForEach(segment.items) { item in
                             BarMark(
                                 x: .value("Bar x value", category.label),
@@ -95,12 +95,20 @@ struct SegmentedStackedBarChart<Identifier: Hashable>: View {
                                 width:  standardBarWidth
                             )
                             .foregroundStyle(barColor(for: item, in: category))
-                            .clipShape(RoundedCorner(radius: 5, corners: (segment.items.first == item ? [.bottomLeft, .bottomRight] : []) + (segment.items.last == item ? [.topLeft, .topRight] : [])))
+                            .clipShape(
+                                UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
+                                    topLeading: segment.items.last == item ? 5 : 0,
+                                    bottomLeading: segment.items.first == item ? 5 : 0,
+                                    bottomTrailing: segment.items.first == item ? 5 : 0,
+                                    topTrailing: segment.items.last == item ? 5 : 0
+                                )))
+//                            .clipShape(RoundedCorner(radius: 5, corners: (segment.items.first == item ? [.bottomLeft, .bottomRight] : []) + (segment.items.last == item ? [.topLeft, .topRight] : [])))
                         }
-                    }
+//                    }
                 }
             }
         }
+        .clipShape(Rectangle())
         .chartXAxis {
             AxisMarks(preset: .aligned) { value in
                 if let label = value.as(String.self) {
