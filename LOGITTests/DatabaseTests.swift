@@ -11,11 +11,17 @@ import XCTest
 
 final class DatabaseTests: XCTestCase {
 
-    let database = Database(isPreview: true)
+    private var database: Database!
+    private var workoutSetRepository: WorkoutSetRepository!
+    
+    override func setUp() {
+        self.database = Database(isPreview: true)
+        self.workoutSetRepository = WorkoutSetRepository(database: database, currentWorkoutManager: CurrentWorkoutManager(database: database))
+    }
 
     func testWorkoutSetsGroupedByCalendarComponent() {
         // Tests if there are workout sets with different weeks in the database to make sure that the following tests are correcty testing.
-        let workoutSets = database.getWorkoutSets()
+        let workoutSets = workoutSetRepository.getWorkoutSets()
         guard let firstSetDate = workoutSets.first?.workout?.date else {
             XCTFail("No workout sets available in the database.")
             return
@@ -37,7 +43,7 @@ final class DatabaseTests: XCTestCase {
         XCTAssertTrue(differentWeekFound, "All workout sets belong to the same week.")
 
         // Test for .day component
-        let groupedByDay = database.getGroupedWorkoutsSets(in: .day)
+        let groupedByDay = workoutSetRepository.getGroupedWorkoutsSets(in: .day)
         XCTAssertTrue(
             groupedByDay.count > 1,
             "Expected there two be workouts on at least 2 different days"
@@ -64,7 +70,7 @@ final class DatabaseTests: XCTestCase {
         }
 
         // Test for .weekOfYear component
-        let groupedByWeek = database.getGroupedWorkoutsSets(in: .weekOfYear)
+        let groupedByWeek = workoutSetRepository.getGroupedWorkoutsSets(in: .weekOfYear)
         XCTAssertTrue(
             groupedByWeek.count > 1,
             "Expected there to be workouts in at least 2 different weeks"

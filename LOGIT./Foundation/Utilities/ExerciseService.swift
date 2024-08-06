@@ -32,7 +32,7 @@ class ExerciseService {
                 \((MuscleGroup.allCases.map { $0.rawValue }).joined(separator: ", "))
             }
             Return JSON of form:
-            exercise = {
+            {
             name: string,
             type: Type
             }
@@ -64,7 +64,7 @@ class ExerciseService {
                 .sendChatCompletion(
                     newMessage: userMessage,
                     previousMessages: [systemMessage],
-                    model: .gptV3_5(.gptTurbo),
+                    model: .custom("gpt-4o-mini"),
                     maxTokens: nil,
                     temperature: 0
                 ) { result in
@@ -143,7 +143,7 @@ class ExerciseService {
                 .sendChatCompletion(
                     newMessage: userMessage,
                     previousMessages: [systemMessage],
-                    model: .gptV3_5(.gptTurbo),
+                    model: .custom("gpt-4o-mini"),
                     maxTokens: nil,
                     temperature: 0
                 ) { result in
@@ -181,6 +181,11 @@ class ExerciseService {
 
     private func createExercise(from jsonData: Data) -> AnyPublisher<Exercise, Swift.Error> {
         Self.logger.info("Decoding Exercise from JSON: \(jsonData.description)")
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print(jsonString)
+        } else {
+            print("Failed to convert Data to String")
+        }
         let decoder = JSONDecoder()
         return Just(jsonData)
             .decode(type: ExerciseDTO.self, decoder: decoder)

@@ -1,4 +1,5 @@
 {
+  "originHash" : "b77256718cde9bad0077ca245e5d3faa95561d87477fe38ef1a8952097ef9a59",
   "pins" : [
     {
       "identity" : "camera-swiftui",
@@ -23,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/FuturraGroup/OpenAI.git",
       "state" : {
-        "revision" : "9431444ae7f729e9c0dba1c49f975907b2eca32a",
-        "version" : "1.5.0"
+        "revision" : "0f50bc2531639e1093d93d5a02dc2a99e0697ef5",
+        "version" : "1.9.3"
       }
     },
     {
@@ -32,10 +33,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/swift-markdown-ui",
       "state" : {
-        "revision" : "5df8a4adedd6ae4eb2455ef60ff75183984daeb8",
-        "version" : "2.2.0"
+        "revision" : "9a8119b37e09a770367eeb26e05267c75d854053",
+        "version" : "2.3.1"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

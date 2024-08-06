@@ -85,7 +85,7 @@ class TemplateService: ObservableObject {
                 .sendChatCompletion(
                     newMessage: userMessage,
                     previousMessages: [systemMessage],
-                    model: .gptV3_5(.gptTurbo),
+                    model: .custom("gpt-4o-mini"),
                     maxTokens: nil,
                     temperature: 0
                 ) { result in
