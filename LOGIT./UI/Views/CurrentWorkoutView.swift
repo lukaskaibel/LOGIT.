@@ -31,12 +31,16 @@ struct CurrentWorkoutView: View {
                 // TODO: If timer is running, add a Divider and the timer with a timer symbol
                 // Maybe put a white rounded rect around the timer value, so its more visible
             }
-            Text(workoutName ?? Workout.getStandardName(for: workoutDate ?? .now))
+            Text(workoutHasName ? workoutName! : Workout.getStandardName(for: workoutDate ?? .now))
                 .fontWeight(.semibold)
                 .lineLimit(1)
         }
         .padding(10)
         .floatingStyle()
+    }
+    
+    private var workoutHasName: Bool {
+        !(workoutName?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
     }
     
 }
