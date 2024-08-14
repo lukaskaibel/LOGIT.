@@ -30,7 +30,7 @@ struct StartWorkoutView: View {
     
     var body: some View {
         ZStack {
-            CurrentWorkoutView(workout: database.testWorkout)
+            CurrentWorkoutView(workoutName: nil, workoutDate: nil)
                 .opacity(0.0001)
                 .fixedSize()
             HStack(spacing: 0) {

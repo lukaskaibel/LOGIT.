@@ -38,11 +38,11 @@ struct LOGIT: App {
     // MARK: - Init
 
     init() {
-        #if targetEnvironment(simulator)
-        let database = Database(isPreview: true)
-        #else
+//        #if targetEnvironment(simulator)
+//        let database = Database(isPreview: true)
+//        #else
         let database = Database()
-        #endif
+//        #endif
         let currentWorkoutManager = CurrentWorkoutManager(database: database)
         let workoutRepository = WorkoutRepository(database: database, currentWorkoutManager: currentWorkoutManager)
         let workoutSetRepository = WorkoutSetRepository(database: database, currentWorkoutManager: currentWorkoutManager)
@@ -132,7 +132,7 @@ struct LOGIT: App {
                     }
                     .safeAreaInset(edge: .bottom) {
                         if let workout = workoutRecorder.workout {
-                            CurrentWorkoutView(workout: workout)
+                            CurrentWorkoutView(workoutName: workout.name, workoutDate: workout.date)
                                 .padding(.horizontal, 10)
                                 .padding(.bottom, 5)
                                 .onTapGesture {

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CurrentWorkoutView: View {
     
-    let workout: Workout
+    let workoutName: String?
+    let workoutDate: Date?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,7 +20,7 @@ struct CurrentWorkoutView: View {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Group {
-                    if let workoutStartTime = workout.date {
+                    if let workoutStartTime = workoutDate {
                         StopwatchView(startTime: workoutStartTime)
                     } else {
                         Text("-:--:--")
@@ -30,16 +31,12 @@ struct CurrentWorkoutView: View {
                 // TODO: If timer is running, add a Divider and the timer with a timer symbol
                 // Maybe put a white rounded rect around the timer value, so its more visible
             }
-            Text(workoutHasName ? workout.name! : Workout.getStandardName(for: .now))
+            Text(workoutName ?? Workout.getStandardName(for: workoutDate ?? .now))
                 .fontWeight(.semibold)
                 .lineLimit(1)
         }
         .padding(10)
         .floatingStyle()
-    }
-    
-    private var workoutHasName: Bool {
-        !(workout.name?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
     }
     
 }
@@ -51,7 +48,7 @@ private struct PreviewWrapper: View {
     @EnvironmentObject var database: Database
     
     var body: some View {
-        CurrentWorkoutView(workout: database.testWorkout)
+        CurrentWorkoutView(workoutName: database.testWorkout.name, workoutDate: database.testWorkout.date)
             .previewEnvironmentObjects()
             .padding(.horizontal, 8)
             .padding(.bottom, 2)

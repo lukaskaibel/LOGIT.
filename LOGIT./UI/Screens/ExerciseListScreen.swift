@@ -82,7 +82,7 @@ struct ExerciseListScreen: View {
                 }
             }
         }
-        .navigationDestination(item: $selectedExercise) { exercise in
+        .navigationDestination(item: $selectedExercise) { exercise in
             ExerciseDetailScreen(exercise: exercise)
         }
         .sheet(isPresented: $showingAddExercise) {
