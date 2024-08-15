@@ -86,6 +86,16 @@ struct SettingsScreen: View {
                         .padding(CELL_PADDING)
                         .tileStyle()
                     }
+                    Link(destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!) {
+                        HStack {
+                            Text(NSLocalizedString("licenceAgreement", comment: ""))
+                            Spacer()
+                            Image(systemName: "arrow.up.forward.square")
+                        }
+                        .padding(CELL_PADDING)
+                        .tileStyle()
+                    }
+                    
                 }
                 
                 VStack(spacing: SECTION_HEADER_SPACING) {
