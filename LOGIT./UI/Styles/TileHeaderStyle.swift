@@ -29,7 +29,8 @@ struct TileHeaderSecondaryModifier: ViewModifier {
 struct TileHeaderTertiaryModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.footnote.weight(.medium))
+            .font(.footnote.weight(.semibold))
+            .textCase(.uppercase)
             .foregroundStyle(Color.secondaryLabel)
     }
 }

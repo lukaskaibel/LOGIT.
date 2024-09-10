@@ -53,6 +53,7 @@
 "createTemplate" = "Create Template";
 "creatingTemplateFailed" = "Creating Template Failed";
 "creatingTemplateFailedText" = "Make sure the selected image contains a workout.";
+"currentWeek" = "Current Week";
 "currentWorkout" = "Current Workout";
 
 // MARK: - D
@@ -97,6 +98,7 @@
 "finishWorkoutConfimation" = "Do you want to finish the workout?";
 "five" = "Five";
 "four" = "Four";
+"fourWeeksAgo" = "Four weeks ago";
 "fromLastWeek" = "from last week";
 "FromPhoto" = "From Photo";
 
@@ -122,6 +124,7 @@
 
 "lastTenWorkouts" = "In Last 10 Workouts";
 "lastUsed" = "Last used";
+"lastWeek" = "Last week";
 "lastWorkout" = "Last Workout";
 "legs" = "Legs";
 "letsGetStarted" = "Let's get started";
@@ -149,6 +152,7 @@
 "shoulders" = "Shoulders";
 "waist" = "Waist";
 "measurements" = "Measurements";
+"missing" = "Missing";
 "measurementsPromotionDescription" = "Plot bodyweight, calories, and other metrics to clearly see your progress.";
 "month" = "Month";
 "monthly" = "Monthly";
@@ -279,16 +283,19 @@
 "templates" = "Templates";
 "three" = "Three";
 "threeMonths" = "3 Months";
+"threeWeeksAgo" = "Three weeks ago";
 "time" = "time";
 "timer" = "Timer";
 "timerIsMuted" = "Timer Muted";
 "times" = "times";
 "title" = "Title";
+"to" = "to";
 "today" = "Today";
 "toGo" = "to go";
 "trackMore" = "Track More";
 "triceps" = "Triceps";
 "two" = "Two";
+"twoWeeksAgo" = "Two weeks ago";
 
 // MARK: - U
 
@@ -314,6 +321,9 @@
 "weightUnitDescription" = "Select the unit you want to use throughout the app.";
 "welcomeTo" = "Welcome to";
 "widget" = "Widget";
+"weekOfThe" = "Week of the";
+"workout" = "Workout";
+"workoutGoal" = "Workout Goal";
 "workoutHistory" = "History";
 "workouts" = "Workouts";
 "workoutTarget" = "Workout target";

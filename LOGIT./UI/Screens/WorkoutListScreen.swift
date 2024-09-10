@@ -17,7 +17,7 @@ struct WorkoutListScreen: View {
     // MARK: - State
 
     @State private var selectedWorkout: Workout?
-    @State private var groupingKey: WorkoutRepository.WorkoutGroupingKey = .date(calendarComponent: .month)
+    @State private var groupingKey: WorkoutRepository.WorkoutGroupingKey = .date(calendarComponents: [.month, .year])
     @State private var searchedText: String = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
     @State private var isShowingAddWorkout = false
@@ -74,7 +74,7 @@ struct WorkoutListScreen: View {
                         Button(action: { groupingKey = .name }) {
                             Label(NSLocalizedString("name", comment: ""), systemImage: "textformat")
                         }
-                        Button(action: { groupingKey = .date(calendarComponent: .month) }) {
+                        Button(action: { groupingKey = .date(calendarComponents: [.month, .year]) }) {
                             Label(NSLocalizedString("date", comment: ""), systemImage: "calendar")
                         }
                     }

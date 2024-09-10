@@ -10,8 +10,12 @@ import Foundation
 extension Date {
 
     var startOfWeek: Date {
-            return Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) ?? self
-        }
+        return Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: self)) ?? self
+    }
+    
+    var endOfWeek: Date {
+        return Calendar.current.date(byAdding: .day, value: 6, to: startOfWeek) ?? self
+    }
         
     var startOfMonth: Date {
         return Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: self)) ?? self
@@ -38,11 +42,13 @@ extension Date {
         }
         return formatter.string(from: self)
     }
+    
+    var weekDescription: String {
+        return self.formatted(.dateTime.day().month())
+    }
 
     var monthDescription: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM YYYY"
-        return formatter.string(from: self)
+        return self.formatted(.dateTime.month(.wide).year())
     }
 
     var timeString: String {

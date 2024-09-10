@@ -8,83 +8,85 @@
 import SwiftUI
 
 struct TargetPerWeekDetailScreen: View {
-
+    
     // MARK: - AppStorage
-
+    
     @AppStorage("workoutPerWeekTarget") var targetPerWeek: Int = 3
-
+    
     // MARK: - Environment
-
+    
     @EnvironmentObject var workoutRepository: WorkoutRepository
-
+    
     // MARK: - State
-
+    
+    @State private var selectedMonthIndexFromNow: Int = 0
     @State private var selectedIndexInWeekGroup: Int? = 0
     @State private var isShowingWorkoutDetail: Bool = false
     @State private var selectedWorkout: Workout? = nil
-
+    
     // MARK: - Body
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 header
-                    .padding([.horizontal, .top])
-                TargetPerWeekChart(selectedWeeksFromNowIndex: $selectedIndexInWeekGroup, canSelectWeek: true, grayOutNotSelectedWeeks: true)
-                    .frame(height: 200)
+                    .padding(.horizontal)
+                LazyVStack(spacing: SECTION_SPACING) {
+                    ForEach(weeksSinceLogitStartGroupedByMonth, id:\.first) { weeksFromNowMonthGroup in
+                        VStack(spacing: SECTION_HEADER_SPACING) {
+                            Text(Calendar.current.date(byAdding: .weekOfYear, value: -weeksFromNowMonthGroup.first!, to: .now)?.startOfWeek.monthDescription ?? "")
+                                .sectionHeaderStyle2()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            VStack(spacing: CELL_SPACING) {
+                                ForEach(weeksFromNowMonthGroup, id:\.self) { weeksFromNow in
+                                    let isCurrentWeek = weeksFromNow == 0
+                                    let numberOfWorkoutsInWeek = workoutRepository.getWorkouts(
+                                        for: [.weekOfYear, .yearForWeekOfYear],
+                                        including: dateForWeeksAgo(weeksFromNow)!
+                                    ).count
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack(alignment: .lastTextBaseline) {
+                                            Text(weekTitle(for: Calendar.current.date(byAdding: .weekOfYear, value: -weeksFromNow, to: .now)!))
+                                                .fontWeight(isCurrentWeek ? .bold : .regular)
+                                            Spacer()
+                                            if numberOfWorkoutsInWeek < targetPerWeek {
+                                                Label(
+                                                    "\(targetPerWeek - numberOfWorkoutsInWeek) \(NSLocalizedString(isCurrentWeek ? "toGo" : "missing", comment: ""))", systemImage: isCurrentWeek ? "arrow.right.circle.fill" : "xmark.circle.fill")
+                                                .font(.footnote)
+                                                .foregroundStyle(.secondary)
+                                            } else {
+                                                Label(NSLocalizedString("completed", comment: ""), systemImage: "checkmark.circle.fill")
+                                                    .font(.footnote)
+                                            }
+                                        }
+                                        HStack(spacing: 2) {
+                                            ForEach(0..<targetPerWeek, id:\.self) { index in
+                                                UnevenRoundedRectangle(cornerRadii: .init(
+                                                    topLeading: index == 0 ? 10 : 0,
+                                                    bottomLeading: index == 0 ? 10 : 0,
+                                                    bottomTrailing: index == targetPerWeek - 1 ? 10 : 0,
+                                                    topTrailing: index == targetPerWeek - 1 ? 10 : 0
+                                                ))
+                                                .foregroundStyle(index < numberOfWorkoutsInWeek ? .white : .placeholder)
+                                            }
+                                        }
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundStyle(Color.fill)
+                                        )
+                                        .frame(height: 30)
+                                    }
+                                    .padding(CELL_PADDING)
+                                    .tileStyle()
+                                }
+                            }
+                        }
+                    }
                     .overlay {
                         if workouts.isEmpty {
                             Text(NSLocalizedString("noData", comment: ""))
                                 .fontWeight(.bold)
                                 .foregroundColor(.secondaryLabel)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                HStack {
-                    Text(NSLocalizedString("targetPerWeek", comment: ""))
-                    Spacer()
-                    Picker(
-                        NSLocalizedString("targetPerWeek", comment: ""),
-                        selection: $targetPerWeek
-                    ) {
-                        ForEach(1..<10, id: \.self) { i in
-                            Text(String(i)).tag(i)
-                        }
-                    }
-                    .fontWeight(.bold)
-                }
-                .padding(CELL_PADDING)
-                .tileStyle()
-                .padding(.horizontal)
-                VStack(spacing: SECTION_HEADER_SPACING) {
-                    HStack(alignment: .lastTextBaseline) {
-                        Text(NSLocalizedString("workouts", comment: ""))
-                            .sectionHeaderStyle2()
-                        Spacer()
-                        Text(NSLocalizedString("inSelectedWeek", comment: ""))
-                            .foregroundColor(.secondaryLabel)
-                            .textCase(.none)
-                    }
-                    LazyVStack(spacing: CELL_SPACING) {
-                        ForEach(
-                            workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0),
-                            id: \.self
-                        ) {
-                            workout in
-                            Button {
-                                selectedWorkout = workout
-                                isShowingWorkoutDetail = true
-                            } label: {
-                                WorkoutCell(workout: workout)
-                                    .padding(CELL_PADDING)
-                                    .tileStyle()
-                                    .contentShape(Rectangle())
-                            }
-                            .buttonStyle(TileButtonStyle())
-                        }
-                        .emptyPlaceholder(workouts(forWeekIndex: selectedIndexInWeekGroup ?? 0)) {
-                            Text(NSLocalizedString("noWorkoutsInWeek", comment: ""))
-                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -99,47 +101,89 @@ struct TargetPerWeekDetailScreen: View {
             }
         }
     }
-
+    
     // MARK: - Supporting Views
-
+    
     private var header: some View {
-        VStack(alignment: .leading) {
-            Text(NSLocalizedString("workoutTarget", comment: ""))
-                .screenHeaderStyle()
-            Text("\(targetPerWeek) / \(NSLocalizedString("week", comment: ""))")
-                .screenHeaderSecondaryStyle()
-                .foregroundColor(.secondary)
+        HStack {
+            VStack(alignment: .leading) {
+                Text(NSLocalizedString("workoutGoal", comment: ""))
+                    .screenHeaderStyle()
+                Text("\(NSLocalizedString("PerWeek", comment: ""))")
+                    .screenHeaderSecondaryStyle()
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Menu {
+                ForEach(1...10, id:\.self) { value in
+                    Button {
+                        targetPerWeek = value
+                    } label: {
+                        Text("\(value) \(NSLocalizedString("workout\(value == 1 ? "" : "s")", comment: ""))")
+                        Text("\(NSLocalizedString("perWeek", comment: ""))")
+                        if value == targetPerWeek {
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                }
+            } label: {
+                HStack {
+                    Text("\(targetPerWeek)")
+                        .font(.system(size: 55))
+                    Image(systemName: "chevron.up.chevron.down")
+                }
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
-
+    
     // MARK: - Supporting Methods
-
+    
     var workouts: [Workout] {
         workoutRepository.getWorkouts(sortedBy: .date)
     }
-
-    private func workouts(forWeekIndex index: Int) -> [Workout] {
-        workoutRepository.getWorkouts(
-            for: .weekOfYear,
-            including: Calendar.current.date(
-                byAdding: .weekOfYear,
-                value: index,
-                to: .now
-            )!
-        )
+    
+    private var numberOfWeeksSinceLogitStart: Int {
+        let logitStartDate = Calendar.current.date(from: .init(year: 2023, month: 1, day: 2))
+        return Calendar.current.dateComponents([.weekOfYear], from: logitStartDate!, to: .now).weekOfYear!
     }
-
-    func getFirstDayOfWeekString(for date: Date) -> String {
-        let firstDayOfWeek = Calendar.current
-            .dateComponents(
-                [.calendar, .yearForWeekOfYear, .weekOfYear],
-                from: date
-            )
-            .date!
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM."
-        return formatter.string(from: firstDayOfWeek)
+    
+    private var weeksSinceLogitStartGroupedByMonth: [[Int]] {
+        Array(0...numberOfWeeksSinceLogitStart).reduce([[Int]]()) { currentResult, nextValue in
+            guard let lastMonth = currentResult.last, !lastMonth.isEmpty else {
+                return currentResult + [[nextValue]]
+            }
+            
+            let currentWeekDate = Calendar.current.date(byAdding: .weekOfYear, value: -nextValue, to: Date())!.startOfWeek
+            let lastMonthWeekDate = Calendar.current.date(byAdding: .weekOfYear, value: -lastMonth.first!, to: Date())!.startOfWeek
+            
+            if Calendar.current.isDate(currentWeekDate, equalTo: lastMonthWeekDate, toGranularity: .month) {
+                var newResult = currentResult
+                newResult[newResult.count - 1].append(nextValue)
+                return newResult
+            } else {
+                return currentResult + [[nextValue]]
+            }
+        }
+    }
+    
+    private func dateForWeeksAgo(_ weeksAgo: Int) -> Date? {
+        return Calendar.current.date(byAdding: .day, value: -(7 * weeksAgo), to: .now, wrappingComponents: false)
+    }
+    
+    private func weekTitle(for date: Date) -> String {
+        if Calendar.current.isDate(date, equalTo: .now, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("currentWeek", comment: "")
+        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -1, to: .now)!, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("lastWeek", comment: "")
+        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -2, to: .now)!, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("twoWeeksAgo", comment: "")
+        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -3, to: .now)!, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("threeWeeksAgo", comment: "")
+        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -4, to: .now)!, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("fourWeeksAgo", comment: "")
+        } else {
+            return "\(date.startOfWeek.weekDescription) - \(date.endOfWeek.weekDescription)"
+        }
     }
 
 }

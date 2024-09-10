@@ -22,7 +22,7 @@ class WorkoutRepository: ObservableObject {
     }
 
     enum WorkoutGroupingKey: Equatable {
-        case date(calendarComponent: Calendar.Component)
+        case date(calendarComponents: [Calendar.Component])
         case name
 
         static func == (lhs: WorkoutGroupingKey, rhs: WorkoutGroupingKey) -> Bool {
@@ -74,15 +74,14 @@ class WorkoutRepository: ObservableObject {
     func getWorkouts(
         withNameIncluding filteredText: String = "",
         sortedBy sortingKey: WorkoutSortingKey = .date,
-        for calendarComponent: Calendar.Component,
+        for calendarComponents: [Calendar.Component],
         including date: Date,
         includingCurrentWorkout: Bool = false
     ) -> [Workout] {
         getWorkouts(withNameIncluding: filteredText, sortedBy: sortingKey, includingCurrentWorkout: includingCurrentWorkout)
             .filter {
                 guard let workoutDate = $0.date else { return false }
-                return Calendar.current.component(calendarComponent, from: workoutDate)
-                    == Calendar.current.component(calendarComponent, from: date)
+                return Calendar.current.isDate(workoutDate, equalTo: date, toGranularity: calendarComponents)
             }
     }
 
@@ -101,14 +100,10 @@ class WorkoutRepository: ObservableObject {
         )
         .forEach { workout in
             switch groupingKey {
-            case .date(let component):
+            case .date(let components):
                 if let lastDate = result.last?.last?.date,
                     let workoutDate = workout.date,
-                    Calendar.current.isDate(
-                        lastDate,
-                        equalTo: workoutDate,
-                        toGranularity: component
-                    )
+                    Calendar.current.isDate(lastDate, equalTo: workoutDate, toGranularity: components)
                 {
                     result[result.count - 1].append(workout)
                 } else {

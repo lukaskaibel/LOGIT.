@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct TileModifier: ViewModifier {
+    
+    var backgroundColor: Color = .secondaryBackground
+    
     func body(content: Content) -> some View {
         content
-            .background(Color.secondaryBackground)
+            .background(backgroundColor)
             .cornerRadius(20)
     }
 }
@@ -24,8 +27,8 @@ struct SecondaryTileModifier: ViewModifier {
 }
 
 extension View {
-    func tileStyle() -> some View {
-        modifier(TileModifier())
+    func tileStyle(backgroundColor: Color = .secondaryBackground) -> some View {
+        modifier(TileModifier(backgroundColor: backgroundColor))
     }
     func secondaryTileStyle() -> some View {
         modifier(SecondaryTileModifier())

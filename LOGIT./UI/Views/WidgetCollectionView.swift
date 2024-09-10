@@ -34,21 +34,23 @@ struct WidgetCollectionView<Content: View>: View {
                 Spacer()
                 Menu {
                     ForEach(collection.items) { item in
-                        let canUseFeature = !item.isProFeature || purchaseManager.hasUnlockedPro
-                        Button {
-                            if canUseFeature {
-                                item.isAdded.toggle()
-                                database.save()
-                            } else {
-                                isShowingUpgradeToPro = true
-                            }
-                        } label: {
-                            Text(item.type.title)
-                            Text(item.type.unit)
-                            if canUseFeature {
-                                Image(systemName: item.isAdded ? "checkmark" : "plus")
-                            } else {
-                                Image(systemName: "crown.fill")
+                        if let type = item.type {
+                            let canUseFeature = !item.isProFeature || purchaseManager.hasUnlockedPro
+                            Button {
+                                if canUseFeature {
+                                    item.isAdded.toggle()
+                                    database.save()
+                                } else {
+                                    isShowingUpgradeToPro = true
+                                }
+                            } label: {
+                                Text(type.title)
+                                Text(type.unit)
+                                if canUseFeature {
+                                    Image(systemName: item.isAdded ? "checkmark" : "plus")
+                                } else {
+                                    Image(systemName: "crown.fill")
+                                }
                             }
                         }
                     }

@@ -53,6 +53,7 @@
 "createTemplate" = "Vorlage erstellen";
 "creatingTemplateFailed" = "Generieren Fehlgeschlagen";
 "creatingTemplateFailedText" = "Stelle sicher, dass das Bild ein Workout enthält.";
+"currentWeek" = "Diese Woche";
 "currentWorkout" = "Aktuelles Workout";
 
 // MARK: - D
@@ -97,6 +98,7 @@
 "finishWorkoutConfimation" = "Möchtest du das Workout beenden?";
 "five" = "Fünf";
 "four" = "Vier";
+"fourWeeksAgo" = "Vor 4 Wochen";
 "fromLastWeek" = "zu letzter Woche";
 "FromPhoto" = "Aus Foto";
 
@@ -122,6 +124,7 @@
 
 "lastTenWorkouts" = "In Letzten 10 Workouts";
 "lastUsed" = "Zuletzt benutzt";
+"lastWeek" = "Letzte Woche";
 "lastWorkout" = "Letztes Workout";
 "legs" = "Beine";
 "letsGetStarted" = "Los gehts";
@@ -151,6 +154,7 @@
 "waist" = "Taille";
 "measurements" = "Messungen";
 "measurementsPromotionDescription" = "Verfolge weitere wichtige Fitnessmetriken, wie Körpergewicht, Kalorien und mehr...";
+"missing" = "Fehlen";
 "month" = "Monat";
 "monthly" = "Monatlich";
 "morning" = "Morgen";
@@ -282,16 +286,19 @@
 "templates" = "Vorlagen";
 "three" = "Drei";
 "threeMonths" = "3 Monate";
+"threeWeeksAgo" = "Vor 3 Wochen";
 "time" = "mal";
 "timer" = "Timer";
 "timerIsMuted" = "Timer Stummschalten";
 "times" = "mal";
 "title" = "Titel";
+"to" = "bis";
 "today" = "Heute";
 "toGo" = "übrig";
 "trackMore" = "Tracke mehr";
 "triceps" = "Trizeps";
 "two" = "Zwei";
+"twoWeeksAgo" = "Vor 2 Wochen";
 
 // MARK: - U
 
@@ -317,6 +324,9 @@
 "weightUnitDescription" = "Wähle deine bevorzugte Einheit aus.";
 "welcomeTo" = "Willkommen bei";
 "widget" = "Widget";
+"weekOfThe" = "Woche vom";
+"workout" = "Workout";
+"workoutGoal" = "Workout Ziel";
 "workoutHistory" = "Verlauf";
 "workouts" = "Workouts";
 "workoutTarget" = "Workout Ziel";

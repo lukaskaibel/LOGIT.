@@ -10,7 +10,7 @@ import Foundation
 enum WidgetType {
     case personalBest, bestWeightPerDay, bestRepetitionsPerDay, volumePerDay, exerciseSetsPerWeek
     case measurement(MeasurementEntryType)
-    case targetPerWeek, muscleGroupsInLastTen, setsPerWeek, workoutsPerMonth, homeScreenVolumePerDay
+    case currentWeekTargetPerWeek, muscleGroupsInLastTen, setsPerWeek, workoutsPerMonth, homeScreenVolumePerDay
 
     init?(rawValue: String) {
         if rawValue.hasPrefix("measurement") {
@@ -33,8 +33,8 @@ enum WidgetType {
         case "exerciseSetsPerWeek":
             self = .exerciseSetsPerWeek
             
-        case "targetPerWeek":
-            self = .targetPerWeek
+        case "currentWeekTargetPerWeek":
+            self = .currentWeekTargetPerWeek
         case "muscleGroupsInLastTen":
             self = .muscleGroupsInLastTen
         case "setsPerWeek":
@@ -62,8 +62,8 @@ enum WidgetType {
         case .exerciseSetsPerWeek:
             return "exerciseSetsPerWeek"
             
-        case .targetPerWeek:
-            return "targetPerWeek"
+        case .currentWeekTargetPerWeek:
+            return "currentWeekTargetPerWeek"
         case .muscleGroupsInLastTen:
             return "muscleGroupsInLastTen"
         case .setsPerWeek:
@@ -86,7 +86,7 @@ enum WidgetType {
         case .volumePerDay: return NSLocalizedString("volume", comment: "")
         case .exerciseSetsPerWeek: return NSLocalizedString("sets", comment: "")
             
-        case .targetPerWeek: return NSLocalizedString("workoutTarget", comment: "")
+        case .currentWeekTargetPerWeek: return NSLocalizedString("workoutGoal", comment: "")
         case .muscleGroupsInLastTen: return NSLocalizedString("muscleGroupSplit", comment: "")
         case .setsPerWeek: return NSLocalizedString("overallSets", comment: "")
         case .workoutsPerMonth: return NSLocalizedString("workouts", comment: "")
@@ -105,7 +105,7 @@ enum WidgetType {
         case .volumePerDay: return WeightUnit.used.rawValue.uppercased() + " " + NSLocalizedString("perDay", comment: "")
         case .exerciseSetsPerWeek: return NSLocalizedString("PerWeek", comment: "")
             
-        case .targetPerWeek: return NSLocalizedString("PerWeek", comment: "")
+        case .currentWeekTargetPerWeek: return NSLocalizedString("PerWeek", comment: "")
         case .muscleGroupsInLastTen: return NSLocalizedString("lastTenWorkouts", comment: "")
         case .setsPerWeek: return NSLocalizedString("PerWeek", comment: "")
         case .workoutsPerMonth: return NSLocalizedString("PerMonth", comment: "")

@@ -92,7 +92,7 @@ struct HomeScreen: View {
                         type: .homeScreen,
                         title: NSLocalizedString("overview", comment: ""),
                         views: [
-                            targetWorkoutsView.widget(ofType: .targetPerWeek, isAddedByDefault: true),
+                            currentWeekWeeklyTargetWidget,
                             muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: true),
                             setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
                             workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false),
@@ -145,42 +145,15 @@ struct HomeScreen: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-
-    private var targetWorkoutsView: some View {
+    
+    private var currentWeekWeeklyTargetWidget: WidgetView<AnyView> {
         Button {
             navigationDestinationType = .targetPerWeek
         } label: {
-            VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(
-                            "\(NSLocalizedString("lastWorkout", comment: "")) - \(workouts.first?.date?.description(.short) ?? NSLocalizedString("never", comment: ""))"
-                        )
-                        .tileHeaderTertiaryStyle()
-                        Text(NSLocalizedString("workoutTarget", comment: ""))
-                            .tileHeaderStyle()
-                        Text("\(targetPerWeek) / \(NSLocalizedString("week", comment: ""))")
-                            .tileHeaderSecondaryStyle()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    NavigationChevron()
-                        .foregroundColor(.secondaryLabel)
-                }
-                TargetPerWeekChart(selectedWeeksFromNowIndex: .constant(0), canSelectWeek: false, grayOutNotSelectedWeeks: false)
-                    .frame(height: 170)
-                    .overlay {
-                        if workouts.isEmpty {
-                            Text(NSLocalizedString("noData", comment: ""))
-                                .font(.title3.weight(.medium))
-                                .foregroundColor(.placeholder)
-                        }
-                    }
-            }
-            .padding(CELL_PADDING)
-            .tileStyle()
-            .contentShape(Rectangle())
+            CurrentWeekWeeklyTargetTile()
         }
         .buttonStyle(TileButtonStyle())
+        .widget(ofType: .currentWeekTargetPerWeek, isAddedByDefault: true)
     }
 
     private var muscleGroupPercentageView: some View {
@@ -251,7 +224,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             DateBarChart(dateUnit: .month) {
-                workoutRepository.getGroupedWorkouts(groupedBy: .date(calendarComponent: .month))
+                workoutRepository.getGroupedWorkouts(groupedBy: .date(calendarComponents: [.month, .year]))
                     .compactMap {
                         guard let date = $0.first?.date else { return nil }
                         return DateBarChart.Item(date: date, value: $0.count)
