@@ -523,14 +523,6 @@
 			path = Environment;
 			sourceTree = "<group>";
 		};
-		79488DF32A770FA2005C485D /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				798BDC122A79A7DC00EAA75D /* Secrets.swift */,
-			);
-			path = Config;
-			sourceTree = "<group>";
-		};
 		794A8E5E2ACC2162006087EA /* WorkoutImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -791,7 +783,7 @@
 				79B27FE22AD803C90026EF35 /* LOGITStoreKit.storekit */,
 				8065AA722686668100F53A5A /* Assets.xcassets */,
 				8065AA7C2686668100F53A5A /* Info.plist */,
-				79488DF32A770FA2005C485D /* Config */,
+				798BDC122A79A7DC00EAA75D /* Secrets.swift */,
 				791347AF2AE2B79000D20BB7 /* Documents */,
 				792A3FED2AB36C1E00C6A097 /* Foundation */,
 				79488DF12A770D17005C485D /* Legacy */,

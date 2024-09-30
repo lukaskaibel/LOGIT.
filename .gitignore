@@ -2,3 +2,4 @@
 LOGIT.xcodeproj/project.xcworkspace/xcuserdata/lukaskaibel.xcuserdatad/UserInterfaceState.xcuserstate
 LOGIT.xcworkspace/xcuserdata/lukaskaibel.xcuserdatad/UserInterfaceState.xcuserstate
 *.DS_Store
+Secrets.swift
