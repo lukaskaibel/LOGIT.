@@ -66,14 +66,16 @@ struct PieGraph<CenterView: View>: View {
                                 lineWidth: circleLineWidth * (item.isSelected ? 1.5 : 1.0)
                             )
                         )
-                        .rotation(Angle(degrees: -90))
+//                        .rotation(Angle(degrees: -90))
                         .foregroundStyle(item.color.gradient)
                         .shadow(radius: item.isSelected ? 5 : 0)
                 }
-                if let centerView = centerView {
-                    centerView
-                }
+//                if let centerView = centerView {
+//                    centerView
+//                }
             }
+            .padding(circleLineWidth / 2)
+            .background(.red)
             .padding(configuration == .small ? 5 : 15)
         }
     }

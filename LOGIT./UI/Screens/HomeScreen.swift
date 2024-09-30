@@ -57,9 +57,11 @@ struct HomeScreen: View {
                                         .frame(width: 40)
                                         .foregroundColor(.secondary)
                                     Text(NSLocalizedString("exercises", comment: ""))
+                                        .foregroundStyle(.white)
                                 }
                                 Spacer()
                                 NavigationChevron()
+                                    .foregroundStyle(Color.secondaryLabel)
                             }
                             .padding(.trailing)
                             .padding(.vertical, 12)
@@ -75,9 +77,11 @@ struct HomeScreen: View {
                                         .frame(width: 40)
                                         .foregroundColor(.secondary)
                                     Text(NSLocalizedString("templates", comment: ""))
+                                        .foregroundStyle(.white)
                                 }
                                 Spacer()
                                 NavigationChevron()
+                                    .foregroundStyle(Color.secondaryLabel)
                             }
                             .padding(.trailing)
                             .padding(.vertical, 12)
@@ -160,34 +164,7 @@ struct HomeScreen: View {
         Button {
             navigationDestinationType = .muscleGroupsOverview
         } label: {
-            VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(NSLocalizedString("muscleGroupSplit", comment: ""))
-                            .tileHeaderStyle()
-                        Text(NSLocalizedString("lastTenWorkouts", comment: ""))
-                            .tileHeaderSecondaryStyle()
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    NavigationChevron()
-                        .foregroundColor(.secondaryLabel)
-                }
-                PieGraph(
-                    items:
-                        getOverallMuscleGroupOccurances()
-                        .map {
-                            PieGraph.Item(
-                                title: $0.0.description.capitalized,
-                                amount: $0.1,
-                                color: $0.0.color,
-                                isSelected: false
-                            )
-                        },
-                    showZeroValuesInLegend: true
-                )
-            }
-            .padding(CELL_PADDING)
-            .tileStyle()
+            MuscleGroupSplitTile()
             .contentShape(Rectangle())
         }
         .buttonStyle(TileButtonStyle())

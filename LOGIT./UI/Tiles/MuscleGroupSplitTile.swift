@@ -2,9 +2,10 @@
 //  MuscleGroupSplitTile.swift
 //  LOGIT
 //
-//  Created by Lukas Kaibel on 13.08.24.
+//  Created by Lukas Kaibel on 24.08.24.
 //
 
+import Charts
 import SwiftUI
 
 struct MuscleGroupSplitTile: View {
@@ -12,59 +13,123 @@ struct MuscleGroupSplitTile: View {
     @EnvironmentObject private var workoutRepository: WorkoutRepository
     
     var body: some View {
-        VStack(spacing: 10) {
-            HStack {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(NSLocalizedString("muscleSplit", comment: ""))
-                        .tileHeaderTertiaryStyle()
-//                    Text(NSLocalizedString("lastTenWorkouts", comment: ""))
-//                        .tileHeaderStyle()
+        if #available(iOS 17.0, *) {
+            let muscleGroupOccurances = getOverallMuscleGroupOccurances()
+            VStack(spacing: 20) {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(NSLocalizedString("muscleGroupSplit", comment: ""))
+                            .tileHeaderStyle()
+                        Text(NSLocalizedString("lastTenWorkouts", comment: ""))
+                            .tileHeaderSecondaryStyle()
+                    }
+                    Spacer()
+                    NavigationChevron()
+                        .foregroundStyle(.secondary)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                NavigationChevron()
-                    .foregroundColor(.secondaryLabel)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Focused on")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        if let firstMuscleGroup = muscleGroupOccurances.first?.0 {
+                            HStack {
+                                ForEach(getFocusedMuscleGroups()) { muscleGroup in
+                                    Text(muscleGroup.description)
+                                        .fontWeight(.bold)
+                                        .fontDesign(.rounded)
+                                        .foregroundStyle(muscleGroup.color)
+                                }
+                            }
+                        }
+                    }
+                    Spacer()
+                    Chart {
+                        ForEach(muscleGroupOccurances, id:\.0) { muscleGroupOccurance in
+                            SectorMark(
+                                angle: .value("Value", muscleGroupOccurance.1),
+                                innerRadius: .ratio(0.65),
+                                angularInset: 1
+                            )
+                            .foregroundStyle(muscleGroupOccurance.0.color.gradient)
+                        }
+                    }
+                    .frame(width: 150, height: 150)
+                }
+                // MARK: Legend, maybe needed in future...
+//                Grid(alignment: .leading) {
+//                    GridRow {
+//                        ForEach(muscleGroupOccurances.prefix(upTo: muscleGroupOccurances.count / 2 + 1), id:\.0) { muscleGroupOccurance in
+//                            HStack {
+//                                Circle()
+//                                    .frame(width: 5, height: 5)
+//                                    .foregroundStyle(muscleGroupOccurance.0.color.gradient)
+//                                Text(muscleGroupOccurance.0.description)
+//                                    .font(.footnote)
+//                            }
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                        }
+//                    }
+//                    GridRow {
+//                        ForEach(muscleGroupOccurances.suffix(from: muscleGroupOccurances.count / 2 + 1), id:\.0) { muscleGroupOccurance in
+//                            HStack {
+//                                Circle()
+//                                    .frame(width: 5, height: 5)
+//                                    .foregroundStyle(muscleGroupOccurance.0.color.gradient)
+//                                Text(muscleGroupOccurance.0.description)
+//                                    .font(.footnote)
+//                            }
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                        }
+//                    }
+//                }
+                
             }
-            PieGraph(
-                items:
-                    getOverallMuscleGroupOccurances()
-                    .map {
-                        PieGraph.Item(
-                            title: $0.0.description.capitalized,
-                            amount: $0.1,
-                            color: $0.0.color,
-                            isSelected: false
-                        )
-                    },
-                showZeroValuesInLegend: true,
-                hideLegend: true
-            )
-            .frame(height: 180)
+            .padding(CELL_PADDING)
+            .tileStyle()
+        } else {
+            // Fallback on earlier versions
         }
-        .padding(CELL_PADDING)
-        .tileStyle()
+        
     }
     
-    private var lastTenWorkouts: [Workout] {
-        Array(workoutRepository.getWorkouts(sortedBy: .date).prefix(10))
-    }
-
-    private func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
+    // MAKR: - Supporting Methods
+    
+    func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
         Array(
-            lastTenWorkouts
+            workoutRepository.getWorkouts()
                 .reduce(
                     [:],
                     { current, workout in
                         current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
                     }
                 )
-                .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
+                .filter { $0.value > 0 }
         )
-        .sorted {
-            MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases.firstIndex(
-                of: $1.key
-            )!
+        .sorted { (first: (MuscleGroup, Int), second: (MuscleGroup, Int)) in
+            first.1 > second.1
         }
     }
+    
+    private var amountOfOccurances: Int {
+        getOverallMuscleGroupOccurances().reduce(0, { $0 + $1.1 })
+    }
+    
+    /// Calculates the smallest number of Muscle Groups that combined account for 51% of the overall sets in the timeframe
+    /// - Returns: The focused Muscle Groups
+    private func getFocusedMuscleGroups() -> [MuscleGroup] {
+        var accumulatedPercetange: Float = 0
+        var focusedMuscleGroups = [MuscleGroup]()
+        for muscleGroupOccurance in getOverallMuscleGroupOccurances() {
+            accumulatedPercetange += Float(muscleGroupOccurance.1) / Float(amountOfOccurances)
+            focusedMuscleGroups.append(muscleGroupOccurance.0)
+            if accumulatedPercetange > 0.51 {
+                return focusedMuscleGroups
+            }
+        }
+        return []
+    }
+    
 }
 
 private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
@@ -72,10 +137,7 @@ private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
 }
 
 #Preview {
-    GeometryReader { geometry in
-        MuscleGroupSplitTile()
-            .previewEnvironmentObjects()
-            .frame(width: geometry.size.width / 2)
-    }
-    .padding()
+    MuscleGroupSplitTile()
+        .padding()
+        .previewEnvironmentObjects()
 }

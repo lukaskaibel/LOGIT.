@@ -84,10 +84,6 @@ extension Workout {
             }
     }
 
-    private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
-        MuscleGroup.allCases.reduce(into: [MuscleGroup: Int](), { $0[$1, default: 0] = 0 })
-    }
-
     func remove(setGroup: WorkoutSetGroup) {
         setGroups = setGroups.filter { $0 != setGroup }
     }

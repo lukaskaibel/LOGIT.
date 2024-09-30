@@ -5,6 +5,7 @@
 //  Created by Lukas Kaibel on 19.11.22.
 //
 
+import Charts
 import SwiftUI
 
 struct MuscleGroupsDetailScreen: View {
@@ -31,24 +32,82 @@ struct MuscleGroupsDetailScreen: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
-
-                PieGraph(
-                    items: muscleGroupOccurances.map {
-                        PieGraph.Item(
-                            title: $0.0.description,
-                            amount: $0.1,
-                            color: $0.0.color,
-                            isSelected: $0.0 == selectedMuscleGroup
-                        )
-                    },
-                    centerView: centerView,
-                    hideLegend: true
-                )
-                .frame(height: 200)
-                .padding()
-                .padding(.vertical, 50)
-
-                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup)
+                if #available(iOS 17.0, *) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(NSLocalizedString("overall", comment: ""))
+                            Text("Your training programs overall muscle group split")
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Chart {
+                            ForEach(muscleGroupOccurances, id:\.0) { muscleGroupOccurance in
+                                SectorMark(
+                                    angle: .value("Value", muscleGroupOccurance.1),
+                                    innerRadius: .ratio(0.65),
+                                    angularInset: 1
+                                )
+                                .foregroundStyle(foregroundStyle(for: muscleGroupOccurance.0))
+                            }
+                        }
+                        .frame(width: 100, height: 100)
+                    }
+                    .padding(CELL_PADDING)
+                    .tileStyle()
+                    .padding(.horizontal)
+                    HStack {
+                        if let selectedMuscleGroup = selectedMuscleGroup {
+                            VStack(alignment: .leading, spacing: 10) {
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("exercises", comment: ""))
+                                    Text("\(filteredSetGroups.count)")
+                                        .font(.title3)
+                                        .fontDesign(.rounded)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(selectedMuscleGroup.color.gradient)
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("sets", comment: ""))
+                                    Text("\(filteredSetGroups.flatMap({ $0.sets }).count)")
+                                        .font(.title3)
+                                        .fontDesign(.rounded)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(selectedMuscleGroup.color.gradient)
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("volume", comment: ""))
+                                    UnitView(value: "\(convertWeightForDisplaying(volume(for: selectedMuscleGroup, in: filteredSetGroups.flatMap({ $0.sets }))))", unit: WeightUnit.used.rawValue)
+                                        .font(.title3)
+                                        .fontDesign(.rounded)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(selectedMuscleGroup.color.gradient)
+                                }
+                            }
+                            .padding(.leading)
+                            Spacer()
+                        }
+                        Chart {
+                            ForEach(muscleGroupOccurances, id:\.0) { muscleGroupOccurance in
+                                SectorMark(
+                                    angle: .value("Value", muscleGroupOccurance.1),
+                                    innerRadius: .ratio(0.65),
+                                    angularInset: 1
+                                )
+                                .foregroundStyle(foregroundStyle(for: muscleGroupOccurance.0))
+                            }
+                        }
+                        .animation(nil, value: UUID())
+                        .frame(width: 200, height: 200)
+                        .padding()
+                        .padding(.vertical, 50)
+                    }
+                    .frame(minHeight: 200)
+                    .padding(.horizontal)
+                }
+                
+                MuscleGroupSelector(selectedMuscleGroup: $selectedMuscleGroup, withAnimation: true)
 
                 VStack(spacing: CELL_SPACING) {
                     ForEach(filteredSetGroups, id: \.objectID) { setGroup in
@@ -136,6 +195,14 @@ struct MuscleGroupsDetailScreen: View {
     }
 
     // MARK: - Computed Properties
+    
+    private func foregroundStyle(for muscleGroup: MuscleGroup) -> some ShapeStyle {
+        if selectedMuscleGroup == nil || muscleGroup == selectedMuscleGroup {
+            return AnyShapeStyle(muscleGroup.color.gradient)
+        } else {
+            return AnyShapeStyle(muscleGroup.color.secondaryTranslucentBackground)
+        }
+    }
 
     private var filteredSetGroups: [WorkoutSetGroup] {
         setGroups.filter {
@@ -146,6 +213,28 @@ struct MuscleGroupsDetailScreen: View {
 
     private var sets: [WorkoutSet] {
         (setGroups.map { $0.sets }).reduce([], +)
+    }
+    
+    private func volume(for muscleGroup: MuscleGroup, in sets: [WorkoutSet]) -> Int {
+        sets.reduce(0, { currentVolume, currentSet in
+            if let standardSet = currentSet as? StandardSet {
+                guard standardSet.exercise?.muscleGroup == muscleGroup else { return 0 }
+                return Int(standardSet.repetitions * standardSet.weight)
+            }
+            if let dropSet = currentSet as? DropSet, let repetitions = dropSet.repetitions, let weights = dropSet.weights {
+                guard dropSet.exercise?.muscleGroup == muscleGroup else { return 0 }
+                return Int(zip(repetitions, weights).map(*).reduce(0, +))
+            }
+            if let superSet = currentSet as? SuperSet {
+                if superSet.exercise?.muscleGroup == muscleGroup {
+                    return Int(superSet.repetitionsFirstExercise * superSet.weightFirstExercise)
+                }
+                if superSet.secondaryExercise?.muscleGroup == muscleGroup {
+                    return Int(superSet.repetitionsSecondExercise * superSet.weightSecondExercise)
+                }
+            }
+            return 0
+        })
     }
 
     private var muscleGroupOccurances: [(MuscleGroup, Int)] {

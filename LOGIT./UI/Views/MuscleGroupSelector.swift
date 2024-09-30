@@ -11,10 +11,12 @@ struct MuscleGroupSelector: View {
 
     @Binding var selectedMuscleGroup: MuscleGroup?
     let canBeNil: Bool
+    let animation: Bool
 
-    init(selectedMuscleGroup: Binding<MuscleGroup?>, canBeNil: Bool = true) {
+    init(selectedMuscleGroup: Binding<MuscleGroup?>, canBeNil: Bool = true, withAnimation: Bool = false) {
         self._selectedMuscleGroup = selectedMuscleGroup
         self.canBeNil = canBeNil
+        self.animation = withAnimation
     }
 
     var body: some View {
@@ -22,13 +24,25 @@ struct MuscleGroupSelector: View {
             HStack {
                 if canBeNil {
                     Button(NSLocalizedString("all", comment: "")) {
-                        selectedMuscleGroup = nil
+                        if animation {
+                            withAnimation {
+                                selectedMuscleGroup = nil
+                            }
+                        } else {
+                            selectedMuscleGroup = nil
+                        }
                     }
                     .buttonStyle(CapsuleButtonStyle(isSelected: selectedMuscleGroup == nil))
                 }
                 ForEach(MuscleGroup.allCases) { muscleGroup in
                     Button(muscleGroup.description) {
-                        selectedMuscleGroup = muscleGroup
+                        if animation {
+                            withAnimation {
+                                selectedMuscleGroup = muscleGroup
+                            }
+                        } else {
+                            selectedMuscleGroup = muscleGroup
+                        }
                     }
                     .buttonStyle(
                         CapsuleButtonStyle(

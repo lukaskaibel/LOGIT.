@@ -61,7 +61,7 @@ struct TemplateListScreen: View {
                                     HStack {
                                         TemplateCell(template: template)
                                         NavigationChevron()
-                                            .muscleGroupGradientStyle(for: template.muscleGroups)
+                                            .foregroundStyle(.secondary)
                                     }
                                     if showStartButton {
                                         Button {

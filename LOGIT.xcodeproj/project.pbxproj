@@ -35,6 +35,7 @@
 		792DAB7327EB97E80062C20D /* LineGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7227EB97E80062C20D /* LineGraph.swift */; };
 		792DAB7527EB9AD30062C20D /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792DAB7427EB9AD30062C20D /* Int+.swift */; };
 		792F9741280AC65D0032761C /* Database+EntityCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792F9740280AC65D0032761C /* Database+EntityCreation.swift */; };
+		793608142C979AA500A95221 /* WeeklyMuscleGroupScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793608132C979AA500A95221 /* WeeklyMuscleGroupScreen.swift */; };
 		793CB8A82975BB1B00140D2B /* IntegerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793CB8A72975BB1B00140D2B /* IntegerField.swift */; };
 		79407A8B2772380C004F32A3 /* UnitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79407A8A2772380C004F32A3 /* UnitView.swift */; };
 		79488DD72A7558B2005C485D /* EnvironmentValues+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79488DD62A7558B2005C485D /* EnvironmentValues+.swift */; };
@@ -224,6 +225,7 @@
 		792DAB7227EB97E80062C20D /* LineGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineGraph.swift; sourceTree = "<group>"; };
 		792DAB7427EB9AD30062C20D /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		792F9740280AC65D0032761C /* Database+EntityCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+EntityCreation.swift"; sourceTree = "<group>"; };
+		793608132C979AA500A95221 /* WeeklyMuscleGroupScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyMuscleGroupScreen.swift; sourceTree = "<group>"; };
 		793CB8A72975BB1B00140D2B /* IntegerField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegerField.swift; sourceTree = "<group>"; };
 		79407A8A2772380C004F32A3 /* UnitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitView.swift; sourceTree = "<group>"; };
 		79488DD62A7558B2005C485D /* EnvironmentValues+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+.swift"; sourceTree = "<group>"; };
@@ -658,6 +660,7 @@
 				79898A7F27F7B02100935E05 /* TemplateEditorScreen.swift */,
 				7955EEAD27FDC2F30010693C /* TemplateListScreen.swift */,
 				792A3FEB2AB34EB400C6A097 /* UpgradeToProScreen.swift */,
+				793608132C979AA500A95221 /* WeeklyMuscleGroupScreen.swift */,
 				79746708277136FE006518F0 /* WorkoutDetailScreen.swift */,
 				79B2FA412B8EA08200987578 /* WorkoutEditorScreen.swift */,
 				8084604A276662A000E0D0D0 /* WorkoutListScreen.swift */,
@@ -970,6 +973,7 @@
 				79746709277136FE006518F0 /* WorkoutDetailScreen.swift in Sources */,
 				79488DE62A76F00F005C485D /* TemplateDropSetCell.swift in Sources */,
 				79602BF32ACF3AE4001A5046 /* TemplateDTO.swift in Sources */,
+				793608142C979AA500A95221 /* WeeklyMuscleGroupScreen.swift in Sources */,
 				791F556729EC768100902352 /* StandardSetCell.swift in Sources */,
 				794E64FC28EE38F3003AACDD /* ExerciseCell.swift in Sources */,
 				794DAC632A320919006F0168 /* ChronoView.swift in Sources */,

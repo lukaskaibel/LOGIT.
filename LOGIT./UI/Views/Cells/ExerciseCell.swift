@@ -22,13 +22,6 @@ struct ExerciseCell: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(
-                NSLocalizedString("lastUsed", comment: "") + " - "
-                    + (lastUsed?.description(.short) ?? NSLocalizedString("never", comment: ""))
-            )
-            .font(.footnote.weight(.medium))
-            .foregroundColor(.secondaryLabel)
-            .lineLimit(1)
             Text(exercise.name ?? "")
                 .font(.body.weight(.bold))
                 .foregroundColor(.primary)
