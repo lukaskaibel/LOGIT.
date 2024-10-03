@@ -12,7 +12,8 @@ struct TemplateDetailScreen: View {
     // MARK: - Environment
 
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var database: Database
+    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var muscleGroupService: MuscleGroupService
 
     // MARK: - State
 
@@ -167,7 +168,7 @@ struct TemplateDetailScreen: View {
                 .tileHeaderStyle()
                 .frame(maxWidth: .infinity, alignment: .leading)
             PieGraph(
-                items: template.muscleGroupOccurances.map {
+                items: muscleGroupService.getMuscleGroupOccurances(in: template).map {
                     PieGraph.Item(
                         title: $0.0.rawValue.capitalized,
                         amount: $0.1,

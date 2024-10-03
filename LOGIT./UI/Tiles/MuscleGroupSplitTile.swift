@@ -10,50 +10,50 @@ import SwiftUI
 
 struct MuscleGroupSplitTile: View {
     
+    // MARK: - Environment
+    
     @EnvironmentObject private var workoutRepository: WorkoutRepository
+    @EnvironmentObject private var muscleGroupService: MuscleGroupService
+    
+    // MARK: - Body
     
     var body: some View {
         if #available(iOS 17.0, *) {
-            let muscleGroupOccurances = getOverallMuscleGroupOccurances()
+            let muscleGroupOccurances = getMuscleGroupOccurancesThisWeek()
             VStack(spacing: 20) {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(NSLocalizedString("muscleGroupSplit", comment: ""))
                             .tileHeaderStyle()
-                        Text(NSLocalizedString("lastTenWorkouts", comment: ""))
+                        Text(NSLocalizedString("ThisWeek", comment: ""))
                             .tileHeaderSecondaryStyle()
                     }
                     Spacer()
                     NavigationChevron()
                         .foregroundStyle(.secondary)
                 }
-                HStack {
+                HStack(alignment: .bottom) {
                     VStack(alignment: .leading) {
-                        Text("Focused on")
+                        Text(NSLocalizedString("focusedOn", comment: ""))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        if let firstMuscleGroup = muscleGroupOccurances.first?.0 {
-                            HStack {
-                                ForEach(getFocusedMuscleGroups()) { muscleGroup in
-                                    Text(muscleGroup.description)
-                                        .fontWeight(.bold)
-                                        .fontDesign(.rounded)
-                                        .foregroundStyle(muscleGroup.color)
-                                }
+                        HStack {
+                            ForEach(getFocusedMuscleGroups()) { muscleGroup in
+                                Text(muscleGroup.description)
+                                    .fontWeight(.bold)
+                                    .fontDesign(.rounded)
+                                    .foregroundStyle(muscleGroup.color)
                             }
                         }
                     }
-                    Spacer()
-                    Chart {
-                        ForEach(muscleGroupOccurances, id:\.0) { muscleGroupOccurance in
-                            SectorMark(
-                                angle: .value("Value", muscleGroupOccurance.1),
-                                innerRadius: .ratio(0.65),
-                                angularInset: 1
-                            )
-                            .foregroundStyle(muscleGroupOccurance.0.color.gradient)
-                        }
+                    .emptyPlaceholder(muscleGroupOccurances) {
+                        Text(NSLocalizedString("noWorkoutsThisWeek", comment: ""))
+                            .font(.body)
+                            .multilineTextAlignment(.center)
                     }
+                    .frame(maxHeight: 150)
+                    Spacer()
+                    MuscleGroupOccurancesChart(muscleGroupOccurances: muscleGroupOccurances)
                     .frame(width: 150, height: 150)
                 }
                 // MARK: Legend, maybe needed in future...
@@ -95,24 +95,16 @@ struct MuscleGroupSplitTile: View {
     
     // MAKR: - Supporting Methods
     
-    func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
-        Array(
-            workoutRepository.getWorkouts()
-                .reduce(
-                    [:],
-                    { current, workout in
-                        current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
-                    }
-                )
-                .filter { $0.value > 0 }
+    func getMuscleGroupOccurancesThisWeek() -> [(MuscleGroup, Int)] {
+        let workoutsThisWeek = workoutRepository.getWorkouts(
+            for: [.weekOfYear, .yearForWeekOfYear],
+            including: .now
         )
-        .sorted { (first: (MuscleGroup, Int), second: (MuscleGroup, Int)) in
-            first.1 > second.1
-        }
+        return muscleGroupService.getMuscleGroupOccurances(in: workoutsThisWeek)
     }
     
     private var amountOfOccurances: Int {
-        getOverallMuscleGroupOccurances().reduce(0, { $0 + $1.1 })
+        getMuscleGroupOccurancesThisWeek().reduce(0, { $0 + $1.1 })
     }
     
     /// Calculates the smallest number of Muscle Groups that combined account for 51% of the overall sets in the timeframe
@@ -120,7 +112,7 @@ struct MuscleGroupSplitTile: View {
     private func getFocusedMuscleGroups() -> [MuscleGroup] {
         var accumulatedPercetange: Float = 0
         var focusedMuscleGroups = [MuscleGroup]()
-        for muscleGroupOccurance in getOverallMuscleGroupOccurances() {
+        for muscleGroupOccurance in getMuscleGroupOccurancesThisWeek() {
             accumulatedPercetange += Float(muscleGroupOccurance.1) / Float(amountOfOccurances)
             focusedMuscleGroups.append(muscleGroupOccurance.0)
             if accumulatedPercetange > 0.51 {
@@ -130,10 +122,6 @@ struct MuscleGroupSplitTile: View {
         return []
     }
     
-}
-
-private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
-    MuscleGroup.allCases.reduce(into: [MuscleGroup: Int](), { $0[$1, default: 0] = 0 })
 }
 
 #Preview {

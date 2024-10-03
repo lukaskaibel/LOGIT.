@@ -24,6 +24,7 @@ struct ScreenHeaderSecondaryModifier: ViewModifier {
 struct ScreenHeaderTertiaryModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .textCase(.uppercase)
             .font(.subheadline.weight(.semibold))
             .foregroundColor(.secondary)
     }

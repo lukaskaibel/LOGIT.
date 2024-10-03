@@ -30,6 +30,7 @@ struct LOGIT: App {
     @StateObject private var purchaseManager = PurchaseManager()
     @StateObject private var networkMonitor = NetworkMonitor()
     @StateObject private var workoutRecorder: WorkoutRecorder
+    @StateObject private var muscleGroupService: MuscleGroupService
     
     @State private var selectedTab: TabType = .home
     @State private var isShowingPrivacyPolicy = false
@@ -55,6 +56,7 @@ struct LOGIT: App {
         self._templateService = StateObject(wrappedValue: TemplateService(database: database))
         self._measurementController = StateObject(wrappedValue: MeasurementEntryController(database: database))
         self._workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: database, workoutRepository: workoutRepository, currentWorkoutManager: currentWorkoutManager))
+        self._muscleGroupService = StateObject(wrappedValue: MuscleGroupService(workoutRepository: workoutRepository))
         
         UserDefaults.standard.register(defaults: [
             "weightUnit": WeightUnit.kg.rawValue,
@@ -166,6 +168,7 @@ struct LOGIT: App {
                 .environmentObject(purchaseManager)
                 .environmentObject(networkMonitor)
                 .environmentObject(workoutRecorder)
+                .environmentObject(muscleGroupService)
                 .environment(\.goHome, { selectedTab = .home })
                 .task {
                     if acceptedPrivacyPolicyVersion != privacyPolicyVersion {

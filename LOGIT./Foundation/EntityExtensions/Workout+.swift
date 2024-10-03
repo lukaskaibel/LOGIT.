@@ -68,21 +68,6 @@ extension Workout {
             return leftIndex < rightIndex
         }
     }
-    
-    func percentage(ofTraining muscleGroup: MuscleGroup) -> Float {
-        Float(muscleGroupOccurances.first(where: { $0.0 == muscleGroup })?.1 ?? 0) / Float(muscleGroupOccurances.reduce(0, { $0 + $1.1 }))
-    }
-
-    var primaryMuscleGroup: MuscleGroup? {
-        (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
-    }
-
-    var muscleGroupOccurances: [(MuscleGroup, Int)] {
-        MuscleGroup.allCases
-            .map { muscleGroup in
-                (muscleGroup, sets.reduce(into: 0, { $0 += $1.isTraining(muscleGroup) ? 1 : 0 }))
-            }
-    }
 
     func remove(setGroup: WorkoutSetGroup) {
         setGroups = setGroups.filter { $0 != setGroup }

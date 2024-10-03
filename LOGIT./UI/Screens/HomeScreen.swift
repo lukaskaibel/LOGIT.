@@ -125,9 +125,7 @@ struct HomeScreen: View {
                 case .templateList: TemplateListScreen()
                 case .targetPerWeek: TargetPerWeekDetailScreen()
                 case .muscleGroupsOverview:
-                    MuscleGroupsDetailScreen(
-                        setGroups: (lastTenWorkouts.map { $0.setGroups }).reduce([], +)
-                    )
+                    MuscleGroupSplitScreen()
                 }
             }
         }
@@ -250,36 +248,6 @@ struct HomeScreen: View {
         workoutRepository.getWorkouts(sortedBy: .date)
     }
 
-    var recentWorkouts: [Workout] {
-        Array(workoutRepository.getWorkouts(sortedBy: .date).prefix(3))
-    }
-
-    var lastTenWorkouts: [Workout] {
-        Array(workouts.prefix(10))
-    }
-
-    func getOverallMuscleGroupOccurances() -> [(MuscleGroup, Int)] {
-        Array(
-            lastTenWorkouts
-                .reduce(
-                    [:],
-                    { current, workout in
-                        current.merging(workout.muscleGroupOccurances, uniquingKeysWith: +)
-                    }
-                )
-                .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
-        )
-        .sorted {
-            MuscleGroup.allCases.firstIndex(of: $0.key)! < MuscleGroup.allCases.firstIndex(
-                of: $1.key
-            )!
-        }
-    }
-
-}
-
-private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
-    MuscleGroup.allCases.reduce(into: [MuscleGroup: Int](), { $0[$1, default: 0] = 0 })
 }
 
 struct HomeView_Previews: PreviewProvider {

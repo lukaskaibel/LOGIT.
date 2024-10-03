@@ -44,7 +44,13 @@ extension Date {
     }
     
     var weekDescription: String {
-        return self.formatted(.dateTime.day().month())
+        if Calendar.current.isDate(self, equalTo: .now, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("currentWeek", comment: "")
+        } else if Calendar.current.isDate(self, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -1, to: .now)!, toGranularity: [.weekOfYear, .year]) {
+            return NSLocalizedString("lastWeek", comment: "")
+        } else {
+            return "\(self.startOfWeek.formatted(.dateTime.day().month())) - \(self.endOfWeek.formatted(.dateTime.day().month()))"
+        }
     }
 
     var monthDescription: String {

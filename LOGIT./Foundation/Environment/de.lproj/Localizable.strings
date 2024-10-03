@@ -97,6 +97,7 @@
 "finishWorkout" = "Workout beenden";
 "finishWorkoutConfimation" = "Möchtest du das Workout beenden?";
 "five" = "Fünf";
+"focusedOn" = "Fokussiert auf";
 "four" = "Vier";
 "fourWeeksAgo" = "Vor 4 Wochen";
 "fromLastWeek" = "zu letzter Woche";
@@ -193,6 +194,7 @@
 "noWidgetsAdded" = "Keine Widgets hinzugefügt";
 "noWorkouts" = "Keine Workouts";
 "noWorkoutsInWeek" = "Keine Workouts in der Woche";
+"noWorkoutsThisWeek" = "Keine Workouts in dieser Woche";
 "noWorkoutsTip" = "Lass uns trainieren 💪";
 "noWorkoutsTipDescription" = "Du hast bisher keine Workouts in LOGIT eingetragen. Starte jetzt und klicke unten, um dein erstes Training zu erfassen!";
 
@@ -284,6 +286,7 @@
 "templateFromPhoto" = "Vorlage aus Foto";
 "templateFromPhotoDescription" = "Extrahiert eine Vorlage aus einem Foto";
 "templates" = "Vorlagen";
+"ThisWeek" = "Diese Woche";
 "three" = "Drei";
 "threeMonths" = "3 Monate";
 "threeWeeksAgo" = "Vor 3 Wochen";

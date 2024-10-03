@@ -18,6 +18,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
     @StateObject private var purchaseManager: PurchaseManager
     @StateObject private var networkMonitor: NetworkMonitor
     @StateObject private var workoutRecorder: WorkoutRecorder
+    @StateObject private var muscleGroupService: MuscleGroupService
     
     init() {
         let db = Database(isPreview: true)
@@ -34,6 +35,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
         _purchaseManager = StateObject(wrappedValue: PurchaseManager())
         _networkMonitor = StateObject(wrappedValue: NetworkMonitor())
         _workoutRecorder = StateObject(wrappedValue: WorkoutRecorder(database: db, workoutRepository: wr, currentWorkoutManager: cwm))
+        _muscleGroupService = StateObject(wrappedValue: MuscleGroupService(workoutRepository: wr))
     }
 
     func body(content: Content) -> some View {
@@ -47,6 +49,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
             .environmentObject(purchaseManager)
             .environmentObject(networkMonitor)
             .environmentObject(workoutRecorder)
+            .environmentObject(muscleGroupService)
             .task {
                 Task {
                     do {

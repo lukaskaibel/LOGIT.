@@ -10,11 +10,18 @@ import SwiftUI
 struct MuscleGroupSelector: View {
 
     @Binding var selectedMuscleGroup: MuscleGroup?
+    let muscleGroups: [MuscleGroup]
     let canBeNil: Bool
     let animation: Bool
 
-    init(selectedMuscleGroup: Binding<MuscleGroup?>, canBeNil: Bool = true, withAnimation: Bool = false) {
+    init(
+        selectedMuscleGroup: Binding<MuscleGroup?>,
+        from muscleGroups: [MuscleGroup] = MuscleGroup.allCases,
+        canBeNil: Bool = true,
+        withAnimation: Bool = false
+    ) {
         self._selectedMuscleGroup = selectedMuscleGroup
+        self.muscleGroups = muscleGroups
         self.canBeNil = canBeNil
         self.animation = withAnimation
     }
@@ -34,7 +41,7 @@ struct MuscleGroupSelector: View {
                     }
                     .buttonStyle(CapsuleButtonStyle(isSelected: selectedMuscleGroup == nil))
                 }
-                ForEach(MuscleGroup.allCases) { muscleGroup in
+                ForEach(muscleGroups) { muscleGroup in
                     Button(muscleGroup.description) {
                         if animation {
                             withAnimation {
@@ -60,5 +67,7 @@ struct MuscleGroupSelector: View {
 struct MuscleGroupSelector_Previews: PreviewProvider {
     static var previews: some View {
         MuscleGroupSelector(selectedMuscleGroup: .constant(.chest))
+        MuscleGroupSelector(selectedMuscleGroup: .constant(.chest), from: [.chest, .back])
+        MuscleGroupSelector(selectedMuscleGroup: .constant(.chest), from: [])
     }
 }

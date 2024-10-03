@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum MuscleGroup: String, Decodable, Identifiable, CaseIterable {
+enum MuscleGroup: String, Decodable, Identifiable, CaseIterable, Comparable, Equatable {
 
     case chest, triceps, shoulders, biceps, back, legs, abdominals, cardio
 
@@ -15,6 +15,10 @@ enum MuscleGroup: String, Decodable, Identifiable, CaseIterable {
 
     var description: String {
         NSLocalizedString(self.rawValue, comment: "")
+    }
+    
+    static func < (lhs: MuscleGroup, rhs: MuscleGroup) -> Bool {
+        return lhs.rawValue > rhs.rawValue
     }
 
 //    var color: Color {

@@ -46,7 +46,7 @@ struct TargetPerWeekDetailScreen: View {
                                     ).count
                                     VStack(alignment: .leading, spacing: 8) {
                                         HStack(alignment: .lastTextBaseline) {
-                                            Text(weekTitle(for: Calendar.current.date(byAdding: .weekOfYear, value: -weeksFromNow, to: .now)!))
+                                            Text(Calendar.current.date(byAdding: .weekOfYear, value: -weeksFromNow, to: .now)!.weekDescription)
                                                 .fontWeight(isCurrentWeek ? .bold : .regular)
                                             Spacer()
                                             if numberOfWorkoutsInWeek < targetPerWeek {
@@ -168,22 +168,6 @@ struct TargetPerWeekDetailScreen: View {
     
     private func dateForWeeksAgo(_ weeksAgo: Int) -> Date? {
         return Calendar.current.date(byAdding: .day, value: -(7 * weeksAgo), to: .now, wrappingComponents: false)
-    }
-    
-    private func weekTitle(for date: Date) -> String {
-        if Calendar.current.isDate(date, equalTo: .now, toGranularity: [.weekOfYear, .year]) {
-            return NSLocalizedString("currentWeek", comment: "")
-        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -1, to: .now)!, toGranularity: [.weekOfYear, .year]) {
-            return NSLocalizedString("lastWeek", comment: "")
-        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -2, to: .now)!, toGranularity: [.weekOfYear, .year]) {
-            return NSLocalizedString("twoWeeksAgo", comment: "")
-        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -3, to: .now)!, toGranularity: [.weekOfYear, .year]) {
-            return NSLocalizedString("threeWeeksAgo", comment: "")
-        } else if Calendar.current.isDate(date, equalTo: Calendar.current.date(byAdding: .weekOfYear, value: -4, to: .now)!, toGranularity: [.weekOfYear, .year]) {
-            return NSLocalizedString("fourWeeksAgo", comment: "")
-        } else {
-            return "\(date.startOfWeek.weekDescription) - \(date.endOfWeek.weekDescription)"
-        }
     }
 
 }

@@ -82,22 +82,4 @@ extension Template {
         }
     }
 
-    var primaryMuscleGroup: MuscleGroup? {
-        (muscleGroupOccurances.max { $0.1 < $1.1 })?.0
-    }
-
-    var muscleGroupOccurances: [(MuscleGroup, Int)] {
-        Array(
-            sets
-                .compactMap({ $0.exercise?.muscleGroup })
-                .reduce(into: [:]) { $0[$1, default: 0] += 1 }
-                .merging(allMuscleGroupZeroDict, uniquingKeysWith: +)
-        )
-        .sorted { $0.key.rawValue < $1.key.rawValue }
-    }
-
-    private var allMuscleGroupZeroDict: [MuscleGroup: Int] {
-        MuscleGroup.allCases.reduce(into: [:], { $0[$1, default: 0] = 0 })
-    }
-
 }

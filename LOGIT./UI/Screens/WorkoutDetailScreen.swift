@@ -18,12 +18,15 @@ struct WorkoutDetailScreen: View {
     // MARK: - Environment
 
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var database: Database
+    @EnvironmentObject private var database: Database
+    @EnvironmentObject private var muscleGroupService: MuscleGroupService
 
     // MARK: - State
 
     @State private var isShowingDeleteWorkoutAlert: Bool = false
     @State private var sheetType: SheetType? = nil
+    @State private var selectedMuscleGroup: MuscleGroup? = nil
+    @State private var isMuscleGroupExpanded: Bool = false
 
     // MARK: - Variables
 
@@ -151,14 +154,6 @@ struct WorkoutDetailScreen: View {
             Text(workout.name ?? "")
                 .screenHeaderStyle()
                 .lineLimit(2)
-            HStack {
-                ForEach(workout.muscleGroups) { muscleGroup in
-                    Text(muscleGroup.description)
-                        .screenHeaderSecondaryStyle()
-                        .foregroundStyle(muscleGroup.color.gradient)
-                        .lineLimit(1)
-                }
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -207,20 +202,91 @@ struct WorkoutDetailScreen: View {
     }
 
     private var setsPerMuscleGroup: some View {
-        VStack(alignment: .leading) {
-            Text(NSLocalizedString("muscleGroups", comment: ""))
-                .tileHeaderStyle()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            PieGraph(
-                items: workout.muscleGroupOccurances.map {
-                    PieGraph.Item(
-                        title: $0.0.rawValue.capitalized,
-                        amount: $0.1,
-                        color: $0.0.color,
-                        isSelected: false
-                    )
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                Text(NSLocalizedString("muscleGroups", comment: ""))
+                    .tileHeaderStyle()
+                Spacer()
+                NavigationChevron()
+                    .foregroundStyle(.tint)
+                    .rotationEffect(isMuscleGroupExpanded ? .degrees(90) : .degrees(0))
+            }
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("focusedOn", comment: ""))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        ForEach(getFocusedMuscleGroups()) { muscleGroup in
+                            Text(muscleGroup.description)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(muscleGroup.color)
+                        }
+                    }
                 }
-            )
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .emptyPlaceholder(getMuscleGroupOccurancesInWorkout) {
+                    Text(NSLocalizedString("noWorkoutsThisWeek", comment: ""))
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxHeight: 150)
+                Spacer()
+                MuscleGroupOccurancesChart(muscleGroupOccurances: getMuscleGroupOccurancesInWorkout)
+                    .frame(width: 150, height: 150)
+            }
+            if isMuscleGroupExpanded {
+                VStack(spacing: CELL_SPACING) {
+                    ForEach(getMuscleGroupOccurancesInWorkout, id:\.self.0) { muscleGroupOccurance in
+                        HStack {
+                            Text(muscleGroupOccurance.0.description)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(muscleGroupOccurance.0.color)
+                            Spacer()
+                            HStack(spacing: 10) {
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("exercises", comment: ""))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text("\(workout.setGroups.filter({ $0.muscleGroups.contains(where: { $0 == muscleGroupOccurance.0 }) }).count)")
+                                        .fontWeight(.bold)
+                                        .fontDesign(.rounded)
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("sets", comment: ""))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text("\(workout.sets.filter({ $0.setGroup?.muscleGroups.contains(where: { $0 == muscleGroupOccurance.0 }) ?? false }).count)")
+                                        .fontWeight(.bold)
+                                        .fontDesign(.rounded)
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("volume", comment: ""))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    UnitView(
+                                        value: "\(convertWeightForDisplaying(volume(for: muscleGroupOccurance.0, in: workout.sets)))",
+                                        unit: WeightUnit.used.rawValue
+                                    )
+                                }
+                            }
+                        }
+
+                        .padding(CELL_PADDING)
+                        .secondaryTileStyle(backgroundColor: muscleGroupOccurance.0.color.secondaryTranslucentBackground)
+                    }
+                }
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation {
+                isMuscleGroupExpanded.toggle()
+            }
         }
     }
 
@@ -258,6 +324,54 @@ struct WorkoutDetailScreen: View {
         let minutes =
             (Calendar.current.dateComponents([.minute], from: start, to: end).minute ?? 0) % 60
         return "\(hours):\(minutes < 10 ? "0" : "")\(minutes)"
+    }
+    
+    var getMuscleGroupOccurancesInWorkout: [(MuscleGroup, Int)] {
+        muscleGroupService.getMuscleGroupOccurances(in: workout)
+    }
+    
+    private var amountOfOccurances: Int {
+        getMuscleGroupOccurancesInWorkout.reduce(0, { $0 + $1.1 })
+    }
+    
+    /// Calculates the smallest number of Muscle Groups that combined account for 51% of the overall sets in the timeframe
+    /// - Returns: The focused Muscle Groups
+    private func getFocusedMuscleGroups() -> [MuscleGroup] {
+        var accumulatedPercetange: Float = 0
+        var focusedMuscleGroups = [MuscleGroup]()
+        for muscleGroupOccurance in getMuscleGroupOccurancesInWorkout {
+            accumulatedPercetange += Float(muscleGroupOccurance.1) / Float(amountOfOccurances)
+            focusedMuscleGroups.append(muscleGroupOccurance.0)
+            if accumulatedPercetange > 0.51 {
+                return focusedMuscleGroups
+            }
+        }
+        return []
+    }
+    
+    private func volume(for muscleGroup: MuscleGroup, in sets: [WorkoutSet]) -> Int {
+        sets.reduce(0, { currentVolume, currentSet in
+            if let standardSet = currentSet as? StandardSet {
+                guard standardSet.exercise?.muscleGroup == muscleGroup else { return currentVolume }
+                return currentVolume + Int(standardSet.repetitions * standardSet.weight)
+            }
+            if let dropSet = currentSet as? DropSet, let repetitions = dropSet.repetitions, let weights = dropSet.weights {
+                guard dropSet.exercise?.muscleGroup == muscleGroup else { return currentVolume }
+                return currentVolume + Int(zip(repetitions, weights).map(*).reduce(0, +))
+            }
+            if let superSet = currentSet as? SuperSet {
+                var volumeForFirstExercise = 0
+                var volumeForSecondExercise = 0
+                if superSet.exercise?.muscleGroup == muscleGroup {
+                    volumeForFirstExercise = Int(superSet.repetitionsFirstExercise * superSet.weightFirstExercise)
+                }
+                if superSet.secondaryExercise?.muscleGroup == muscleGroup {
+                    volumeForSecondExercise = Int(superSet.repetitionsSecondExercise * superSet.weightSecondExercise)
+                }
+                return currentVolume + volumeForFirstExercise + volumeForSecondExercise
+            }
+            return currentVolume
+        })
     }
 
 }

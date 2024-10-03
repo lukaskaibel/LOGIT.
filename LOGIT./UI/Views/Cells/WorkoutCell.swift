@@ -9,8 +9,12 @@ import Charts
 import SwiftUI
 
 struct WorkoutCell: View {
+    
+    // MARK: - Environment
+    
+    @EnvironmentObject private var muscleGroupService: MuscleGroupService
 
-    // MARK: Variables
+    // MARK: - Variables
 
     @ObservedObject var workout: Workout
 
@@ -22,7 +26,7 @@ struct WorkoutCell: View {
                 HStack(spacing: 12) {
                     if #available(iOS 17.0, *) {
                         Chart {
-                            ForEach(workout.muscleGroupOccurances, id:\.0) { muscleGroupOccurance in
+                            ForEach(muscleGroupService.getMuscleGroupOccurances(in: workout), id:\.0) { muscleGroupOccurance in
                                 SectorMark(
                                     angle: .value("Value", muscleGroupOccurance.1),
                                     innerRadius: .ratio(0.65),
