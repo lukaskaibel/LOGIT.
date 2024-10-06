@@ -98,7 +98,7 @@ struct HomeScreen: View {
                         views: [
                             currentWeekWeeklyTargetWidget,
                             muscleGroupPercentageView.widget(ofType: .muscleGroupsInLastTen, isAddedByDefault: true),
-                            setsPerWeek.widget(ofType: .setsPerWeek, isAddedByDefault: false),
+                            WorkoutSetsTile().widget(ofType: .setsPerWeek, isAddedByDefault: true),
                             workoutsPerMonth.widget(ofType: .workoutsPerMonth, isAddedByDefault: false),
                             volumePerDay.widget(ofType: .homeScreenVolumePerDay, isAddedByDefault: false)
                         ],
@@ -166,27 +166,6 @@ struct HomeScreen: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(TileButtonStyle())
-    }
-
-    private var setsPerWeek: some View {
-        VStack {
-            VStack(alignment: .leading) {
-                Text(NSLocalizedString("overallSets", comment: ""))
-                    .tileHeaderStyle()
-                Text(NSLocalizedString("PerWeek", comment: ""))
-                    .tileHeaderSecondaryStyle()
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            DateBarChart(dateUnit: .weekOfYear) {
-                workoutSetRepository.getGroupedWorkoutsSets(in: .weekOfYear)
-                    .compactMap {
-                        guard let date = $0.first?.workout?.date else { return nil }
-                        return DateBarChart.Item(date: date, value: $0.count)
-                    }
-            }
-        }
-        .padding(CELL_PADDING)
-        .tileStyle()
     }
 
     private var workoutsPerMonth: some View {

@@ -168,6 +168,7 @@
 		80D9A7DB28860BB1000BF05E /* WorkoutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D9A7DA28860BB1000BF05E /* WorkoutCell.swift */; };
 		80ED02902764D94200D59B75 /* ExerciseSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80ED028F2764D94200D59B75 /* ExerciseSelectionScreen.swift */; };
 		80F9C34B2704C4F000B6EBF2 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F9C34A2704C4F000B6EBF2 /* Date+.swift */; };
+		A004D4512CB2E009002914FF /* WorkoutSetsTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A004D4502CB2E009002914FF /* WorkoutSetsTile.swift */; };
 		A06205B12CADEF1F0034BF47 /* MuscleGroupOccurancesChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06205B02CADEF1F0034BF47 /* MuscleGroupOccurancesChart.swift */; };
 /* End PBXBuildFile section */
 
@@ -361,6 +362,7 @@
 		80E9FAEE26FE152100C670D5 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		80ED028F2764D94200D59B75 /* ExerciseSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSelectionScreen.swift; sourceTree = "<group>"; };
 		80F9C34A2704C4F000B6EBF2 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		A004D4502CB2E009002914FF /* WorkoutSetsTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetsTile.swift; sourceTree = "<group>"; };
 		A06205B02CADEF1F0034BF47 /* MuscleGroupOccurancesChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupOccurancesChart.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -486,6 +488,7 @@
 			children = (
 				79CC7A7C2C7A691E00674E22 /* CurrentWeekWeeklyTargetTile.swift */,
 				79CC7A802C7A7FC100674E22 /* MuscleGroupSplitTile.swift */,
+				A004D4502CB2E009002914FF /* WorkoutSetsTile.swift */,
 			);
 			path = Tiles;
 			sourceTree = "<group>";
@@ -1031,6 +1034,7 @@
 				798FBF812925571900A5F7F0 /* NavigationChevron.swift in Sources */,
 				79DB52112AE1724F00073423 /* NetworkMonitor.swift in Sources */,
 				79B27FE52AD8288A0026EF35 /* PurchaseManager.swift in Sources */,
+				A004D4512CB2E009002914FF /* WorkoutSetsTile.swift in Sources */,
 				79C07B2E2ABA535F000BF879 /* MeasurementController.swift in Sources */,
 				7907B5A5280B73E7003E5515 /* Database+Preview.swift in Sources */,
 				79B7C9B42BF2320A001B5353 /* StartWorkoutView.swift in Sources */,

@@ -16,7 +16,8 @@ struct BlockedWithoutProModifier: ViewModifier {
     @State private var isShowingUpgradeToProScreen = false
 
     func body(content: Content) -> some View {
-        if !purchaseManager.hasUnlockedPro && blocked {
+        // MARK: Change This Back before Commit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if false {// !purchaseManager.hasUnlockedPro && blocked {
             content
                 .overlay {
                     Color.black.opacity(0.2)
