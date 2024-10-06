@@ -21,6 +21,7 @@ struct TemplateDetailScreen: View {
     @State private var showingTemplateInfoAlert = false
     @State private var showingDeletionAlert = false
     @State private var showingTemplateEditor = false
+    @State private var isMuscleGroupExpanded = false
 
     // MARK: - Variables
 
@@ -52,11 +53,9 @@ struct TemplateDetailScreen: View {
                     exercisesList
                 }
                 VStack(spacing: SECTION_HEADER_SPACING) {
-                    Text(
-                        "\(NSLocalizedString("performed", comment: "")) \(template.workouts.count) \(NSLocalizedString("time\(template.workouts.count == 1 ? "" : "s")", comment: ""))"
-                    )
-                    .sectionHeaderStyle2()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(NSLocalizedString("lastUsed", comment: ""))
+                        .sectionHeaderStyle2()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     workoutList
                 }
             }
@@ -68,7 +67,6 @@ struct TemplateDetailScreen: View {
         .navigationDestination(item: $selectedWorkout) { workout in
             WorkoutDetailScreen(workout: workout, canNavigateToTemplate: false)
         }
-        .navigationTitle(NSLocalizedString("template", comment: ""))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Menu(content: {
@@ -116,24 +114,11 @@ struct TemplateDetailScreen: View {
 
     private var templateHeader: some View {
         VStack(alignment: .leading) {
-            Text(
-                template.lastUsed != nil
-                    ? (NSLocalizedString("lastUsed", comment: "") + " "
-                        + (template.lastUsed?.description(.long) ?? ""))
-                    : NSLocalizedString("unused", comment: "")
-            )
-            .screenHeaderTertiaryStyle()
+            Text(NSLocalizedString("template", comment: ""))
+                .screenHeaderTertiaryStyle()
             Text(template.name ?? "")
                 .screenHeaderStyle()
                 .lineLimit(2)
-            HStack {
-                ForEach(template.muscleGroups) { muscleGroup in
-                    Text(muscleGroup.description)
-                        .screenHeaderSecondaryStyle()
-                        .foregroundStyle(muscleGroup.color.gradient)
-                        .lineLimit(1)
-                }
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -162,21 +147,85 @@ struct TemplateDetailScreen: View {
         }
     }
 
+    @ViewBuilder
     private var setsPerMuscleGroup: some View {
-        VStack(alignment: .leading) {
-            Text(NSLocalizedString("muscleGroups", comment: ""))
-                .tileHeaderStyle()
-                .frame(maxWidth: .infinity, alignment: .leading)
-            PieGraph(
-                items: muscleGroupService.getMuscleGroupOccurances(in: template).map {
-                    PieGraph.Item(
-                        title: $0.0.rawValue.capitalized,
-                        amount: $0.1,
-                        color: $0.0.color,
-                        isSelected: false
-                    )
+        VStack(alignment: .leading, spacing: 20) {
+            let muscleGroupOccurances = muscleGroupService.getMuscleGroupOccurances(in: template)
+            HStack {
+                Text(NSLocalizedString("muscleGroups", comment: ""))
+                    .tileHeaderStyle()
+                Spacer()
+                NavigationChevron()
+                    .foregroundStyle(.tint)
+                    .rotationEffect(isMuscleGroupExpanded ? .degrees(90) : .degrees(0))
+            }
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading) {
+                    Text(NSLocalizedString("focusedOn", comment: ""))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        ForEach(getFocusedMuscleGroups()) { muscleGroup in
+                            Text(muscleGroup.description)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(muscleGroup.color)
+                        }
+                    }
                 }
-            )
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .emptyPlaceholder(muscleGroupOccurances) {
+                    Text(NSLocalizedString("noWorkoutsThisWeek", comment: ""))
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxHeight: 150)
+                Spacer()
+                MuscleGroupOccurancesChart(muscleGroupOccurances: muscleGroupService.getMuscleGroupOccurances(in: template))
+                    .frame(width: 150, height: 150)
+            }
+            if isMuscleGroupExpanded {
+                VStack(spacing: CELL_SPACING) {
+                    ForEach(muscleGroupOccurances, id:\.self.0) { muscleGroupOccurance in
+                        HStack {
+                            Text(muscleGroupOccurance.0.description)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(muscleGroupOccurance.0.color)
+                            Spacer()
+                            HStack(spacing: 10) {
+
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("exercises", comment: ""))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text("\(template.setGroups.filter({ $0.muscleGroups.contains(where: { $0 == muscleGroupOccurance.0 }) }).count)")
+                                        .fontWeight(.bold)
+                                        .fontDesign(.rounded)
+                                }
+                                Divider()
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("sets", comment: ""))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Text("\(template.sets.filter({ $0.setGroup?.muscleGroups.contains(where: { $0 == muscleGroupOccurance.0 }) ?? false }).count)")
+                                        .fontWeight(.bold)
+                                        .fontDesign(.rounded)
+                                }
+                            }
+                        }
+
+                        .padding(CELL_PADDING)
+                        .secondaryTileStyle(backgroundColor: muscleGroupOccurance.0.color.secondaryTranslucentBackground)
+                    }
+                }
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation {
+                isMuscleGroupExpanded.toggle()
+            }
         }
     }
 
@@ -209,6 +258,9 @@ struct TemplateDetailScreen: View {
             .tileStyle()
             .buttonStyle(TileButtonStyle())
         }
+        .emptyPlaceholder(template.workouts) {
+            Text(NSLocalizedString("templateNeverUsed", comment: ""))
+        }
     }
 
     // MARK: - Computed Properties
@@ -216,6 +268,25 @@ struct TemplateDetailScreen: View {
     private var lastUsedDateString: String {
         template.workouts.first?.date?.description(.medium)
             ?? NSLocalizedString("never", comment: "")
+    }
+    
+    private var amountOfOccurances: Int {
+        muscleGroupService.getMuscleGroupOccurances(in: template).reduce(0, { $0 + $1.1 })
+    }
+    
+    /// Calculates the smallest number of Muscle Groups that combined account for 51% of the overall sets in the timeframe
+    /// - Returns: The focused Muscle Groups
+    private func getFocusedMuscleGroups() -> [MuscleGroup] {
+        var accumulatedPercetange: Float = 0
+        var focusedMuscleGroups = [MuscleGroup]()
+        for muscleGroupOccurance in muscleGroupService.getMuscleGroupOccurances(in: template) {
+            accumulatedPercetange += Float(muscleGroupOccurance.1) / Float(amountOfOccurances)
+            focusedMuscleGroups.append(muscleGroupOccurance.0)
+            if accumulatedPercetange > 0.51 {
+                return focusedMuscleGroups
+            }
+        }
+        return []
     }
 
 }

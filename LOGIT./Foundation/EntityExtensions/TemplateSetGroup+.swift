@@ -64,7 +64,11 @@ extension TemplateSetGroup {
             }
         }
     }
-
+    
+    var muscleGroups: [MuscleGroup] {
+        Array(Set(exercises.compactMap({ $0.muscleGroup })))
+    }
+    
     var setType: SetType {
         let firstSet = sets.first
         if let _ = firstSet as? TemplateDropSet {

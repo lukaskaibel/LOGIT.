@@ -282,6 +282,7 @@
 "templateExplanation" = "Use Templates to plan and reuse workouts. You can select a Template when starting a workout.";
 "templateFromPhoto" = "Template from Photo";
 "templateFromPhotoDescription" = "Extracts a template from a photo";
+"templateNeverUsed" = "Template never used";
 "templates" = "Templates";
 "ThisWeek" = "This Week";
 "three" = "Three";

@@ -285,6 +285,7 @@
 "templateExplanation" = "Benutze Vorlagen um deine Workouts zu planen und wiederzuverwerten. Du kannst eine Vorlage auswählen, wenn du dein Workout startest.";
 "templateFromPhoto" = "Vorlage aus Foto";
 "templateFromPhotoDescription" = "Extrahiert eine Vorlage aus einem Foto";
+"templateNeverUsed" = "Vorlage nie benutzt";
 "templates" = "Vorlagen";
 "ThisWeek" = "Diese Woche";
 "three" = "Drei";
