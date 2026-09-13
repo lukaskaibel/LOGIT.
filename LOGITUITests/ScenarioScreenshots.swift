@@ -1608,11 +1608,18 @@ final class ScenarioScreenshots: XCTestCase {
         editButton.tap()
         waitABit(2)
 
-        // Tap the "2:00" rest capsule between set 1 and set 2 (coordinate-based;
-        // background elements aren't in the a11y tree while the tray is up).
+        // Tap the "2:00" rest capsule between set 1 and set 2 — the editor's first rest capsule
+        // (the detail screen underneath draws its rests as plain text, not buttons). Found by
+        // label rather than by a fixed screen point, which a sheet's top inset pushed onto set
+        // 1's reps field. The capsule relabels itself to the preset picked below, so the reopen
+        // taps the same point instead of looking it up again.
         // The sheet-presence sentinel is its "Rest Between Sets" caption — unique to the
         // sheet, unlike the preset labels, which collide with the editor's rest capsules.
-        let restCapsule = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.287))
+        let firstRestCapsule = app.buttons.matching(NSPredicate(format: "label == '2:00'")).firstMatch
+        XCTAssertTrue(firstRestCapsule.waitForExistence(timeout: 5), "No 2:00 rest capsule in the editor")
+        let capsuleFrame = firstRestCapsule.frame
+        let restCapsule = app.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: capsuleFrame.midX, dy: capsuleFrame.midY))
         let sheetCaption = app.staticTexts["Rest Between Sets"].firstMatch
         restCapsule.tap()
         waitABit(1)
@@ -1706,5 +1713,103 @@ final class ScenarioScreenshots: XCTestCase {
             }
             XCTFail("Focus jump: tapped field at y=\(targetFrame.minY) value='\(valueAfter)'; digit landed at y=\(changed?.frame.minY ?? -1)")
         }
+    }
+
+    /// The template editor's keyboard accessory: the planned rest (⏱) on the leading edge, Next
+    /// and hide on the trailing one, hide at the very edge. A number pad has no return key, so
+    /// this row is the only way to move on or put the keyboard away. Asserts the row is up over a
+    /// template's number field, that Next walks the fields in typing order (reps → weight → the
+    /// next set), and that ⏱ opens the rest editor.
+    func testTemplateEditorKeyboardAccessory() {
+        let app = launchApp(scenario: "many")
+
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 30), "Tab bar never appeared")
+        waitABit(1)
+        tapTab(app, at: 2) // Templates
+
+        let templateRow = app.staticTexts["Push Day"].firstMatch
+        XCTAssertTrue(templateRow.waitForExistence(timeout: 5), "No template row")
+        templateRow.tap()
+        waitABit(1)
+
+        // Nav-bar ellipsis menu → Edit.
+        app.navigationBars.firstMatch.buttons.allElementsBoundByIndex.last?.tap()
+        waitABit(1)
+        let editButton = app.buttons["Edit"].firstMatch
+        XCTAssertTrue(editButton.waitForExistence(timeout: 3), "No Edit menu item")
+        editButton.tap()
+        waitABit(3)
+
+        // The first group's number fields in reading order: set 1 reps, set 1 weight, set 2 reps.
+        // Only the first few fields are read: every frame is a query of its own, and walking all
+        // thirty of the template's fields costs half a minute.
+        let setFields = app.textFields.matching(
+            NSPredicate(format: "placeholderValue != %@", "Search in Exercises")
+        )
+        let bandBottom = app.frame.height * 0.5
+        var fields: [(element: XCUIElement, frame: CGRect)] = []
+        for index in 0 ..< min(setFields.count, 6) {
+            let element = setFields.element(boundBy: index)
+            let frame = element.frame
+            if frame.minY > 100, frame.maxY < bandBottom {
+                fields.append((element, frame))
+            }
+        }
+        fields.sort {
+            abs($0.frame.midY - $1.frame.midY) < 10
+                ? $0.frame.minX < $1.frame.minX
+                : $0.frame.midY < $1.frame.midY
+        }
+        guard fields.count >= 3 else {
+            XCTFail("Expected the first group's set fields in the editor, found \(fields.count)")
+            attach(app, "template_keyboard_fail_fields")
+            return
+        }
+        let (setOneReps, setOneWeight, setTwoReps) = (fields[0].element, fields[1].element, fields[2].element)
+
+        setOneReps.tap()
+        let next = app.buttons["keyboardNextField"]
+        let hide = app.buttons["keyboardHide"]
+        let rest = app.buttons["Rest Between Sets"]
+        XCTAssertTrue(next.waitForExistence(timeout: 5), "Keyboard accessory has no Next button")
+        XCTAssertTrue(hide.exists, "Keyboard accessory has no hide button")
+        XCTAssertTrue(rest.exists, "Keyboard accessory has no rest button")
+        waitABit(1)
+        attachScreen("template_keyboard_01_row")
+
+        // Leading: what belongs to the set. Trailing: the keyboard's own controls, hide outermost.
+        XCTAssertLessThan(rest.frame.midX, app.frame.midX, "Rest isn't on the leading edge")
+        XCTAssertGreaterThan(next.frame.midX, app.frame.midX, "Next isn't on the trailing edge")
+        XCTAssertLessThan(next.frame.maxX, hide.frame.minX, "Hide isn't outboard of Next")
+        XCTAssertTrue(hasKeyboardFocus(setOneReps), "The tapped reps field doesn't hold the keyboard")
+
+        next.tap()
+        waitABit(1)
+        XCTAssertTrue(hasKeyboardFocus(setOneWeight), "Next didn't move from reps to the set's weight")
+        attachScreen("template_keyboard_02_next_weight")
+
+        next.tap()
+        waitABit(1)
+        XCTAssertTrue(hasKeyboardFocus(setTwoReps), "Next didn't move on to the next set")
+        attachScreen("template_keyboard_03_next_set")
+
+        rest.tap()
+        let restEditorCaption = app.staticTexts["Rest Between Sets"].firstMatch
+        XCTAssertTrue(restEditorCaption.waitForExistence(timeout: 5), "⏱ didn't open the rest editor")
+        waitABit(1)
+        attachScreen("template_keyboard_04_rest_editor")
+    }
+
+    /// Captures the whole screen rather than the app's window, keyboard and accessory included.
+    private func attachScreen(_ name: String) {
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    private func hasKeyboardFocus(_ element: XCUIElement) -> Bool {
+        (element.value(forKey: "hasKeyboardFocus") as? Bool) ?? false
     }
 }

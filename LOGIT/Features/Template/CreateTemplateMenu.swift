@@ -54,7 +54,7 @@ struct CreateTemplateMenu: View {
             guard let template = newValue else { return }
             database.flagAsTemporary(template)
         }
-        .fullScreenCover(item: $newTemplate) { template in
+        .sheet(item: $newTemplate) { template in
             TemplateEditorScreen(
                 template: template,
                 isEditingExistingTemplate: false

@@ -330,12 +330,6 @@ struct TemplateEditorScreen: View {
                         }
                     }
                 }
-                // Presented, but not seen: SwiftUI drops `.keyboard` toolbar items inside a
-                // `fullScreenCover`, which is how every caller opens this screen (the workout
-                // editor is a `.sheet` and shows the same accessory fine). Verified in the
-                // simulator on iOS 26.4 — the item renders the moment the cover becomes a sheet,
-                // and nowhere else it can be attached helps. Left wired so the accessory is
-                // right the day the presentation changes.
                 KeyboardToolbarItem { keyboardToolbarContent }
             }
             .scrollDismissesKeyboard(.immediately)
