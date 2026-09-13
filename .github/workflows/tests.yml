@@ -5,16 +5,28 @@ on:
     branches: ['*']
   pull_request:
     branches: ['*']
+  # The Claude bug-fix workflow runs this same gate on the agent's commit before it merges
+  # (claude-bugfix.yml). A branch pushed with the workflow token triggers no push or
+  # pull_request run of its own, so it has to be called.
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to test
+        required: true
+        type: string
 
 jobs:
   test:
     name: Run Unit Tests
     runs-on: macos-15
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+        with:
+          # Empty for push and pull_request runs, which keeps checkout's default.
+          ref: ${{ inputs.ref }}
+
       - name: Select latest Xcode version
         run: |
           # List available Xcode versions
@@ -93,6 +105,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
 
       - name: Select latest Xcode version
         run: |
