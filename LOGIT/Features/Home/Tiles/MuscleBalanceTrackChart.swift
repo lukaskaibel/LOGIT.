@@ -142,11 +142,17 @@ struct MuscleBalanceGoalCell: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 12) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(entry.muscleGroup.description)
-                    .font(.system(.subheadline, design: .rounded, weight: .bold))
-                    .foregroundStyle(isExcluded ? Color.secondaryLabel : entry.muscleGroup.color)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
+                // The chevron says the tile opens the muscle's page, the way "Volume >" does on the
+                // Summary's tiles.
+                HStack(spacing: 4) {
+                    Text(entry.muscleGroup.description)
+                        .font(.system(.subheadline, design: .rounded, weight: .bold))
+                        .foregroundStyle(isExcluded ? Color.secondaryLabel : entry.muscleGroup.color)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                    NavigationChevron()
+                        .foregroundStyle(Color.secondaryLabel)
+                }
                 Spacer(minLength: 10)
                 if isExcluded {
                     Text(NSLocalizedString("musclePriorityOff", comment: ""))

@@ -27,10 +27,6 @@ struct MuscleFocus: Codable, Equatable {
     /// program would prescribe, so the cap only stops a runaway press.
     static let targetRange = 0 ... 40
 
-    /// A group counts as well past its target — the double-chevron badge rather than the check — once
-    /// its weekly sets exceed the target by half again.
-    static let overshootRatio = 1.5
-
     init(targets: [MuscleGroup: Int]) {
         self.targets = targets.mapValues { Self.clamped($0) }
     }

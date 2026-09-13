@@ -17,9 +17,10 @@ import Foundation
 enum MuscleBalanceGoalState {
     /// Short of target — the track is partly filled and the remainder shows.
     case under
-    /// At target, up to `MuscleFocus.overshootRatio` times it.
+    /// Exactly at target.
     case met
-    /// Well past target: met, but worth admitting.
+    /// Past target, by even one set: met, but worth admitting. Targets are whole sets per week, so
+    /// "one more than you planned" is already a real difference rather than rounding noise.
     case over
 }
 
@@ -50,7 +51,7 @@ struct MuscleBalanceEntry: Identifiable {
     var goalState: MuscleBalanceGoalState {
         guard target > 0 else { return .met }
         if setsPerWeek < target { return .under }
-        return Double(setsPerWeek) > Double(target) * MuscleFocus.overshootRatio ? .over : .met
+        return setsPerWeek > target ? .over : .met
     }
 }
 

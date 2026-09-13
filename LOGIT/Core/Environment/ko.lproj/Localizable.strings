@@ -971,7 +971,6 @@
 "muscleDetailWeeklyAverage" = "주간 평균";
 "muscleFocusTargetsFooter" = "각 근육 그룹에 주당 몇 세트를 할지 정합니다. 0으로 설정하면 균형에서 제외됩니다.";
 "muscleFocusEditTargets" = "목표 편집";
-"muscleDetailWeeklyTargetCaption" = "주간 목표 · %@";
 "muscleBalanceSetsOfTarget" = "주당 %2$d세트 중 %1$d세트";
 "muscleFocusDefaultCaption" = "기본값 · 탭하여 초점 선택";
 "muscleDetailNotInFocus" = "초점에 포함되지 않음";

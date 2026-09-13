@@ -971,7 +971,6 @@
 "muscleDetailWeeklyAverage" = "Weekly average";
 "muscleFocusTargetsFooter" = "How many sets each muscle group should get per week. Set a group to 0 to leave it out of your balance.";
 "muscleFocusEditTargets" = "Edit Targets";
-"muscleDetailWeeklyTargetCaption" = "Weekly target · %@";
 "muscleBalanceSetsOfTarget" = "%1$d of %2$d sets per week";
 "muscleFocusDefaultCaption" = "Default · tap to choose what you train for";
 "muscleDetailNotInFocus" = "Not part of your focus";

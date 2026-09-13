@@ -967,7 +967,6 @@
 "muscleDetailWeeklyAverage" = "Wochendurchschnitt";
 "muscleFocusTargetsFooter" = "Wie viele Sätze jede Muskelgruppe pro Woche bekommen soll. Setze eine Gruppe auf 0, um sie aus deiner Balance herauszulassen.";
 "muscleFocusEditTargets" = "Ziele bearbeiten";
-"muscleDetailWeeklyTargetCaption" = "Wochenziel · %@";
 "muscleBalanceSetsOfTarget" = "%1$d von %2$d Sätzen pro Woche";
 "muscleFocusDefaultCaption" = "Standard · tippe, um deinen Fokus zu wählen";
 "muscleDetailNotInFocus" = "Nicht Teil deines Fokus";

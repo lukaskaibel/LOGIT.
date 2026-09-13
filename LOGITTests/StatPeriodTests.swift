@@ -329,8 +329,7 @@ final class MuscleFocusTests: XCTestCase {
         }
         XCTAssertEqual(state(9, target: 10), .under)
         XCTAssertEqual(state(10, target: 10), .met)
-        XCTAssertEqual(state(15, target: 10), .met, "Exactly half again is still met")
-        XCTAssertEqual(state(16, target: 10), .over)
+        XCTAssertEqual(state(11, target: 10), .over, "One set past the target is already above it")
         XCTAssertNil(MuscleBalanceEntry(muscleGroup: .legs, setCount: 3, setsPerWeek: 3, target: 0).goalFraction)
     }
 

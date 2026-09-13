@@ -971,7 +971,6 @@
 "muscleDetailWeeklyAverage" = "週平均";
 "muscleFocusTargetsFooter" = "各筋肉グループに週何セット行うかを設定します。0にするとバランスの対象から外れます。";
 "muscleFocusEditTargets" = "目標を編集";
-"muscleDetailWeeklyTargetCaption" = "週の目標 · %@";
 "muscleBalanceSetsOfTarget" = "週 %2$d セット中 %1$d セット";
 "muscleFocusDefaultCaption" = "デフォルト · タップして重点を選択";
 "muscleDetailNotInFocus" = "重点に含まれていません";

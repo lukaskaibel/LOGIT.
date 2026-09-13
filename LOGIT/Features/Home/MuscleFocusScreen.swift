@@ -9,12 +9,12 @@ import SwiftUI
 
 /// The training-focus editor, in two parts: the focus itself — a tappable title over a stacked bar of
 /// the week it describes — and the eight muscle groups as a two-column grid, each tile a weekly set
-/// target with a native stepper.
+/// target between a round minus and plus (`MuscleTargetControl`).
 ///
 /// Targets are real numbers of sets per week, not shares and not priority levels: it is the unit
 /// programs are written in, it needs no explaining, and unlike a percentage split one group's number
 /// never has to move because another's did. The four presets live in the title's menu as ready-made
-/// weeks; any stepper change makes the focus "Custom" (the title says so, with nothing checked in the
+/// weeks; any target change makes the focus "Custom" (the title says so, with nothing checked in the
 /// menu). Setting a group to 0 takes it out of the focus.
 ///
 /// Commits on every change through the `MuscleFocusStore`, so the Muscle Groups overview and the
@@ -78,8 +78,8 @@ struct MuscleFocusScreen: View {
 
     // MARK: - Targets
 
-    /// The eight groups, two across. A grid rather than a column because each cell is a name, a
-    /// number and a stepper and nothing else — four rows of two put every group on screen at once,
+    /// The eight groups, two across. A grid rather than a column because each cell is a name and a
+    /// number with its two buttons and nothing else — four rows of two put every group on screen at once,
     /// which is what makes the week legible as a whole.
     private var targetSection: some View {
         Section {
@@ -101,40 +101,21 @@ struct MuscleFocusScreen: View {
         }
     }
 
-    /// One group: its name, its weekly target, and a native stepper. The unit lives once, in the
-    /// section header, rather than beside eight numbers. A group at 0 gives up its colour — the tile
-    /// saying it is out of the focus.
+    /// One group: its name over its weekly target, with a round minus and plus either side of the
+    /// number — the weekly-goal screen's own control, tinted in the muscle's colour. The unit lives
+    /// once, in the section header, rather than beside eight numbers. A group at 0 gives up its colour
+    /// on the name and the number — the tile saying it is out of the focus.
     private func targetTile(_ group: MuscleGroup) -> some View {
-        let target = store.focus.target(for: group)
-        let isExcluded = target == 0
-        return VStack(alignment: .leading, spacing: 6) {
+        let isExcluded = store.focus.isExcluded(group)
+        return VStack(alignment: .leading, spacing: 12) {
             // Muscle names carry their colour themselves — bold, rounded, no identity dot.
             Text(group.description)
                 .font(.system(.subheadline, design: .rounded, weight: .bold))
                 .foregroundStyle(isExcluded ? Color.secondaryLabel : group.color)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
-            HStack(alignment: .center, spacing: 8) {
-                Text("\(target)")
-                    .font(.system(.title, design: .rounded, weight: .bold))
-                    .monospacedDigit()
-                    .foregroundStyle(isExcluded ? Color.secondaryLabel : Color.label)
-                    .contentTransition(.numericText())
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Spacer(minLength: 0)
-                Stepper(
-                    group.description,
-                    value: Binding(
-                        get: { store.focus.target(for: group) },
-                        set: { store.setTarget($0, for: group) }
-                    ),
-                    // The last group with a target can't reach 0 — a focus on nothing isn't a focus.
-                    in: store.focus.minimumTarget(for: group) ... MuscleFocus.targetRange.upperBound
-                )
-                .labelsHidden()
-                .accessibilityIdentifier("muscleTargetStepper_\(group.rawValue)")
-            }
+            MuscleTargetControl(group: group, spread: true)
+                .accessibilityIdentifier("muscleTargetControl_\(group.rawValue)")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(CELL_PADDING)
@@ -142,6 +123,84 @@ struct MuscleFocusScreen: View {
             RoundedRectangle(cornerRadius: Self.tileCornerRadius, style: .continuous)
                 .fill(Color.secondaryBackground)
         }
+    }
+}
+
+// MARK: - Target control
+
+/// A group's weekly set target as a number between a round minus and plus — the control the focus
+/// editor's tiles and the muscle detail's target row share, so a target reads and changes the same
+/// way on both. Buttons wear the muscle's colour on a tinted disc, repeat while held, and give a
+/// selection tick per step; each end greys out at its bound (0, or 1 for the last group with a target,
+/// and `MuscleFocus.targetRange`'s top).
+///
+/// Chosen over a native `Stepper`: two capsule halves in system grey read as a form field dropped into
+/// a tile, their `−`/`+` are small targets, and they carry no trace of which muscle they set.
+///
+/// One accessibility element, adjustable: VoiceOver reads "Legs, 10 sets per week" and swipes up or
+/// down to change it.
+struct MuscleTargetControl: View {
+    let group: MuscleGroup
+    /// Stretches across the available width — minus at the leading edge, the number centred, plus at
+    /// the trailing edge — for a tile. Off keeps the three together, for the end of a row.
+    var spread: Bool = false
+
+    @EnvironmentObject private var store: MuscleFocusStore
+
+    private static let buttonSize: CGFloat = 36
+
+    var body: some View {
+        let target = store.focus.target(for: group)
+        let lower = store.focus.minimumTarget(for: group)
+        let upper = MuscleFocus.targetRange.upperBound
+        return HStack(spacing: spread ? 0 : 12) {
+            stepButton("minus", enabled: target > lower) { set(target - 1) }
+            if spread { Spacer(minLength: 8) }
+            Text("\(target)")
+                .font(.system(.title, design: .rounded, weight: .bold))
+                .monospacedDigit()
+                .foregroundStyle(target == 0 ? Color.secondaryLabel : Color.label)
+                .contentTransition(.numericText(value: Double(target)))
+                .frame(minWidth: 40)
+                .lineLimit(1)
+            if spread { Spacer(minLength: 8) }
+            stepButton("plus", enabled: target < upper) { set(target + 1) }
+        }
+        .frame(maxWidth: spread ? .infinity : nil)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(group.description))
+        .accessibilityValue(Text(String(format: NSLocalizedString("muscleFocusWeeklyTotal", comment: ""), target)))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: set(target + 1)
+            case .decrement: set(target - 1)
+            @unknown default: break
+            }
+        }
+    }
+
+    private func set(_ value: Int) {
+        withAnimation(.snappy(duration: 0.25)) {
+            store.setTarget(value, for: group)
+        }
+    }
+
+    private func stepButton(_ symbol: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        Button {
+            UISelectionFeedbackGenerator().selectionChanged()
+            action()
+        } label: {
+            Image(systemName: symbol)
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(group.color)
+                .frame(width: Self.buttonSize, height: Self.buttonSize)
+                .background(Circle().fill(group.color.opacity(0.18)))
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .buttonRepeatBehavior(.enabled)
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.3)
     }
 }
 

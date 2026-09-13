@@ -81,15 +81,19 @@ struct MuscleGroupDetailScreen: View {
         return ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 TrendWindowPicker(selection: $window)
-                targetHeader
                 if groupSetCount > 0 {
-                    setsVsTarget(entry: entry)
+                    // The result, then the setting it is read against, together in one block.
+                    VStack(spacing: CELL_SPACING * 2) {
+                        setsVsTarget(entry: entry)
+                        targetRow
+                    }
                     setsHistoryChart(allWorkouts: allWorkouts)
                     topExercises(in: periodWorkouts)
                 } else {
+                    targetRow
                     emptyState
                         .containerRelativeFrame(.vertical, alignment: .center) { height, _ in
-                            max(height - 170, 300)
+                            max(height - 200, 300)
                         }
                 }
             }
@@ -113,45 +117,25 @@ struct MuscleGroupDetailScreen: View {
 
     private var isExcluded: Bool { focusStore.focus.isExcluded(muscleGroup) }
 
-    /// The group's weekly set target as the control that sets it — the same number and the same
-    /// native stepper as the focus editor's tile for this group — over the focus it belongs to.
-    /// Changing it here is changing it there, including making the focus Custom; 0 takes the group out
-    /// of the focus.
+    /// The group's weekly set target, set right here: "Target" and the same number-between-buttons
+    /// the focus editor's tile for this group shows. Changing it here is changing it there, including
+    /// making the focus Custom; 0 takes the group out of the focus.
     ///
-    /// Shown whether or not the window has any sets: the target is a setting, not a result.
-    private var targetHeader: some View {
-        let focusName = focusStore.focus.matchingPreset?.title ?? NSLocalizedString("muscleFocusCustom", comment: "")
-        let target = focusStore.focus.target(for: muscleGroup)
-        return HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("\(target)")
-                        .font(.system(.title, design: .rounded, weight: .bold))
-                        .monospacedDigit()
-                        .foregroundStyle(isExcluded ? Color.secondaryLabel : Color.label)
-                        .contentTransition(.numericText())
-                    Text(NSLocalizedString("setsPerWeekCaption", comment: ""))
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color.secondaryLabel)
-                }
-                Text(String(format: NSLocalizedString("muscleDetailWeeklyTargetCaption", comment: ""), focusName))
-                    .font(.subheadline)
-                    .foregroundStyle(Color.secondaryLabel)
-            }
+    /// It sits under the weekly average rather than above it: the result is what the page is about,
+    /// and the target is the setting that result is read against. Shown whether or not the window has
+    /// any sets — the target is a setting, not a result.
+    private var targetRow: some View {
+        HStack(spacing: 12) {
+            Text(NSLocalizedString("target", comment: ""))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.label)
             Spacer(minLength: 8)
-            Stepper(
-                muscleGroup.description,
-                value: Binding(
-                    get: { focusStore.focus.target(for: muscleGroup) },
-                    set: { focusStore.setTarget($0, for: muscleGroup) }
-                ),
-                in: focusStore.focus.minimumTarget(for: muscleGroup) ... MuscleFocus.targetRange.upperBound
-            )
-            .labelsHidden()
-            .accessibilityIdentifier("muscleDetailTargetStepper")
+            MuscleTargetControl(group: muscleGroup)
+                .accessibilityIdentifier("muscleDetailTargetControl")
         }
-        .padding(.horizontal, 2)
-        .animation(.snappy, value: focusStore.focus)
+        .padding(.horizontal, CELL_PADDING)
+        .padding(.vertical, 10)
+        .tileStyle()
     }
 
     // MARK: - Hero

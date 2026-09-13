@@ -168,9 +168,8 @@ final class ChartGestureValues {
 /// Tap or press-and-hold a **trained** bar to inspect it — a value card names the exact value and which
 /// day, week or month it belongs to, the touched bar lights up and the rest dim. Untrained bins are not
 /// selectable: they draw no bar, so there is nothing there to inspect, and a card reading "0" hanging
-/// over a gap said less than the gap itself. The y-axis tops out on a round `chartAxisTop` above the
-/// tallest visible bar, so a peak never touches the ceiling and the plot is closed by a labelled grid
-/// line.
+/// over a gap said less than the gap itself. The scale tops out on a round `chartAxisTop` above the
+/// tallest visible bar so a peak never touches the ceiling; there are no grid lines and no y-axis.
 ///
 /// **What a gesture is allowed to re-render.** A strip runs to `TrendWindow.maxStripBinCount` bars, so
 /// every pass over this body rebuilds several hundred `BarMark`s — the one thing a scroll or a drag
@@ -301,18 +300,18 @@ struct TrendWindowHistoryChart: View {
             // four-week strip would read as hatching, and their labels would collide outright. The
             // label is looked up by index rather than searched for: this closure runs per mark, and a
             // linear scan through the strip inside it re-derived a bin index for every bar of it.
+            // No grid lines at all, horizontal or vertical: in a compact tile they read as hatching
+            // behind the bars. Labels only, centred under the bins they name — and only those at
+            // least half a stride from either edge of the viewport. A label right at an edge is
+            // clipped to half a date ("ug 16"), and the newest bin's label hung trailing off the edge
+            // ran into its neighbour ("Sep 6Sep 13"); the picker above already says where the window
+            // ends. Styling lives on the Text inside the closure — hierarchical styles on the AxisMark
+            // resolve against the chart's accent on iOS 26 (labels turned lime).
             AxisMarks(values: axis.values) { value in
                 if let date = value.as(Date.self) {
                     let index = TrendWindow.stripIndex(for: date)
-                    if let label = axis.byIndex[index] {
-                        AxisGridLine()
-                            .foregroundStyle(Color.gray.opacity(0.4))
-                        // The newest bin hugs the right edge on first load, where a centred label is
-                        // silently clipped to half a date ("Au"). Hang that one trailing off its mark
-                        // so it renders whole; every other label centres under the bar it names.
-                        // Styling lives on the Text inside the closure — hierarchical styles on the
-                        // AxisMark resolve against the chart's accent on iOS 26 (labels turned lime).
-                        AxisValueLabel(anchor: index == bins.count - 1 ? .topTrailing : nil) {
+                    if let label = axis.byIndex[index], isClearOfEdges(index) {
+                        AxisValueLabel {
                             Text(label)
                                 .font(.caption.weight(.semibold))
                                 .foregroundStyle(Color.secondaryLabel)
@@ -322,10 +321,9 @@ struct TrendWindowHistoryChart: View {
                 }
             }
         }
-        .chartYAxis {
-            // Zero, the midpoint and the ceiling — the top mark is the point: it closes the plot.
-            AxisMarks(values: [0, axisTop / 2, axisTop])
-        }
+        // No y-axis: no grid lines and no scale down the side. The bars are compared with each other,
+        // and tapping one names its exact value.
+        .chartYAxis(.hidden)
         // Ease the y-scale and the dashed mean to their new values as bars scroll in and out, so the
         // axis rescales and the line glides instead of snapping. Applied to the chart's marks and scale
         // here, *inside* the scroll modifiers below — the horizontal scroll must stay outside this
@@ -356,10 +354,10 @@ struct TrendWindowHistoryChart: View {
         BarMark(
             x: .value("Bin", bin.stripDate, unit: .day),
             y: .value(valueLabel, bin.value),
-            width: .ratio(0.6)
+            width: .ratio(0.7)
         )
         .foregroundStyle(barStyle)
-        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
         // A tapped bar stays lit; every other bar goes quiet while one is inspected.
         .opacity(dimmed ? 0.4 : 1.0)
     }
@@ -369,10 +367,10 @@ struct TrendWindowHistoryChart: View {
         BarMark(
             x: .value("Bin", bin.stripDate, unit: .day),
             y: .value(valueLabel, bin.value),
-            width: .ratio(0.6)
+            width: .ratio(0.7)
         )
         .foregroundStyle(Color.label)
-        .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
         .annotation(
             position: annotationPosition(for: bin),
             overflowResolution: .init(x: .fit(to: .chart), y: .fit(to: .chart))
@@ -388,6 +386,15 @@ struct TrendWindowHistoryChart: View {
     private struct AxisLabels {
         var values: [Date] = []
         var byIndex: [Int: String] = [:]
+    }
+
+    /// Whether a labelled bin sits far enough inside the viewport for a centred label to render whole
+    /// and clear of its neighbours: at least half a label stride from both edges.
+    private func isClearOfEdges(_ index: Int) -> Bool {
+        let margin = max(window.binAxisStride / 2, 1)
+        let first = ownLeadingBin
+        let last = ownLeadingBin + window.binsPerWindow - 1
+        return index - first >= margin && last - index >= margin
     }
 
     private var axisLabels: AxisLabels {

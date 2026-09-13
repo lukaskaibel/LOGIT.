@@ -971,7 +971,6 @@
 "muscleDetailWeeklyAverage" = "Media settimanale";
 "muscleFocusTargetsFooter" = "Quante serie deve ricevere ogni gruppo muscolare a settimana. Imposta un gruppo a 0 per lasciarlo fuori dal tuo equilibrio.";
 "muscleFocusEditTargets" = "Modifica obiettivi";
-"muscleDetailWeeklyTargetCaption" = "Obiettivo settimanale · %@";
 "muscleBalanceSetsOfTarget" = "%1$d su %2$d serie a settimana";
 "muscleFocusDefaultCaption" = "Predefinito · tocca per scegliere su cosa ti alleni";
 "muscleDetailNotInFocus" = "Non fa parte del tuo focus";
