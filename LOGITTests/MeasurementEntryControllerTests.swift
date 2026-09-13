@@ -5,6 +5,7 @@
 //  Created by Lukas Kaibel on 20.09.23.
 //
 
+import Combine
 import XCTest
 
 @testable import LOGIT
@@ -248,6 +249,24 @@ final class MeasurementEntryControllerTests: XCTestCase {
         
         let entries = controller.getMeasurementEntries(ofType: .bodyFatPercentage)
         XCTAssertTrue(entries.contains { $0.value == 15 }, "Should handle body fat percentage")
+    }
+
+    // MARK: - BMI
+
+    /// BMI is derived on read, so the views showing it only redraw when the controller publishes —
+    /// and a height change touches UserDefaults, not the store.
+    func testHeightChangeRepublishesSoBMIRedraws() {
+        userDefaultsHelper.saveValue(forKey: UserHeight.storageKey)
+        let published = expectation(
+            description: "objectWillChange after a height change (is UserDefaults.userHeightCentimeters still spelled like UserHeight.storageKey?)"
+        )
+        published.assertForOverFulfill = false
+        let subscription = controller.objectWillChange.sink { published.fulfill() }
+
+        UserHeight.set(centimeters: 172)
+
+        wait(for: [published], timeout: 2)
+        subscription.cancel()
     }
 }
 

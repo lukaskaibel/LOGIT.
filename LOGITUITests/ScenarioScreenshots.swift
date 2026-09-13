@@ -1409,6 +1409,64 @@ final class ScenarioScreenshots: XCTestCase {
         attach(app, "bodymeasurements_05_settings_health_sync")
     }
 
+    /// Settings' height field is a decimal pad, and a decimal pad has no return key: the keyboard
+    /// accessory's hide button is the only thing on screen that puts it away. The round trip it has
+    /// to survive — the button floats over the keys, hiding the keyboard keeps the typed height
+    /// (the field stores it as each keystroke parses, so hiding isn't the save, it just mustn't
+    /// undo it), and the BMI already on screen in the Summary tab follows the new height.
+    func testSettingsHeightKeyboardHide() {
+        // The measurements list stays pushed in the Summary tab while Settings is edited, so its
+        // BMI tile is one that was drawn before the height changed.
+        let app = launchFixtures(deepLink: "measurements")
+        let bmiTile = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'BMI'")).firstMatch
+        XCTAssertTrue(bmiTile.waitForExistence(timeout: 20), "BMI tile missing from the measurements list")
+        let bmiBefore = bmiTile.label.split(separator: " ").last.flatMap { Double($0) }
+
+        tapTab(app, at: 3)
+        let heightField = app.textFields["heightField"].firstMatch
+        XCTAssertTrue(heightField.waitForExistence(timeout: 10), "Height field missing from Settings")
+        XCTAssertEqual(heightField.value as? String, "180", "The fixtures' height should be 180 cm")
+
+        // The field is trailing-aligned, so a tap at its trailing edge puts the caret after the digits.
+        heightField.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        let keyboard = app.keyboards.firstMatch
+        XCTAssertTrue(keyboard.waitForExistence(timeout: 5), "Decimal pad did not come up for the height field")
+        heightField.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 5) + "170")
+
+        let hide = app.buttons["keyboardHide"]
+        XCTAssertTrue(hide.waitForExistence(timeout: 5), "No hide-keyboard button over the height field's decimal pad")
+        guard hide.exists else { return }
+        XCTAssertLessThanOrEqual(
+            hide.frame.maxY, keyboard.frame.minY,
+            "Hide button \(hide.frame) should float above the keys \(keyboard.frame)"
+        )
+        XCTAssertGreaterThan(
+            hide.frame.midX, app.frame.midX,
+            "Hide button \(hide.frame) should sit on the trailing edge"
+        )
+        attach(app, "settings_height_01_decimal_pad")
+
+        hide.tap()
+        XCTAssertTrue(keyboard.waitForNonExistence(timeout: 5), "Hide button did not put the keyboard away")
+        XCTAssertEqual(heightField.value as? String, "170", "The typed height did not survive hiding the keyboard")
+        attach(app, "settings_height_02_keyboard_hidden")
+
+        // BMI is weight over height squared: the same weight over 1.70 m instead of 1.80 m.
+        tapTab(app, at: 0)
+        XCTAssertTrue(bmiTile.waitForExistence(timeout: 5), "BMI tile gone from the measurements list")
+        waitABit()
+        let bmiAfter = bmiTile.label.split(separator: " ").last.flatMap { Double($0) }
+        if let bmiBefore, let bmiAfter {
+            XCTAssertEqual(
+                bmiAfter, bmiBefore * pow(180.0 / 170.0, 2), accuracy: 0.15,
+                "BMI read \(bmiBefore) at 180 cm and \(bmiAfter) at 170 cm"
+            )
+        } else {
+            XCTFail("BMI tile shows no value: '\(bmiTile.label)'")
+        }
+        attach(app, "settings_height_03_bmi_follows")
+    }
+
     /// A fixture launch for the screenshot deep links — the curated preview dataset plus, when
     /// given, the screen to open straight to.
     private func launchFixtures(deepLink: String?) -> XCUIApplication {
