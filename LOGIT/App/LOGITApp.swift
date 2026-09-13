@@ -27,7 +27,7 @@ struct LOGIT: App {
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager()
     @StateObject private var networkMonitor = NetworkMonitor()
-    @StateObject private var muscleTargetSplitStore = MuscleTargetSplitStore()
+    @StateObject private var muscleFocusStore = MuscleFocusStore()
     @StateObject private var workoutRecorder: WorkoutRecorder
     @StateObject private var workoutLiveActivityManager: WorkoutLiveActivityManager
     @StateObject private var muscleGroupService: MuscleGroupService
@@ -193,7 +193,7 @@ struct LOGIT: App {
                 .environmentObject(networkMonitor)
                 .environmentObject(workoutRecorder)
                 .environmentObject(muscleGroupService)
-                .environmentObject(muscleTargetSplitStore)
+                .environmentObject(muscleFocusStore)
                 .environmentObject(homeNavigationCoordinator)
                 .environmentObject(chronograph)
                 .environmentObject(exerciseSuggestionService)
@@ -320,7 +320,7 @@ struct LOGIT: App {
                     .environmentObject(networkMonitor)
                     .environmentObject(workoutRecorder)
                     .environmentObject(muscleGroupService)
-                    .environmentObject(muscleTargetSplitStore)
+                    .environmentObject(muscleFocusStore)
                     .environmentObject(homeNavigationCoordinator)
                     .environmentObject(chronograph)
                     .environmentObject(exerciseSuggestionService)
@@ -347,7 +347,7 @@ struct LOGIT: App {
                     .environmentObject(networkMonitor)
                     .environmentObject(workoutRecorder)
                     .environmentObject(muscleGroupService)
-                    .environmentObject(muscleTargetSplitStore)
+                    .environmentObject(muscleFocusStore)
                     .environmentObject(homeNavigationCoordinator)
                     .environmentObject(chronograph)
                     .environmentObject(exerciseSuggestionService)
@@ -526,7 +526,7 @@ struct LOGIT: App {
             .environmentObject(networkMonitor)
             .environmentObject(workoutRecorder)
             .environmentObject(muscleGroupService)
-            .environmentObject(muscleTargetSplitStore)
+            .environmentObject(muscleFocusStore)
             .environmentObject(homeNavigationCoordinator)
             .environmentObject(chronograph)
             .environmentObject(exerciseSuggestionService)

@@ -155,8 +155,8 @@ struct HomeScreen: View {
                         case .measurements: MeasurementsScreen()
                         case .muscleGroupsOverview:
                             MuscleGroupsOverviewScreen(initialWindow: trendWindow.wrappedValue)
-                        case .muscleTargetSplit:
-                            MuscleTargetSplitScreen()
+                        case .muscleFocus:
+                            MuscleFocusScreen()
                         case let .muscleGroupDetail(group, initialWindow):
                             MuscleGroupDetailScreen(muscleGroup: group, initialWindow: initialWindow)
                         case let .summaryStat(metric, window):

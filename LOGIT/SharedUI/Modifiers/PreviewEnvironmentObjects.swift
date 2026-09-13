@@ -15,7 +15,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
     @StateObject private var networkMonitor: NetworkMonitor
     @StateObject private var workoutRecorder: WorkoutRecorder
     @StateObject private var muscleGroupService: MuscleGroupService
-    @StateObject private var muscleTargetSplitStore = MuscleTargetSplitStore()
+    @StateObject private var muscleFocusStore = MuscleFocusStore()
     @StateObject private var homeNavigationCoordinator: HomeNavigationCoordinator
     @StateObject private var chronograph: Chronograph
     @StateObject private var exerciseSuggestionService: ExerciseSuggestionService
@@ -47,7 +47,7 @@ struct PreviewEnvironmentObjects: ViewModifier {
             .environmentObject(networkMonitor)
             .environmentObject(workoutRecorder)
             .environmentObject(muscleGroupService)
-            .environmentObject(muscleTargetSplitStore)
+            .environmentObject(muscleFocusStore)
             .environmentObject(homeNavigationCoordinator)
             .environmentObject(chronograph)
             .environmentObject(exerciseSuggestionService)

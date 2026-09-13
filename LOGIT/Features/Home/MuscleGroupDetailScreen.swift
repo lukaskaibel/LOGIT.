@@ -37,7 +37,7 @@ struct MuscleGroupDetailScreen: View {
     }
 
     @EnvironmentObject private var muscleGroupService: MuscleGroupService
-    @EnvironmentObject private var targetSplitStore: MuscleTargetSplitStore
+    @EnvironmentObject private var focusStore: MuscleFocusStore
     @EnvironmentObject private var homeNavigationCoordinator: HomeNavigationCoordinator
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -74,9 +74,9 @@ struct MuscleGroupDetailScreen: View {
         let setGroups = setGroupsTraining(in: periodWorkouts)
         let sessions = Set(setGroups.compactMap { $0.workout?.objectID }).count
         let volume = getVolume(of: setGroups.flatMap { $0.sets })
-        let calculator = MuscleBalanceCalculator(workouts: periodWorkouts, target: targetSplitStore.split, muscleGroupService: muscleGroupService)
+        let calculator = MuscleBalanceCalculator(workouts: periodWorkouts, target: focusStore.split, muscleGroupService: muscleGroupService)
         let entry = calculator.entries.first { $0.muscleGroup == muscleGroup }
-            ?? MuscleBalanceEntry(muscleGroup: muscleGroup, setCount: 0, actualPercent: 0, targetPercent: targetSplitStore.target(for: muscleGroup))
+            ?? MuscleBalanceEntry(muscleGroup: muscleGroup, setCount: 0, actualPercent: 0, targetPercent: focusStore.target(for: muscleGroup))
 
         return ScrollView {
             VStack(spacing: SECTION_SPACING) {

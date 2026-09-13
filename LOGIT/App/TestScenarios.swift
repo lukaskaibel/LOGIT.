@@ -83,6 +83,7 @@ enum TestScenario: String {
         // the views fall back to their defaults.
         overrides["pinnedExercises"] = "cleared"
         overrides["pinnedMeasurements"] = "cleared"
+        overrides["muscleFocus"] = "cleared"
         overrides["muscleTargetSplit"] = "cleared"
         // Force the default exercises/templates to import into the fresh
         // in-memory store even though the persistent domain records them as

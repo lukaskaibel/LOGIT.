@@ -27,7 +27,7 @@ struct MuscleGroupsOverviewScreen: View {
     }
 
     @EnvironmentObject private var muscleGroupService: MuscleGroupService
-    @EnvironmentObject private var targetSplitStore: MuscleTargetSplitStore
+    @EnvironmentObject private var focusStore: MuscleFocusStore
     @EnvironmentObject private var homeNavigationCoordinator: HomeNavigationCoordinator
 
     var body: some View {
@@ -45,7 +45,7 @@ struct MuscleGroupsOverviewScreen: View {
         let windowWorkouts = allWorkouts.filter { ($0.date).map { range.contains($0) } ?? false }
         let calculator = MuscleBalanceCalculator(
             workouts: windowWorkouts,
-            target: targetSplitStore.split,
+            target: focusStore.split,
             muscleGroupService: muscleGroupService
         )
 
@@ -215,18 +215,23 @@ struct MuscleGroupsOverviewScreen: View {
 
     // MARK: - Adjust
 
+    /// The way to the focus editor, reading the focus in force ("Upper Body", or "Custom") so the
+    /// screen says what its targets come from before you open it.
     private var adjustRow: some View {
         Button {
-            homeNavigationCoordinator.path.append(.muscleTargetSplit)
+            homeNavigationCoordinator.path.append(.muscleFocus)
         } label: {
             HStack(spacing: 12) {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: "target")
                     .font(.title3)
                     .foregroundStyle(Color.accentColor)
                     .frame(width: 32, height: 32)
-                Text(NSLocalizedString("adjustTargetSplit", comment: ""))
+                Text(NSLocalizedString("trainingFocus", comment: ""))
                     .foregroundStyle(Color.label)
                 Spacer()
+                Text(focusStore.focus.matchingPreset?.title ?? NSLocalizedString("muscleFocusCustom", comment: ""))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
                 NavigationChevron()
                     .foregroundStyle(.secondary)
             }
@@ -234,6 +239,7 @@ struct MuscleGroupsOverviewScreen: View {
             .tileStyle()
         }
         .buttonStyle(TileButtonStyle())
+        .accessibilityIdentifier("trainingFocusRow")
     }
 }
 
