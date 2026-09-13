@@ -259,7 +259,10 @@ struct RecorderTopSheetPanel<Summary: View, Actions: View, FinishContent: View, 
     var body: some View {
         Color.clear
             .frame(maxWidth: .infinity)
-            .frame(height: max(model.reveal, 0))
+            // While finishing (and not being pulled) the height is the LIVE full reveal rather than
+            // the stored one: the title row grows during the finish animation, so the room below it
+            // shrinks by the same amount and the bar stays on the screen's bottom edge.
+            .frame(height: max(model.isFinishing && !model.isDragging ? model.fullReveal : model.reveal, 0))
             .overlay(alignment: .bottom) { recordingPanel }
             .overlay(alignment: .top) { finishLayer }
             .overlay(alignment: .bottom) { finishBarLayer }
@@ -347,9 +350,10 @@ struct RecorderTopSheetPanel<Summary: View, Actions: View, FinishContent: View, 
 
 // MARK: - Title
 
-/// The workout title, growing into a large title as the actions come out. Its line is sized for the
-/// large size at all times, so the compact row's height never changes with the reveal — the sheet's
-/// closed height and the list's top inset are constants.
+/// The workout title, growing into a large title as the actions come out, and larger still while
+/// finishing — the name is the finish panel's headline. Its line is sized for the large size at all
+/// times while recording, so the compact row's height never changes with the reveal; only the
+/// finish stop grows the row, and the panel below reads the live full reveal for that.
 struct RecorderTopSheetTitleField: View {
     let model: RecorderTopSheetModel
     let text: Binding<String>
@@ -357,11 +361,17 @@ struct RecorderTopSheetTitleField: View {
 
     @ScaledMetric(relativeTo: .body) private var collapsedSize: CGFloat = 17
     @ScaledMetric(relativeTo: .title2) private var expandedSize: CGFloat = 22
+    @ScaledMetric(relativeTo: .largeTitle) private var finishingSize: CGFloat = 32
+
+    private var size: CGFloat {
+        if model.isFinishing { return finishingSize }
+        return collapsedSize + (expandedSize - collapsedSize) * model.primaryRevealFraction
+    }
 
     var body: some View {
         ZStack(alignment: .leading) {
             Text(verbatim: "Ag")
-                .font(.system(size: expandedSize, weight: .bold))
+                .modifier(AnimatableTitleFont(size: max(size, expandedSize)))
                 .hidden()
             TextField(
                 "",
@@ -372,11 +382,7 @@ struct RecorderTopSheetTitleField: View {
             .focused(isFocused)
             .lineLimit(1)
             .foregroundColor(.label)
-            .modifier(
-                AnimatableTitleFont(
-                    size: collapsedSize + (expandedSize - collapsedSize) * model.primaryRevealFraction
-                )
-            )
+            .modifier(AnimatableTitleFont(size: size))
         }
     }
 }

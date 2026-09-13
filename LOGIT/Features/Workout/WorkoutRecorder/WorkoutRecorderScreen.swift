@@ -637,20 +637,13 @@ struct WorkoutRecorderScreen: View {
     private var headerCompactRow: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Group {
-                    if let workout = workoutRecorder.workout, topSheet.isFinishing {
-                        // The finish panel leads with the duration, so the caption stops repeating it.
-                        RecorderFinishCaption(workout: workout)
-                    } else {
-                        HStack(spacing: 5) {
-                            if let workoutStartTime = workoutRecorder.workout?.date {
-                                StopwatchView(startTime: workoutStartTime)
-                            }
-                            Text("·")
-                            if let workout = workoutRecorder.workout {
-                                RecorderSetCountText(workout: workout)
-                            }
-                        }
+                HStack(spacing: 5) {
+                    if let workoutStartTime = workoutRecorder.workout?.date {
+                        StopwatchView(startTime: workoutStartTime)
+                    }
+                    Text("·")
+                    if let workout = workoutRecorder.workout {
+                        RecorderSetCountText(workout: workout)
                     }
                 }
                 .foregroundStyle(.secondary)
@@ -798,8 +791,12 @@ struct WorkoutRecorderScreen: View {
                 if value.translation.height < -80 || value.velocity.height < -800 {
                     endFinishing()
                 } else {
-                    topSheet.isDragging = false
-                    withAnimation(finishAnimation) { topSheet.reveal = topSheet.fullReveal }
+                    // Inside the animation: the panel switches from the dragged reveal to the live
+                    // full reveal the moment the drag ends, and that switch has to be animated too.
+                    withAnimation(finishAnimation) {
+                        topSheet.isDragging = false
+                        topSheet.reveal = topSheet.fullReveal
+                    }
                 }
             }
     }
@@ -1333,18 +1330,6 @@ private struct RecorderSetCountText: View {
     }
 }
 
-/// The compact row's caption while finishing: the duration has moved into the panel's hero, so
-/// the caption says what the session was made of instead.
-private struct RecorderFinishCaption: View {
-    @ObservedObject var workout: Workout
-
-    var body: some View {
-        Text(
-            "\(workout.numberOfSets) \(NSLocalizedString("sets", comment: "")) · \(workout.exercises.count) \(NSLocalizedString("exercises", comment: ""))"
-        )
-    }
-}
-
 /// The note as it appears on the *recording* header. Its own view only so it can observe the
 /// workout: the recall half of the card has to appear and collapse as the note is written, and
 /// the recorder screen itself observes the recorder, not the managed object.
@@ -1370,10 +1355,7 @@ private struct RecorderFinishPanelContent: View {
 
     var body: some View {
         VStack(spacing: SECTION_SPACING) {
-            VStack(alignment: .leading, spacing: 12) {
-                durationHero
-                RecorderHeaderStatTiles(workout: workout)
-            }
+            RecorderHeaderStatTiles(workout: workout)
 
             // With the facts, above the rating: what you just did, and the best of it.
             PersonalRecordsHighlight(workout: workout, records: records)
@@ -1419,29 +1401,6 @@ private struct RecorderFinishPanelContent: View {
                 .foregroundStyle(Color.accentColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-        }
-    }
-
-    /// The session's length, as the panel's headline. It is the one moment the duration is the
-    /// point, and the caption above can say what the session was made of instead. The clock keeps
-    /// running until End Workout, which is when the workout's end is actually written.
-    @ViewBuilder
-    private var durationHero: some View {
-        if let startTime = workout.date {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(NSLocalizedString("duration", comment: ""))
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.secondaryLabel)
-                StopwatchView(startTime: startTime)
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(Color.label)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
-            .accessibilityIdentifier("finishPanelDuration")
         }
     }
 
