@@ -1005,7 +1005,6 @@
 "bestStreakLabel" = "最高 · %d週";
 "monthWorkoutsCount" = "%d回";
 "muscleBalanceEmptySubtitle" = "ワークアウトを記録すると筋肉の配分が表示されます。";
-"setsOverTime" = "時間ごとのセット数";
 "muscleBalanceGridCaption" = "セットの割合・目標スプリット比";
 "muscleBalanceOnTargetShort" = "8つ中%dつが目標内";
 "muscleBalanceOnTrack" = "順調";

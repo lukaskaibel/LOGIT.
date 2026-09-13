@@ -1001,7 +1001,6 @@
 "bestStreakLabel" = "Beste · %d Wo.";
 "monthWorkoutsCount" = "%d Workouts";
 "muscleBalanceEmptySubtitle" = "Logge ein Workout, um deine Muskelverteilung zu sehen.";
-"setsOverTime" = "Sätze im Zeitverlauf";
 "muscleBalanceGridCaption" = "Anteil an Sätzen · vs. Ziel-Split";
 "muscleBalanceOnTargetShort" = "%d von 8 im Ziel";
 "muscleBalanceOnTrack" = "Auf Kurs";

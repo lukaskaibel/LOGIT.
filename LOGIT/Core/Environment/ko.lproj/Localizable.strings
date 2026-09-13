@@ -1005,7 +1005,6 @@
 "bestStreakLabel" = "최고 · %d주";
 "monthWorkoutsCount" = "%d회";
 "muscleBalanceEmptySubtitle" = "운동을 기록하면 근육 분포가 표시됩니다.";
-"setsOverTime" = "기간별 세트";
 "muscleBalanceGridCaption" = "세트 비율 · 목표 분배 대비";
 "muscleBalanceOnTargetShort" = "8개 중 %d개 목표 내";
 "muscleBalanceOnTrack" = "순조로움";

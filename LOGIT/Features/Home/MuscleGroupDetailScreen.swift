@@ -9,7 +9,7 @@ import CoreData
 import SwiftUI
 
 /// The single-muscle detail: the group's weekly set target in the training focus, how many sets per
-/// week it actually got, a sets-history chart following the selected window, and the top exercises
+/// week it actually got, a sets-per-week chart following the selected window, and the top exercises
 /// that train it.
 ///
 /// It used to carry a 2×2 grid of Share, Volume, Sessions and Rank. A muscle group's kilograms is a
@@ -87,7 +87,7 @@ struct MuscleGroupDetailScreen: View {
                         setsVsTarget(entry: entry)
                         targetRow
                     }
-                    setsHistoryChart(allWorkouts: allWorkouts)
+                    weeklySetsChart(allWorkouts: allWorkouts)
                     topExercises(in: periodWorkouts)
                 } else {
                     targetRow
@@ -258,55 +258,26 @@ struct MuscleGroupDetailScreen: View {
         .padding(.horizontal)
     }
 
-    // MARK: - Sets history chart
+    // MARK: - Weekly sets chart
 
-    /// Sets over the selected window, one bar per day / week / month of it, scrollable back through
-    /// everything logged a window at a time. Titled "Sets over time" like the overview's "Balance over
-    /// time" one level up rather than "Sets per month": the bin size follows the picker, so no one
-    /// unit belongs after "per".
-    ///
-    /// No caption beside the header. It used to say how wide the viewport was, back when that was a
-    /// span the picker didn't name (twenty-eight weeks for a four-week window); the viewport is now
-    /// exactly the selected window, which the picker directly above already names.
-    private func setsHistoryChart(allWorkouts: [Workout]) -> some View {
-        let sets = setsTraining(in: allWorkouts)
-        let ranges = window.binRanges(firstDataDate: allWorkouts.compactMap(\.date).min())
-        // One pass over the sets, each placed in its bin by binary search — the strip runs to hundreds
-        // of bins, and filtering the whole set list per bin would be quadratic.
-        var counts = [Double](repeating: 0, count: ranges.count)
-        for set in sets {
-            guard let date = set.workout?.date,
-                  let index = TrendWindow.binIndex(of: date, in: ranges) else { continue }
-            counts[index] += 1
-        }
-        let bins = TrendWindowBin.strip(
-            for: window,
-            ranges: ranges,
-            raw: counts,
-            display: { $0 },
-            formatted: { String(Int($0.rounded())) }
-        )
+    /// Sets per week across the selected window, each week against the target — see
+    /// `MuscleWeeklySetsChart`. In the page's own unit at every window, so the bars and the weekly
+    /// average above them describe the same sets.
+    private func weeklySetsChart(allWorkouts: [Workout]) -> some View {
+        let bins = MuscleWeeklySets.bins(window: window, workouts: allWorkouts, muscleGroup: muscleGroup)
         return VStack(alignment: .leading, spacing: SECTION_HEADER_SPACING) {
-            Text(NSLocalizedString("setsOverTime", comment: ""))
+            Text(NSLocalizedString("setsPerWeekTitle", comment: ""))
                 .sectionHeaderStyle2()
                 .frame(maxWidth: .infinity, alignment: .leading)
-            // The shared bin chart in a compact tile — the same bars as the stat detail screens, so
-            // tapping to inspect a bin and scrolling back through the history work here too, at the
-            // tile's height. It keeps its own scroll position: there is no header beside it that has
-            // to move with the viewport.
-            TrendWindowHistoryChart(
-                window: window,
+            MuscleWeeklySetsChart(
                 bins: bins,
-                valueLabel: NSLocalizedString("sets", comment: ""),
-                barStyle: AnyShapeStyle(color),
-                unit: NSLocalizedString("sets", comment: ""),
-                height: 120
+                labels: bins.map { MuscleWeeklySets.label(for: $0.range, window: window) },
+                target: focusStore.focus.target(for: muscleGroup),
+                color: color
             )
-            // A fresh chart per window: the strip is re-tiled wholesale when the window changes, and
-            // its scroll offset would otherwise point into a strip that no longer exists.
-            .id(window)
             .padding(CELL_PADDING)
             .tileStyle()
+            .accessibilityIdentifier("muscleWeeklySetsChart")
         }
     }
 
@@ -375,9 +346,5 @@ struct MuscleGroupDetailScreen: View {
         workouts.flatMap { $0.setGroups }.filter {
             $0.exercise?.muscleGroup == muscleGroup || $0.secondaryExercise?.muscleGroup == muscleGroup
         }
-    }
-
-    private func setsTraining(in workouts: [Workout]) -> [WorkoutSet] {
-        setGroupsTraining(in: workouts).flatMap { $0.sets }
     }
 }

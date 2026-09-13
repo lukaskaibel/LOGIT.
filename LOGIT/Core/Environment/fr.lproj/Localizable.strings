@@ -1005,7 +1005,6 @@
 "bestStreakLabel" = "Record · %d sem";
 "monthWorkoutsCount" = "%d séances";
 "muscleBalanceEmptySubtitle" = "Enregistre une séance pour voir ta répartition musculaire.";
-"setsOverTime" = "Séries dans le temps";
 "muscleBalanceGridCaption" = "% des séries · vs ta répartition cible";
 "muscleBalanceOnTargetShort" = "%d sur 8 dans la cible";
 "muscleBalanceOnTrack" = "Sur la bonne voie";
