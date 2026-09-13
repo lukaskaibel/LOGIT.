@@ -877,10 +877,7 @@ struct WorkoutRecorderScreen: View {
                 workout: workout,
                 records: finishReport?.exerciseRecords ?? [],
                 isNoteFieldFocused: $isNoteFieldFocused,
-                onSkipEffort: {
-                    effortWasSkipped = true
-                    withAnimation(.snappy(duration: 0.25)) { workout.effortScore = nil }
-                }
+                onSkipEffort: { effortWasSkipped = true }
             )
             .padding(.horizontal)
             .padding(.top, 10)
@@ -1364,17 +1361,20 @@ private struct RecorderFinishPanelContent: View {
             VStack(alignment: .leading, spacing: SECTION_HEADER_SPACING) {
                 Text(NSLocalizedString("howHardWasIt", comment: ""))
                     .sectionHeaderStyle2()
-                WorkoutEffortScale(
+                WorkoutEffortTile(
                     score: Binding(
                         get: { workout.effortScore },
-                        set: { workout.effortScore = $0 }
+                        set: { newValue in
+                            workout.effortScore = newValue
+                            // Skipping is a decision; re-opening the panel must not re-seed the 5.
+                            if newValue == nil { onSkipEffort() }
+                        }
                     ),
                     // Top-to-bottom, not leading-to-trailing: one selected bar is narrow and
                     // tall, so a horizontal sweep would squeeze the whole gradient into 30pt.
                     tint: workout.sets.muscleGroupGradientStyle(startPoint: .top, endPoint: .bottom),
-                    barHeight: 76
+                    style: .translucent
                 )
-                effortVerdict
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -1387,6 +1387,15 @@ private struct RecorderFinishPanelContent: View {
                     prompt: NSLocalizedString("workoutNotePrompt", comment: ""),
                     lineLimit: 4...12
                 )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Everything the session contained, for a last look before it is written. Read-only:
+            // changing a set is what Continue is for.
+            VStack(alignment: .leading, spacing: SECTION_HEADER_SPACING) {
+                Text(NSLocalizedString("exercises", comment: ""))
+                    .sectionHeaderStyle2()
+                RecorderFinishExerciseList(workout: workout)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -1404,36 +1413,6 @@ private struct RecorderFinishPanelContent: View {
         }
     }
 
-    /// The rating as a number and a word, with a way out. The scale starts at a suggested 5, so
-    /// Skip is what keeps that suggestion from being written to Health as an answer.
-    private var effortVerdict: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            if let score = workout.effortScore, let effort = WorkoutEffort(score: score) {
-                Text("\(score)")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(
-                        workout.sets.muscleGroupGradientStyle(startPoint: .top, endPoint: .bottom)
-                    )
-                    .contentTransition(.numericText())
-                Text(effort.name)
-                    .font(.headline)
-                    .foregroundStyle(Color.label)
-                Spacer(minLength: 8)
-                Button(NSLocalizedString("skip", comment: ""), action: onSkipEffort)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.secondaryLabel)
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("finishPanelSkipEffort")
-            } else {
-                Text(NSLocalizedString("effortOptional", comment: ""))
-                    .font(.footnote)
-                    .foregroundStyle(Color.secondaryLabel)
-                    .frame(minHeight: 41, alignment: .leading)
-                Spacer(minLength: 0)
-            }
-        }
-    }
 }
 
 /// The panel's Volume and Repetitions tiles. They appear only once the workout has a logged
@@ -1477,6 +1456,64 @@ private struct RecorderHeaderStatTiles: View {
         // wash and pick up its colour, but without Liquid Glass's specular rim, which made them the
         // loudest thing on the header.
         .translucentTileStyle()
+    }
+}
+
+/// One row per set group: the exercise (both, for a superset), its muscle group in colour, and how
+/// many of its sets were logged. The finish panel's last section, so the whole session can be
+/// checked against memory before End Workout writes it.
+private struct RecorderFinishExerciseList: View {
+    @ObservedObject var workout: Workout
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(workout.setGroups.enumerated()), id: \.element.objectID) { index, setGroup in
+                if index > 0 {
+                    Divider().overlay(Color.fill)
+                }
+                row(for: setGroup)
+            }
+        }
+        .padding(.horizontal, CELL_PADDING)
+        .padding(.vertical, 4)
+        .translucentTileStyle()
+        .accessibilityIdentifier("finishPanelExercises")
+    }
+
+    private func row(for setGroup: WorkoutSetGroup) -> some View {
+        let exercises = [setGroup.exercise, setGroup.secondaryExercise].compactMap { $0 }
+        let logged = setGroup.sets.filter { $0.hasEntry }.count
+        let total = setGroup.sets.count
+        return HStack(alignment: .firstTextBaseline, spacing: 12) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(exercises.map { $0.displayName }.joined(separator: " + "))
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Color.label)
+                    .lineLimit(1)
+                Text(
+                    Set(exercises.compactMap { $0.muscleGroup })
+                        .sorted { $0.rawValue < $1.rawValue }
+                        .map { $0.description }
+                        .joined(separator: " · ")
+                )
+                .font(.system(.footnote, design: .rounded, weight: .bold))
+                .foregroundStyle(
+                    exercises.compactMap { $0.muscleGroup }
+                        .weightedSpectrumGradientStyle()
+                )
+            }
+            Spacer(minLength: 0)
+            // "3 / 4 sets" only when something is missing; a complete group just says "4 sets".
+            Text(
+                (logged < total ? "\(logged) / \(total)" : "\(total)")
+                    + " " + NSLocalizedString("sets", comment: "").lowercased()
+            )
+            .font(.subheadline.weight(.semibold))
+            .monospacedDigit()
+            .foregroundStyle(logged < total ? Color.secondaryLabel : Color.label)
+        }
+        .padding(.vertical, 10)
+        .accessibilityElement(children: .combine)
     }
 }
 

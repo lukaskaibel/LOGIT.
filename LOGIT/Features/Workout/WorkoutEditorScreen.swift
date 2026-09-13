@@ -43,9 +43,6 @@ struct WorkoutEditorScreen: View {
     /// when its owning state lives outside the recycled tray content
     /// (see TemplateEditorScreen).
     @State private var createExerciseRequest: ExerciseSelectionScreen.AddExerciseRequest?
-    /// The effort scale is folded away behind its own row until asked for — the editor is mostly
-    /// about sets, and ten permanent bars at the top would out-shout them.
-    @State private var isEditingEffort = false
     @FocusState private var isNoteFieldFocused: Bool
 
     private var effortTint: AnyShapeStyle {
@@ -115,33 +112,17 @@ struct WorkoutEditorScreen: View {
                         }
                         
                         VStack(spacing: CELL_SPACING) {
-                            Button {
-                                withAnimation(.snappy(duration: 0.3)) {
-                                    isEditingEffort.toggle()
-                                }
-                            } label: {
-                                WorkoutEffortRow(
-                                    score: workout.effortScore,
-                                    tint: effortTint
-                                )
-                                    .padding(CELL_PADDING)
-                                    .tileStyle()
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityIdentifier("editorEffortRow")
-                            if isEditingEffort {
-                                WorkoutEffortScale(
-                                    score: Binding(
-                                        get: { workout.effortScore },
-                                        set: { workout.effortScore = $0 }
-                                    ),
-                                    tint: effortTint,
-                                    barHeight: 72
-                                )
-                                .padding(CELL_PADDING)
-                                .tileStyle()
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                            }
+                            // The same tile as the recorder's finish panel. It drafts the rating
+                            // while the finger is down and writes once on release — every write
+                            // here republishes the whole editor, set list included.
+                            WorkoutEffortTile(
+                                score: Binding(
+                                    get: { workout.effortScore },
+                                    set: { workout.effortScore = $0 }
+                                ),
+                                tint: effortTint,
+                                style: .tile
+                            )
                             WorkoutNoteField(
                                 workout: workout,
                                 isFocused: $isNoteFieldFocused,

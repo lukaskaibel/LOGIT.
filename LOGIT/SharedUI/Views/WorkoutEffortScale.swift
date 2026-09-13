@@ -25,6 +25,10 @@ struct WorkoutEffortScale: View {
 
     var barHeight: CGFloat = 92
 
+    /// Called when the finger lifts (and after an accessibility adjustment). The tile uses it to
+    /// write a drafted rating back to the model once, instead of on every bar the drag crosses.
+    var onEnded: (() -> Void)? = nil
+
     /// Set while a finger is down so the haptic only fires when the value actually changes.
     @State private var lastHapticScore: Int?
 
@@ -45,7 +49,10 @@ struct WorkoutEffortScale: View {
                         .onChanged { gestureValue in
                             select(atX: gestureValue.location.x, width: geometry.size.width)
                         }
-                        .onEnded { _ in lastHapticScore = nil }
+                        .onEnded { _ in
+                            lastHapticScore = nil
+                            onEnded?()
+                        }
                 )
             }
             .frame(height: barHeight)
@@ -72,6 +79,7 @@ struct WorkoutEffortScale: View {
             case .decrement: score = max(current - 1, 1)
             default: break
             }
+            onEnded?()
         }
     }
 
@@ -110,6 +118,108 @@ struct WorkoutEffortScale: View {
         UISelectionFeedbackGenerator().selectionChanged()
         withAnimation(.interactiveSpring(response: 0.25, dampingFraction: 0.8)) {
             score = clamped
+        }
+    }
+}
+
+
+/// The one effort control the app shows: the caption and verdict on top, the scale below, and a
+/// Skip that clears the rating. The recorder's finish panel, and the workout editor, both use it, so
+/// rating a workout looks and feels the same wherever it happens.
+///
+/// **It holds a draft.** Both hosts observe a managed object; writing the score on every bar a drag
+/// crosses re-rendered the entire editor (set list included) per step, which is what made the
+/// scale feel laggy there. The drag moves `draft` — local state, cheap — and only the finger
+/// lifting writes it through the binding.
+struct WorkoutEffortTile: View {
+    enum Style {
+        /// The app's standard opaque cell, for the editor.
+        case tile
+        /// A translucent card, for the recorder's finish panel over the muscle wash.
+        case translucent
+    }
+
+    @Binding var score: Int?
+    let tint: AnyShapeStyle
+    var style: Style = .tile
+    var barHeight: CGFloat = 72
+
+    @State private var draft: Int?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                WorkoutEffortVerdict(score: draft)
+                Spacer(minLength: 8)
+                if draft != nil {
+                    Button(NSLocalizedString("skip", comment: "")) {
+                        UISelectionFeedbackGenerator().selectionChanged()
+                        withAnimation(.snappy(duration: 0.25)) { draft = nil }
+                        score = nil
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.secondaryLabel)
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("effortSkip")
+                }
+            }
+            WorkoutEffortScale(score: $draft, tint: tint, barHeight: barHeight) {
+                if score != draft { score = draft }
+            }
+            if draft == nil {
+                Text(NSLocalizedString("effortOptional", comment: ""))
+                    .font(.footnote)
+                    .foregroundStyle(Color.secondaryLabel)
+            }
+        }
+        .padding(CELL_PADDING)
+        .modifier(EffortTileSurface(style: style))
+        .onAppear { draft = score }
+        // An external change (Skip elsewhere, a re-seeded default) must show up here too.
+        .onChange(of: score) { if score != draft { draft = score } }
+    }
+}
+
+/// "EFFORT" over "Hard · 7", or "Not rated". The tile's headline; `WorkoutEffortRow` is the same
+/// pairing with the mini bars, for read-only rows.
+struct WorkoutEffortVerdict: View {
+    let score: Int?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(NSLocalizedString("effort", comment: ""))
+                .font(.caption.weight(.bold))
+                .textCase(.uppercase)
+                .foregroundStyle(Color.secondaryLabel)
+            if let score, let effort = WorkoutEffort(score: score) {
+                HStack(spacing: 5) {
+                    Text(effort.name)
+                    Text("·")
+                        .foregroundStyle(Color.secondaryLabel)
+                    Text("\(score)")
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
+                }
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Color.label)
+            } else {
+                Text(NSLocalizedString("notRated", comment: ""))
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Color.secondaryLabel)
+            }
+        }
+        .animation(.snappy(duration: 0.2), value: score)
+    }
+}
+
+private struct EffortTileSurface: ViewModifier {
+    let style: WorkoutEffortTile.Style
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        switch style {
+        case .tile: content.tileStyle()
+        case .translucent: content.translucentTileStyle()
         }
     }
 }
@@ -188,7 +298,7 @@ struct WorkoutEffortRow: View {
         )
         var body: some View {
             VStack(spacing: 30) {
-                WorkoutEffortScale(score: $score, tint: tint)
+                WorkoutEffortTile(score: $score, tint: tint)
                 WorkoutEffortRow(score: score, tint: tint)
                 WorkoutEffortRow(score: nil, tint: tint)
             }
