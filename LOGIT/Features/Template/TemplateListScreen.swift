@@ -20,7 +20,12 @@ struct TemplateListScreen: View {
 
     @State private var searchedText = ""
     @State private var selectedMuscleGroup: MuscleGroup? = nil
-    @State private var showingTemplateCreation = false
+    /// The template the tip's editor sheet edits, created once in the tip's action. Don't create it
+    /// in the sheet's builder: that is only safe while `TemplateEditorScreen` keeps its synthesized
+    /// init, whose `@StateObject` parameter is an autoclosure run once. With an explicit init, every
+    /// evaluation inserts a template, and each insert re-renders this fetch-driven list, which
+    /// evaluates the builder again: hundreds of empty templates within seconds, all saved with it.
+    @State private var templateToAdd: Template?
     @State private var isShowingNoTemplatesTip = false
     @State private var selectedTemplate: Template?
 
@@ -55,7 +60,7 @@ struct TemplateListScreen: View {
                             description: NSLocalizedString("noTemplatesTipDescription", comment: ""),
                             buttonAction: .init(
                                 title: NSLocalizedString("createTemplate", comment: ""),
-                                action: { showingTemplateCreation = true }
+                                action: { templateToAdd = database.newTemplate() }
                             ),
                             isShown: $isShowingNoTemplatesTip
                         )
@@ -130,8 +135,8 @@ struct TemplateListScreen: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingTemplateCreation) {
-                TemplateEditorScreen(template: database.newTemplate(), isEditingExistingTemplate: false)
+            .sheet(item: $templateToAdd) { template in
+                TemplateEditorScreen(template: template, isEditingExistingTemplate: false)
             }
             .navigationDestination(item: $selectedTemplate) { template in
                 TemplateDetailScreen(template: template)
