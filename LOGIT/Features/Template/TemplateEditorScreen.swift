@@ -329,44 +329,77 @@ struct TemplateEditorScreen: View {
                             dismiss()
                         }
                     }
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            if focusedIntegerFieldIndex != nil, let templateSet = selectedTemplateSet {
-                                Button {
-                                    // Dismiss the keyboard first, then present the rest sheet on the next
-                                    // runloop tick so the keyboard teardown and the sheet presentation
-                                    // don't race. The sheet itself is presented from within the
-                                    // exercise-selection sheet (see `selectedRestDurationSet`), so it
-                                    // stacks on top of it instead of colliding.
-                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                    focusedIntegerFieldIndex = nil
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                        selectedRestDurationSet = templateSet
-                                    }
-                                } label: {
-                                    Image(systemName: "timer")
-                                        .keyboardToolbarButtonStyle()
-                                }
-                            }
-                            Button {
-                                if focusedIntegerFieldIndex == nil {
-                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                } else {
-                                    focusedIntegerFieldIndex = nil
-                                }
-                            } label: {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                                    .keyboardToolbarButtonStyle()
-                            }
-                            if focusedIntegerFieldIndex != nil {
-                                Spacer()
-                            }
+                }
+                // Presented, but not seen: SwiftUI drops `.keyboard` toolbar items inside a
+                // `fullScreenCover`, which is how every caller opens this screen (the workout
+                // editor is a `.sheet` and shows the same accessory fine). Verified in the
+                // simulator on iOS 26.4 — the item renders the moment the cover becomes a sheet,
+                // and nowhere else it can be attached helps. Left wired so the accessory is
+                // right the day the presentation changes.
+                KeyboardToolbarItem { keyboardToolbarContent }
+            }
+            .scrollDismissesKeyboard(.immediately)
+        }
+    }
+
+    // MARK: - Keyboard Toolbar
+
+    /// The template's keyboard accessory, laid out like the recorder's: what belongs to the set on
+    /// the leading edge, the keyboard's own controls trailing. Where the recorder puts its live
+    /// timer, a template puts the rest it *plans* — that control sits between the rows, which is
+    /// exactly where the keyboard covers it. Next stands in for the number pad's missing return key
+    /// and walks the set's fields in the order they are filled in; hide closes the row at the very
+    /// edge, as it does everywhere else.
+    @ViewBuilder
+    private var keyboardToolbarContent: some View {
+        if let focusedIndex = focusedIntegerFieldIndex {
+            if let templateSet = selectedTemplateSet {
+                KeyboardToolbarGroup {
+                    KeyboardToolbarIconButton(
+                        systemImage: "timer",
+                        accessibilityLabel: NSLocalizedString("restBetweenSets", comment: "")
+                    ) {
+                        // Dismiss the keyboard first, then present the rest sheet on the next
+                        // runloop tick so the keyboard teardown and the sheet presentation
+                        // don't race. The sheet itself is presented from within the
+                        // exercise-selection sheet (see `selectedRestDurationSet`), so it
+                        // stacks on top of it instead of colliding.
+                        dismissKeyboard()
+                        focusedIntegerFieldIndex = nil
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            selectedRestDurationSet = templateSet
                         }
                     }
                 }
             }
-            .scrollDismissesKeyboard(.immediately)
+            Spacer(minLength: 8)
+            let nextIndex = SetFieldNavigation.index(after: focusedIndex, in: template.sets)
+            KeyboardToolbarGroup {
+                KeyboardToolbarTextButton(
+                    title: NSLocalizedString("next", comment: ""),
+                    isEnabled: nextIndex != nil
+                ) {
+                    focusedIntegerFieldIndex = nextIndex
+                }
+                .accessibilityIdentifier("keyboardNextField")
+            }
+            keyboardHideGroup
+        } else {
+            Spacer(minLength: 8)
+            keyboardHideGroup
+        }
+    }
+
+    private var keyboardHideGroup: some View {
+        KeyboardToolbarGroup {
+            KeyboardToolbarIconButton(
+                systemImage: "keyboard.chevron.compact.down",
+                accessibilityLabel: NSLocalizedString("hideKeyboard", comment: "")
+            ) {
+                focusedIntegerFieldIndex = nil
+                dismissKeyboard()
+            }
+            .accessibilityIdentifier("keyboardHide")
         }
     }
 

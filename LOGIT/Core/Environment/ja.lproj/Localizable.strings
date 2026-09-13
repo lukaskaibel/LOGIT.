@@ -156,6 +156,7 @@
 
 // MARK: - H (continued)
 
+"hideKeyboard" = "キーボードを非表示";
 "hidden" = "非表示";
 
 // MARK: - I
@@ -224,6 +225,7 @@
 "newTemplateFromWorkout" = "テンプレートとして使用...";
 "newWorkout" = "新しいワークアウト";
 "newWorkoutDescription" = "ワークアウトを一から構築します。";
+"next" = "次へ";
 "night" = "夜";
 "nine" = "九";
 "noAttempts" = "試行なし";

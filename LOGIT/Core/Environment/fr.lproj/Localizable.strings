@@ -156,6 +156,7 @@
 
 // MARK: - H (continued)
 
+"hideKeyboard" = "Masquer le clavier";
 "hidden" = "Caché";
 
 // MARK: - I
@@ -224,6 +225,7 @@
 "newTemplateFromWorkout" = "Utiliser comme modèle...";
 "newWorkout" = "Nouvel entraînement";
 "newWorkoutDescription" = "Construis ta séance à partir de zéro.";
+"next" = "Suivant";
 "night" = "Nuit";
 "nine" = "Neuf";
 "noAttempts" = "Aucune tentative";

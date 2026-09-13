@@ -566,6 +566,12 @@ struct WorkoutRecorderScreen: View {
                             .interactiveDismissDisabled()
                         }
                         .overlay(alignment: .bottomTrailing) {
+                            Color.clear
+                                .frame(width: 1, height: 1)
+                                .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY }
+                                    action: { sheetGeometry.containerBottomY = $0 }
+                        }
+                        .overlay(alignment: .bottomTrailing) {
                             FloatingChronoControlsOverlay(
                                 chronograph: chronograph,
                                 workoutRecorder: workoutRecorder,
@@ -649,6 +655,10 @@ struct WorkoutRecorderScreen: View {
             // and cannot be scrolled off is zero. `scrollDisabled` (above) then holds it there.
             .onChange(of: isNoteFieldFocused) {
                 guard isNoteFieldFocused, !isFinishing else { return }
+                // A number field never clears the binding when it loses focus (the field taking
+                // over is the one that rewrites it), so a text field stealing the keyboard would
+                // otherwise leave Next in the toolbar, pointing at a set nobody is typing in.
+                focusedIntegerFieldIndex = nil
                 withAnimation(headerExpansionAnimation) {
                     scrollPosition.scrollTo(y: 0)
                     // All the way: the note lives above the actions, so the first stop would put
@@ -656,9 +666,12 @@ struct WorkoutRecorderScreen: View {
                     openHeaderPanel(to: headerPanelHeight)
                 }
             }
+            .onChange(of: isFocusingTitleTextfield) {
+                if isFocusingTitleTextfield { focusedIntegerFieldIndex = nil }
+            }
             .onChange(of: workoutRecorderIsDragging) {
                 if workoutRecorderIsDragging {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    dismissKeyboard()
                 } else {
                     // Safety net: whenever the drag settles (dismiss committed or
                     // snapped back), re-enable scrolling and forget the hand-over
@@ -670,17 +683,8 @@ struct WorkoutRecorderScreen: View {
             }
             .toolbar(.hidden, for: .navigationBar)
             .toolbar {
-                if ProcessInfo.processInfo.arguments.contains("-UITEST_SIMPLE_TOOLBAR") {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button {} label: { Image(systemName: "chevron.up").keyboardToolbarButtonStyle() }
-                            Button {} label: { Image(systemName: "chevron.down").keyboardToolbarButtonStyle() }
-                            Button {} label: { Image(systemName: "keyboard.chevron.compact.down").keyboardToolbarButtonStyle() }
-                        }
-                    }
-                } else {
-                    ToolbarItemsKeyboard
+                KeyboardToolbarItem(onRowBottom: { sheetGeometry.keyboardRowBottomY = $0 }) {
+                    keyboardToolbarContent
                 }
             }
         }
@@ -1037,7 +1041,7 @@ struct WorkoutRecorderScreen: View {
     /// the lower half of the screen, so the panel cannot reach the floor underneath it — and it
     /// leaves through its own presentation binding rather than being yanked out of the tree.
     private func beginFinishing() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        dismissKeyboard()
         UIImpactFeedbackGenerator(style: .soft).impactOccurred()
         // Start the scale in the middle, like Apple's effort screen: a nudge from neutral reads as
         // rating, where an empty scale reads as a form to fill in. Only ever seeds a workout that
@@ -1056,7 +1060,7 @@ struct WorkoutRecorderScreen: View {
     /// a re-open. (The fold's own scalars were never touched; `isRestoringFromFinish` only stops
     /// the re-created list from scrolling itself to the bottom on the way back.)
     private func endFinishing() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        dismissKeyboard()
         isRestoringFromFinish = true
         finishReport = nil
         withAnimation(headerExpansionAnimation) {
@@ -1416,58 +1420,11 @@ struct WorkoutRecorderScreen: View {
         return workoutRecorder.workout?.sets.first { $0.id == focusedIndex.setID }
     }
 
+    /// Where the keyboard's Next button goes from the focused field — see `SetFieldNavigation`.
     func nextIntegerFieldIndex() -> IntegerField.Index? {
-        guard let workout = workoutRecorder.workout,
-              let focusedIndex = focusedIntegerFieldIndex,
-              let position = workout.sets.firstIndex(where: { $0.id == focusedIndex.setID })
+        guard let workout = workoutRecorder.workout, let focusedIndex = focusedIntegerFieldIndex
         else { return nil }
-        // Advance entry by entry within the set (drops, super set sides), then set by set.
-        let focusedWorkoutSet = workout.sets[position]
-        if focusedIndex.secondary + 1 < focusedWorkoutSet.entryValues.count {
-            return clampedIndex(
-                for: focusedWorkoutSet,
-                secondary: focusedIndex.secondary + 1,
-                tertiary: focusedIndex.tertiary
-            )
-        }
-        guard let nextSet = workout.sets.value(at: position + 1) else { return nil }
-        return clampedIndex(for: nextSet, secondary: 0, tertiary: focusedIndex.tertiary)
-    }
-
-    func previousIntegerFieldIndex() -> IntegerField.Index? {
-        guard let workout = workoutRecorder.workout,
-              let focusedIndex = focusedIntegerFieldIndex,
-              let position = workout.sets.firstIndex(where: { $0.id == focusedIndex.setID })
-        else { return nil }
-        guard focusedIndex.secondary == 0 else {
-            return clampedIndex(
-                for: workout.sets[position],
-                secondary: focusedIndex.secondary - 1,
-                tertiary: focusedIndex.tertiary
-            )
-        }
-        guard position > 0 else { return nil }
-        let previousSet = workout.sets[position - 1]
-        return clampedIndex(
-            for: previousSet,
-            secondary: max(0, previousSet.entryValues.count - 1),
-            tertiary: focusedIndex.tertiary
-        )
-    }
-
-    /// Builds a focus index whose field column is clamped to the target entry's fields —
-    /// moving from a two-field reps+weight row onto a single-field reps-only row lands on
-    /// that row's last field instead of dropping focus.
-    private func clampedIndex(
-        for workoutSet: WorkoutSet, secondary: Int, tertiary: Int
-    ) -> IntegerField.Index? {
-        guard let setID = workoutSet.id else { return nil }
-        let targetType = workoutSet.entryValues.value(at: secondary)?.type ?? .repsAndWeight
-        return IntegerField.Index(
-            setID: setID,
-            secondary: secondary,
-            tertiary: min(tertiary, targetType.inputFieldCount - 1)
-        )
+        return SetFieldNavigation.index(after: focusedIndex, in: workout.sets)
     }
 
     // MARK: - Autosave
@@ -1670,6 +1627,14 @@ private struct RecorderHeaderStatTiles: View {
 /// `@State` on the screen each frame re-rendered the entire recorder tree.
 final class RecorderSheetGeometry: ObservableObject {
     @Published var sheetHeight: CGFloat = 0
+    /// Where the keyboard accessory's capsules end, when one is on screen — the line the floating
+    /// timer lines itself up with. Published here rather than held on the screen so the accessory's
+    /// per-frame measurements re-render only the overlay that reads them.
+    @Published var keyboardRowBottomY: CGFloat?
+    /// The bottom edge of the area the floating controls hang off, in the same space. Measured by a
+    /// probe *outside* their offset: a reader inside it would report the offset position and the
+    /// offset derived from that would chase its own tail.
+    @Published var containerBottomY: CGFloat = 0
     @Published var toolbarOpacity: CGFloat = 1
     @Published var animationDuration: CGFloat = 0
     @Published var safeAreaBottomInset: CGFloat = 0
@@ -1710,33 +1675,109 @@ private struct FloatingChronoControlsOverlay: View {
     let onStopStopwatch: () -> Void
     let onCancelTimer: () -> Void
 
+    /// Whether a keyboard is on screen. What the slide is keyed on — and what keeps the controls
+    /// visible while it happens, since the tray's measured height spikes and re-settles as a
+    /// keyboard animates over it, which used to fade them out mid-flight.
+    @State private var isKeyboardVisible = false
+
+    /// Measured, not assumed: the controls are a plain circle while idle and a wide pill while a
+    /// rest counts down, and the slide has to land on the leading edge either way.
+    @State private var controlsWidth: CGFloat = 0
+
+    /// Leading inset while the keyboard is up — the same margin the accessory row's capsules keep
+    /// on the other side, so the two read as one row.
+    private static let keyboardLeadingInset: CGFloat = 16
+    /// The overlay's resting inset from the trailing edge.
+    private static let trailingInset: CGFloat = 15
+
     var body: some View {
-        if sheetGeometry.sheetHeight > 0 && !workoutRecorderIsDragging {
-            HStack {
-                WorkoutRecorderFloatingTimerButton(
-                    chronograph: chronograph,
-                    workoutRecorder: workoutRecorder,
-                    action: onOpenChronoSheet
-                )
-                if chronograph.mode == .stopwatch, chronograph.status == .running {
-                    WorkoutRecorderFloatingStopwatchStopButton(
-                        workoutRecorder: workoutRecorder,
-                        action: onStopStopwatch
-                    )
-                } else if chronograph.mode == .timer, chronograph.status == .running {
-                    WorkoutRecorderFloatingStopwatchStopButton(
-                        workoutRecorder: workoutRecorder,
-                        action: onCancelTimer
-                    )
-                }
-            }
-            .opacity(sheetGeometry.toolbarOpacity)
-            .offset(y: -sheetGeometry.sheetHeight)
-            .padding(.trailing, 15)
-            .offset(y: bottomOffset)
-            .animation(.easeInOut(duration: sheetGeometry.animationDuration), value: sheetGeometry.sheetHeight)
+        controls
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { controlsWidth = $0 }
+            // Never conditionally removed: a view that leaves the hierarchy cannot animate back in,
+            // and the guards this replaces (a zero sheet height, a mid-flight opacity fade) all
+            // fire exactly while the keyboard is moving.
+            .opacity(opacity)
+            .padding(.trailing, Self.trailingInset)
+            .offset(x: horizontalOffset, y: verticalOffset)
+            .animation(
+                .easeInOut(duration: sheetGeometry.animationDuration),
+                value: sheetGeometry.sheetHeight
+            )
             .animation(.easeInOut(duration: sheetGeometry.animationDuration), value: bottomOffset)
+            // These two say plainly what is happening; `willChangeFrame`'s end frame does not —
+            // after a dismissal it still reported 82 points of the screen covered, which left the
+            // controls parked on the left. Both notifications carry the curve and duration UIKit is
+            // about to use, and making the change inside that transaction is what has the controls
+            // travel *with* the keyboard rather than merely at the same time as it.
+            .onReceive(
+                NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+            ) { notification in
+                withAnimation(.keyboard(from: notification)) { isKeyboardVisible = true }
+            }
+            .onReceive(
+                NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+            ) { notification in
+                withAnimation(.keyboard(from: notification)) { isKeyboardVisible = false }
+            }
+    }
+
+    private var controls: some View {
+        HStack {
+            WorkoutRecorderFloatingTimerButton(
+                chronograph: chronograph,
+                workoutRecorder: workoutRecorder,
+                action: onOpenChronoSheet
+            )
+            if chronograph.mode == .stopwatch, chronograph.status == .running {
+                WorkoutRecorderFloatingStopwatchStopButton(
+                    workoutRecorder: workoutRecorder,
+                    action: onStopStopwatch
+                )
+            } else if chronograph.mode == .timer, chronograph.status == .running {
+                WorkoutRecorderFloatingStopwatchStopButton(
+                    workoutRecorder: workoutRecorder,
+                    action: onCancelTimer
+                )
+            }
         }
+    }
+
+    /// Hidden while the recorder is being dragged, and before the tray has been measured — but
+    /// never while a keyboard is on screen: the tray's measured height swings wildly as one opens
+    /// over it, and `toolbarOpacity`'s fade would take the controls away exactly mid-slide.
+    private var opacity: CGFloat {
+        if workoutRecorderIsDragging { return 0 }
+        if isKeyboardVisible { return 1 }
+        return sheetGeometry.sheetHeight > 0 ? sheetGeometry.toolbarOpacity : 0
+    }
+
+    /// How far left of its resting place the controls sit. Zero with no keyboard; with one, exactly
+    /// enough to put their leading edge on `keyboardLeadingInset`.
+    ///
+    /// Derived from the measured width rather than stored, so a timer that starts counting while
+    /// parked on the left widens to the right instead of drifting: the trailing anchoring moves the
+    /// controls left by the same amount this offset gives back.
+    private var horizontalOffset: CGFloat {
+        guard isKeyboardVisible,
+              controlsWidth > 0,
+              let screenWidth = UIScreen.current?.bounds.width
+        else { return 0 }
+        let travel = screenWidth - Self.trailingInset - controlsWidth - Self.keyboardLeadingInset
+        return -max(0, travel)
+    }
+
+    /// Riding the top of the tray with no keyboard; sitting *in* the accessory row when there is
+    /// one, by lining this control's bottom edge up with the row's own.
+    ///
+    /// Both edges are measured, neither derived: the keyboard's reported frame begins a capsule's
+    /// height above the row (a gap that is the system's, not ours, to define), and this overlay's
+    /// container is the list area above the tray rather than the screen. Two measurements in one
+    /// coordinate space subtract cleanly; two assumptions would not.
+    private var verticalOffset: CGFloat {
+        if isKeyboardVisible, let rowBottom = sheetGeometry.keyboardRowBottomY {
+            return rowBottom - sheetGeometry.containerBottomY
+        }
+        return -sheetGeometry.sheetHeight + bottomOffset
     }
 
     private var bottomOffset: CGFloat {

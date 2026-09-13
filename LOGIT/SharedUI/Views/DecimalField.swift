@@ -111,7 +111,14 @@ struct DecimalField: View {
             // While the user is typing, valueString is the source of truth;
             // overwriting it causes rounding artefacts from the
             // display → grams → display round-trip (especially for lbs).
-            guard !isFocused else { return }
+            //
+            // The sign is the exception. Assistance is a negative weight, and the ± in the
+            // keyboard row flips the stored value *under a focused field* — so that one
+            // character is carried across on its own, leaving the digits being typed alone.
+            guard !isFocused else {
+                syncSignWhileTyping(of: newValue)
+                return
+            }
             let formatted = formatNumber(newValue)
             if formatted != valueString {
                 valueString = formatted
@@ -148,8 +155,20 @@ struct DecimalField: View {
 
     // MARK: - Helper Methods
 
+    /// Puts the model's sign on the string being typed, without reformatting the digits.
+    private func syncSignWhileTyping(of newValue: Double) {
+        let isNegative = newValue < 0
+        guard !valueString.isEmpty, isNegative != valueString.hasPrefix("-") else { return }
+        valueString = isNegative ? "-" + valueString : String(valueString.dropFirst())
+    }
+
     private func filterInput(_ input: String) -> String {
-        var filtered = input
+        // A number pad has no minus key, so a sign here never came from a keystroke: it came
+        // from the ± in the keyboard row, which flips the stored weight. Set it aside, filter
+        // the magnitude exactly as before, and put it back — a field showing assistance has to
+        // read as the negative number it stores.
+        let isNegative = input.hasPrefix("-")
+        var filtered = isNegative ? String(input.dropFirst()) : input
         
         // Only allow digits and one decimal separator
         let allowedCharacters = CharacterSet(charactersIn: "0123456789.,")
@@ -209,7 +228,9 @@ struct DecimalField: View {
             }
         }
         
-        return filtered
+        // Nothing to be negative about: an empty field and a zero are unsigned.
+        guard isNegative, !filtered.isEmpty, Double(filtered) != 0 else { return filtered }
+        return "-" + filtered
     }
 
     /// Formatters are expensive to create and this runs twice per body evaluation (placeholder

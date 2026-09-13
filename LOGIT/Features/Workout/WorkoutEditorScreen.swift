@@ -149,6 +149,11 @@ struct WorkoutEditorScreen: View {
                                 // The session is over — there is nothing left to prompt.
                                 showsPreviousNote: false
                             )
+                            // A number field never clears the binding when it loses focus, so
+                            // writing a note would otherwise leave Next in the keyboard toolbar.
+                            .onChange(of: isNoteFieldFocused) {
+                                if isNoteFieldFocused { focusedIntegerFieldIndex = nil }
+                            }
                         }
 
                         VStack(spacing: CELL_SPACING) {
@@ -387,30 +392,7 @@ struct WorkoutEditorScreen: View {
                         dismiss()
                     }
                 }
-                if focusedTextField != .workoutName {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        HStack {
-                            Spacer()
-                            Button {
-                                focusedIntegerFieldIndex = nil
-                                // Defer — same transaction entanglement as the
-                                // editDateTime button above.
-                                DispatchQueue.main.async {
-                                    isShowingReorderSheet = true
-                                }
-                            } label: {
-                                Image(systemName: "arrow.up.arrow.down")
-                                    .keyboardToolbarButtonStyle()
-                            }
-                            Button {
-                                focusedIntegerFieldIndex = nil
-                            } label: {
-                                Image(systemName: "keyboard.chevron.compact.down")
-                                    .keyboardToolbarButtonStyle()
-                            }
-                        }
-                    }
-                }
+                KeyboardToolbarItem { keyboardToolbarContent }
             }
             .onAppear {
                 // Guarantee a start date (a workout's place in history); `newWorkout()` already sets
@@ -423,6 +405,59 @@ struct WorkoutEditorScreen: View {
                 exerciseSelectionPresentationDetent = workout.isEmpty ? .medium : .height(BOTTOM_SHEET_SMALL)
             }
         }
+    }
+
+    // MARK: - Keyboard Toolbar
+
+    /// Same accessory as the recorder, minus the live timer this screen has no session for: Next
+    /// and then hide, two capsules on the trailing edge with the dismiss at the very edge. Next
+    /// stands in for the number pad's missing return key and walks the set's fields in the order
+    /// they are filled in; the note only ever needs the button that puts the keyboard away. The
+    /// workout's name has a return key of its own (`submitLabel(.done)`), so it brings nothing.
+    @ViewBuilder
+    private var keyboardToolbarContent: some View {
+        if focusedTextField != .workoutName {
+            Spacer(minLength: 8)
+            if let focusedIndex = focusedIntegerFieldIndex {
+                let nextIndex = SetFieldNavigation.index(after: focusedIndex, in: workout.sets)
+                KeyboardToolbarGroup {
+                    // Leading of Next, so the capsule grows away from the edge — see the
+                    // recorder's copy.
+                    if let assistedSet = focusedWeightSet {
+                        KeyboardAssistedButton(workoutSet: assistedSet)
+                    }
+                    KeyboardToolbarTextButton(
+                        title: NSLocalizedString("next", comment: ""),
+                        isEnabled: nextIndex != nil
+                    ) {
+                        focusedIntegerFieldIndex = nextIndex
+                    }
+                    .accessibilityIdentifier("keyboardNextField")
+                }
+            }
+            KeyboardToolbarGroup {
+                KeyboardToolbarIconButton(
+                    systemImage: "keyboard.chevron.compact.down",
+                    accessibilityLabel: NSLocalizedString("hideKeyboard", comment: "")
+                ) {
+                    focusedIntegerFieldIndex = nil
+                    dismissKeyboard()
+                }
+                .accessibilityIdentifier("keyboardHide")
+            }
+        }
+    }
+
+    /// The focused set, but only while the field with the keyboard is its *weight* — see the
+    /// recorder's `focusedWeightSet`, which this mirrors.
+    private var focusedWeightSet: WorkoutSet? {
+        guard let focusedIndex = focusedIntegerFieldIndex,
+              let workoutSet = workout.sets.first(where: { $0.id == focusedIndex.setID }),
+              let entry = workoutSet.entryValues.value(at: focusedIndex.secondary),
+              entry.type.weightFieldIndex == focusedIndex.tertiary,
+              workoutSet.entryValues.contains(where: { $0.type.usesWeight && $0.weight != 0 })
+        else { return nil }
+        return workoutSet
     }
 
     // MARK: - Computed Properties

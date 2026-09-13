@@ -499,6 +499,12 @@ struct WorkoutSetGroupCell: View {
             axis: .vertical
         )
         .focused($isNoteFieldFocused)
+        // A number field never clears the binding when it loses focus (the field taking over is
+        // the one that rewrites it), so writing a note would otherwise leave Next in the keyboard
+        // toolbar, pointing at a set nobody is typing in.
+        .onChange(of: isNoteFieldFocused) {
+            if isNoteFieldFocused { focusedIntegerFieldIndex = nil }
+        }
         .onSubmit(of: .text) {
             setGroup.note = (setGroup.note ?? "") + "\n"
             isNoteFieldFocused = true

@@ -156,6 +156,7 @@
 
 // MARK: - H (continued)
 
+"hideKeyboard" = "Hide Keyboard";
 "hidden" = "Hidden";
 
 // MARK: - I
@@ -224,6 +225,7 @@
 "newTemplateFromWorkout" = "Use as Template...";
 "newWorkout" = "New Workout";
 "newWorkoutDescription" = "Build your workout from scratch.";
+"next" = "Next";
 "night" = "Night";
 "nine" = "Nine";
 "noAttempts" = "No Attempts";

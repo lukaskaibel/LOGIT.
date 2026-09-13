@@ -156,6 +156,7 @@
 
 // MARK: - H (continued)
 
+"hideKeyboard" = "Ocultar teclado";
 "hidden" = "Oculto";
 
 // MARK: - I
@@ -224,6 +225,7 @@
 "newTemplateFromWorkout" = "Usar como plantilla...";
 "newWorkout" = "Nuevo entrenamiento";
 "newWorkoutDescription" = "Desarrolla tu entrenamiento desde cero.";
+"next" = "Siguiente";
 "night" = "Madrugada";
 "nine" = "Nueve";
 "noAttempts" = "Sin intentos";
