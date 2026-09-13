@@ -74,6 +74,17 @@ enum SetMeasurementType: String, CaseIterable, Codable, Identifiable {
         }
     }
 
+    /// Which of those input fields is the weight, if this type records one. Must stay in step with
+    /// the order `SetEntryFieldsRow` lays the fields out in — it is how the keyboard accessory
+    /// knows the field being typed into is the one a ± would act on.
+    var weightFieldIndex: Int? {
+        switch self {
+        case .repsAndWeight: return 1
+        case .weightAndDuration, .weightAndDistance: return 0
+        case .repsOnly, .duration, .distance, .distanceAndDuration: return nil
+        }
+    }
+
     var title: String {
         NSLocalizedString("measurementType.\(rawValue)", comment: "")
     }

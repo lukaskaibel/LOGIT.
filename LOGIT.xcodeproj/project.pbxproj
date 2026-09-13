@@ -178,7 +178,6 @@
 		801BBDEA2DF7338A00CDB1FB /* EnvironmentValues+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBCA72DF7338A00CDB1FB /* EnvironmentValues+.swift */; };
 		801BBDEB2DF7338A00CDB1FB /* WorkoutDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBD272DF7338A00CDB1FB /* WorkoutDetailScreen.swift */; };
 		801BBDED2DF7338A00CDB1FB /* TemplateSuperSet+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBCDA2DF7338A00CDB1FB /* TemplateSuperSet+.swift */; };
-		801BBDEE2DF7338A00CDB1FB /* KeyboardToolbarButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBD472DF7338A00CDB1FB /* KeyboardToolbarButtonStyle.swift */; };
 		801BBDEF2DF7338A00CDB1FB /* CurrentWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBD4E2DF7338A00CDB1FB /* CurrentWorkoutView.swift */; };
 		801BBDF02DF7338A00CDB1FB /* TemplateListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBD142DF7338A00CDB1FB /* TemplateListScreen.swift */; };
 		801BBDF42DF7338A00CDB1FB /* TextProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801BBCBD2DF7338A00CDB1FB /* TextProcessing.swift */; };
@@ -246,6 +245,7 @@
 		80SE000C2F70CC0100SE000C /* SetEntryMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80SE00092F70CC0100SE0009 /* SetEntryMigrationTests.swift */; };
 		80SE000D2F70CC0100SE000D /* LOGIT-v7-legacy.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 80SE000A2F70CC0100SE000A /* LOGIT-v7-legacy.sqlite */; };
 		80SE00112F70CC0100SE0011 /* SetEntryFieldsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80SE00122F70CC0100SE0012 /* SetEntryFieldsRow.swift */; };
+		1453C5ACB4E9ADB6367A4547 /* KeyboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC34530FDD62DECEA8CD394 /* KeyboardToolbar.swift */; };
 		80TH00022F80AA0100TH0002 /* SetGroupThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80TH00012F80AA0100TH0001 /* SetGroupThread.swift */; };
 		85709CDA5A20D6B7D9C23487 /* ExerciseMergeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF956F5D14BBB78133BD528A /* ExerciseMergeServiceTests.swift */; };
 		85A5686D4D81DE28549B45E0 /* MuscleBalanceGoalTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919AE56C70A5A00C302C7D8A /* MuscleBalanceGoalTile.swift */; };
@@ -541,7 +541,6 @@
 		801BBD422DF7338A00CDB1FB /* RequiresNetworkConnectionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiresNetworkConnectionModifier.swift; sourceTree = "<group>"; };
 		801BBD432DF7338A00CDB1FB /* TemplateGenerationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateGenerationModifier.swift; sourceTree = "<group>"; };
 		801BBD452DF7338A00CDB1FB /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
-		801BBD472DF7338A00CDB1FB /* KeyboardToolbarButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbarButtonStyle.swift; sourceTree = "<group>"; };
 		801BBD482DF7338A00CDB1FB /* MuscleGroupGradientStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleGroupGradientStyle.swift; sourceTree = "<group>"; };
 		801BBD492DF7338A00CDB1FB /* ScreenHeaderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenHeaderStyle.swift; sourceTree = "<group>"; };
 		801BBD4A2DF7338A00CDB1FB /* SectionHeaderStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderStyle.swift; sourceTree = "<group>"; };
@@ -619,6 +618,7 @@
 		80SE000A2F70CC0100SE000A /* LOGIT-v7-legacy.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LOGIT-v7-legacy.sqlite"; sourceTree = "<group>"; };
 		80SE000B2F70CC0100SE000B /* make_v7_fixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = make_v7_fixture.swift; sourceTree = "<group>"; };
 		80SE00122F70CC0100SE0012 /* SetEntryFieldsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEntryFieldsRow.swift; sourceTree = "<group>"; };
+		5DC34530FDD62DECEA8CD394 /* KeyboardToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbar.swift; sourceTree = "<group>"; };
 		80TH00012F80AA0100TH0001 /* SetGroupThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGroupThread.swift; sourceTree = "<group>"; };
 		829F12D41C231764936B6B83 /* WorkoutLiveActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WorkoutLiveActivityAttributes.swift; sourceTree = "<group>"; };
 		8571CBB4B50589F1F8F36F44 /* StatPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPeriod.swift; sourceTree = "<group>"; };
@@ -1303,7 +1303,6 @@
 			isa = PBXGroup;
 			children = (
 				801BBD452DF7338A00CDB1FB /* ButtonStyle.swift */,
-				801BBD472DF7338A00CDB1FB /* KeyboardToolbarButtonStyle.swift */,
 				801BBD482DF7338A00CDB1FB /* MuscleGroupGradientStyle.swift */,
 				801BBD492DF7338A00CDB1FB /* ScreenHeaderStyle.swift */,
 				801BBD4A2DF7338A00CDB1FB /* SectionHeaderStyle.swift */,
@@ -1325,6 +1324,7 @@
 				E1E1E1000000000000000F07 /* AboutSection.swift */,
 				801BBD522DF7338A00CDB1FB /* IntegerField.swift */,
 				80SE00122F70CC0100SE0012 /* SetEntryFieldsRow.swift */,
+				5DC34530FDD62DECEA8CD394 /* KeyboardToolbar.swift */,
 				801BBD532DF7338A00CDB1FB /* LogitProLogo.swift */,
 				801BBD542DF7338A00CDB1FB /* MuscleGroupSelector.swift */,
 				801BBD552DF7338A00CDB1FB /* NavigationChevron.swift */,
@@ -1780,6 +1780,7 @@
 				801BBDB72DF7338A00CDB1FB /* FetchRequestWrapper.swift in Sources */,
 				2333D8B12B944AD1A27D0E0A /* SetEntityClasses.swift in Sources */,
 				80SE00112F70CC0100SE0011 /* SetEntryFieldsRow.swift in Sources */,
+				1453C5ACB4E9ADB6367A4547 /* KeyboardToolbar.swift in Sources */,
 				80SE00012F70CC0100SE0001 /* SetMeasurementType.swift in Sources */,
 				80DG00012F70CC0100DG0001 /* ExerciseDurationGoal.swift in Sources */,
 				80SE00032F70CC0100SE0003 /* SetEntry+.swift in Sources */,
@@ -1853,7 +1854,6 @@
 				E1E1E1000000000000000B09 /* WorkoutStatTiles.swift in Sources */,
 				E1E1E1000000000000000B0A /* WorkoutStatScreen.swift in Sources */,
 				801BBDED2DF7338A00CDB1FB /* TemplateSuperSet+.swift in Sources */,
-				801BBDEE2DF7338A00CDB1FB /* KeyboardToolbarButtonStyle.swift in Sources */,
 				801BBDEF2DF7338A00CDB1FB /* CurrentWorkoutView.swift in Sources */,
 				80036CDC2EFEF98C00B7C7B4 /* GlobalSearchScreen.swift in Sources */,
 				801BBDF02DF7338A00CDB1FB /* TemplateListScreen.swift in Sources */,

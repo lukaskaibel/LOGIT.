@@ -319,6 +319,18 @@ struct MeasurementDetailScreen: View {
                     .fontWeight(.bold)
                     .disabled(newEntryValue == 0)
                 }
+                // A decimal pad has no return key, and this sheet's only field filled the screen
+                // with one that could not be put away again.
+                KeyboardToolbarItem {
+                    KeyboardToolbarGroup {
+                        KeyboardToolbarIconButton(
+                            systemImage: "keyboard.chevron.compact.down",
+                            accessibilityLabel: NSLocalizedString("hideKeyboard", comment: "")
+                        ) {
+                            dismissKeyboard()
+                        }
+                    }
+                }
             }
         }
         .presentationDetents([.medium])

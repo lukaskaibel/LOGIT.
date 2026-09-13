@@ -138,6 +138,7 @@
 
 // MARK: - H
 
+"hideKeyboard" = "Tastatur ausblenden";
 "hidden" = "Ausgeblendet";
 "highlights" = "Highlights";
 "hips" = "Hüfte";
@@ -219,6 +220,7 @@
 "newTemplateFromWorkout" = "Als Vorlage verwenden...";
 "newWorkout" = "Neues Workout";
 "newWorkoutDescription" = "Workout von Grund auf erstellen.";
+"next" = "Weiter";
 "night" = "Nacht";
 "nine" = "Neun";
 "noAttempts" = "Keine Versuche";

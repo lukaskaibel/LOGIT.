@@ -26,14 +26,82 @@ protocol SetEntryFieldsEditable: NSManagedObject, ObservableObject {
 extension SetEntry: SetEntryFieldsEditable {}
 extension TemplateSetEntry: SetEntryFieldsEditable {}
 
+/// The keyboard accessory's ± — the number pad has no minus key, and assistance is stored as a
+/// negative weight, so this is the only way to type one.
+///
+/// A view of its own because it has to *observe* the set: flipping the sign mutates entries rather
+/// than the set, and without something watching, the button would change the weights and go on
+/// drawing itself un-latched.
+struct KeyboardAssistedButton: View {
+    @ObservedObject var workoutSet: WorkoutSet
+
+    var body: some View {
+        KeyboardToolbarIconButton(
+            systemImage: workoutSet.isAssisted ? "plusminus.circle.fill" : "plusminus.circle",
+            accessibilityLabel: NSLocalizedString("assisted", comment: ""),
+            isOn: workoutSet.isAssisted
+        ) {
+            withAnimation(.interactiveSpring()) {
+                workoutSet.setAssisted(!workoutSet.isAssisted)
+                // The entries changed, not the set — the cells need telling, exactly as the set's
+                // own context-menu toggle does.
+                workoutSet.objectWillChange.send()
+                workoutSet.setGroup?.objectWillChange.send()
+            }
+        }
+        .accessibilityIdentifier("keyboardAssisted")
+    }
+}
+
+// MARK: - Keyboard field navigation
+
+/// A set the keyboard's Next button can walk: its identity and the entries it lays out.
+/// Workouts and templates render the same rows, so they navigate by the same rules.
+protocol SetFieldNavigable {
+    var id: UUID? { get }
+    var entryValues: [SetEntryValues] { get }
+}
+
+extension WorkoutSet: SetFieldNavigable {}
+extension TemplateSet: SetFieldNavigable {}
+
+/// Where the keyboard's Next button goes, in the order a set is actually typed: across the
+/// entry's own fields first (reps, then weight), then on to the set's next entry — a drop, or
+/// the other half of a superset, which is the next thing performed — and only then to the next
+/// set. `SetEntryFieldsRow` decides which field a position means; this decides the order.
+enum SetFieldNavigation {
+    /// The field after `index`, or nil at the last field of the last set.
+    static func index<S: SetFieldNavigable>(
+        after index: IntegerField.Index,
+        in sets: [S]
+    ) -> IntegerField.Index? {
+        guard let position = sets.firstIndex(where: { $0.id == index.setID }) else { return nil }
+        let entries = sets[position].entryValues
+        if let type = entries.value(at: index.secondary)?.type,
+           index.tertiary + 1 < type.inputFieldCount
+        {
+            return IntegerField.Index(
+                setID: index.setID, secondary: index.secondary, tertiary: index.tertiary + 1
+            )
+        }
+        if index.secondary + 1 < entries.count {
+            return IntegerField.Index(
+                setID: index.setID, secondary: index.secondary + 1, tertiary: 0
+            )
+        }
+        guard let nextSetID = sets.value(at: position + 1)?.id else { return nil }
+        return IntegerField.Index(setID: nextSetID, secondary: 0, tertiary: 0)
+    }
+}
+
 /// One set entry's input fields, laid out by the entry's measurement type:
 /// reps+weight, reps only, duration, weight+duration, distance, distance+duration, or
 /// weight+distance. This is the single row every set cell — standard, drop, super, workout
 /// or template — renders per entry.
 ///
 /// The focus index is (set id, entry position, field position); field positions must
-/// stay consistent with `SetMeasurementType.inputFieldCount`, which the recorder's keyboard
-/// next/previous navigation clamps against.
+/// stay consistent with `SetMeasurementType.inputFieldCount`, which `SetFieldNavigation`
+/// walks when the keyboard's Next button advances the focus.
 struct SetEntryFieldsRow<Entry: SetEntryFieldsEditable>: View {
     @ObservedObject var entry: Entry
     let setID: UUID
