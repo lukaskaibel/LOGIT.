@@ -320,9 +320,8 @@ struct PersonalRecordsHighlight: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(CELL_PADDING)
-            // Applied directly, at the tile radius, so it is the same material as the Volume and
-            // Repetitions tiles above it rather than a flat slab beside them.
-            .glassEffect(.clear, in: .rect(cornerRadius: 30))
+            // The same translucent surface as the Volume and Repetitions tiles above it.
+            .translucentTileStyle()
             .accessibilityElement(children: .combine)
             .accessibilityIdentifier("finishPersonalRecords")
         }

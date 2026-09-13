@@ -9,8 +9,8 @@ import SwiftUI
 
 /// The workout's own note — "bench felt easy, go 82.5 next time".
 ///
-/// One component, three homes: the recorder header (over the muscle wash, so `.glass`), the finish
-/// panel, and the workout editor (`.tile`). Deliberately the same shape as
+/// One component, three homes: the recorder header (over the muscle wash, so `.translucent`), the
+/// finish panel, and the workout editor (`.tile`). Deliberately the same shape as
 /// `WorkoutSetGroupCell.noteField` — a note on the workout and a note on an exercise should not
 /// look like two different features.
 ///
@@ -21,15 +21,15 @@ import SwiftUI
 /// typing into?".
 struct WorkoutNoteField: View {
     enum Style {
-        /// Clear glass, for the header and finish panel where the muscle wash shows through.
-        case glass
+        /// A translucent card, for the header and finish panel where the muscle wash shows through.
+        case translucent
         /// The app's standard opaque cell, for the editor.
         case tile
     }
 
     @ObservedObject var workout: Workout
     var isFocused: FocusState<Bool>.Binding
-    var style: Style = .glass
+    var style: Style = .translucent
     var prompt: String = NSLocalizedString("addNote...", comment: "")
     var lineLimit: ClosedRange<Int> = 1...6
     /// Whether to offer last session's note above the field at all. The detail/editor screens pass
@@ -39,18 +39,11 @@ struct WorkoutNoteField: View {
     @ViewBuilder
     var body: some View {
         switch style {
-        case .glass:
-            // The same modifier the header's stat tiles wear, written the same way: applied to the
-            // view, at `tileStyle()`'s radius. This card used to apply it to a `Color.clear` inside
-            // `.background` at radius 24 — cosmetically out of step with the tiles beside it.
-            //
-            // NB the card can still LOOK less lit than those tiles, and that is the backdrop, not
-            // the material: clear glass refracts what is behind it, the muscle wash spends most of
-            // its colour in the top of the header, and this card sits below that. Measured rim
-            // contrast against an adjacent record card and a plain-Text control card was the same
-            // to within a few levels. Don't go hunting a rendering bug here.
+        case .translucent:
+            // The same surface the header's stat tiles wear. It was clear Liquid Glass until the
+            // specular rims turned out to be the loudest thing on the header.
             card
-                .glassEffect(.clear, in: .rect(cornerRadius: 30))
+                .translucentTileStyle()
                 .animation(.snappy(duration: 0.28), value: showsRecall)
         case .tile:
             card
