@@ -79,7 +79,9 @@ struct MuscleBalanceCalculator {
             .getMuscleGroupOccurances(in: workouts)
             .reduce(into: [:]) { $0[$1.0] = $1.1 }
         let total = counts.values.reduce(0, +)
-        let actuals = Self.actualPercents(counts: counts, total: total)
+        // The same largest-remainder apportionment the target split is built with, so the two
+        // sides of every comparison round the same way.
+        let actuals = MuscleTargetSplit.apportion(weights: counts)
 
         entries = MuscleGroup.allCases.map { group in
             MuscleBalanceEntry(
@@ -104,39 +106,5 @@ struct MuscleBalanceCalculator {
     /// Numerator for the Balance tile: groups at least at their target.
     func atLeastTargetCount() -> Int {
         goalEntries.filter { $0.goalState != .under }.count
-    }
-
-    // MARK: - Rounding
-
-    /// Largest-remainder (Hamilton) apportionment so the 8 whole-percent actuals sum to exactly 100
-    /// rather than drifting from independent rounding. Returns an empty map when the period is empty.
-    private static func actualPercents(counts: [MuscleGroup: Int], total: Int) -> [MuscleGroup: Int] {
-        guard total > 0 else { return [:] }
-        var floors: [MuscleGroup: Int] = [:]
-        var remainders: [(group: MuscleGroup, fraction: Double)] = []
-        var assigned = 0
-        for group in MuscleGroup.allCases {
-            let exact = Double(counts[group] ?? 0) / Double(total) * 100
-            let floored = Int(exact.rounded(.down))
-            floors[group] = floored
-            assigned += floored
-            remainders.append((group, exact - Double(floored)))
-        }
-        // Distribute the leftover points to the largest fractional remainders, ties broken by
-        // canonical group order so the result is deterministic.
-        let ordered = remainders.sorted {
-            if $0.fraction != $1.fraction { return $0.fraction > $1.fraction }
-            let lhs = MuscleGroup.allCases.firstIndex(of: $0.group) ?? 0
-            let rhs = MuscleGroup.allCases.firstIndex(of: $1.group) ?? 0
-            return lhs < rhs
-        }
-        var remaining = 100 - assigned
-        var index = 0
-        while remaining > 0, index < ordered.count {
-            floors[ordered[index].group, default: 0] += 1
-            remaining -= 1
-            index += 1
-        }
-        return floors
     }
 }

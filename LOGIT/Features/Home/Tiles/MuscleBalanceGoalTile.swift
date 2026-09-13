@@ -30,13 +30,13 @@ struct MuscleBalanceGoalTile: View {
     /// Workouts already narrowed to the window the tile reports.
     let workouts: [Workout]
 
-    @EnvironmentObject private var targetSplitStore: MuscleTargetSplitStore
+    @EnvironmentObject private var focusStore: MuscleFocusStore
     @EnvironmentObject private var muscleGroupService: MuscleGroupService
 
     private var calculator: MuscleBalanceCalculator {
         MuscleBalanceCalculator(
             workouts: workouts,
-            target: targetSplitStore.split,
+            target: focusStore.split,
             muscleGroupService: muscleGroupService
         )
     }
