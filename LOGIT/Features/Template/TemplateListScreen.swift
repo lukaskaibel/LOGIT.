@@ -130,7 +130,7 @@ struct TemplateListScreen: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $showingTemplateCreation) {
+            .sheet(isPresented: $showingTemplateCreation) {
                 TemplateEditorScreen(template: database.newTemplate(), isEditingExistingTemplate: false)
             }
             .navigationDestination(item: $selectedTemplate) { template in

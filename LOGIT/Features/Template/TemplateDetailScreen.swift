@@ -138,7 +138,7 @@ struct TemplateDetailScreen: View {
             actions: {},
             message: { Text(NSLocalizedString("templateExplanation", comment: "")) }
         )
-        .fullScreenCover(isPresented: $showingTemplateEditor) {
+        .sheet(isPresented: $showingTemplateEditor) {
             TemplateEditorScreen(template: template, isEditingExistingTemplate: true)
         }
     }
