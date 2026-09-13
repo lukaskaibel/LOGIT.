@@ -28,11 +28,22 @@ final class MuscleFocusStore: ObservableObject {
     /// The target split the focus implies — what every balance surface reads.
     @Published private(set) var split: MuscleTargetSplit
 
+    /// Whether the user has ever set a focus themselves, as opposed to running on the default. Drives
+    /// the Summary's one-time focus tip and the "Default" caption on Muscle Groups. A split carried
+    /// over from the old percent editor counts: someone who tuned percentages has made that choice.
+    ///
+    /// Kept in memory once known rather than re-read from disk, because a scenario launch pins reads
+    /// of the storage key for the whole session and a re-read would never see the write.
+    @Published private(set) var hasChosenFocus: Bool
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        let focus = Self.load(from: defaults) ?? Self.migrateLegacySplit(from: defaults) ?? .default
+        let stored = Self.load(from: defaults)
+        let migrated = stored == nil ? Self.migrateLegacySplit(from: defaults) : nil
+        let focus = stored ?? migrated ?? .default
         self.focus = focus
         split = focus.split
+        hasChosenFocus = stored != nil || migrated != nil
     }
 
     // MARK: - Reads
@@ -63,9 +74,14 @@ final class MuscleFocusStore: ObservableObject {
         commit(updated)
     }
 
+    /// Every mutation is a choice, even one that changes nothing: picking Full Body while running on
+    /// the Full Body default is the user settling on it, and it is persisted so the next launch
+    /// remembers that rather than asking again.
     private func commit(_ updated: MuscleFocus) {
-        guard updated != focus else { return }
-        focus = updated
+        if updated != focus {
+            focus = updated
+        }
+        hasChosenFocus = true
         persist()
     }
 

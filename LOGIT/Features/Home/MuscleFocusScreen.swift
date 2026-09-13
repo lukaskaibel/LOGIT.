@@ -31,8 +31,7 @@ import SwiftUI
 struct MuscleFocusScreen: View {
     @EnvironmentObject private var store: MuscleFocusStore
 
-    /// Descending by the default focus, so the grid reads big to small.
-    private static let order: [MuscleGroup] = [.legs, .back, .chest, .shoulders, .biceps, .triceps, .abdominals, .cardio]
+    private static let order = MuscleFocus.displayOrder
 
     /// The bar, the title and the tiles all sit at this inset, so they line up with each other and
     /// with the list's own cards. Not zero: a row's content is clipped to its bounds, and a bold
@@ -40,10 +39,6 @@ struct MuscleFocusScreen: View {
     private static let rowInsets = EdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
 
     private static let tileCornerRadius: CGFloat = 20
-
-    private var currentTitle: String {
-        store.focus.matchingPreset?.title ?? NSLocalizedString("muscleFocusCustom", comment: "")
-    }
 
     var body: some View {
         List {
@@ -72,7 +67,7 @@ struct MuscleFocusScreen: View {
     private var focusSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 10) {
-                focusMenu
+                MuscleFocusMenu()
                 MuscleSplitBar(split: store.split, order: Self.order)
                     .frame(height: 24)
             }
@@ -82,46 +77,6 @@ struct MuscleFocusScreen: View {
             .listRowSeparator(.hidden)
         }
         .listSectionSpacing(.compact)
-    }
-
-    /// The title is the control: tapping it offers the four presets, each with its glyph, the
-    /// current one checked. "Custom" is never an item — it isn't something you pick, it is what the
-    /// focus becomes when you change a priority below, so it only ever appears as the title with
-    /// nothing checked.
-    private var focusMenu: some View {
-        let selection = Binding<MuscleFocusPreset?>(
-            get: { store.focus.matchingPreset },
-            set: { newValue in
-                guard let newValue else { return }
-                store.apply(preset: newValue)
-            }
-        )
-        return Menu {
-            Picker(NSLocalizedString("trainingFocus", comment: ""), selection: selection) {
-                ForEach(MuscleFocusPreset.allCases) { preset in
-                    Text("\(preset.emoji)  \(preset.title)").tag(Optional(preset))
-                }
-            }
-        } label: {
-            HStack(spacing: 7) {
-                Text(currentTitle)
-                    .font(.system(.title2, design: .rounded, weight: .bold))
-                    .foregroundStyle(Color.label)
-                // Down, not up-and-down: this opens a list of choices rather than cycling a value,
-                // and it is the glyph a menu-backed title wears everywhere else in iOS.
-                Image(systemName: "chevron.down")
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(Color.secondaryLabel)
-            }
-            .padding(.vertical, 4)
-            .padding(.trailing, 6)
-            .contentShape(Rectangle())
-        }
-        // Deliberately unstretched — the enclosing VStack aligns it leading. A menu hit-tests only
-        // the content its label draws, so widening it to the row would leave the control dead
-        // everywhere except on the words, while still reporting the full width to accessibility:
-        // VoiceOver and any synthetic tap would aim at the middle of that empty box and miss.
-        .accessibilityIdentifier("muscleFocusMenu")
     }
 
     // MARK: - Priorities
@@ -154,32 +109,12 @@ struct MuscleFocusScreen: View {
     /// in the same place the priority does.
     private func priorityTile(_ group: MuscleGroup) -> some View {
         let isExcluded = store.focus.isExcluded(group)
-        // The last included group can't be turned off — a focus on nothing isn't a focus — so the
-        // option simply isn't offered for it.
-        let offersOff = isExcluded || store.focus.includedGroups.count > 1
-        let selection = Binding<MusclePriority?>(
-            get: { isExcluded ? nil : store.focus.priority(for: group) },
-            set: { newValue in
-                if let newValue {
-                    store.setPriority(newValue, for: group)
-                } else {
-                    store.exclude(group)
-                }
-            }
-        )
         // A `Menu` around an inline `Picker` rather than a `.menu`-style picker: the options still
         // come up as the native checkmark list, but the tile is drawn here — a menu picker's own
         // label ignores `.tint` and paints itself in the accent, and eight accent-coloured values
         // read as eight links; the muscle names carry the colour here.
         return Menu {
-            Picker(group.description, selection: selection) {
-                ForEach(MusclePriority.allCases.reversed()) { priority in
-                    Text(priority.title).tag(Optional(priority))
-                }
-                if offersOff {
-                    Text(NSLocalizedString("musclePriorityOff", comment: "")).tag(MusclePriority?.none)
-                }
-            }
+            MusclePriorityPicker(group: group)
         } label: {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
@@ -224,6 +159,99 @@ struct MuscleFocusScreen: View {
             .contentShape(RoundedRectangle(cornerRadius: Self.tileCornerRadius, style: .continuous))
         }
         .accessibilityIdentifier("musclePriority_\(group.rawValue)")
+    }
+}
+
+// MARK: - Focus menu
+
+/// The focus as a control: its name — a preset's, or "Custom" — with a chevron, opening the four
+/// presets with the current one checked. Shared by the editor and the Muscle Groups screen, so the
+/// setting reads and changes the same way wherever it appears.
+///
+/// "Custom" is never an item. It isn't something you pick; it is what the focus becomes when a
+/// priority changes, so it only ever appears as the title with nothing checked.
+struct MuscleFocusMenu: View {
+    /// Adds an "Edit Priorities" item — the way into the full editor from surfaces that aren't it.
+    var onEditPriorities: (() -> Void)? = nil
+
+    @EnvironmentObject private var store: MuscleFocusStore
+
+    var body: some View {
+        let selection = Binding<MuscleFocusPreset?>(
+            get: { store.focus.matchingPreset },
+            set: { newValue in
+                guard let newValue else { return }
+                store.apply(preset: newValue)
+            }
+        )
+        Menu {
+            Picker(NSLocalizedString("trainingFocus", comment: ""), selection: selection) {
+                ForEach(MuscleFocusPreset.allCases) { preset in
+                    Text("\(preset.emoji)  \(preset.title)").tag(Optional(preset))
+                }
+            }
+            if let onEditPriorities {
+                Divider()
+                Button(action: onEditPriorities) {
+                    Label(NSLocalizedString("muscleFocusEditPriorities", comment: ""), systemImage: "slider.horizontal.3")
+                }
+            }
+        } label: {
+            HStack(spacing: 7) {
+                Text(store.focus.matchingPreset?.title ?? NSLocalizedString("muscleFocusCustom", comment: ""))
+                    .font(.system(.title2, design: .rounded, weight: .bold))
+                    .foregroundStyle(Color.label)
+                // Down, not up-and-down: this opens a list of choices rather than cycling a value,
+                // and it is the glyph a menu-backed title wears everywhere else in iOS.
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(Color.secondaryLabel)
+            }
+            .padding(.vertical, 4)
+            .padding(.trailing, 6)
+            .contentShape(Rectangle())
+        }
+        // Deliberately unstretched — callers align it leading. A menu hit-tests only the content its
+        // label draws, so widening it to the row would leave the control dead everywhere except on
+        // the words, while still reporting the full width to accessibility: VoiceOver and any
+        // synthetic tap would aim at the middle of that empty box and miss.
+        .accessibilityIdentifier("muscleFocusMenu")
+    }
+}
+
+// MARK: - Priority picker
+
+/// One group's priority options — High, Medium, Low, and Off — bound to the store. Meant to sit
+/// inside a `Menu`, which renders it as the native checkmark list; the editor's tiles and the muscle
+/// detail both use it, so a priority set on either screen is the same setting.
+struct MusclePriorityPicker: View {
+    let group: MuscleGroup
+
+    @EnvironmentObject private var store: MuscleFocusStore
+
+    var body: some View {
+        let isExcluded = store.focus.isExcluded(group)
+        // The last included group can't be turned off — a focus on nothing isn't a focus — so the
+        // option simply isn't offered for it.
+        let offersOff = isExcluded || store.focus.includedGroups.count > 1
+        let selection = Binding<MusclePriority?>(
+            get: { isExcluded ? nil : store.focus.priority(for: group) },
+            set: { newValue in
+                if let newValue {
+                    store.setPriority(newValue, for: group)
+                } else {
+                    store.exclude(group)
+                }
+            }
+        )
+        Picker(group.description, selection: selection) {
+            ForEach(MusclePriority.allCases.reversed()) { priority in
+                Text(priority.title).tag(Optional(priority))
+            }
+            if offersOff {
+                Text(NSLocalizedString("musclePriorityOff", comment: "")).tag(MusclePriority?.none)
+            }
+        }
     }
 }
 

@@ -8,9 +8,15 @@
 import CoreData
 import SwiftUI
 
-/// The single-muscle detail: how many sets this group got against how many its target share asks
-/// for, a 2×2 stat grid, a sets-history chart following the selected window, and the top exercises
-/// that train it. Opens scoped to the window the caller was showing — the Summary's picker carries
+/// The single-muscle detail: the group's priority in the training focus, how many sets it got against
+/// how many its target share asks for, a sets-history chart following the selected window, and the
+/// top exercises that train it.
+///
+/// It used to carry a 2×2 grid of Share, Volume, Sessions and Rank. Share already sits in the hero's
+/// caption and on the Muscle Groups tile that opened this page; a muscle group's kilograms is a number
+/// nobody trains by; and rank is trivia. What replaced it is the one thing on this page you can act
+/// on besides training: the group's priority, so the fix for a group that is always short of target
+/// is on the screen that shows it. Opens scoped to the window the caller was showing — the Summary's picker carries
 /// all the way down here through Muscle Groups. Pro — the full per-muscle breakdown is the analytics
 /// behind the wall.
 ///
@@ -70,10 +76,6 @@ struct MuscleGroupDetailScreen: View {
         let occurrences = muscleGroupService.getMuscleGroupOccurances(in: periodWorkouts)
         let total = occurrences.reduce(0) { $0 + $1.1 }
         let groupSetCount = occurrences.first { $0.0 == muscleGroup }?.1 ?? 0
-        let rank = (occurrences.firstIndex { $0.0 == muscleGroup }).map { $0 + 1 } ?? MuscleGroup.allCases.count
-        let setGroups = setGroupsTraining(in: periodWorkouts)
-        let sessions = Set(setGroups.compactMap { $0.workout?.objectID }).count
-        let volume = getVolume(of: setGroups.flatMap { $0.sets })
         let calculator = MuscleBalanceCalculator(workouts: periodWorkouts, target: focusStore.split, muscleGroupService: muscleGroupService)
         let entry = calculator.entries.first { $0.muscleGroup == muscleGroup }
             ?? MuscleBalanceEntry(muscleGroup: muscleGroup, setCount: 0, actualPercent: 0, targetPercent: focusStore.target(for: muscleGroup))
@@ -81,15 +83,15 @@ struct MuscleGroupDetailScreen: View {
         return ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 TrendWindowPicker(selection: $window)
+                priorityHeader
                 if groupSetCount > 0 {
                     setsVsTarget(entry: entry, setCount: groupSetCount, totalSets: total)
-                    statGrid(share: entry.actualPercent, volume: volume, sessions: sessions, rank: rank)
                     setsHistoryChart(allWorkouts: allWorkouts)
                     topExercises(in: periodWorkouts)
                 } else {
                     emptyState
                         .containerRelativeFrame(.vertical, alignment: .center) { height, _ in
-                            max(height - 96, 320)
+                            max(height - 170, 300)
                         }
                 }
             }
@@ -107,6 +109,53 @@ struct MuscleGroupDetailScreen: View {
                     .foregroundStyle(color)
             }
         }
+    }
+
+    // MARK: - Priority
+
+    private var isExcluded: Bool { focusStore.focus.isExcluded(muscleGroup) }
+
+    /// The group's priority as the control that sets it — the same options, the same three-bar meter
+    /// and the same menu shape as the focus editor's tile for this group — over the focus it belongs
+    /// to. Changing it here is changing it there, including making the focus Custom.
+    ///
+    /// Shown whether or not the window has any sets: the priority is a setting, not a result.
+    private var priorityHeader: some View {
+        let focusName = focusStore.focus.matchingPreset?.title ?? NSLocalizedString("muscleFocusCustom", comment: "")
+        return VStack(alignment: .leading, spacing: 0) {
+            Menu {
+                MusclePriorityPicker(group: muscleGroup)
+            } label: {
+                HStack(spacing: 7) {
+                    Text(
+                        isExcluded
+                            ? NSLocalizedString("musclePriorityOff", comment: "")
+                            : focusStore.focus.priority(for: muscleGroup).title
+                    )
+                    .font(.system(.title2, design: .rounded, weight: .bold))
+                    .foregroundStyle(Color.label)
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(Color.secondaryLabel)
+                    MusclePriorityMeter(
+                        level: isExcluded ? nil : focusStore.focus.priority(for: muscleGroup),
+                        color: color
+                    )
+                    .padding(.leading, 4)
+                }
+                .padding(.vertical, 4)
+                .padding(.trailing, 6)
+                .contentShape(Rectangle())
+            }
+            // Unstretched, like the focus menu: a menu hit-tests only what its label draws.
+            .accessibilityIdentifier("muscleDetailPriorityMenu")
+            Text(String(format: NSLocalizedString("muscleDetailPriorityCaption", comment: ""), focusName))
+                .font(.subheadline)
+                .foregroundStyle(Color.secondaryLabel)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 2)
+        .animation(.snappy, value: focusStore.focus)
     }
 
     // MARK: - Hero
@@ -134,7 +183,7 @@ struct MuscleGroupDetailScreen: View {
         let targetSets = targetSetCount(targetPercent: entry.targetPercent, totalSets: totalSets)
         return HStack(alignment: .bottom, spacing: 16) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(NSLocalizedString("muscleDetailSetsVsTarget", comment: ""))
+                Text(NSLocalizedString(isExcluded ? "sets" : "muscleDetailSetsVsTarget", comment: ""))
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.label)
                     .lineLimit(1)
@@ -152,8 +201,19 @@ struct MuscleGroupDetailScreen: View {
                 .contentTransition(.numericText())
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
-                standing(entry.goalState)
-                    .padding(.top, 1)
+                if isExcluded {
+                    // An excluded group has no target, and `goalState` reads a zero target as met —
+                    // which would call a group the user turned off "At target", over a full badge.
+                    Text(NSLocalizedString("muscleDetailNotInFocus", comment: ""))
+                        .font(.system(.subheadline, design: .rounded, weight: .bold))
+                        .foregroundStyle(Color.secondaryLabel)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                        .padding(.top, 1)
+                } else {
+                    standing(entry.goalState)
+                        .padding(.top, 1)
+                }
                 Text(caption(targetPercent: entry.targetPercent))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -161,7 +221,9 @@ struct MuscleGroupDetailScreen: View {
                     .padding(.top, 2)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            track(entry)
+            if !isExcluded {
+                track(entry)
+            }
         }
         .padding(CELL_PADDING)
         .frame(height: usesFixedHeight ? Self.heroHeight : nil)
@@ -245,39 +307,6 @@ struct MuscleGroupDetailScreen: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal)
-    }
-
-    // MARK: - Stat grid
-
-    /// Share sits here rather than in the hero: at tile size, under a "Share" title and captioned "of
-    /// all sets", the percentage reads as the proportion it is — the number the Muscle Groups screen
-    /// ranks by, kept visible so the two screens can be read against each other. Sets left the grid
-    /// with the hero; it would only be the numerator again.
-    private func statGrid(share: Int, volume: Int, sessions: Int, rank: Int) -> some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 9), GridItem(.flexible(), spacing: 9)], spacing: 9) {
-            statTile(title: NSLocalizedString("share", comment: ""), value: "\(share)", unit: "%", caption: NSLocalizedString("muscleDetailShareOfSets", comment: ""))
-            statTile(title: NSLocalizedString("volume", comment: ""), value: formatWeightForDisplay(volume), unit: WeightUnit.used.rawValue, caption: periodCaption)
-            statTile(title: NSLocalizedString("sessions", comment: ""), value: "\(sessions)", unit: "", caption: periodCaption)
-            statTile(title: NSLocalizedString("rank", comment: ""), value: "#\(rank)", unit: "", caption: NSLocalizedString("muscleDetailRankCaption", comment: ""))
-        }
-    }
-
-    private func statTile(title: String, value: String, unit: String, caption: String) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.label)
-            UnitView(value: value, unit: unit, configuration: .large, unitColor: .secondaryLabel)
-                .foregroundStyle(color.gradient)
-                .padding(.top, 10)
-            Text(caption)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .padding(.top, 8)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(CELL_PADDING)
-        .tileStyle()
     }
 
     // MARK: - Sets history chart

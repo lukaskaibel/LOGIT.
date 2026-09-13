@@ -160,6 +160,10 @@ struct MuscleFocus: Codable, Equatable {
 
     // MARK: Defaults
 
+    /// The order every focus surface lists the groups in — the editor's grid, the Muscle Groups grid,
+    /// the split bar — descending by the default focus, so a group sits in the same place on each.
+    static let displayOrder: [MuscleGroup] = [.legs, .back, .chest, .shoulders, .biceps, .triceps, .abdominals, .cardio]
+
     /// The app's default focus.
     static var `default`: MuscleFocus { MuscleFocusPreset.fullBody.focus }
 

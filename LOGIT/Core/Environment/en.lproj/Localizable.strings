@@ -948,7 +948,7 @@
 "muscleBalanceBelowTargetSection" = "Below target";
 "muscleBalanceAtTargetSection" = "At target";
 "muscleBalanceAboveTargetSection" = "Above target";
-"muscleBalanceGoalHeroCaption" = "groups at or above target · %d sets";
+"muscleBalanceGoalHeroCaption" = "groups at or above target";
 "muscleBalanceGoalAccessibility" = "%d of %d muscle groups at or above target";
 "muscleBalanceOfTarget" = "of %d%% target";
 "muscleBalanceEmpty" = "Keep training to see your muscle split";
@@ -966,6 +966,13 @@
 "muscleFocusPreset_lowerBody" = "Lower Body";
 "muscleFocusPreset_endurance" = "Endurance";
 "muscleFocusCustom" = "Custom";
+"muscleFocusEditPriorities" = "Edit Priorities";
+"muscleFocusDefaultCaption" = "Default · tap to choose what you train for";
+"muscleDetailPriorityCaption" = "Priority · %@";
+"muscleDetailNotInFocus" = "Not part of your focus";
+"muscleFocusTipTitle" = "Set your training focus";
+"muscleFocusTipMessage" = "Balance measures your training against %@ until you choose your own focus.";
+"muscleFocusTipAction" = "Choose focus";
 "musclePriority_high" = "High";
 "musclePriority_medium" = "Medium";
 "musclePriority_low" = "Low";
@@ -987,11 +994,9 @@
 "records" = "Records";
 "sessions" = "Sessions";
 "rank" = "Rank";
-"muscleDetailRankCaption" = "of 8 groups";
 "share" = "Share";
 "muscleDetailSetsVsTarget" = "Sets vs target";
 "muscleDetailTargetSetsCaption" = "%1$@ · %2$d%% target share";
-"muscleDetailShareOfSets" = "of all sets";
 "topExercises" = "Top Exercises";
 "weekStreakSuffix" = "week streak";
 "weeklyGoalAccessibility" = "Weekly goal, %d of %d workouts";

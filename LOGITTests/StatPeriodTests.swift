@@ -335,6 +335,34 @@ final class MuscleFocusTests: XCTestCase {
         XCTAssertEqual(reloaded.target(for: .cardio), 0)
         XCTAssertEqual(reloaded.focus.matchingPreset, .upperBody)
     }
+
+    func testStoreKnowsWhetherAFocusWasEverChosen() throws {
+        let suite = "MuscleFocusChosen-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        let fresh = MuscleFocusStore(defaults: defaults)
+        XCTAssertFalse(fresh.hasChosenFocus, "A new user runs on the default without having chosen it")
+
+        // Settling on the preset already in force is still a choice, and it survives a relaunch.
+        fresh.apply(preset: .fullBody)
+        XCTAssertTrue(fresh.hasChosenFocus)
+        XCTAssertTrue(MuscleFocusStore(defaults: defaults).hasChosenFocus)
+    }
+
+    func testMigratedLegacySplitCountsAsChosen() throws {
+        let suite = "MuscleFocusLegacyChosen-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let legacy = MuscleTargetSplit(percentages: [.legs: 40, .back: 30, .chest: 20, .shoulders: 10])
+        defaults.set(try JSONEncoder().encode(legacy), forKey: MuscleFocusStore.legacyStorageKey)
+        XCTAssertTrue(MuscleFocusStore(defaults: defaults).hasChosenFocus, "Someone who tuned percentages made a choice")
+    }
+
+    func testDisplayOrderCoversEveryGroupOnce() {
+        XCTAssertEqual(Set(MuscleFocus.displayOrder), Set(MuscleGroup.allCases))
+        XCTAssertEqual(MuscleFocus.displayOrder.count, MuscleGroup.allCases.count)
+    }
 }
 
 // MARK: - Weekly streak

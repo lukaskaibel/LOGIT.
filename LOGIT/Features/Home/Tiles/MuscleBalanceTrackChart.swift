@@ -71,12 +71,16 @@ struct MuscleBalanceTrack: View {
                 // The unfilled remainder stays visible on every track, so "not there yet" is a
                 // shape rather than something you infer from the absence of a badge. An untrained
                 // group keeps its colour at low alpha: identity without inventing a single set.
-                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                Capsule(style: .continuous)
                     .fill(entry.setCount == 0 ? color.opacity(0.12) : Color.label.opacity(0.07))
-                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                Capsule(style: .continuous)
                     .fill(color.opacity(isMet ? 0.25 : 1))
                     .frame(height: geo.size.height * fraction)
             }
+            // Capsule ends to sit with the rounded tiles they stand in. Clipped to the track, so a
+            // fill shorter than the track is wide reads as the bottom of the capsule filling up
+            // rather than as a sideways pill.
+            .clipShape(Capsule(style: .continuous))
             // Centred on the track rather than laid out by the fill's bottom-aligned stack, which
             // parked every badge on the floor.
             .overlay {
@@ -100,20 +104,23 @@ struct MuscleBalanceTrack: View {
     }
 }
 
-/// One muscle group as a compact cell for the overview's two-column grid: the name at the top, the
-/// group's share of the period large at the bottom-leading corner over the target it is measured
-/// against, and its filling track standing full height on the trailing edge.
+/// One muscle group as a compact cell for the Muscle Groups grid: the name at the top, the group's
+/// share over its target ("22/17 %") at the bottom-leading corner, and its filling track standing full
+/// height on the trailing edge.
 ///
-/// That is the app's tile anatomy — title, big value, caption, chart — so the grid reads as tiles
-/// rather than as a second kind of row. The track is literally `MuscleBalanceTrack`, the same bar the
-/// hero chart above draws, badge and all: a cell and its bar in the hero say the same thing in the
-/// same shape, and the verdict glyph lives in one place instead of being repeated beside the name.
+/// The track is literally `MuscleBalanceTrack`, the same bar the hero chart above draws, badge and
+/// all: a cell and its bar in the hero say the same thing in the same shape, and the verdict glyph
+/// lives in one place instead of being repeated beside the name.
 ///
-/// A full-width row could carry all of that on a single line, but two columns halve the scrolling on
-/// a screen whose whole job is comparing eight groups — and the grouping into below / at / above
-/// target is what makes the columns readable, because everything in a section shares a verdict.
+/// The cell does not name the group's priority. The grid reads results; priorities are set on the
+/// focus editor and on the muscle's own page, and a third place to read them would turn every tile
+/// into a comparison between two scales.
 struct MuscleBalanceGoalCell: View {
     let entry: MuscleBalanceEntry
+    /// A group the user turned off. It keeps its place in the grid — the editor keeps it in place as
+    /// "Off" too, so nothing shifts between the two screens — but has no share to read against a
+    /// target: its name gives up its colour, the value says Off, and the track stands empty.
+    var isExcluded: Bool = false
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -136,43 +143,69 @@ struct MuscleBalanceGoalCell: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text(entry.muscleGroup.description)
                     .font(.system(.subheadline, design: .rounded, weight: .bold))
-                    .foregroundStyle(entry.muscleGroup.color)
+                    .foregroundStyle(isExcluded ? Color.secondaryLabel : entry.muscleGroup.color)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                 Spacer(minLength: 10)
-                // Neutral, like every other value in the app: the name and the track already carry
-                // the group's colour, and a coloured number would read as a verdict of its own.
-                UnitView(
-                    value: "\(entry.actualPercent)",
-                    unit: "%",
-                    configuration: .large,
-                    unitColor: .secondaryLabel
-                )
-                .foregroundStyle(Color.label)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-                Text(
-                    String(
-                        format: NSLocalizedString("muscleBalanceOfTarget", comment: ""),
-                        entry.targetPercent
-                    )
-                )
-                .font(.caption2)
-                .monospacedDigit()
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-                .padding(.top, 2)
+                if isExcluded {
+                    Text(NSLocalizedString("musclePriorityOff", comment: ""))
+                        .font(.title.weight(.bold))
+                        .fontDesign(.rounded)
+                        .foregroundStyle(Color.secondaryLabel)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                } else {
+                    share
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            track
+            if isExcluded {
+                Capsule(style: .continuous)
+                    .fill(Color.label.opacity(0.07))
+                    .frame(width: Self.trackWidth)
+                    .frame(maxHeight: usesFixedHeight ? .infinity : Self.accessibilityTrackHeight)
+            } else {
+                track
+            }
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 11)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: usesFixedHeight ? Self.height : nil)
         .secondaryTileStyle()
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            Text(
+                isExcluded
+                    ? entry.muscleGroup.description + ", " + NSLocalizedString("musclePriorityOff", comment: "")
+                    : entry.muscleGroup.description + ", \(entry.actualPercent)%, "
+                        + String(format: NSLocalizedString("muscleBalanceOfTarget", comment: ""), entry.targetPercent)
+            )
+        )
+        .accessibilityAddTraits(.isButton)
+    }
+
+    /// "22/17 %": the share over the target it is measured against, in the goal shape every other
+    /// count on these screens uses — 4/8 groups above it, 15/22 sets on the muscle's own page. Neutral
+    /// like every other value in the app: the name and the track already carry the group's colour,
+    /// and a coloured number would read as a verdict of its own.
+    private var share: some View {
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
+            Text("\(entry.actualPercent)")
+                .font(.title.weight(.bold))
+                .foregroundStyle(Color.label)
+            Text("/\(entry.targetPercent)")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(Color.secondaryLabel)
+            Text("%")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Color.secondaryLabel)
+                .padding(.leading, 3)
+        }
+        .fontDesign(.rounded)
+        .monospacedDigit()
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
     }
 
     /// Fills the cell's height at normal sizes; at accessibility sizes the cell grows with its text,

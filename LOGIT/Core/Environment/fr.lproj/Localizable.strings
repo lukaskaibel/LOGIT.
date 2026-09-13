@@ -948,7 +948,7 @@
 "muscleBalanceBelowTargetSection" = "Sous l'objectif";
 "muscleBalanceAtTargetSection" = "À l'objectif";
 "muscleBalanceAboveTargetSection" = "Au-dessus de l'objectif";
-"muscleBalanceGoalHeroCaption" = "groupes à l'objectif ou au-delà · %d séries";
+"muscleBalanceGoalHeroCaption" = "groupes à l'objectif ou au-delà";
 "muscleBalanceGoalAccessibility" = "%d groupes musculaires sur %d à l'objectif ou au-delà";
 "muscleBalanceOfTarget" = "sur %d%% visés";
 "muscleBalanceEmpty" = "Continue à t'entraîner pour voir ta répartition";
@@ -966,6 +966,13 @@
 "muscleFocusPreset_lowerBody" = "Bas du corps";
 "muscleFocusPreset_endurance" = "Endurance";
 "muscleFocusCustom" = "Personnalisée";
+"muscleFocusEditPriorities" = "Modifier les priorités";
+"muscleFocusDefaultCaption" = "Par défaut · touche pour choisir ton orientation";
+"muscleDetailPriorityCaption" = "Priorité · %@";
+"muscleDetailNotInFocus" = "Ne fait pas partie de ton orientation";
+"muscleFocusTipTitle" = "Définis l'orientation de ton entraînement";
+"muscleFocusTipMessage" = "L'équilibre mesure ton entraînement par rapport à %@ jusqu'à ce que tu choisisses ta propre orientation.";
+"muscleFocusTipAction" = "Choisir l'orientation";
 "musclePriority_high" = "Haute";
 "musclePriority_medium" = "Moyenne";
 "musclePriority_low" = "Basse";
@@ -987,11 +994,9 @@
 "records" = "Records";
 "sessions" = "Séances";
 "rank" = "Rang";
-"muscleDetailRankCaption" = "sur 8 groupes";
 "share" = "Part";
 "muscleDetailSetsVsTarget" = "Séries vs objectif";
 "muscleDetailTargetSetsCaption" = "%1$@ · objectif %2$d %%";
-"muscleDetailShareOfSets" = "de toutes les séries";
 "topExercises" = "Meilleurs exercices";
 "weekStreakSuffix" = "semaines d'affilée";
 "weeklyGoalAccessibility" = "Objectif hebdo, %d séances sur %d";
