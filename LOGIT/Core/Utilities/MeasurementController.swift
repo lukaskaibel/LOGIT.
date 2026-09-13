@@ -16,6 +16,12 @@ class MeasurementEntryController: ObservableObject {
     /// Mirrors body measurements to Apple Health (see `BodyMeasurementSyncManager`). Optional so
     /// previews and tests can construct a controller without a Health store.
     private let bodyMeasurementSync: BodyMeasurementSyncManager?
+    /// BMI is recomputed from the height on every read, but the height lives in UserDefaults rather
+    /// than the store, so a new one — typed in Settings or read from Health — publishes nothing by
+    /// itself, and a BMI already on screen (the Summary tab's, while Settings is being edited)
+    /// would keep showing the old value. This republishes the controller whenever it changes —
+    /// once per keystroke while a height is typed, which only the measurement views observe.
+    private var heightObservation: NSKeyValueObservation?
 
     // MARK: - Init
 
@@ -24,6 +30,10 @@ class MeasurementEntryController: ObservableObject {
         self.bodyMeasurementSync = bodyMeasurementSync
         if database.isPreview {
             setupPreviewMeasurementEntries()
+        }
+        heightObservation = UserDefaults.standard.observe(\.userHeightCentimeters) { [weak self] _, _ in
+            // KVO calls back on the writer's thread, from inside the write.
+            DispatchQueue.main.async { self?.objectWillChange.send() }
         }
     }
 

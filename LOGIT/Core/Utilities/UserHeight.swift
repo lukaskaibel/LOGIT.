@@ -58,3 +58,12 @@ enum UserHeight {
         return kilograms / (meters * meters)
     }
 }
+
+extension UserDefaults {
+    /// The stored height as a key-value-observable property — how `MeasurementEntryController`
+    /// hears it change. UserDefaults posts its KVO notifications under the key itself, so this has
+    /// to be spelled exactly like `UserHeight.storageKey`.
+    @objc dynamic var userHeightCentimeters: Double {
+        double(forKey: UserHeight.storageKey)
+    }
+}
