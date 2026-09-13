@@ -73,13 +73,14 @@ struct MuscleBalanceTrack: View {
                 // group keeps its colour at low alpha: identity without inventing a single set.
                 Capsule(style: .continuous)
                     .fill(entry.setCount == 0 ? color.opacity(0.12) : Color.label.opacity(0.07))
-                Capsule(style: .continuous)
+                // The fill keeps the track's original near-flat top; the capsule clip below rounds
+                // its bottom (and its top once full). A capsule-shaped fill instead shrinks into a
+                // circle whenever it is shorter than the track is wide — every low weekly count.
+                RoundedRectangle(cornerRadius: 3, style: .continuous)
                     .fill(color.opacity(isMet ? 0.25 : 1))
                     .frame(height: geo.size.height * fraction)
             }
-            // Capsule ends to sit with the rounded tiles they stand in. Clipped to the track, so a
-            // fill shorter than the track is wide reads as the bottom of the capsule filling up
-            // rather than as a sideways pill.
+            // Capsule ends to sit with the rounded tiles they stand in.
             .clipShape(Capsule(style: .continuous))
             // Centred on the track rather than laid out by the fill's bottom-aligned stack, which
             // parked every badge on the floor.
@@ -105,8 +106,8 @@ struct MuscleBalanceTrack: View {
 }
 
 /// One muscle group as a compact cell for the Muscle Groups grid: the name at the top, the group's
-/// share over its target ("22/17 %") at the bottom-leading corner, and its filling track standing full
-/// height on the trailing edge.
+/// weekly sets over its weekly target ("7/10") at the bottom-leading corner, and its filling track
+/// standing full height on the trailing edge.
 ///
 /// The track is literally `MuscleBalanceTrack`, the same bar the hero chart above draws, badge and
 /// all: a cell and its bar in the hero say the same thing in the same shape, and the verdict glyph
@@ -178,34 +179,37 @@ struct MuscleBalanceGoalCell: View {
             Text(
                 isExcluded
                     ? entry.muscleGroup.description + ", " + NSLocalizedString("musclePriorityOff", comment: "")
-                    : entry.muscleGroup.description + ", \(entry.actualPercent)%, "
-                        + String(format: NSLocalizedString("muscleBalanceOfTarget", comment: ""), entry.targetPercent)
+                    : entry.muscleGroup.description + ", "
+                        + String(format: NSLocalizedString("muscleBalanceSetsOfTarget", comment: ""), entry.setsPerWeek, entry.target)
             )
         )
         .accessibilityAddTraits(.isButton)
     }
 
-    /// "22/17 %": the share over the target it is measured against, in the goal shape every other
-    /// count on these screens uses — 4/8 groups above it, 15/22 sets on the muscle's own page. Neutral
-    /// like every other value in the app: the name and the track already carry the group's colour,
-    /// and a coloured number would read as a verdict of its own.
+    /// "7/10" over "sets per week": the group's weekly sets over its weekly target, in the goal shape
+    /// every other count on these screens uses — 4/8 groups above it, the same pair at hero size on
+    /// the muscle's own page. Neutral like every other value in the app: the name and the track
+    /// already carry the group's colour, and a coloured number would read as a verdict of its own.
     private var share: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 0) {
-            Text("\(entry.actualPercent)")
-                .font(.title.weight(.bold))
-                .foregroundStyle(Color.label)
-            Text("/\(entry.targetPercent)")
-                .font(.title3.weight(.bold))
+        VStack(alignment: .leading, spacing: 1) {
+            HStack(alignment: .lastTextBaseline, spacing: 0) {
+                Text("\(entry.setsPerWeek)")
+                    .font(.title.weight(.bold))
+                    .foregroundStyle(Color.label)
+                Text("/\(entry.target)")
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(Color.secondaryLabel)
+            }
+            .fontDesign(.rounded)
+            .monospacedDigit()
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            Text(NSLocalizedString("setsPerWeekCaption", comment: ""))
+                .font(.caption2)
                 .foregroundStyle(Color.secondaryLabel)
-            Text("%")
-                .font(.body.weight(.semibold))
-                .foregroundStyle(Color.secondaryLabel)
-                .padding(.leading, 3)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
-        .fontDesign(.rounded)
-        .monospacedDigit()
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
     }
 
     /// Fills the cell's height at normal sizes; at accessibility sizes the cell grows with its text,
@@ -226,7 +230,7 @@ struct MuscleBalanceGoalCell: View {
 
 #Preview {
     FetchRequestWrapper(Workout.self) { workouts in
-        let calculator = MuscleBalanceCalculator(workouts: workouts, target: .default)
+        let calculator = MuscleBalanceCalculator(workouts: workouts, focus: .default, weeks: 4)
         VStack(spacing: 24) {
             MuscleBalanceTrackChart(entries: calculator.goalEntries)
                 .frame(height: 90)

@@ -239,6 +239,19 @@ enum TrendWindow: String, CaseIterable, Identifiable {
         return start == end ? start : "\(start) - \(end)"
     }
 
+    /// How many weeks the current window's weekly averages divide by: the window's length, but never
+    /// more than the time since the first logged workout, and never less than one week. Without that
+    /// cap someone in their first week would have their sets spread across four weeks they hadn't
+    /// trained yet, and read as far short of a weekly target they had actually met.
+    func weeksCovered(firstDataDate: Date?, from reference: Date = .now) -> Double {
+        let week: TimeInterval = 7 * 24 * 60 * 60
+        var span = reference.timeIntervalSince(currentRange(from: reference).lowerBound)
+        if let firstDataDate {
+            span = min(span, max(reference.timeIntervalSince(firstDataDate), 0))
+        }
+        return max(span / week, 1)
+    }
+
     /// How much of the span a trend needs — the current window plus the one before it — the logged
     /// history actually covers, 0…1. The fill of the "building your trend" ring, so a fresh account
     /// sees a placeholder that creeps forward as history accumulates rather than one stuck at a fixed

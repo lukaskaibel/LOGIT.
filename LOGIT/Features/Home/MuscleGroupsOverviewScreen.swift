@@ -49,7 +49,8 @@ struct MuscleGroupsOverviewScreen: View {
         let windowWorkouts = allWorkouts.filter { ($0.date).map { range.contains($0) } ?? false }
         let calculator = MuscleBalanceCalculator(
             workouts: windowWorkouts,
-            target: focusStore.split,
+            focus: focusStore.focus,
+            weeks: window.weeksCovered(firstDataDate: allWorkouts.compactMap(\.date).min()),
             muscleGroupService: muscleGroupService
         )
 
@@ -93,7 +94,7 @@ struct MuscleGroupsOverviewScreen: View {
     /// first time anything is chosen.
     private var focusHeader: some View {
         VStack(alignment: .leading, spacing: 0) {
-            MuscleFocusMenu(onEditPriorities: {
+            MuscleFocusMenu(onEditTargets: {
                 homeNavigationCoordinator.path.append(.muscleFocus)
             })
             if !focusStore.hasChosenFocus {
@@ -160,13 +161,13 @@ struct MuscleGroupsOverviewScreen: View {
                 Button {
                     homeNavigationCoordinator.path.append(.muscleGroupDetail(group, window))
                 } label: {
-                    // Every included group has a target of at least a few percent, so a group
-                    // missing from the goal entries is one the user turned off.
+                    // The goal entries are exactly the groups with a target, so a group missing
+                    // from them is one the user set to 0.
                     if let entry = byGroup[group] {
                         MuscleBalanceGoalCell(entry: entry)
                     } else {
                         MuscleBalanceGoalCell(
-                            entry: MuscleBalanceEntry(muscleGroup: group, setCount: 0, actualPercent: 0, targetPercent: 0),
+                            entry: MuscleBalanceEntry(muscleGroup: group, setCount: 0, setsPerWeek: 0, target: 0),
                             isExcluded: true
                         )
                     }

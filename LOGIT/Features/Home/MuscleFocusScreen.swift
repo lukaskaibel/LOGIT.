@@ -7,27 +7,18 @@
 
 import SwiftUI
 
-/// The training-focus editor, in two parts: the focus itself — a tappable title over the stacked bar
-/// of the split it implies — and the eight muscle groups as a two-column grid, each tile a menu of
-/// High / Medium / Low, or Off to leave the group out.
+/// The training-focus editor, in two parts: the focus itself — a tappable title over a stacked bar of
+/// the week it describes — and the eight muscle groups as a two-column grid, each tile a weekly set
+/// target with a native stepper.
 ///
-/// It replaced a per-group percent stepper list with a live "Total" that had to be balanced to 100
-/// by hand. Nobody thinks about their training in percentage points; they think "legs first, cardio
-/// not at all" — so that is the whole vocabulary here, and the percentages are derived
-/// (`MuscleFocus.split`) and drawn only as the bar. Neither the title nor the tiles repeat a group's
-/// share: a number beside a control that cannot set it invites exactly the arithmetic this redesign
-/// removes, and eight of them turn a settings screen back into a spreadsheet.
+/// Targets are real numbers of sets per week, not shares and not priority levels: it is the unit
+/// programs are written in, it needs no explaining, and unlike a percentage split one group's number
+/// never has to move because another's did. The four presets live in the title's menu as ready-made
+/// weeks; any stepper change makes the focus "Custom" (the title says so, with nothing checked in the
+/// menu). Setting a group to 0 takes it out of the focus.
 ///
-/// The four presets live **in** the title rather than in a block of their own. They are the value of
-/// one setting, not eight competing calls to action, so they belong behind the control that reads
-/// that value — which is what the chevron says. It also buys the screen back the space a preset
-/// section was spending, so the groups sit above the fold in a grid instead of a long column.
-///
-/// Presets are starting points: any priority change makes the focus "Custom" (the title says so,
-/// with nothing checked in the menu), while turning a group off is orthogonal and survives a preset
-/// switch (see `MuscleFocus`). Commits on every change through the `MuscleFocusStore`, so the Muscle
-/// Groups overview and the Summary's Balance tile update live. Free — it's configuration, not
-/// analytics.
+/// Commits on every change through the `MuscleFocusStore`, so the Muscle Groups overview and the
+/// Summary's Balance tile update live. Free — it's configuration, not analytics.
 struct MuscleFocusScreen: View {
     @EnvironmentObject private var store: MuscleFocusStore
 
@@ -43,7 +34,7 @@ struct MuscleFocusScreen: View {
     var body: some View {
         List {
             focusSection
-            prioritySection
+            targetSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.background)
@@ -60,16 +51,22 @@ struct MuscleFocusScreen: View {
 
     // MARK: - Focus
 
-    /// The setting's value over what it comes out as: the focus's name — a preset's, or "Custom" —
-    /// above every included group as a segment of one bar, sized by its target share. The bar
-    /// re-proportions as the focus and the priorities change, which is the whole explanation of what
-    /// a priority does, and the only place the split is quantified at all.
+    /// The setting's value over the week it describes: the focus's name — a preset's, or "Custom" —
+    /// above every group with a target as a segment of one bar, sized by its sets, and the week's total
+    /// under it. The bar re-proportions as the steppers move, which shows at a glance where the week's
+    /// sets go.
     private var focusSection: some View {
         Section {
             VStack(alignment: .leading, spacing: 10) {
                 MuscleFocusMenu()
-                MuscleSplitBar(split: store.split, order: Self.order)
+                MuscleSplitBar(focus: store.focus, order: Self.order)
                     .frame(height: 24)
+                Text(String(format: NSLocalizedString("muscleFocusWeeklyTotal", comment: ""), store.focus.weeklyTotal))
+                    .font(.subheadline)
+                    .foregroundStyle(Color.secondaryLabel)
+                    .monospacedDigit()
+                    // A leading digit's glyph overhangs its frame, and at the row's edge it clips.
+                    .padding(.leading, 2)
             }
             .padding(.vertical, 4)
             .listRowBackground(Color.clear)
@@ -79,86 +76,72 @@ struct MuscleFocusScreen: View {
         .listSectionSpacing(.compact)
     }
 
-    // MARK: - Priorities
+    // MARK: - Targets
 
-    /// The eight groups, two across. A grid rather than a column because each cell is a name and a
-    /// value and nothing else — half-width rows waste no information, and four rows of two put every
-    /// group on screen at once, which is what makes the balance between them legible at all.
-    private var prioritySection: some View {
+    /// The eight groups, two across. A grid rather than a column because each cell is a name, a
+    /// number and a stepper and nothing else — four rows of two put every group on screen at once,
+    /// which is what makes the week legible as a whole.
+    private var targetSection: some View {
         Section {
             LazyVGrid(
                 columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)],
                 spacing: 10
             ) {
                 ForEach(Self.order, id: \.self) { group in
-                    priorityTile(group)
+                    targetTile(group)
                 }
             }
             .listRowBackground(Color.clear)
             .listRowInsets(Self.rowInsets)
             .listRowSeparator(.hidden)
         } header: {
-            Text(NSLocalizedString("priorities", comment: ""))
+            Text(NSLocalizedString("setsPerWeekTitle", comment: ""))
         } footer: {
-            Text(NSLocalizedString("muscleFocusPrioritiesFooter", comment: ""))
+            Text(NSLocalizedString("muscleFocusTargetsFooter", comment: ""))
         }
     }
 
-    /// One group: its name and its level, the whole tile being the menu. "Off" is an option of that
-    /// same menu rather than a separate toggle — one control per group, and the excluded state reads
-    /// in the same place the priority does.
-    private func priorityTile(_ group: MuscleGroup) -> some View {
-        let isExcluded = store.focus.isExcluded(group)
-        // A `Menu` around an inline `Picker` rather than a `.menu`-style picker: the options still
-        // come up as the native checkmark list, but the tile is drawn here — a menu picker's own
-        // label ignores `.tint` and paints itself in the accent, and eight accent-coloured values
-        // read as eight links; the muscle names carry the colour here.
-        return Menu {
-            MusclePriorityPicker(group: group)
-        } label: {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 6) {
-                    // Muscle names carry their colour themselves — bold, rounded, no identity dot.
-                    // An excluded group gives that colour up, which is the tile saying it is out.
-                    Text(group.description)
-                        .font(.system(.subheadline, design: .rounded, weight: .bold))
-                        .foregroundStyle(isExcluded ? Color.secondaryLabel : group.color)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                    Spacer(minLength: 4)
-                    MusclePriorityMeter(
-                        level: isExcluded ? nil : store.focus.priority(for: group),
-                        color: group.color
-                    )
-                }
-                HStack(spacing: 5) {
-                    // Full-strength, not secondary: this is the value the tile is here to state, and
-                    // a greyed-out value reads as a disabled control rather than a set one.
-                    Text(
-                        isExcluded
-                            ? NSLocalizedString("musclePriorityOff", comment: "")
-                            : store.focus.priority(for: group).title
-                    )
-                    .font(.system(.body, design: .rounded, weight: .semibold))
+    /// One group: its name, its weekly target, and a native stepper. The unit lives once, in the
+    /// section header, rather than beside eight numbers. A group at 0 gives up its colour — the tile
+    /// saying it is out of the focus.
+    private func targetTile(_ group: MuscleGroup) -> some View {
+        let target = store.focus.target(for: group)
+        let isExcluded = target == 0
+        return VStack(alignment: .leading, spacing: 6) {
+            // Muscle names carry their colour themselves — bold, rounded, no identity dot.
+            Text(group.description)
+                .font(.system(.subheadline, design: .rounded, weight: .bold))
+                .foregroundStyle(isExcluded ? Color.secondaryLabel : group.color)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            HStack(alignment: .center, spacing: 8) {
+                Text("\(target)")
+                    .font(.system(.title, design: .rounded, weight: .bold))
+                    .monospacedDigit()
                     .foregroundStyle(isExcluded ? Color.secondaryLabel : Color.label)
+                    .contentTransition(.numericText())
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                    // The affordance, and nothing more: tertiary so it never competes with the value.
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(Color.tertiaryLabel)
-                    Spacer(minLength: 0)
-                }
+                Spacer(minLength: 0)
+                Stepper(
+                    group.description,
+                    value: Binding(
+                        get: { store.focus.target(for: group) },
+                        set: { store.setTarget($0, for: group) }
+                    ),
+                    // The last group with a target can't reach 0 — a focus on nothing isn't a focus.
+                    in: store.focus.minimumTarget(for: group) ... MuscleFocus.targetRange.upperBound
+                )
+                .labelsHidden()
+                .accessibilityIdentifier("muscleTargetStepper_\(group.rawValue)")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(CELL_PADDING)
-            .background {
-                RoundedRectangle(cornerRadius: Self.tileCornerRadius, style: .continuous)
-                    .fill(Color.secondaryBackground)
-            }
-            .contentShape(RoundedRectangle(cornerRadius: Self.tileCornerRadius, style: .continuous))
         }
-        .accessibilityIdentifier("musclePriority_\(group.rawValue)")
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(CELL_PADDING)
+        .background {
+            RoundedRectangle(cornerRadius: Self.tileCornerRadius, style: .continuous)
+                .fill(Color.secondaryBackground)
+        }
     }
 }
 
@@ -169,10 +152,10 @@ struct MuscleFocusScreen: View {
 /// setting reads and changes the same way wherever it appears.
 ///
 /// "Custom" is never an item. It isn't something you pick; it is what the focus becomes when a
-/// priority changes, so it only ever appears as the title with nothing checked.
+/// target changes, so it only ever appears as the title with nothing checked.
 struct MuscleFocusMenu: View {
-    /// Adds an "Edit Priorities" item — the way into the full editor from surfaces that aren't it.
-    var onEditPriorities: (() -> Void)? = nil
+    /// Adds an "Edit Targets" item — the way into the full editor from surfaces that aren't it.
+    var onEditTargets: (() -> Void)? = nil
 
     @EnvironmentObject private var store: MuscleFocusStore
 
@@ -190,10 +173,10 @@ struct MuscleFocusMenu: View {
                     Text("\(preset.emoji)  \(preset.title)").tag(Optional(preset))
                 }
             }
-            if let onEditPriorities {
+            if let onEditTargets {
                 Divider()
-                Button(action: onEditPriorities) {
-                    Label(NSLocalizedString("muscleFocusEditPriorities", comment: ""), systemImage: "slider.horizontal.3")
+                Button(action: onEditTargets) {
+                    Label(NSLocalizedString("muscleFocusEditTargets", comment: ""), systemImage: "slider.horizontal.3")
                 }
             }
         } label: {
@@ -219,90 +202,30 @@ struct MuscleFocusMenu: View {
     }
 }
 
-// MARK: - Priority picker
-
-/// One group's priority options — High, Medium, Low, and Off — bound to the store. Meant to sit
-/// inside a `Menu`, which renders it as the native checkmark list; the editor's tiles and the muscle
-/// detail both use it, so a priority set on either screen is the same setting.
-struct MusclePriorityPicker: View {
-    let group: MuscleGroup
-
-    @EnvironmentObject private var store: MuscleFocusStore
-
-    var body: some View {
-        let isExcluded = store.focus.isExcluded(group)
-        // The last included group can't be turned off — a focus on nothing isn't a focus — so the
-        // option simply isn't offered for it.
-        let offersOff = isExcluded || store.focus.includedGroups.count > 1
-        let selection = Binding<MusclePriority?>(
-            get: { isExcluded ? nil : store.focus.priority(for: group) },
-            set: { newValue in
-                if let newValue {
-                    store.setPriority(newValue, for: group)
-                } else {
-                    store.exclude(group)
-                }
-            }
-        )
-        Picker(group.description, selection: selection) {
-            ForEach(MusclePriority.allCases.reversed()) { priority in
-                Text(priority.title).tag(Optional(priority))
-            }
-            if offersOff {
-                Text(NSLocalizedString("musclePriorityOff", comment: "")).tag(MusclePriority?.none)
-            }
-        }
-    }
-}
-
-// MARK: - Priority meter
-
-/// Three ascending bars, filled up to the group's level — the priority as a quantity rather than a
-/// word, in the muscle's own colour. It repeats what the tile's value says, which is the point: the
-/// word is what you read, the bars are what you compare across eight tiles at a glance. An excluded
-/// group shows the empty track, so "Off" has a picture too.
-struct MusclePriorityMeter: View {
-    /// `nil` when the group is excluded.
-    let level: MusclePriority?
-    let color: Color
-
-    private static let heights: [CGFloat] = [7, 11, 15]
-
-    var body: some View {
-        HStack(alignment: .bottom, spacing: 3) {
-            ForEach(Array(Self.heights.enumerated()), id: \.offset) { index, height in
-                Capsule()
-                    .fill(index < (level?.weight ?? 0) ? color : Color.fill)
-                    .frame(width: 4, height: height)
-            }
-        }
-        .accessibilityHidden(true)
-    }
-}
-
 // MARK: - Split bar
 
-/// One stacked bar of the target split, each included group a segment in its own colour, in the
-/// given order. Segments animate as the split changes; a group with no share has no segment.
+/// One stacked bar of a focus's week, each group with a target a segment in its own colour sized by
+/// its sets, in the given order. Segments animate as targets change; a group at 0 has no segment.
 struct MuscleSplitBar: View {
-    let split: MuscleTargetSplit
+    let focus: MuscleFocus
     let order: [MuscleGroup]
 
     private let gap: CGFloat = 2
 
     private var segments: [MuscleGroup] {
-        order.filter { split.percentage(for: $0) > 0 }
+        order.filter { focus.target(for: $0) > 0 }
     }
 
     var body: some View {
         GeometryReader { geometry in
             let segments = self.segments
+            let total = CGFloat(max(focus.weeklyTotal, 1))
             let available = max(geometry.size.width - gap * CGFloat(max(segments.count - 1, 0)), 0)
             HStack(spacing: gap) {
                 ForEach(segments, id: \.self) { group in
                     Rectangle()
                         .fill(group.color)
-                        .frame(width: available * CGFloat(split.percentage(for: group)) / 100)
+                        .frame(width: available * CGFloat(focus.target(for: group)) / total)
                 }
             }
             .frame(width: geometry.size.width, alignment: .leading)

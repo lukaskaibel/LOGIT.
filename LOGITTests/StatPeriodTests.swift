@@ -194,146 +194,117 @@ final class PeriodHistoryChartTests: XCTestCase {
 // MARK: - MuscleFocus
 
 final class MuscleFocusTests: XCTestCase {
-    /// Four, each with its own glyph: the editor offers them as the title's menu, and the count is a
-    /// product decision — a fifth "focus" has to earn its place rather than appear by accident.
-    func testPresetsAreFourWithDistinctGlyphs() {
-        XCTAssertEqual(MuscleFocusPreset.allCases.count, 4)
+    func testPresetsCoverEveryGroupWithATarget() {
         for preset in MuscleFocusPreset.allCases {
-            XCTAssertFalse(preset.emoji.isEmpty, "\(preset.rawValue) needs a menu glyph")
-        }
-        XCTAssertEqual(Set(MuscleFocusPreset.allCases.map(\.emoji)).count, 4, "Glyphs must be distinct")
-    }
-
-    func testEveryPresetCoversEveryGroupAndSumsTo100() {
-        for preset in MuscleFocusPreset.allCases {
-            XCTAssertEqual(preset.priorities.count, MuscleGroup.allCases.count, "\(preset.rawValue) must set every group")
-            XCTAssertEqual(preset.focus.split.total, 100, "\(preset.rawValue) must sum to 100")
+            for group in MuscleGroup.allCases {
+                XCTAssertGreaterThan(preset.focus.target(for: group), 0, "\(preset.rawValue) must give \(group.rawValue) a target")
+            }
             XCTAssertEqual(preset.focus.matchingPreset, preset, "\(preset.rawValue) must recognise itself")
         }
     }
 
-    func testPresetsAreDistinct() {
-        let splits = MuscleFocusPreset.allCases.map(\.focus)
-        for (index, focus) in splits.enumerated() {
-            for other in splits[(index + 1)...] {
+    func testPresetsAreFourDistinctWeeksWithDistinctGlyphs() {
+        XCTAssertEqual(MuscleFocusPreset.allCases.count, 4)
+        let focuses = MuscleFocusPreset.allCases.map(\.focus)
+        for (index, focus) in focuses.enumerated() {
+            for other in focuses[(index + 1)...] {
                 XCTAssertNotEqual(focus, other)
             }
         }
+        XCTAssertEqual(Set(MuscleFocusPreset.allCases.map(\.emoji)).count, 4)
     }
 
     func testDefaultIsFullBody() {
         XCTAssertEqual(MuscleFocus.default.matchingPreset, .fullBody)
-        XCTAssertEqual(MuscleTargetSplit.default, MuscleFocusPreset.fullBody.focus.split)
+        XCTAssertEqual(MuscleFocus.default.weeklyTotal, 56)
     }
 
-    func testSplitFollowsPriorityWeights() {
-        // High counts three times as much as low: two groups → 75 / 25.
-        var focus = MuscleFocus(priorities: [.chest: .high, .legs: .low])
-        for group in MuscleGroup.allCases where group != .chest && group != .legs {
-            focus.exclude(group)
-        }
-        XCTAssertEqual(focus.split.percentage(for: .chest), 75)
-        XCTAssertEqual(focus.split.percentage(for: .legs), 25)
-        XCTAssertEqual(focus.split.total, 100)
+    func testDisplayOrderCoversEveryGroupOnce() {
+        XCTAssertEqual(Set(MuscleFocus.displayOrder), Set(MuscleGroup.allCases))
+        XCTAssertEqual(MuscleFocus.displayOrder.count, MuscleGroup.allCases.count)
     }
 
-    func testExcludedGroupLeavesTheSplitButNotThePreset() {
-        var focus = MuscleFocusPreset.fullBody.focus
-        focus.exclude(.cardio)
-        XCTAssertTrue(focus.isExcluded(.cardio))
-        XCTAssertEqual(focus.split.percentage(for: .cardio), 0)
-        XCTAssertEqual(focus.split.total, 100)
-        XCTAssertEqual(focus.matchingPreset, .fullBody, "Turning a group off is not a custom focus")
-        // Switching presets keeps the exclusion …
-        focus.apply(.upperBody)
-        XCTAssertTrue(focus.isExcluded(.cardio))
-        XCTAssertEqual(focus.matchingPreset, .upperBody)
-        // … and setting a priority turns the group back on.
-        focus.setPriority(.low, for: .cardio)
-        XCTAssertFalse(focus.isExcluded(.cardio))
-        XCTAssertEqual(focus.matchingPreset, .upperBody)
+    func testTargetsClampToTheStepperRange() {
+        var focus = MuscleFocus.default
+        focus.setTarget(99, for: .legs)
+        XCTAssertEqual(focus.target(for: .legs), MuscleFocus.targetRange.upperBound)
+        focus.setTarget(-3, for: .legs)
+        XCTAssertEqual(focus.target(for: .legs), 0)
+        XCTAssertTrue(focus.isExcluded(.legs))
+        XCTAssertFalse(focus.includedGroups.contains(.legs))
     }
 
-    func testChangingAPriorityMakesTheFocusCustom() {
+    func testChangingATargetMakesTheFocusCustom() {
         var focus = MuscleFocusPreset.upperBody.focus
-        focus.setPriority(.high, for: .legs)
+        focus.setTarget(5, for: .legs)
         XCTAssertNil(focus.matchingPreset)
         focus.apply(.upperBody)
         XCTAssertEqual(focus.matchingPreset, .upperBody)
     }
 
-    func testLastIncludedGroupCannotBeExcluded() {
-        var focus = MuscleFocusPreset.fullBody.focus
-        for group in MuscleGroup.allCases {
-            focus.exclude(group)
+    func testLastGroupWithATargetCannotReachZero() {
+        var focus = MuscleFocus.default
+        for group in MuscleGroup.allCases where group != .chest {
+            focus.setTarget(0, for: group)
         }
-        XCTAssertEqual(focus.includedGroups.count, 1)
-        XCTAssertEqual(focus.split.total, 100)
+        XCTAssertEqual(focus.includedGroups, [.chest])
+        XCTAssertEqual(focus.minimumTarget(for: .chest), 1)
+        focus.setTarget(0, for: .chest)
+        XCTAssertEqual(focus.target(for: .chest), 1)
+        XCTAssertEqual(focus.minimumTarget(for: .legs), 0, "Other groups can still be at 0")
     }
 
-    func testCodableRoundTripKeepsPrioritiesAndExclusions() throws {
+    func testCodableRoundTripKeepsTargets() throws {
         var original = MuscleFocusPreset.lowerBody.focus
-        original.exclude(.cardio)
-        let data = try JSONEncoder().encode(original)
-        let decoded = try JSONDecoder().decode(MuscleFocus.self, from: data)
+        original.setTarget(0, for: .cardio)
+        original.setTarget(13, for: .back)
+        let decoded = try JSONDecoder().decode(MuscleFocus.self, from: JSONEncoder().encode(original))
         XCTAssertEqual(decoded, original)
+        XCTAssertEqual(decoded.target(for: .back), 13)
         XCTAssertTrue(decoded.isExcluded(.cardio))
-        XCTAssertEqual(decoded.matchingPreset, .lowerBody)
     }
 
-    func testLegacyPresetsMigrateToTheirSuccessors() {
-        let balanced = MuscleTargetSplit(percentages: [
-            .legs: 20, .back: 18, .chest: 16, .shoulders: 13, .biceps: 9, .triceps: 9, .abdominals: 9, .cardio: 6,
-        ])
-        XCTAssertEqual(MuscleFocus(legacy: balanced).matchingPreset, .fullBody)
-        let upper = MuscleTargetSplit(percentages: [
-            .chest: 18, .back: 18, .shoulders: 16, .biceps: 13, .triceps: 13, .legs: 12, .abdominals: 6, .cardio: 4,
-        ])
-        XCTAssertEqual(MuscleFocus(legacy: upper).matchingPreset, .upperBody)
+    func testPriorityShapeDecodesToSets() throws {
+        let json = #"{"priorities": {"legs": 3, "back": 2, "chest": 1}, "excluded": ["cardio"]}"#
+        let focus = try JSONDecoder().decode(MuscleFocus.self, from: Data(json.utf8))
+        XCTAssertEqual(focus.target(for: .legs), 10)
+        XCTAssertEqual(focus.target(for: .back), 6)
+        XCTAssertEqual(focus.target(for: .chest), 3)
+        XCTAssertEqual(focus.target(for: .shoulders), 6, "A group missing from the priorities read as medium")
+        XCTAssertEqual(focus.target(for: .cardio), 0)
     }
 
-    func testLegacyCustomSplitQuantisesAndKeepsExclusions() {
-        let legacy = MuscleTargetSplit(percentages: [.legs: 40, .back: 30, .chest: 20, .shoulders: 10])
-        let focus = MuscleFocus(legacy: legacy)
-        // Mean share 25: legs at 40 clears 130 % → high, shoulders at 10 sits under 70 % → low.
-        XCTAssertEqual(focus.priority(for: .legs), .high)
-        XCTAssertEqual(focus.priority(for: .back), .medium)
-        XCTAssertEqual(focus.priority(for: .chest), .medium)
-        XCTAssertEqual(focus.priority(for: .shoulders), .low)
-        for group in [MuscleGroup.biceps, .triceps, .abdominals, .cardio] {
-            XCTAssertTrue(focus.isExcluded(group), "\(group.rawValue) was zeroed and must stay off")
-        }
-        XCTAssertNil(focus.matchingPreset)
-        XCTAssertEqual(focus.split.total, 100)
+    func testLegacyPercentPresetsMigrateToTheirSuccessors() {
+        let balanced: [MuscleGroup: Int] = [.legs: 20, .back: 18, .chest: 16, .shoulders: 13, .biceps: 9, .triceps: 9, .abdominals: 9, .cardio: 6]
+        XCTAssertEqual(MuscleFocus(legacyPercentages: balanced).matchingPreset, .fullBody)
+        let upper: [MuscleGroup: Int] = [.chest: 18, .back: 18, .shoulders: 16, .biceps: 13, .triceps: 13, .legs: 12, .abdominals: 6, .cardio: 4]
+        XCTAssertEqual(MuscleFocus(legacyPercentages: upper).matchingPreset, .upperBody)
     }
 
-    func testApportionmentSumsTo100AndIsEmptyWithoutWeights() {
-        XCTAssertTrue(MuscleTargetSplit.apportion(weights: [:]).isEmpty)
-        let split = MuscleTargetSplit.apportion(weights: [.chest: 1, .back: 1, .legs: 1])
-        XCTAssertEqual(split.values.reduce(0, +), 100)
-        // Equal remainders: the leftover point goes to the earliest group in canonical order.
-        XCTAssertEqual(split[.chest], 34)
-        XCTAssertEqual(split[.back], 33)
-        XCTAssertEqual(split[.legs], 33)
+    func testLegacyCustomPercentagesScaleOntoTheDefaultWeek() {
+        let focus = MuscleFocus(legacyPercentages: [.legs: 50, .back: 49, .chest: 1])
+        // 56 sets a week, split 50 / 49 / 1 %: the tiny share still keeps a set.
+        XCTAssertEqual(focus.target(for: .legs), 28)
+        XCTAssertEqual(focus.target(for: .back), 27)
+        XCTAssertEqual(focus.target(for: .chest), 1)
+        XCTAssertTrue(focus.isExcluded(.biceps), "A zeroed share stays out")
     }
 
     func testStoreMigratesLegacySplitAndPersistsEdits() throws {
         let suite = "MuscleFocusTests-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
-        let legacy = MuscleTargetSplit(percentages: [
-            .chest: 18, .back: 18, .shoulders: 16, .biceps: 13, .triceps: 13, .legs: 12, .abdominals: 6, .cardio: 4,
-        ])
+        let legacy = ["chest": 18, "back": 18, "shoulders": 16, "biceps": 13, "triceps": 13, "legs": 12, "abdominals": 6, "cardio": 4]
         defaults.set(try JSONEncoder().encode(legacy), forKey: MuscleFocusStore.legacyStorageKey)
 
         let store = MuscleFocusStore(defaults: defaults)
         XCTAssertEqual(store.focus.matchingPreset, .upperBody)
+        XCTAssertTrue(store.hasChosenFocus, "Someone who tuned percentages made a choice")
 
-        store.exclude(.cardio)
+        store.setTarget(0, for: .cardio)
         let reloaded = MuscleFocusStore(defaults: defaults)
         XCTAssertTrue(reloaded.focus.isExcluded(.cardio))
-        XCTAssertEqual(reloaded.target(for: .cardio), 0)
-        XCTAssertEqual(reloaded.focus.matchingPreset, .upperBody)
+        XCTAssertNil(reloaded.focus.matchingPreset)
     }
 
     func testStoreKnowsWhetherAFocusWasEverChosen() throws {
@@ -350,18 +321,26 @@ final class MuscleFocusTests: XCTestCase {
         XCTAssertTrue(MuscleFocusStore(defaults: defaults).hasChosenFocus)
     }
 
-    func testMigratedLegacySplitCountsAsChosen() throws {
-        let suite = "MuscleFocusLegacyChosen-\(UUID().uuidString)"
-        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
-        defer { defaults.removePersistentDomain(forName: suite) }
-        let legacy = MuscleTargetSplit(percentages: [.legs: 40, .back: 30, .chest: 20, .shoulders: 10])
-        defaults.set(try JSONEncoder().encode(legacy), forKey: MuscleFocusStore.legacyStorageKey)
-        XCTAssertTrue(MuscleFocusStore(defaults: defaults).hasChosenFocus, "Someone who tuned percentages made a choice")
+    // MARK: Balance entries
+
+    func testEntryVerdictsReadWholeWeeklySets() {
+        func state(_ setsPerWeek: Int, target: Int) -> MuscleBalanceGoalState {
+            MuscleBalanceEntry(muscleGroup: .legs, setCount: 0, setsPerWeek: setsPerWeek, target: target).goalState
+        }
+        XCTAssertEqual(state(9, target: 10), .under)
+        XCTAssertEqual(state(10, target: 10), .met)
+        XCTAssertEqual(state(15, target: 10), .met, "Exactly half again is still met")
+        XCTAssertEqual(state(16, target: 10), .over)
+        XCTAssertNil(MuscleBalanceEntry(muscleGroup: .legs, setCount: 3, setsPerWeek: 3, target: 0).goalFraction)
     }
 
-    func testDisplayOrderCoversEveryGroupOnce() {
-        XCTAssertEqual(Set(MuscleFocus.displayOrder), Set(MuscleGroup.allCases))
-        XCTAssertEqual(MuscleFocus.displayOrder.count, MuscleGroup.allCases.count)
+    func testWeeksCoveredCapsAtTheHistoryAndNeverDropsBelowOneWeek() {
+        let now = Date(timeIntervalSince1970: 1_780_000_000)
+        let day: TimeInterval = 24 * 60 * 60
+        XCTAssertEqual(TrendWindow.fourWeeks.weeksCovered(firstDataDate: nil, from: now), 4, accuracy: 0.01)
+        XCTAssertEqual(TrendWindow.fourWeeks.weeksCovered(firstDataDate: now.addingTimeInterval(-400 * day), from: now), 4, accuracy: 0.01)
+        XCTAssertEqual(TrendWindow.fourWeeks.weeksCovered(firstDataDate: now.addingTimeInterval(-14 * day), from: now), 2, accuracy: 0.01)
+        XCTAssertEqual(TrendWindow.fourWeeks.weeksCovered(firstDataDate: now.addingTimeInterval(-2 * day), from: now), 1, accuracy: 0.01)
     }
 }
 

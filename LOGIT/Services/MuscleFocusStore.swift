@@ -8,25 +8,21 @@
 import Combine
 import Foundation
 
-/// Persists the user's `MuscleFocus` as JSON in `UserDefaults` (mirrors the pinned-exercise tile
-/// pattern — no Core Data, since CloudKit is additive-only) and publishes the `MuscleTargetSplit` it
-/// implies. An `ObservableObject` so the focus editor's edits live-update the Muscle Groups overview
-/// and the Summary Balance tile that read off it. Injected from `LOGITApp`/`PreviewEnvironmentObjects`.
+/// Persists the user's `MuscleFocus` — a weekly set target per muscle group — as JSON in
+/// `UserDefaults` (mirrors the pinned-exercise tile pattern — no Core Data, since CloudKit is
+/// additive-only). An `ObservableObject` so the focus editor's steppers live-update the Muscle Groups
+/// overview, the muscle detail and the Summary Balance tile that read off it. Injected from
+/// `LOGITApp`/`PreviewEnvironmentObjects`.
 final class MuscleFocusStore: ObservableObject {
     static let storageKey = "muscleFocus"
-    /// Where the retired percent editor kept its split. Read once, when there is no focus yet, so an
+    /// Where the original percent editor kept its split. Read once, when there is no focus yet, so an
     /// existing user's targets carry over; never written again.
     static let legacyStorageKey = "muscleTargetSplit"
 
     private let defaults: UserDefaults
 
-    /// The current focus. Published so the editor re-renders on every change.
-    @Published private(set) var focus: MuscleFocus {
-        didSet { split = focus.split }
-    }
-
-    /// The target split the focus implies — what every balance surface reads.
-    @Published private(set) var split: MuscleTargetSplit
+    /// The current focus. Published so every consumer re-renders on each change.
+    @Published private(set) var focus: MuscleFocus
 
     /// Whether the user has ever set a focus themselves, as opposed to running on the default. Drives
     /// the Summary's one-time focus tip and the "Default" caption on Muscle Groups. A split carried
@@ -40,16 +36,8 @@ final class MuscleFocusStore: ObservableObject {
         self.defaults = defaults
         let stored = Self.load(from: defaults)
         let migrated = stored == nil ? Self.migrateLegacySplit(from: defaults) : nil
-        let focus = stored ?? migrated ?? .default
-        self.focus = focus
-        split = focus.split
+        focus = stored ?? migrated ?? .default
         hasChosenFocus = stored != nil || migrated != nil
-    }
-
-    // MARK: - Reads
-
-    func target(for muscleGroup: MuscleGroup) -> Int {
-        split.percentage(for: muscleGroup)
     }
 
     // MARK: - Mutations
@@ -60,17 +48,10 @@ final class MuscleFocusStore: ObservableObject {
         commit(updated)
     }
 
-    /// Sets a group's priority, turning it back on if it was off.
-    func setPriority(_ priority: MusclePriority, for muscleGroup: MuscleGroup) {
+    /// Sets a group's weekly set target (0 leaves the group out of the focus).
+    func setTarget(_ value: Int, for muscleGroup: MuscleGroup) {
         var updated = focus
-        updated.setPriority(priority, for: muscleGroup)
-        commit(updated)
-    }
-
-    /// Leaves a group out of the split (a no-op for the last included group).
-    func exclude(_ muscleGroup: MuscleGroup) {
-        var updated = focus
-        updated.exclude(muscleGroup)
+        updated.setTarget(value, for: muscleGroup)
         commit(updated)
     }
 
@@ -99,8 +80,13 @@ final class MuscleFocusStore: ObservableObject {
 
     private static func migrateLegacySplit(from defaults: UserDefaults) -> MuscleFocus? {
         guard let data = defaults.data(forKey: legacyStorageKey),
-              let split = try? JSONDecoder().decode(MuscleTargetSplit.self, from: data)
+              let raw = try? JSONDecoder().decode([String: Int].self, from: data)
         else { return nil }
-        return MuscleFocus(legacy: split)
+        let percentages = raw.reduce(into: [MuscleGroup: Int]()) { result, pair in
+            if let group = MuscleGroup(rawValue: pair.key) {
+                result[group] = pair.value
+            }
+        }
+        return MuscleFocus(legacyPercentages: percentages)
     }
 }

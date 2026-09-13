@@ -12,95 +12,86 @@ import Foundation
 /// visibly full while the verdict says "not there yet" is a tile arguing with itself. Overshoot still
 /// counts; it just says so.
 ///
-/// The one verdict in the app. A symmetric `MuscleBalanceState` used to sit beside it for the
-/// single-muscle detail's pill, which meant the same group could be "on target" on one screen and
-/// "at target" or worse on the next.
+/// The one verdict in the app, read by the Summary tile, the Muscle Groups screen and the muscle
+/// detail alike.
 enum MuscleBalanceGoalState {
     /// Short of target — the track is partly filled and the remainder shows.
     case under
-    /// At target, up to `MuscleTargetSplit.behindThreshold` points past it.
+    /// At target, up to `MuscleFocus.overshootRatio` times it.
     case met
-    /// More than the threshold past target: met, but worth admitting.
+    /// Well past target: met, but worth admitting.
     case over
 }
 
-/// One muscle group's standing against its target, for a given period: how many sets trained it, what
-/// share of the period that is, and how far that share sits from the user's target. The filling
+/// One muscle group's standing against its weekly set target for a given window: how many sets
+/// trained it, what that works out to per week, and the target it is read against. The filling
 /// `MuscleBalanceTrack` (Summary tile, overview hero and tiles, single-muscle detail) renders off these.
 struct MuscleBalanceEntry: Identifiable {
     let muscleGroup: MuscleGroup
-    /// Set occurrences training this group in the period (a super set counts toward both its groups,
+    /// Set occurrences training this group in the window (a super set counts toward both its groups,
     /// matching `MuscleGroupService`).
     let setCount: Int
-    /// This group's share of all set occurrences, as a whole percent. Across the 8 groups these sum
-    /// to 100 (largest-remainder reconciled), or are all 0 when the period has no sets.
-    let actualPercent: Int
-    /// The user's target share for this group, whole percent.
-    let targetPercent: Int
+    /// `setCount` as a weekly average, rounded to whole sets — the number every surface shows, and
+    /// the one the verdict is decided on, so "10/10" can never read "below target".
+    let setsPerWeek: Int
+    /// The user's weekly set target for this group; 0 when it isn't part of the focus.
+    let target: Int
 
     var id: MuscleGroup { muscleGroup }
 
-    /// Signed gap from target in percentage points — negative means under-trained. Sorts the
-    /// above-target section, and decides `goalState`'s "met" versus "over".
-    var deviation: Int { actualPercent - targetPercent }
-
-    /// How full this group's track is, 1 meaning "at target". Nil when the user has zeroed the
-    /// target: a track that can never fill isn't a goal, and shouldn't be drawn or counted.
+    /// How full this group's track is, 1 meaning "at target". Nil when the group has no target: a
+    /// track that can never fill isn't a goal, and shouldn't be drawn or counted.
     var goalFraction: Double? {
-        guard targetPercent > 0 else { return nil }
-        return Double(actualPercent) / Double(targetPercent)
+        guard target > 0 else { return nil }
+        return Double(setsPerWeek) / Double(target)
     }
 
     /// The goal reading — see `MuscleBalanceGoalState`.
     var goalState: MuscleBalanceGoalState {
-        guard targetPercent > 0 else { return .met }
-        if actualPercent < targetPercent { return .under }
-        return deviation > MuscleTargetSplit.behindThreshold ? .over : .met
+        guard target > 0 else { return .met }
+        if setsPerWeek < target { return .under }
+        return Double(setsPerWeek) > Double(target) * MuscleFocus.overshootRatio ? .over : .met
     }
-
-
 }
 
-/// Turns a period's workouts + the user's target split into per-group balance entries. Period-agnostic:
-/// the caller supplies the date window (filtering the top-level `[Workout]` in memory, or via
-/// `WorkoutPredicateFactory.getWorkouts(from:to:)`).
+/// Turns a window's workouts + the user's focus into per-group balance entries. Window-agnostic: the
+/// caller supplies the workouts already narrowed to the window and how many weeks it covers (see
+/// `TrendWindow.weeksCovered`).
 struct MuscleBalanceCalculator {
     /// One entry per muscle group, in `MuscleGroup.allCases` order (zero-filled for untrained groups).
     let entries: [MuscleBalanceEntry]
-    /// Total set occurrences across all groups in the period.
+    /// Total set occurrences across all groups in the window.
     let totalSets: Int
 
     init(
         workouts: [Workout],
-        target: MuscleTargetSplit,
+        focus: MuscleFocus,
+        weeks: Double,
         muscleGroupService: MuscleGroupService = MuscleGroupService()
     ) {
         let counts: [MuscleGroup: Int] = muscleGroupService
             .getMuscleGroupOccurances(in: workouts)
             .reduce(into: [:]) { $0[$1.0] = $1.1 }
-        let total = counts.values.reduce(0, +)
-        // The same largest-remainder apportionment the target split is built with, so the two
-        // sides of every comparison round the same way.
-        let actuals = MuscleTargetSplit.apportion(weights: counts)
-
+        let divisor = max(weeks, 1)
         entries = MuscleGroup.allCases.map { group in
-            MuscleBalanceEntry(
+            let count = counts[group] ?? 0
+            return MuscleBalanceEntry(
                 muscleGroup: group,
-                setCount: counts[group] ?? 0,
-                actualPercent: actuals[group] ?? 0,
-                targetPercent: target.percentage(for: group)
+                setCount: count,
+                setsPerWeek: Int((Double(count) / divisor).rounded()),
+                target: focus.target(for: group)
             )
         }
-        totalSets = total
+        totalSets = counts.values.reduce(0, +)
     }
 
     // MARK: - Aggregates
 
-    /// The groups the goal reading applies to: those the user actually targets. A zeroed target is
-    /// an explicit "I don't train this", so it leaves the chart and the denominator rather than
-    /// sitting as a track that can never fill.
+    /// The groups the goal reading applies to: those with a target. A group set to 0 is an explicit
+    /// "I don't train this", so it leaves the chart and the denominator rather than sitting as a track
+    /// that can never fill.
     var goalEntries: [MuscleBalanceEntry] {
-        entries.filter { $0.targetPercent > 0 }
+        entries.filter { $0.target > 0 }
     }
 
     /// Numerator for the Balance tile: groups at least at their target.

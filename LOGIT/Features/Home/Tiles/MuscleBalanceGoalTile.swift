@@ -29,6 +29,8 @@ import SwiftUI
 struct MuscleBalanceGoalTile: View {
     /// Workouts already narrowed to the window the tile reports.
     let workouts: [Workout]
+    /// How many weeks that window covers — the divisor for weekly averages (`TrendWindow.weeksCovered`).
+    let weeks: Double
 
     @EnvironmentObject private var focusStore: MuscleFocusStore
     @EnvironmentObject private var muscleGroupService: MuscleGroupService
@@ -36,7 +38,8 @@ struct MuscleBalanceGoalTile: View {
     private var calculator: MuscleBalanceCalculator {
         MuscleBalanceCalculator(
             workouts: workouts,
-            target: focusStore.split,
+            focus: focusStore.focus,
+            weeks: weeks,
             muscleGroupService: muscleGroupService
         )
     }
@@ -134,8 +137,8 @@ struct MuscleBalanceGoalTile: View {
 #Preview {
     FetchRequestWrapper(Workout.self) { workouts in
         HStack(alignment: .top, spacing: 10) {
-            MuscleBalanceGoalTile(workouts: workouts)
-            MuscleBalanceGoalTile(workouts: [])
+            MuscleBalanceGoalTile(workouts: workouts, weeks: 4)
+            MuscleBalanceGoalTile(workouts: [], weeks: 4)
         }
         .frame(height: 190)
         .padding()
