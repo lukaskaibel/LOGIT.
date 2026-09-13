@@ -131,7 +131,7 @@ struct MuscleFocusScreen: View {
 /// A group's weekly set target as a number between a round minus and plus — the control the focus
 /// editor's tiles and the muscle detail's target row share, so a target reads and changes the same
 /// way on both. Buttons wear the muscle's colour on a tinted disc, repeat while held, and give a
-/// selection tick per step; each end greys out at its bound (0, or 1 for the last group with a target,
+/// selection tick per step (held repeats included); each end greys out at its bound (0, or 1 for the last group with a target,
 /// and `MuscleFocus.targetRange`'s top).
 ///
 /// Chosen over a native `Stepper`: two capsule halves in system grey read as a form field dropped into
@@ -146,6 +146,11 @@ struct MuscleTargetControl: View {
     var spread: Bool = false
 
     @EnvironmentObject private var store: MuscleFocusStore
+
+    /// Counts every press of minus or plus, held repeats included — the trigger for the selection tick.
+    /// Keyed to presses rather than to the value, so a preset changing eight targets at once doesn't
+    /// tick eight controls.
+    @State private var steps = 0
 
     private static let buttonSize: CGFloat = 36
 
@@ -167,6 +172,10 @@ struct MuscleTargetControl: View {
             stepButton("plus", enabled: target < upper) { set(target + 1) }
         }
         .frame(maxWidth: spread ? .infinity : nil)
+        // The system's own selection feedback, kept prepared by SwiftUI. A throwaway
+        // `UISelectionFeedbackGenerator` created, fired and released inside the action can drop the
+        // tick or land it late.
+        .sensoryFeedback(.selection, trigger: steps)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(group.description))
         .accessibilityValue(Text(String(format: NSLocalizedString("muscleFocusWeeklyTotal", comment: ""), target)))
@@ -187,7 +196,7 @@ struct MuscleTargetControl: View {
 
     private func stepButton(_ symbol: String, enabled: Bool, action: @escaping () -> Void) -> some View {
         Button {
-            UISelectionFeedbackGenerator().selectionChanged()
+            steps += 1
             action()
         } label: {
             Image(systemName: symbol)

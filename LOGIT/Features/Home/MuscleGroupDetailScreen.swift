@@ -161,15 +161,18 @@ struct MuscleGroupDetailScreen: View {
                     .foregroundStyle(Color.label)
                     .lineLimit(1)
                 Spacer(minLength: 12)
-                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                // The target smaller and sitting on the count's baseline, like the Muscle Groups
+                // tiles' "7/10", so the count reads first.
+                HStack(alignment: .lastTextBaseline, spacing: 0) {
                     Text("\(entry.setsPerWeek)")
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundStyle(color.gradient)
                     if entry.target > 0 {
                         Text("/\(entry.target)")
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundStyle(Color.secondaryLabel)
                     }
                 }
-                .font(.system(size: 40, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .contentTransition(.numericText())
                 .lineLimit(1)
