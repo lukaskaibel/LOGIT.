@@ -9,6 +9,7 @@ import ActivityKit
 import Combine
 import Foundation
 import OSLog
+import UIKit
 
 @MainActor
 final class WorkoutLiveActivityManager: ObservableObject {
@@ -27,6 +28,13 @@ final class WorkoutLiveActivityManager: ObservableObject {
         self.workoutRecorder = workoutRecorder
         self.database = database
         self.chronograph = chronograph
+
+        #if DEBUG
+        if let fixture = WorkoutLiveActivityFixture.launchFixture {
+            Task { await presentFixture(fixture) }
+            return
+        }
+        #endif
 
         observeWorkoutLifecycle()
 
@@ -116,11 +124,12 @@ final class WorkoutLiveActivityManager: ObservableObject {
             )
         case .stopwatch:
             let tintKind: WorkoutLiveActivityChronoTintKind = activeRest ? .restStopwatch : .manual
+            let muscle = activeRest ? muscleThemeToken(for: workoutRecorder.activeRestTimerSet) : nil
             let startDate = Date().addingTimeInterval(-chronograph.seconds)
             return WorkoutLiveActivityChronoChip(
                 phase: .stopwatchRunning,
                 tintKind: tintKind,
-                muscleThemeToken: nil,
+                muscleThemeToken: muscle,
                 timerEndDate: nil,
                 timerTotalSeconds: nil,
                 staticTickSeconds: nil,
@@ -137,21 +146,23 @@ final class WorkoutLiveActivityManager: ObservableObject {
         case .timer:
             let tintKind: WorkoutLiveActivityChronoTintKind = activeRest ? .restTimer : .manual
             let muscle = activeRest ? muscleThemeToken(for: workoutRecorder.activeRestTimerSet) : nil
+            let total = Double(Int(chronograph.initialTimerSeconds.rounded(.down)))
             return WorkoutLiveActivityChronoChip(
                 phase: .timerPaused,
                 tintKind: tintKind,
                 muscleThemeToken: muscle,
                 timerEndDate: nil,
-                timerTotalSeconds: nil,
+                timerTotalSeconds: total > 0 ? total : nil,
                 staticTickSeconds: roundedSeconds,
                 stopwatchStartDate: nil
             )
         case .stopwatch:
             let tintKind: WorkoutLiveActivityChronoTintKind = activeRest ? .restStopwatch : .manual
+            let muscle = activeRest ? muscleThemeToken(for: workoutRecorder.activeRestTimerSet) : nil
             return WorkoutLiveActivityChronoChip(
                 phase: .stopwatchPaused,
                 tintKind: tintKind,
-                muscleThemeToken: nil,
+                muscleThemeToken: muscle,
                 timerEndDate: nil,
                 timerTotalSeconds: nil,
                 staticTickSeconds: roundedSeconds,
@@ -219,6 +230,30 @@ final class WorkoutLiveActivityManager: ObservableObject {
             await activity.end(nil, dismissalPolicy: .immediate)
         }
     }
+
+    #if DEBUG
+    /// Replaces every activity with the fixture's, so a UI test can capture one exact state.
+    private func presentFixture(_ fixture: WorkoutLiveActivityFixture) async {
+        // An activity can only be requested while the app is in the foreground; the manager is created
+        // in `LOGITApp.init`, before the first scene is active — and a cold first launch after install can
+        // take seconds to get there.
+        for _ in 0 ..< 100 where UIApplication.shared.applicationState != .active {
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+        try? await Task.sleep(for: .milliseconds(500))
+        await endAllActivities()
+        let (attributes, state) = fixture.activity()
+        do {
+            _ = try Activity<WorkoutLiveActivityAttributes>.request(
+                attributes: attributes,
+                content: ActivityContent(state: state, staleDate: nil),
+                pushType: nil
+            )
+        } catch {
+            Self.logger.error("Failed to request fixture live activity: \(error.localizedDescription)")
+        }
+    }
+    #endif
 
     private func activities(for workoutID: UUID) -> [Activity<WorkoutLiveActivityAttributes>] {
         Activity<WorkoutLiveActivityAttributes>.activities.filter {

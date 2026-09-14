@@ -182,8 +182,7 @@
 "letsGetStarted" = "Commençons";
 "letsGetStartedDescription" = "Avant de commencer à t'entraîner, une configuration rapide pour optimiser ton expérience.";
 "liveActivityNextUp" = "À suivre";
-"liveActivitySetLabelCurrent" = "Actuel";
-"liveActivitySetLabelPrev" = "Précédent";
+"liveActivityRest" = "Repos";
 "licenceAgreement" = "Contrat de licence";
 "lookupExercise" = "Rechercher %@";
 
