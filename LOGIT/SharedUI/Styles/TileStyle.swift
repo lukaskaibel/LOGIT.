@@ -60,6 +60,13 @@ extension View {
         modifier(TileModifier(backgroundColor: backgroundColor))
     }
 
+    /// The tile shape over a colourful backdrop — the recorder's muscle wash. `tertiarySystemFill`
+    /// over black lands on the same grey as `tileStyle()`'s `secondaryBackground`, so on a dark
+    /// ground these read as the app's ordinary cards, and over the wash they take on its colour.
+    func translucentTileStyle() -> some View {
+        background(Color.tertiaryFill, in: .rect(cornerRadius: 30))
+    }
+
     func secondaryTileStyle(backgroundColor: Color = .tertiaryBackground, insetShadow: Bool = false) -> some View {
         modifier(SecondaryTileModifier(backgroundColor: backgroundColor, insetShadow: insetShadow))
     }

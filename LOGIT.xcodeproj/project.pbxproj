@@ -22,6 +22,7 @@
 		2BD2E4720FB2C657F8CA372B /* CompletionRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72085C4C10146858277690 /* CompletionRing.swift */; };
 		341961F0E25343384F192151 /* ProgressHighlights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF2AD8F630BC39E7A090D62 /* ProgressHighlights.swift */; };
 		34ED649B10150341352AE3D1 /* StatPeriodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8CD271000D75928FAE0887 /* StatPeriodTests.swift */; };
+		80AB100A2F15AA0100AB100A /* RecorderTopSheetModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AB10092F15AA0100AB1009 /* RecorderTopSheetModelTests.swift */; };
 		5815DAFD325E37FD2ED40B61 /* UserHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981DB0CC0070EAFC2D948564 /* UserHeight.swift */; };
 		BC96C94B1540ACF09629D91B /* MeasurementSeriesPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0382988AB9A5247C27A2FD8C /* MeasurementSeriesPoint.swift */; };
 		37D658746432D205B9A100B7 /* DurationFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5AE5DB723E798F9B5C1B84 /* DurationFormatting.swift */; };
@@ -216,6 +217,7 @@
 		80AA10052F5CAA0200AA1005 /* default_templates.json in Resources */ = {isa = PBXBuildFile; fileRef = 80AA10062F5CAA0200AA1006 /* default_templates.json */; };
 		80AB10032F15AA0100AB1003 /* Transmission in Frameworks */ = {isa = PBXBuildFile; productRef = 80AB10022F15AA0100AB1002 /* Transmission */; };
 		80AB10052F15AA0100AB1005 /* RecorderPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AB10042F15AA0100AB1004 /* RecorderPresentation.swift */; };
+		80AB10082F15AA0100AB1008 /* RecorderTopSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AB10072F15AA0100AB1007 /* RecorderTopSheet.swift */; };
 		80B387BB2EBA187100AD7EFC /* DecimalField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B387BA2EBA187100AD7EFC /* DecimalField.swift */; };
 		80BEEP012EF0000000000001 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 80BEEP022EF0000000000001 /* beep.wav */; };
 		80C2B98F2EC9362A00118FE2 /* ColorfulX in Frameworks */ = {isa = PBXBuildFile; productRef = 80C2B98E2EC9362A00118FE2 /* ColorfulX */; };
@@ -418,6 +420,7 @@
 		79EEE8722792E15D71C22DA3 /* SwipeableMonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableMonthView.swift; sourceTree = "<group>"; };
 		7B23FB52CA7FD72BF528A720 /* StrengthTile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StrengthTile.swift; sourceTree = "<group>"; };
 		7F8CD271000D75928FAE0887 /* StatPeriodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatPeriodTests.swift; sourceTree = "<group>"; };
+		80AB10092F15AA0100AB1009 /* RecorderTopSheetModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderTopSheetModelTests.swift; sourceTree = "<group>"; };
 		80036CDA2EFEF98C00B7C7B4 /* GlobalSearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchScreen.swift; sourceTree = "<group>"; };
 		80036CDD2EFEF9CE00B7C7B4 /* FuzzySearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuzzySearchService.swift; sourceTree = "<group>"; };
 		801BBC932DF7338A00CDB1FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -589,6 +592,7 @@
 		80AA10042F5CAA0200AA1004 /* DefaultTemplateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTemplateService.swift; sourceTree = "<group>"; };
 		80AA10062F5CAA0200AA1006 /* default_templates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default_templates.json; sourceTree = "<group>"; };
 		80AB10042F15AA0100AB1004 /* RecorderPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderPresentation.swift; sourceTree = "<group>"; };
+		80AB10072F15AA0100AB1007 /* RecorderTopSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderTopSheet.swift; sourceTree = "<group>"; };
 		80B387BA2EBA187100AD7EFC /* DecimalField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalField.swift; sourceTree = "<group>"; };
 		80BEEP022EF0000000000001 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		80C7068F531DB65831E8FA8F /* MuscleFocusScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuscleFocusScreen.swift; sourceTree = "<group>"; };
@@ -807,6 +811,7 @@
 				80NEWTEST006 /* VolumeCalculatingTests.swift */,
 				80NEWTEST004 /* WeightConvertingTests.swift */,
 				7F8CD271000D75928FAE0887 /* StatPeriodTests.swift */,
+				80AB10092F15AA0100AB1009 /* RecorderTopSheetModelTests.swift */,
 				80NEWTEST00C /* WorkoutSharingTests.swift */,
 				7959F4CE2ACD8F5B0038B222 /* WorkoutImages.xcassets */,
 				5F7B218CB83CEAEB494355C8 /* WorkoutLiveActivitySnapshotBuilderTests.swift */,
@@ -1208,6 +1213,7 @@
 				801BBD232DF7338A00CDB1FB /* WorkoutRecorder.swift */,
 				801BBD242DF7338A00CDB1FB /* WorkoutRecorderScreen.swift */,
 				80AB10042F15AA0100AB1004 /* RecorderPresentation.swift */,
+				80AB10072F15AA0100AB1007 /* RecorderTopSheet.swift */,
 				801BBD252DF7338A00CDB1FB /* WorkoutRecorderScreen+Toolbar.swift */,
 			);
 			path = WorkoutRecorder;
@@ -1676,6 +1682,7 @@
 				80NEWTEST001 /* TestHelpers.swift in Sources */,
 				80NEWTEST003 /* WeightConvertingTests.swift in Sources */,
 				34ED649B10150341352AE3D1 /* StatPeriodTests.swift in Sources */,
+				80AB100A2F15AA0100AB100A /* RecorderTopSheetModelTests.swift in Sources */,
 				80NEWTEST005 /* VolumeCalculatingTests.swift in Sources */,
 				80NEWTEST007 /* EntityExtensionTests.swift in Sources */,
 				80NEWTEST009 /* ServicesTests.swift in Sources */,
@@ -1862,6 +1869,7 @@
 				80036CDC2EFEF98C00B7C7B4 /* GlobalSearchScreen.swift in Sources */,
 				801BBDF02DF7338A00CDB1FB /* TemplateListScreen.swift in Sources */,
 				80AB10052F15AA0100AB1005 /* RecorderPresentation.swift in Sources */,
+				80AB10082F15AA0100AB1008 /* RecorderTopSheet.swift in Sources */,
 				801BBDF42DF7338A00CDB1FB /* TextProcessing.swift in Sources */,
 				801BBDF52DF7338A00CDB1FB /* FirstStartScreen.swift in Sources */,
 				801BBDF72DF7338A00CDB1FB /* UpgradeToProScreen.swift in Sources */,
