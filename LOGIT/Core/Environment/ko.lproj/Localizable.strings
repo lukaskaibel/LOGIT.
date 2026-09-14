@@ -182,8 +182,7 @@
 "letsGetStarted" = "시작해요";
 "letsGetStartedDescription" = "운동을 시작하기 전에 경험을 최적화하기 위한 빠른 설정을 수행해야 합니다.";
 "liveActivityNextUp" = "다음";
-"liveActivitySetLabelCurrent" = "현재의";
-"liveActivitySetLabelPrev" = "이전";
+"liveActivityRest" = "휴식";
 "licenceAgreement" = "라이센스 계약";
 "lookupExercise" = "%@ 찾아보기";
 

@@ -182,8 +182,7 @@
 "letsGetStarted" = "始めましょう";
 "letsGetStartedDescription" = "ワークアウトを開始する前に、エクスペリエンスを最適化するために簡単なセットアップを行う必要があります。";
 "liveActivityNextUp" = "次へ";
-"liveActivitySetLabelCurrent" = "現在";
-"liveActivitySetLabelPrev" = "前へ";
+"liveActivityRest" = "休憩";
 "licenceAgreement" = "ライセンス契約";
 "lookupExercise" = "%@ を調べる";
 

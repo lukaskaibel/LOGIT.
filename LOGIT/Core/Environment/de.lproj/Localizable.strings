@@ -177,8 +177,7 @@
 "letsGetStarted" = "Los gehts";
 "letsGetStartedDescription" = "Bevor du trainieren kannst, machen wir noch ein kurzes Setup.";
 "liveActivityNextUp" = "Als Nächstes";
-"liveActivitySetLabelCurrent" = "Aktuell";
-"liveActivitySetLabelPrev" = "Vorher";
+"liveActivityRest" = "Pause";
 "licenceAgreement" = "Lizenzvereinbarung";
 "lookupExercise" = "%@ nachschlagen";
 

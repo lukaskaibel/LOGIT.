@@ -294,6 +294,7 @@
 		D0AF3C855D8D73E72DA7AF92 /* SummaryWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62F41D02C28CB089872E955 /* SummaryWelcomeView.swift */; };
 		D1D1D1000000000000000B01 /* MetricTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D1D1000000000000000F01 /* MetricTile.swift */; };
 		E01F0F57C3115A2C00EB638E /* ScenarioScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6EBE9FCA104B46ACA995DE /* ScenarioScreenshots.swift */; };
+		E1E1E1000000000000000B17 /* LiveActivityScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1E1000000000000000F17 /* LiveActivityScreenshots.swift */; };
 		E18E0521AED5762B30E5FA1F /* MuscleGroupDetailScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD9E1A9B2D266CBA7AE5F18 /* MuscleGroupDetailScreen.swift */; };
 		E1E1E1000000000000000B01 /* ExerciseE1RMTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1E1000000000000000F01 /* ExerciseE1RMTile.swift */; };
 		E1E1E1000000000000000B02 /* ExerciseE1RMScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E1E1000000000000000F02 /* ExerciseE1RMScreen.swift */; };
@@ -669,6 +670,7 @@
 		DC42311A655A248061E11238 /* SummaryEmptyStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryEmptyStates.swift; sourceTree = "<group>"; };
 		DD50531C168D4EDFB527D76A /* SetEntityClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEntityClasses.swift; sourceTree = "<group>"; };
 		DD6EBE9FCA104B46ACA995DE /* ScenarioScreenshots.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScenarioScreenshots.swift; sourceTree = "<group>"; };
+		E1E1E1000000000000000F17 /* LiveActivityScreenshots.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivityScreenshots.swift; sourceTree = "<group>"; };
 		DE557E27ADC9A2C02BE79DBE /* SummaryStatScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryStatScreen.swift; sourceTree = "<group>"; };
 		E1E1E1000000000000000F01 /* ExerciseE1RMTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseE1RMTile.swift; sourceTree = "<group>"; };
 		E1E1E1000000000000000F02 /* ExerciseE1RMScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseE1RMScreen.swift; sourceTree = "<group>"; };
@@ -746,6 +748,7 @@
 				0400C2E827A4AEAF03BACDC6 /* SnapshotHelper.swift */,
 				3CDACB5BDD447438F8D60BAE /* LOGITScreenshots.swift */,
 				DD6EBE9FCA104B46ACA995DE /* ScenarioScreenshots.swift */,
+				E1E1E1000000000000000F17 /* LiveActivityScreenshots.swift */,
 			);
 			path = LOGITUITests;
 			sourceTree = "<group>";
@@ -1647,6 +1650,7 @@
 				5701E3D211A49E43B531E6D8 /* SnapshotHelper.swift in Sources */,
 				B3DC6B7D9EF58D3A51C28227 /* LOGITScreenshots.swift in Sources */,
 				E01F0F57C3115A2C00EB638E /* ScenarioScreenshots.swift in Sources */,
+				E1E1E1000000000000000B17 /* LiveActivityScreenshots.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
