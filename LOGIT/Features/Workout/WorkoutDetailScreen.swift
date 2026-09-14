@@ -219,7 +219,7 @@ struct WorkoutDetailScreen: View {
                 WorkoutEditorScreen(workout: workout, isAddingNewWorkout: false)
             }
         }
-        .fullScreenCover(item: $newTemplateFromWorkout) { template in
+        .sheet(item: $newTemplateFromWorkout) { template in
             TemplateEditorScreen(
                 template: template,
                 isEditingExistingTemplate: false

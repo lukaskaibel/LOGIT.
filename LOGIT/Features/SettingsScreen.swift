@@ -64,6 +64,21 @@ struct SettingsScreen: View {
         }
         .navigationTitle(NSLocalizedString("settings", comment: ""))
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            // The height field's decimal pad has no return key, so without this nothing on screen
+            // could put it away again.
+            KeyboardToolbarItem {
+                KeyboardToolbarGroup {
+                    KeyboardToolbarIconButton(
+                        systemImage: "keyboard.chevron.compact.down",
+                        accessibilityLabel: NSLocalizedString("hideKeyboard", comment: "")
+                    ) {
+                        dismissKeyboard()
+                    }
+                    .accessibilityIdentifier("keyboardHide")
+                }
+            }
+        }
         .sheet(isPresented: $isShowingUpgradeToPro) {
             UpgradeToProScreen()
         }

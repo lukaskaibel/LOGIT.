@@ -138,6 +138,7 @@
 
 // MARK: - H
 
+"hideKeyboard" = "Tastatur ausblenden";
 "hidden" = "Ausgeblendet";
 "highlights" = "Highlights";
 "hips" = "Hüfte";
@@ -176,8 +177,7 @@
 "letsGetStarted" = "Los gehts";
 "letsGetStartedDescription" = "Bevor du trainieren kannst, machen wir noch ein kurzes Setup.";
 "liveActivityNextUp" = "Als Nächstes";
-"liveActivitySetLabelCurrent" = "Aktuell";
-"liveActivitySetLabelPrev" = "Vorher";
+"liveActivityRest" = "Pause";
 "licenceAgreement" = "Lizenzvereinbarung";
 "lookupExercise" = "%@ nachschlagen";
 
@@ -219,6 +219,7 @@
 "newTemplateFromWorkout" = "Als Vorlage verwenden...";
 "newWorkout" = "Neues Workout";
 "newWorkoutDescription" = "Workout von Grund auf erstellen.";
+"next" = "Weiter";
 "night" = "Nacht";
 "nine" = "Neun";
 "noAttempts" = "Keine Versuche";
@@ -944,7 +945,7 @@
 "muscleBalanceBelowTargetSection" = "Unter Ziel";
 "muscleBalanceAtTargetSection" = "Auf Ziel";
 "muscleBalanceAboveTargetSection" = "Über Ziel";
-"muscleBalanceGoalHeroCaption" = "Gruppen auf oder über Ziel · %d Sätze";
+"muscleBalanceGoalHeroCaption" = "Gruppen auf oder über Ziel";
 "muscleBalanceGoalAccessibility" = "%d von %d Muskelgruppen auf oder über Ziel";
 "muscleBalanceOfTarget" = "von %d%% Ziel";
 "muscleBalanceEmpty" = "Trainiere weiter für deine Muskelverteilung";
@@ -954,14 +955,25 @@
 "muscleBalanceLightYear" = "%@ dieses Jahr zu wenig";
 "muscleBalanceRoomToBalance" = "Noch Luft zum Ausgleich";
 "balanceVsTarget" = "Balance vs. Ziel";
-"adjustTargetSplit" = "Zielverteilung anpassen";
-"targetSplit" = "Zielverteilung";
-"targetSplitIntro" = "Wie sich deine Sätze auf die Muskelgruppen verteilen sollen. LOGIT markiert eine Gruppe in der Übersicht, wenn sie mehr als ihren Schwellenwert unter dem Ziel liegt.";
-"targetSplitThresholdNote" = "Schwellenwert: Eine Gruppe gilt als im Rückstand, wenn sie im gewählten Zeitraum %d%% oder mehr unter ihrem Ziel liegt.";
-"resetToDefaults" = "Auf Standard zurücksetzen";
-"muscleTargetPreset_balanced" = "Ausgewogen";
-"muscleTargetPreset_upperFocus" = "Oberkörper-Fokus";
-"muscleTargetPreset_pushPullLegs" = "Push / Pull / Beine";
+"trainingFocus" = "Trainingsfokus";
+"priorities" = "Prioritäten";
+"muscleFocusPrioritiesFooter" = "Deine Zielverteilung folgt diesen Prioritäten – Hoch zählt dreimal so viel wie Niedrig. Schalte eine Muskelgruppe aus, um sie aus deiner Balance herauszulassen; sie bleibt beim Fokuswechsel aus.";
+"muscleFocusPreset_fullBody" = "Ganzkörper";
+"muscleFocusPreset_upperBody" = "Oberkörper";
+"muscleFocusPreset_lowerBody" = "Unterkörper";
+"muscleFocusPreset_endurance" = "Ausdauer";
+"muscleFocusCustom" = "Benutzerdefiniert";
+"muscleFocusEditPriorities" = "Prioritäten bearbeiten";
+"muscleFocusDefaultCaption" = "Standard · tippe, um deinen Fokus zu wählen";
+"muscleDetailPriorityCaption" = "Priorität · %@";
+"muscleDetailNotInFocus" = "Nicht Teil deines Fokus";
+"muscleFocusTipTitle" = "Lege deinen Trainingsfokus fest";
+"muscleFocusTipMessage" = "Die Balance misst dein Training an %@, bis du deinen eigenen Fokus wählst.";
+"muscleFocusTipAction" = "Fokus wählen";
+"musclePriority_high" = "Hoch";
+"musclePriority_medium" = "Mittel";
+"musclePriority_low" = "Niedrig";
+"musclePriorityOff" = "Aus";
 "current" = "Aktuell";
 "highest" = "Höchstwert";
 "pinnedExercises" = "Angepinnte Übungen";
@@ -979,11 +991,9 @@
 "records" = "Rekorde";
 "sessions" = "Einheiten";
 "rank" = "Rang";
-"muscleDetailRankCaption" = "von 8 Gruppen";
 "share" = "Anteil";
 "muscleDetailSetsVsTarget" = "Sätze vs. Ziel";
 "muscleDetailTargetSetsCaption" = "%1$@ · %2$d %% Zielanteil";
-"muscleDetailShareOfSets" = "aller Sätze";
 "topExercises" = "Top-Übungen";
 "weekStreakSuffix" = "Wochen-Streak";
 "weeklyGoalAccessibility" = "Wochenziel, %d von %d Workouts";

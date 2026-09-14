@@ -7,16 +7,20 @@
 
 import SwiftUI
 
-/// The Muscle Groups overview: the goal hero leads — how many groups reached their target share, over
-/// the same filling tracks the Balance tile draws — then the groups themselves, split by standing
-/// (⌄ Below target · ✓ At target · ⌃⌃ Above target) as a two-column grid of tiles. The 4 weeks /
-/// 3 months / 1 year picker sets the window. Tiles tap through to the muscle's own page. Pro; the
-/// Summary's Balance tile is the free hook into it.
+/// The Muscle Groups overview: the training focus every number here is measured against, the goal
+/// hero — how many groups reached their target share, over the same filling tracks the Balance tile
+/// draws — then the eight groups as a two-column grid of tiles. The 4 weeks / 3 months / 1 year picker
+/// sets the window. Tiles tap through to the muscle's own page. Pro; the Summary's Balance tile is the
+/// free hook into it.
+///
+/// It is the focus editor's twin. The editor sets priorities in a fixed two-column grid; this screen
+/// reads results in the identical grid, in the same order, so a group sits in the same place on both
+/// and "set there, read here" needs no explaining. It used to file the groups under Below / At / Above
+/// target sections instead, which re-sorted the whole grid every time the window changed and said
+/// again what each tile's badge already says.
 ///
 /// It opens on `TrendWindow.default` — the same rolling four weeks the tile reports — and it only ever
-/// describes the window the picker names, which the header states outright. It used to open on the
-/// newest window that had sets, which meant a tile saying "keep training" could open onto a fully drawn
-/// split from months ago, with nothing on screen naming the period.
+/// describes the window the picker at its top names.
 struct MuscleGroupsOverviewScreen: View {
     @State private var window: TrendWindow
 
@@ -27,7 +31,7 @@ struct MuscleGroupsOverviewScreen: View {
     }
 
     @EnvironmentObject private var muscleGroupService: MuscleGroupService
-    @EnvironmentObject private var targetSplitStore: MuscleTargetSplitStore
+    @EnvironmentObject private var focusStore: MuscleFocusStore
     @EnvironmentObject private var homeNavigationCoordinator: HomeNavigationCoordinator
 
     var body: some View {
@@ -45,27 +49,28 @@ struct MuscleGroupsOverviewScreen: View {
         let windowWorkouts = allWorkouts.filter { ($0.date).map { range.contains($0) } ?? false }
         let calculator = MuscleBalanceCalculator(
             workouts: windowWorkouts,
-            target: targetSplitStore.split,
+            target: focusStore.split,
             muscleGroupService: muscleGroupService
         )
 
         return ScrollView {
             VStack(spacing: SECTION_SPACING) {
                 TrendWindowPicker(selection: $window)
+                focusHeader
                 if calculator.totalSets > 0 {
                     goalHero(calculator)
-                    goalSections(calculator)
+                    groupGrid(calculator)
                 } else {
                     emptyState
                 }
-                adjustRow
             }
             .padding(.horizontal)
             .padding(.top)
             .padding(.bottom, SCROLLVIEW_BOTTOM_PADDING)
         }
-        // Switching the window re-splits the sections and morphs the tracks.
+        // Switching the window morphs the tracks; changing the focus re-targets every tile.
         .animation(.snappy(duration: 0.3), value: window)
+        .animation(.snappy(duration: 0.3), value: focusStore.focus)
         .isBlockedWithoutPro()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -76,26 +81,50 @@ struct MuscleGroupsOverviewScreen: View {
         }
     }
 
+    // MARK: - Focus
+
+    /// The basis of every number below, as the control that changes it: the same menu the editor's
+    /// title is, plus a way into the editor itself. It sits above the hero because it is what the
+    /// hero's "at or above target" is *relative to*; it used to be the last row of the page, a full
+    /// screen below the numbers it explained.
+    ///
+    /// Until the user has chosen a focus, one quiet caption says the targets are the default. It is
+    /// a statement rather than a request — the default is a perfectly good focus — and it goes the
+    /// first time anything is chosen.
+    private var focusHeader: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            MuscleFocusMenu(onEditPriorities: {
+                homeNavigationCoordinator.path.append(.muscleFocus)
+            })
+            if !focusStore.hasChosenFocus {
+                Text(NSLocalizedString("muscleFocusDefaultCaption", comment: ""))
+                    .font(.subheadline)
+                    .foregroundStyle(Color.secondaryLabel)
+                    .transition(.opacity)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 2)
+        .animation(.snappy, value: focusStore.hasChosenFocus)
+    }
+
     // MARK: - Goal hero
 
     /// The Balance tile's own chart at full size, over the count it reports. Same component, same
     /// rule (a group counts once it is at least its target), same window on arrival — the detail
     /// screen is the tile with room, not a second opinion.
     ///
-    /// The window name sits above the count, because every other number on the screen is a share
-    /// *of that window*: four weeks and a year produce very different splits from the same training.
+    /// Just the count and what it counts. The window used to be named above it and the period's set
+    /// total beside the caption; the picker at the top of the screen already names the window, and
+    /// the set total isn't what the count is about. The caption is tertiary, like the Balance tile's
+    /// own "at or above target", so the count reads first.
     ///
-    /// No axis labels under the tracks: the tiles immediately below name every group in reading
-    /// order, and eight labels at track width would be abbreviations of the words already there.
+    /// No axis labels under the tracks: the tiles immediately below name every group, and eight labels
+    /// at track width would be abbreviations of the words already there.
     private func goalHero(_ calculator: MuscleBalanceCalculator) -> some View {
         let entries = calculator.goalEntries
         return VStack(spacing: 14) {
             VStack(spacing: 2) {
-                Text(window.currentWindowLabel)
-                    .font(.caption.weight(.bold))
-                    .tracking(0.3)
-                    .foregroundStyle(.tertiary)
-                    .contentTransition(.identity)
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     Text("\(calculator.atLeastTargetCount())")
                         .foregroundStyle(Color.label)
@@ -105,91 +134,45 @@ struct MuscleGroupsOverviewScreen: View {
                 .font(.system(size: 40, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .contentTransition(.numericText())
-                Text(
-                    String(
-                        format: NSLocalizedString("muscleBalanceGoalHeroCaption", comment: ""),
-                        calculator.totalSets
-                    )
-                )
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .contentTransition(.numericText())
+                Text(NSLocalizedString("muscleBalanceGoalHeroCaption", comment: ""))
+                    .font(.subheadline)
+                    .foregroundStyle(.tertiary)
             }
             MuscleBalanceTrackChart(entries: entries, spacing: 10, badgeDiameter: 22)
                 .frame(height: 130)
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 6)
     }
 
-    /// The eight groups as a two-column grid, split by verdict: what needs work, what is done, what
-    /// overshot. The grouping is what makes two columns readable — within a section every cell shares
-    /// a state, so scanning a column is comparing magnitudes rather than decoding badges.
-    ///
-    /// Below-target leads: it is the only section you can act on, and the other two are its cause.
-    @ViewBuilder
-    private func goalSections(_ calculator: MuscleBalanceCalculator) -> some View {
-        let entries = calculator.goalEntries
-        let under = entries.filter { $0.goalState == .under }
-            .sorted { ($0.goalFraction ?? 0) < ($1.goalFraction ?? 0) }
-        let met = entries.filter { $0.goalState == .met }
-            .sorted { $0.actualPercent > $1.actualPercent }
-        let over = entries.filter { $0.goalState == .over }
-            .sorted { $0.deviation > $1.deviation }
-        VStack(spacing: SECTION_SPACING) {
-            goalSection("muscleBalanceBelowTargetSection", systemImage: "chevron.down", entries: under)
-            goalSection("muscleBalanceAtTargetSection", systemImage: "checkmark", entries: met, isGood: true)
-            goalSection("muscleBalanceAboveTargetSection", systemImage: "chevron.up.2", entries: over)
-        }
-    }
+    // MARK: - Grid
 
-    /// The header glyphs are the ones the tracks already use: a group short of target has no badge and
-    /// gets the plain chevron down, at target is the check the badge wears, and overshoot is the same
-    /// double chevron the badge wears — each in the circle the badges are drawn in.
-    @ViewBuilder
-    private func goalSection(
-        _ titleKey: String,
-        systemImage: String,
-        entries: [MuscleBalanceEntry],
-        isGood: Bool = false
-    ) -> some View {
-        if !entries.isEmpty {
-            VStack(spacing: SECTION_HEADER_SPACING) {
-                HStack(spacing: 8) {
-                    Image(systemName: systemImage)
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(isGood ? Color.accentColor : Color.secondaryLabel)
-                        .frame(width: 24, height: 24)
-                        .background(
-                            Circle()
-                                .fill(isGood ? Color.accentColor.opacity(0.16) : Color.fill)
+    /// All eight groups, two across, in the editor's order. A group the user turned off keeps its
+    /// place as an Off tile, the way it does on the editor — dropping it would slide every later
+    /// group into a different slot and break the one promise the shared order makes. It stays out of
+    /// the hero and the count, where there is no target for it to be read against.
+    private func groupGrid(_ calculator: MuscleBalanceCalculator) -> some View {
+        let byGroup = Dictionary(uniqueKeysWithValues: calculator.goalEntries.map { ($0.muscleGroup, $0) })
+        return LazyVGrid(
+            columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)],
+            spacing: 8
+        ) {
+            ForEach(MuscleFocus.displayOrder, id: \.self) { group in
+                Button {
+                    homeNavigationCoordinator.path.append(.muscleGroupDetail(group, window))
+                } label: {
+                    // Every included group has a target of at least a few percent, so a group
+                    // missing from the goal entries is one the user turned off.
+                    if let entry = byGroup[group] {
+                        MuscleBalanceGoalCell(entry: entry)
+                    } else {
+                        MuscleBalanceGoalCell(
+                            entry: MuscleBalanceEntry(muscleGroup: group, setCount: 0, actualPercent: 0, targetPercent: 0),
+                            isExcluded: true
                         )
-                    Text(NSLocalizedString(titleKey, comment: ""))
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(Color.label)
-                    Spacer()
-                    Text("\(entries.count)")
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(.tertiary)
-                        .monospacedDigit()
-                        .contentTransition(.numericText())
-                }
-                .padding(.horizontal, 4)
-                LazyVGrid(
-                    columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)],
-                    spacing: 8
-                ) {
-                    ForEach(entries) { entry in
-                        Button {
-                            homeNavigationCoordinator.path.append(
-                                .muscleGroupDetail(entry.muscleGroup, window)
-                            )
-                        } label: {
-                            MuscleBalanceGoalCell(entry: entry)
-                        }
-                        .buttonStyle(TileButtonStyle())
                     }
                 }
+                .buttonStyle(TileButtonStyle())
+                .accessibilityIdentifier("muscleBalanceCell_\(group.rawValue)")
             }
         }
     }
@@ -211,29 +194,6 @@ struct MuscleGroupsOverviewScreen: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
-    }
-
-    // MARK: - Adjust
-
-    private var adjustRow: some View {
-        Button {
-            homeNavigationCoordinator.path.append(.muscleTargetSplit)
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "slider.horizontal.3")
-                    .font(.title3)
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: 32, height: 32)
-                Text(NSLocalizedString("adjustTargetSplit", comment: ""))
-                    .foregroundStyle(Color.label)
-                Spacer()
-                NavigationChevron()
-                    .foregroundStyle(.secondary)
-            }
-            .padding(CELL_PADDING)
-            .tileStyle()
-        }
-        .buttonStyle(TileButtonStyle())
     }
 }
 

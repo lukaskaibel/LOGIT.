@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 import Transmission
 
 @main
@@ -27,7 +28,7 @@ struct LOGIT: App {
     @StateObject private var measurementController: MeasurementEntryController
     @StateObject private var purchaseManager = PurchaseManager()
     @StateObject private var networkMonitor = NetworkMonitor()
-    @StateObject private var muscleTargetSplitStore = MuscleTargetSplitStore()
+    @StateObject private var muscleFocusStore = MuscleFocusStore()
     @StateObject private var workoutRecorder: WorkoutRecorder
     @StateObject private var workoutLiveActivityManager: WorkoutLiveActivityManager
     @StateObject private var muscleGroupService: MuscleGroupService
@@ -60,6 +61,23 @@ struct LOGIT: App {
     @State private var showingImportError = false
     @State private var importErrorMessage = ""
 
+    // MARK: - Tips
+
+    /// TipKit, set up before any view reads a tip. Scenario and marketing-screenshot launches start
+    /// from a clean datastore so every run shows the same thing, and hide tips unless a test passes
+    /// `-UITEST_SHOW_TIPS`: an inline tip shifts the Summary, which the standing screenshot suites and
+    /// the App Store captures navigate by.
+    private static func configureTips() {
+        let args = ProcessInfo.processInfo.arguments
+        if TestScenario.active != nil || ScreenshotFixtures.isEnabled {
+            try? Tips.resetDatastore()
+            if !args.contains("-UITEST_SHOW_TIPS") {
+                Tips.hideAllTipsForTesting()
+            }
+        }
+        try? Tips.configure([.displayFrequency(.immediate)])
+    }
+
     // MARK: - Init
 
     init() {
@@ -68,6 +86,7 @@ struct LOGIT: App {
         DemoWorkoutSeeder.prepareUserDefaultsIfNeeded()
         #endif
         TestScenario.active?.prepareUserDefaults()
+        Self.configureTips()
 
         let database: Database
         if ScreenshotFixtures.isEnabled {
@@ -193,7 +212,7 @@ struct LOGIT: App {
                 .environmentObject(networkMonitor)
                 .environmentObject(workoutRecorder)
                 .environmentObject(muscleGroupService)
-                .environmentObject(muscleTargetSplitStore)
+                .environmentObject(muscleFocusStore)
                 .environmentObject(homeNavigationCoordinator)
                 .environmentObject(chronograph)
                 .environmentObject(exerciseSuggestionService)
@@ -320,7 +339,7 @@ struct LOGIT: App {
                     .environmentObject(networkMonitor)
                     .environmentObject(workoutRecorder)
                     .environmentObject(muscleGroupService)
-                    .environmentObject(muscleTargetSplitStore)
+                    .environmentObject(muscleFocusStore)
                     .environmentObject(homeNavigationCoordinator)
                     .environmentObject(chronograph)
                     .environmentObject(exerciseSuggestionService)
@@ -334,7 +353,7 @@ struct LOGIT: App {
                         }
                     }
                 }
-                .fullScreenCover(item: $importedTemplate) { template in
+                .sheet(item: $importedTemplate) { template in
                     TemplateEditorScreen(
                         template: template,
                         isEditingExistingTemplate: false,
@@ -347,7 +366,7 @@ struct LOGIT: App {
                     .environmentObject(networkMonitor)
                     .environmentObject(workoutRecorder)
                     .environmentObject(muscleGroupService)
-                    .environmentObject(muscleTargetSplitStore)
+                    .environmentObject(muscleFocusStore)
                     .environmentObject(homeNavigationCoordinator)
                     .environmentObject(chronograph)
                     .environmentObject(exerciseSuggestionService)
@@ -526,7 +545,7 @@ struct LOGIT: App {
             .environmentObject(networkMonitor)
             .environmentObject(workoutRecorder)
             .environmentObject(muscleGroupService)
-            .environmentObject(muscleTargetSplitStore)
+            .environmentObject(muscleFocusStore)
             .environmentObject(homeNavigationCoordinator)
             .environmentObject(chronograph)
             .environmentObject(exerciseSuggestionService)

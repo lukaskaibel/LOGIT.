@@ -59,26 +59,28 @@ struct WorkoutRecorderFloatingTimerButton: View {
             }
             .foregroundStyle(tint(for: displayState))
             .padding(.horizontal, horizontalPadding(for: displayState))
-            .padding(.vertical, 13)
+            // The same height as the keyboard accessory's capsules, which this button parks beside
+            // whenever one is open.
+            .frame(height: KEYBOARD_TOOLBAR_HEIGHT)
             .background {
                 GeometryReader { proxy in
                     ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(.ultraThinMaterial)
+                        // Liquid Glass, like every other control this button ever sits next to.
+                        // No hairline and no drop shadow: glass draws its own edge and depth, and
+                        // the accessory's capsules carry neither.
+                        Color.clear.glassEffect(.regular, in: .capsule)
 
+                        // Behind the label, so the rest remaining reads as the capsule filling
+                        // rather than as a tint over the time.
                         if let progress = timerProgress(for: seconds, displayState: displayState) {
                             Rectangle()
                                 .fill(tint(for: displayState).opacity(0.24))
                                 .frame(width: proxy.size.width * progress)
                         }
-
-                        Capsule()
-                            .strokeBorder(Color.white.opacity(0.28), lineWidth: 0.9)
                     }
                 }
             }
             .clipShape(Capsule())
-            .shadow(color: Color.black.opacity(0.12), radius: 18, y: 8)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel(for: displayState))

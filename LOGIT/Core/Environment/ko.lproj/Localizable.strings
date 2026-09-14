@@ -156,6 +156,7 @@
 
 // MARK: - H (continued)
 
+"hideKeyboard" = "키보드 가리기";
 "hidden" = "숨김";
 
 // MARK: - I
@@ -181,8 +182,7 @@
 "letsGetStarted" = "시작해요";
 "letsGetStartedDescription" = "운동을 시작하기 전에 경험을 최적화하기 위한 빠른 설정을 수행해야 합니다.";
 "liveActivityNextUp" = "다음";
-"liveActivitySetLabelCurrent" = "현재의";
-"liveActivitySetLabelPrev" = "이전";
+"liveActivityRest" = "휴식";
 "licenceAgreement" = "라이센스 계약";
 "lookupExercise" = "%@ 찾아보기";
 
@@ -224,6 +224,7 @@
 "newTemplateFromWorkout" = "템플릿으로 사용...";
 "newWorkout" = "새로운 운동";
 "newWorkoutDescription" = "처음부터 운동을 구축하세요.";
+"next" = "다음";
 "night" = "밤";
 "nine" = "아홉";
 "noAttempts" = "시도 없음";
@@ -948,7 +949,7 @@
 "muscleBalanceBelowTargetSection" = "목표 미만";
 "muscleBalanceAtTargetSection" = "목표 달성";
 "muscleBalanceAboveTargetSection" = "목표 초과";
-"muscleBalanceGoalHeroCaption" = "부위가 목표 이상 · %d 세트";
+"muscleBalanceGoalHeroCaption" = "부위가 목표 이상";
 "muscleBalanceGoalAccessibility" = "%d/%d 근육 부위가 목표 이상";
 "muscleBalanceOfTarget" = "목표 %d%%";
 "muscleBalanceEmpty" = "계속 운동하면 근육 분배가 표시됩니다";
@@ -958,14 +959,25 @@
 "muscleBalanceLightYear" = "올해 %@ 부족";
 "muscleBalanceRoomToBalance" = "균형 개선 여지";
 "balanceVsTarget" = "목표 대비 균형";
-"adjustTargetSplit" = "목표 배분 조정";
-"targetSplit" = "목표 배분";
-"targetSplitIntro" = "세트를 근육 그룹에 어떻게 나눌지 설정합니다. 어떤 그룹이 목표보다 임계값 이상 떨어지면 요약에 표시됩니다.";
-"targetSplitThresholdNote" = "경고 임계값: 선택한 기간에 목표보다 %d%% 이상 낮으면 해당 그룹은 부족으로 표시됩니다.";
-"resetToDefaults" = "기본값으로 재설정";
-"muscleTargetPreset_balanced" = "균형";
-"muscleTargetPreset_upperFocus" = "상체 집중";
-"muscleTargetPreset_pushPullLegs" = "푸시 / 풀 / 레그";
+"trainingFocus" = "트레이닝 초점";
+"priorities" = "우선순위";
+"muscleFocusPrioritiesFooter" = "목표 배분은 이 우선순위를 따릅니다. 높음은 낮음의 3배로 계산됩니다. 근육 그룹을 끄면 균형에서 제외되고, 초점을 바꿔도 꺼진 상태로 유지됩니다.";
+"muscleFocusPreset_fullBody" = "전신";
+"muscleFocusPreset_upperBody" = "상체";
+"muscleFocusPreset_lowerBody" = "하체";
+"muscleFocusPreset_endurance" = "지구력";
+"muscleFocusCustom" = "사용자화";
+"muscleFocusEditPriorities" = "우선순위 편집";
+"muscleFocusDefaultCaption" = "기본값 · 탭하여 초점 선택";
+"muscleDetailPriorityCaption" = "우선순위 · %@";
+"muscleDetailNotInFocus" = "초점에 포함되지 않음";
+"muscleFocusTipTitle" = "트레이닝 초점 설정";
+"muscleFocusTipMessage" = "직접 초점을 선택하기 전까지 균형은 %@ 기준으로 측정됩니다.";
+"muscleFocusTipAction" = "초점 선택";
+"musclePriority_high" = "높음";
+"musclePriority_medium" = "보통";
+"musclePriority_low" = "낮음";
+"musclePriorityOff" = "끔";
 "current" = "현재";
 "highest" = "최고";
 "pinnedExercises" = "고정된 운동";
@@ -983,11 +995,9 @@
 "records" = "기록";
 "sessions" = "세션";
 "rank" = "순위";
-"muscleDetailRankCaption" = "8개 그룹 중";
 "share" = "비중";
 "muscleDetailSetsVsTarget" = "세트 수와 목표";
 "muscleDetailTargetSetsCaption" = "%1$@ · 목표 %2$d%%";
-"muscleDetailShareOfSets" = "전체 세트 중";
 "topExercises" = "주요 운동";
 "weekStreakSuffix" = "주 연속";
 "weeklyGoalAccessibility" = "주간 목표, %d/%d 운동";

@@ -33,7 +33,7 @@ enum HomeNavigationDestinationType: Hashable, Identifiable, Equatable {
          // Carries the window down from Muscle Groups, which carried it from the Summary — the whole
          // chain reports over one timeframe.
          muscleGroupDetail(MuscleGroup, TrendWindow),
-         muscleTargetSplit,
+         muscleFocus,
          progressHighlights,
          strength,
          // The optional window pins the stat screen to a timeframe (highlight cards open the chart

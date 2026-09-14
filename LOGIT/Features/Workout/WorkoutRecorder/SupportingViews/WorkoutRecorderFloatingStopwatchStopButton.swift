@@ -12,7 +12,9 @@ struct WorkoutRecorderFloatingStopwatchStopButton: View {
 
     let action: () -> Void
 
-    private let buttonSize: CGFloat = 43
+    /// Level with the timer beside it and with the keyboard accessory's capsules, which the pair
+    /// parks next to whenever a keyboard is open.
+    private let buttonSize: CGFloat = KEYBOARD_TOOLBAR_HEIGHT
 
     var body: some View {
         Button(action: action) {
