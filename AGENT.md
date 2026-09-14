@@ -249,6 +249,30 @@ against multiple simulators on CI is slow and fragile - but
 `upload_screenshots` does work in CI since it only needs the framed PNGs
 that are committed to the repo.
 
+### Bug reports fixed by Claude (`claude-bugfix.yml`)
+
+An issue labelled `bug` starts an unattended fix. Lukas files these from an iOS Shortcut, which
+creates the issue with the label already applied. Only issues Lukas both opened and labelled
+count, because the report becomes the agent's instructions and the result merges without review.
+
+1. **Fix** (macOS): Claude reads the report and this file, then either commits a fix with a
+   regression test on `claude/bugfix-<issue>`, or reports `not_a_bug` / `needs_info` /
+   `could_not_fix`. It never pushes or opens the pull request itself. The workflow opens it.
+2. **Tests**: `tests.yml` runs on that commit through `workflow_call`, since a branch pushed with
+   the workflow token triggers no CI of its own. **Regression tests** also runs any UI tests
+   Claude named.
+3. **Merge**: squash-merges only the tested commit, and only once both pass.
+4. **Report**: every outcome ends as a comment on the issue.
+
+If you are the agent in that run, the prompt in the workflow overrides this file's screenshot
+matrix and Artifact contact sheet: nobody is there to see them, so tests are the verification.
+A fix that touches `LOGIT.xcdatamodeld` is left open instead of merged (CloudKit deploy first),
+and one that edits `.github/` can't be pushed at all.
+
+It needs a `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY` repository secret. To retry an
+issue, remove the `bug` label and add it again; an open fix PR for the issue blocks a retry
+until it is closed.
+
 ## Conventions for agents
 
 - Screenshot names follow `NN_Name` (e.g. `01_Home`, `02_History`) and the
