@@ -88,7 +88,10 @@ struct SummaryTrendPair: View {
             Button {
                 homeNavigationCoordinator.path.append(.muscleGroupsOverview)
             } label: {
-                MuscleBalanceGoalTile(workouts: currentWindowWorkouts)
+                MuscleBalanceGoalTile(
+                    workouts: currentWindowWorkouts,
+                    weeks: window.weeksCovered(firstDataDate: workouts.compactMap(\.date).min())
+                )
                     .contentShape(Rectangle())
             }
             .buttonStyle(TileButtonStyle())
